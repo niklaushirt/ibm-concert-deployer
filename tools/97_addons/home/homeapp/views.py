@@ -52,7 +52,7 @@ stream = os.popen('oc get route -n instana-core dev-aiops -o jsonpath={.spec.hos
 INSTANA_URL = stream.read().strip()
 
 print('     ❓ Getting Details Concert Route')
-stream = os.popen('oc get route -n ibm-concert concert -o jsonpath={.spec.host}')
+stream = os.popen('oc get route -n {{ current_ibm_feature.project }} concert -o jsonpath={.spec.host}')
 CONCERT_URL = stream.read().strip()
 
 

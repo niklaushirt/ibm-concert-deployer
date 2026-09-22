@@ -209,7 +209,7 @@ spec:
 
               echo "-------------------------------------------------------------------------------------------------"
               echo "🚀 Create Concert Portal HUB Gateway"
-              oc create route passthrough --insecure-policy="Redirect" portal -n ibm-concert --service=ibm-roja-portal-gw-svc --port=12443
+              oc create route passthrough --insecure-policy="Redirect" portal -n {{ current_ibm_feature.project }} --service=ibm-roja-portal-gw-svc --port=12443
 
 
 
@@ -218,7 +218,7 @@ spec:
               API_URL=$(oc status|grep -m1 "In project"|awk '{print$6}')
               API_SERVER=$(echo $API_URL| cut -d ":" -f 2| tr -d '/')
               API_PORT=$(echo $API_URL| cut -d ":" -f 3)
-              #export CONCERT_HUB_HOST=$(oc get route -n ibm-concert concert -o jsonpath={.spec.host})
+              #export CONCERT_HUB_HOST=$(oc get route -n {{ current_ibm_feature.project }} concert -o jsonpath={.spec.host})
               export HOST=$(oc get route -n openshift-console console -o jsonpath={.spec.host})
               export API_URL="https://"${HOST/console-openshift-console.apps./}
               export SERVER_IP=$(nslookup $HOST 8.8.8.8| awk '/^Address: / { print $2 }')

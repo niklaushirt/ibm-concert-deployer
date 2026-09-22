@@ -49,10 +49,10 @@ export TURBO_PASSWORD=CHANGEME
 # --------------------------------------------------------------------------------------------------------
 
 
-# 🚀 CONCERT OPTIMISE - Create demo User
+# 🚀 CONCERT OPTIMISE - Create Administrator User
 
     echo "------------------------------------------------------------------------------------------------------------------------------"
-    echo " 📥 Create demo User"
+    echo " 📥 Create Administrator User"
     result=$(curl -XPOST -s -k "https://$TURBO_URL/api/v3/users" -b /tmp/cookies  -H 'Content-Type: application/json;' -H 'accept: application/json' -d '  {
       "displayName": "Demo User",
         "username": "{{current_feature.demo_user}}",

@@ -552,7 +552,7 @@
     oc delete ConsoleNotification ibm-concert-operate-notification-password>/dev/null 2>/dev/null
     oc delete ConsoleNotification ibm-concert-operate-notification-status>/dev/null 2>/dev/null    
     export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
-    export appURL=$(oc get routes -n ibm-concert concert  -o jsonpath="{['spec']['host']}")|| true
+    export appURL=$(oc get routes -n {{ current_ibm_feature.project }} concert  -o jsonpath="{['spec']['host']}")|| true
     export DEMO_PWD=$(oc get cm -n $AIOPS_NAMESPACE-demo-ui ibm-concert-demo-ui-config -o jsonpath='{.data.TOKEN}')
     cat <<EOF | oc apply -f -
     apiVersion: console.openshift.io/v1

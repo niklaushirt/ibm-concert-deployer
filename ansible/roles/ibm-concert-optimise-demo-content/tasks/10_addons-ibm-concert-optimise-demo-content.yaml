@@ -159,10 +159,10 @@
 # --------------------------------------------------------------------------------------------------------
 
 
-- name: 🚀 CONCERT OPTIMISE - Create demo User
+- name: 🚀 CONCERT OPTIMISE - Create Administrator User
   shell: |
     echo "------------------------------------------------------------------------------------------------------------------------------"
-    echo " 📥 Create demo User"
+    echo " 📥 Create Administrator"
     result=$(curl -XPOST -s -k "https://{{TURBO_URL}}/api/v3/users" -b /tmp/cookies  -H 'Content-Type: application/json;' -H 'accept: application/json' -d '  {
       "displayName": "Demo User",
         "username": "{{current_feature.demo_user}}",
