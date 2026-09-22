@@ -242,9 +242,6 @@ data:
         # INSTALL_SECURECODER: Set to true if Secure Coder should be installed
         install_secure_coder: true
 
-        # Set to true to enable Concert buddy deployment
-        enable_buddy: true
-
         # Integrate Concert with ITOM and TurboLite
         integrate_itom_turboLite: true
 

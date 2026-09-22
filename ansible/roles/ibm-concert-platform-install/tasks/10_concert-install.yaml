@@ -201,10 +201,7 @@
     # ----- Concert Secure Coder Configuration (DEPRECATED) -----
 
     # # Set to true to enable Concert buddy deployment
-    # ENABLE_BUDDY={{ current_feature.enable_buddy  | default(false) }}
-    # # Storage class (required if ENABLE_BUDDY is set to true)- pass the storage class name for Concert
-    # FILE_STORAGE_CLASS_CONCERT={{ STORAGE_CLASS_FILE }}
-    INSTALL_SECURECODER=false
+    INSTALL_SECURECODER={{ current_feature.install_secure_coder  | default(true) }}
 
 
     # ----- Data Apps Configuration -----
@@ -756,7 +753,7 @@
 
     # echo "------------------------------------------------------------------------------------------------------------------------------"
     # echo " 🚀 Enable WatsonX"
-    export CONCERT_NAMESPACE=ibm-concert
+    export CONCERT_NAMESPACE={{ current_ibm_feature.project }}
     export CONCERT_HUB_NAMESPACE=$CONCERT_NAMESPACE-hub
     export WATSONX_API_KEY={{current_feature.watsonx_token}}
     export WATSONX_API_PROJECT_ID={{current_feature.watsonx_projectid}}
