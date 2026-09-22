@@ -186,9 +186,9 @@
         color: '#fff'
         link:
             href: "https://$appURL"
-            text: IBM Concert
+            text: IBM Concert Platform
         location: BannerTop
-        text: "✅ IBM Concert is installed in this cluster. 🚀 Access it here:"
+        text: "✅ IBM Concert Platform is installed in this cluster. 🚀 Access it here:"
     EOF
   ignore_errors: true
   args:

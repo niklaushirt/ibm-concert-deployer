@@ -162,7 +162,7 @@
         color: '#fff'
         link:
             href: "https://$appURL"
-            text: Concert Optimise
+            text: IBM Concert Optimise
         location: BannerTop
         text: "✅ IBM Concert Optimise is installed in this cluster. 🚀 Access it here:"
     EOF
