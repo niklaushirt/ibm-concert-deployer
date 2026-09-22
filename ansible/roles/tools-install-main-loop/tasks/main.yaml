@@ -1,0 +1,133 @@
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#     ________  __  ___   __________    ___         __                        __  _
+#    /  _/ __ )/  |/  /  /  _/_  __/   /   | __  __/ /_____  ____ ___  ____ _/ /_(_)___  ____
+#    / // __  / /|_/ /   / /  / /     / /| |/ / / / __/ __ \/ __ `__ \/ __ `/ __/ / __ \/ __ \
+#  _/ // /_/ / /  / /  _/ /  / /     / ___ / /_/ / /_/ /_/ / / / / / / /_/ / /_/ / /_/ / / / /
+# /___/_____/_/  /_/  /___/ /_/     /_/  |_\__,_/\__/\____/_/ /_/ /_/\__,_/\__/_/\____/_/ /_/
+#
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------------------------------------------------------"
+#  Installing IBM AIOps
+#
+#  IBM AIOps
+#
+#  ©2026 nikh@ch.ibm.com
+# ---------------------------------------------------------------------------------------------------------------------------------------------------"
+# ---------------------------------------------------------------------------------------------------------------------------------------------------"
+# ---------------------------------------------------------------------------------------------------------------------------------------------------"
+# ---------------------------------------------------------------------------------------------------------------------------------------------------"
+
+
+- name: 🚀 LOOP OVER PRODUCTS
+  debug: 
+    msg: 
+    - "***************************************************************************************************************************************************"
+    - "***************************************************************************************************************************************************"
+    - "***************************************************************************************************************************************************"
+    - "                                                                                                                                                   "
+    - "       🟣🟣🟣🟣🟣🟣🟣🟢🟢🟢 IBM IT Automation - INSTALLATION -  LOOP OVER PRODUCTS                                                                    "
+    - "                                                                                                                                                   "
+    - "***************************************************************************************************************************************************"
+    - "***************************************************************************************************************************************************"
+
+
+- name: 📣 OCP CONSOLE - Delete Deployer Notification
+  shell: oc delete ConsoleNotification deployer-notification --ignore-not-found
+  ignore_errors: true
+
+
+# - name: 📣 OCP CONSOLE - Create Openshift NOTIFICATION
+#   shell: |
+#     cat <<EOF | oc apply -f -
+#     apiVersion: console.openshift.io/v1
+#     kind: ConsoleNotification
+#     metadata:
+#       name: ibm-concert-operate-notification-main
+#     spec:
+#       backgroundColor: '#141a6b'
+#       color: '#fff'
+#       location: {{global_config.position_final_ocp_notification | default("BannerTop")}}
+#       text: 'Starting Installation - Warming Up'
+#     EOF
+#   ignore_errors: true
+#   args:
+#     executable: /bin/bash
+
+
+
+- name: 🟣  Show Config File
+  debug:
+    var: all_config
+    verbosity: 2
+
+- name: 🛠️  Get Global Config
+  set_fact: global_config={{ all_config.global_config | default([]) }}
+- name: 🟣  Show Global Config
+  debug:
+    var: global_config
+    verbosity: 1
+
+# Get OpenShift cluster associated with this IBMAIOPS project
+- name: Get OpenShift definition to use for {{ current_ibm_feature.project }}
+  include_role: 
+    name: tools-get-openshift-cluster
+  vars:
+    _p_openshift_cluster_name: "{{ current_ibm_feature.openshift_cluster_name | default('') }}"
+- name: 🟣  Show Openshift Config
+  debug:
+    var: _current_openshift_cluster
+    verbosity: 1
+
+
+
+
+- name: 📣 OCP CONSOLE - Create Openshift NOTIFICATION
+  shell: |
+    OPENSHIFT_ROUTE=$(oc get route -n openshift-console console -o jsonpath={.spec.host})
+    INSTALL_POD=$(oc get po -n ibm-installer -l app=ibm-installer --no-headers|grep "Running"|grep "1/1"|awk '{print$1}')
+
+    oc delete ConsoleNotification ibm-concert-operate-notification-password>/dev/null 2>/dev/null
+    oc delete ConsoleNotification ibm-concert-operate-notification-status>/dev/null 2>/dev/null
+    cat <<EOF | oc apply -f -
+    apiVersion: console.openshift.io/v1
+    kind: ConsoleNotification
+    metadata:
+        name: ibm-concert-operate-notification-password
+    spec:
+      backgroundColor: '#9a0000'
+      color: '#fff'
+      location: "BannerBottom"
+      text: "❌ FATAL ERROR: Please define your own Password for your installation at global_config.global_password (default to be changed is CHANGEME)"
+      link:
+          href: "https://$OPENSHIFT_ROUTE/k8s/ns/ibm-installer/configmaps/ibm-aiops-install-configuration/yaml"
+          text: Modify your Configuration
+    EOF
+  ignore_errors: true
+  args:
+    executable: /bin/bash
+  when: all_config.global_config.global_password == "CHANGEME"
+
+
+- name: 🛠️  Fail if Password not modified
+  fail: msg="Please define your own Password for your installation at global_config.global_password (default to be changed is CHANGEME)"
+  when: all_config.global_config.global_password == "CHANGEME"
+
+
+# Get default storage classes for current OpenShift cluster
+- name: Get OpenShift storage classes to use for {{ current_ibm_feature.project }} 
+  include_role: 
+    name: tools-get-openshift-storage
+  vars:
+    _p_openshift_cluster_name: "{{ _current_openshift_cluster.name }}"
+    _p_openshift_storage_name: "{{ current_ibm_feature.openshift_storage_name | default('') }}"
+
+# Loop over all instances
+- name: MAIN LOOP   🚀 Deploy IBM AIOps Assets - Loop over Instances for {{current_ibm_feature.project}}
+  include_role:
+    name: tools-install-modules-loop
+  loop: "{{ current_ibm_feature.instances}}"
+  loop_control:
+    loop_var: current_feature
+

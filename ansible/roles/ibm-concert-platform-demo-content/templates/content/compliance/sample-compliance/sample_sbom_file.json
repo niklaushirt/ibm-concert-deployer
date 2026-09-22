@@ -1,0 +1,88 @@
+{
+  "bomFormat": "ConcertDef",
+  "specVersion": "1.0.2",
+  "serialNumber": "urn:ibm:appmgmt:roja-sample-app",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2024-04-02T19:18:54Z",
+    "component": {
+      "bom-ref": "roja-sample-app",
+      "type": "application",
+      "name": "roja-sample-app",
+      "version": "1.0.0"
+    },
+    "business": {
+      "name": "IBM",
+      "units": [
+        {
+          "name": "Software",
+          "email": "concert@ibm.com",
+          "phone": "+1-877-426-6006"
+        }
+      ]
+    }
+  },
+  "components": [
+    {
+      "bom-ref": "build:roja-sample-app",
+      "type": "build",
+      "name": "roja-sample-app",
+      "components": [
+        {
+          "bom-ref": "img:roja-sample-app",
+          "type": "container",
+          "name": "roja-sample-app",
+          "purl": "us.icr.io/icr4mcc/roja-sample-app"
+        },
+        {
+          "bom-ref": "repository:coderepo:github:roja-sample-app",
+          "type": "code",
+          "name": "roja-sample-app",
+          "purl": "https://us-east.git.cloud.ibm.com/jortiz/roja-sample-app"
+        }
+      ],
+      "properties": [
+        {
+          "name": "data_assessment_impact_risk",
+          "value": "5"
+        }
+      ]
+    },
+    {
+      "bom-ref": "environment:qa",
+      "type": "environment",
+      "name": "qa"
+    },
+    {
+      "bom-ref": "environment:stage",
+      "type": "environment",
+      "name": "stage"
+    },
+    {
+      "bom-ref": "environment:prod",
+      "type": "environment",
+      "name": "prod"
+    }
+  ],
+  "services": [
+    {
+      "bom-ref": "appapi:roja-sample-app_api",
+      "name": "appapi:roja-sample-app_api",
+      "endpoints": [
+        "/",
+        "/health",
+        "/logout"
+      ]
+    }
+  ],
+  "properties": [
+    {
+      "name": "application_criticality",
+      "value": "5"
+    },
+    {
+      "name": "application_data_assessment_impact_risk",
+      "value": "5"
+    }
+  ]
+}

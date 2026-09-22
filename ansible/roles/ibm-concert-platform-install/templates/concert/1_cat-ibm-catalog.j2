@@ -1,0 +1,32 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: CatalogSource
+metadata:
+  name: ibm-aiops-catalog
+  namespace: openshift-marketplace
+spec:
+  displayName: ibm-aiops-catalog
+  publisher: IBM Content
+  sourceType: grpc
+  image: {{ global_config.catalog_image}}
+---
+apiVersion: operators.coreos.com/v1alpha1
+kind: CatalogSource
+metadata:
+  name: ibm-cert-manager-catalog
+  namespace: openshift-marketplace
+spec:
+  displayName: ibm-cert-manager
+  publisher: IBM
+  sourceType: grpc
+  image: icr.io/cpopen/ibm-cert-manager-operator-catalog
+---
+apiVersion: operators.coreos.com/v1alpha1
+kind: CatalogSource
+metadata:
+  name: ibm-licensing-catalog
+  namespace: openshift-marketplace
+spec:
+  displayName: IBM License Service Catalog
+  publisher: IBM
+  sourceType: grpc
+  image: icr.io/cpopen/ibm-licensing-catalog

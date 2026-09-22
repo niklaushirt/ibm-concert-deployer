@@ -1,0 +1,599 @@
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#     ________  __  ___   __________    ___         __                        __  _
+#    /  _/ __ )/  |/  /  /  _/_  __/   /   | __  __/ /_____  ____ ___  ____ _/ /_(_)___  ____
+#    / // __  / /|_/ /   / /  / /     / /| |/ / / / __/ __ \/ __ `__ \/ __ `/ __/ / __ \/ __ \
+#  _/ // /_/ / /  / /  _/ /  / /     / ___ / /_/ / /_/ /_/ / / / / / / /_/ / /_/ / /_/ / / / /
+# /___/_____/_/  /_/  /___/ /_/     /_/  |_\__,_/\__/\____/_/ /_/ /_/\__,_/\__/_/\____/_/ /_/
+#
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------------------------------------------------------"
+---
+apiVersion: v1                     
+kind: Namespace
+metadata:
+  name: ibm-installer
+---
+
+
+
+
+# ------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# DO NOT MODIFY BELOW
+# ------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------------------------------------------------------------------------------------------
+---
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  name: ibm-installer-admin
+  namespace: ibm-installer
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: ibm-installer-admin
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+  - kind: ServiceAccount
+    name: ibm-installer-admin
+    namespace: ibm-installer
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: ibm-installer-default-admin
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+  - kind: ServiceAccount
+    name: default
+    namespace: ibm-installer
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: aiops-selfmonitoring
+  namespace: ibm-installer
+  labels:
+   aiops-type: data-load-job
+spec:
+  serviceAccount: ibm-installer-admin
+  template:
+    metadata:
+      labels:
+        app: ibm-installer
+    spec:
+      serviceAccount: ibm-installer-admin
+      containers:
+        - name: install
+          image: quay.io/niklaushirt/ibm-concert-tools:1.0.0
+          imagePullPolicy: IfNotPresent
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "150m"
+            limits:
+              memory: "2024Mi"
+              cpu: "1200m"
+          command:
+            - /bin/bash
+            - -c
+            - |
+              #!/bin/bash
+              #set +x
+              echo "***************************************************************************************************************************************************"
+              echo "***************************************************************************************************************************************************"
+              echo "***************************************************************************************************************************************************"
+              echo "***************************************************************************************************************************************************"
+              echo "                                                                                                                                                   "
+              echo " 🚀 Create AIOPS Self Monitoring                                                                                                                                     "
+              echo "                                                                                                                                                   "
+              echo "***************************************************************************************************************************************************"
+              echo "***************************************************************************************************************************************************"
+              echo "***************************************************************************************************************************************************"
+              echo "***************************************************************************************************************************************************"
+
+
+
+
+
+
+
+              echo "  ***************************************************************************************************************************************************"
+              echo "  ***************************************************************************************************************************************************"
+              echo "  ***************************************************************************************************************************************************"
+              echo "                                                                                                                                                     "
+              echo "   🚀 Create Scheduled Playbooks                                                                                                                                     "
+              echo "                                                                                                                                                     "
+              echo "  ***************************************************************************************************************************************************"
+              echo "  ***************************************************************************************************************************************************"
+              echo ""
+              echo ""
+
+
+              #  ----------------------------------------------------------------------------------------------------------
+              #  ----------------------------------------------------------------------------------------------------------
+              #  ----------------------------------------------------------------------------------------------------------
+              #   🛠️ Initialize
+              #  ----------------------------------------------------------------------------------------------------------
+              #  ----------------------------------------------------------------------------------------------------------
+              echo "   ----------------------------------------------------------------------------------------------------------"
+              echo "    🛠️ Initialize"
+              echo "   ----------------------------------------------------------------------------------------------------------"
+
+              API_TOKEN=$(oc create token -n default demo-admin --duration=999999999s)
+              API_URL=$(oc status|grep -m1 "In project"|awk '{print$6}')
+              API_SERVER=$(echo $API_URL| cut -d ":" -f 2| tr -d '/')
+              API_PORT=$(echo $API_URL| cut -d ":" -f 3)                
+
+
+              export AWX_ROUTE=$(oc get route -n awx awx -o jsonpath={.spec.host})
+              export AWX_URL=$(echo "https://$AWX_ROUTE")
+              echo "AWX_URL: $AWX_URL"
+
+              export AWX_PWD=$(oc -n awx get secret awx-admin-password -o jsonpath='{.data.password}' | base64 --decode && echo)
+              echo "AWX_PWD: $AWX_PWD"
+
+              export EXENV_ID=$(curl -X "GET" -s "$AWX_URL/api/v2/execution_environments/" -u "admin:$AWX_PWD" --insecure|jq -c '.results[]| select( .name == "IBM AIOPS Execution Environment")|.id')         
+              echo "EXENV_ID: '$EXENV_ID'"
+          
+              export AWX_PROJECT_ID=$(curl -X "GET" -s "$AWX_URL/api/v2/projects/" -u "admin:$AWX_PWD" --insecure|jq -c '.results[]| select( .name == "IBM AIOPS Runbooks")|.id')
+              echo "AWX_PROJECT_ID: $AWX_PROJECT_ID"
+
+              export AWX_INVENTORY_ID=$(curl -X "GET" -s "$AWX_URL/api/v2/inventories/" -u "admin:$AWX_PWD" --insecure|jq -c '.results[]| select( .name == "IBM AIOPS Runbooks")|.id')
+              echo "AWX_INVENTORY_ID: $AWX_INVENTORY_ID"
+
+
+              echo "            🌏 API URL:               $API_URL"
+              echo "            🌏 API SERVER:            $API_SERVER"
+              echo "            🌏 API PORT:              $API_PORT"
+              echo "            🔐 API Token:             $API_TOKEN"
+              echo "            🌏 API AWX_URL:           $AWX_URL"
+              echo "            🔐 API AWX_PWD:           $AWX_PWD"
+              echo "            🛠️ API EXENV_ID:          $EXENV_ID"
+              echo "            🛠️ API AWX_PROJECT_ID:    $AWX_PROJECT_ID"
+
+
+
+
+
+
+
+              #  ----------------------------------------------------------------------------------------------------------
+              #  ----------------------------------------------------------------------------------------------------------
+              #  ----------------------------------------------------------------------------------------------------------
+              #   🚀 AWX - Create AWX Template Check AIOPS
+              #  ----------------------------------------------------------------------------------------------------------
+              #  ----------------------------------------------------------------------------------------------------------
+              echo "   ----------------------------------------------------------------------------------------------------------"
+              echo "    🚀 AWX - Create AWX Template Check AIOPS"
+              echo "   ----------------------------------------------------------------------------------------------------------"
+              export result=$(curl -X "POST" -s "$AWX_URL/api/v2/job_templates/" -u "admin:$AWX_PWD" --insecure \
+              -H 'content-type: application/json' \
+              -d $'{
+                "name": "IBM AIOPS Self Check",
+                "description": "IBM AIOPS Self Check",
+                "job_type": "run",
+                "inventory": '$AWX_INVENTORY_ID',
+                "project": '$AWX_PROJECT_ID',
+                "playbook": "ibm-aiops/scripts/check-aiops-create-event.yaml",
+                "scm_branch": "",
+                "extra_vars": "",
+                "ask_variables_on_launch": true,
+                "extra_vars": "{ \"my_k8s_apiurl\": \"'$API_URL'\", \"my_k8s_apikey\": \"'$API_TOKEN'\" }",
+                "execution_environment": '$EXENV_ID'
+              }')
+
+              echo $result
+              
+              export AWX_TEMPL_CHECK_ID=$(echo $result|jq -c 'select( .name == "IBM AIOPS Self Check")|.id')
+              echo "AWX_TEMPL_CHECK_ID: $AWX_TEMPL_CHECK_ID"
+              echo "            🛠️ API AWX_TEMPL_ID:      $AWX_TEMPL_CHECK_ID"
+
+              echo "   ----------------------------------------------------------------------------------------------------------"
+              echo "    🚀 🚀 AWX - Create Schedule"
+              export result=$(curl -X "POST" -s "$AWX_URL/api/v2/schedules/" -u "admin:$AWX_PWD" --insecure \
+              -H 'content-type: application/json' \
+              -d $'{
+                      "rrule": "DTSTART;TZID=Europe/Zurich:20250527T140000 RRULE:INTERVAL=15;FREQ=MINUTELY",
+                      "type": "schedule",
+                      "name": "Run Automatically",
+                      "description": "",
+                      "enabled": true,
+                      "dtstart": "2025-05-27T12:00:00Z",
+                      "dtend": null,
+                      "timezone": "Europe/Zurich",
+                      "until": "",
+                      "unified_job_template": '$AWX_TEMPL_CHECK_ID'
+                  }')
+
+              echo $result
+              echo ""
+              echo ""  echo ""
+              echo ""
+
+
+
+
+
+
+              #  ----------------------------------------------------------------------------------------------------------
+              #  ----------------------------------------------------------------------------------------------------------
+              #  ----------------------------------------------------------------------------------------------------------
+              #   🚀 AWX - Create AWX Template Check robotshop Namespace
+              #  ----------------------------------------------------------------------------------------------------------
+              #  ----------------------------------------------------------------------------------------------------------
+              export CHECK_NAMESPACE=robot-shop
+
+              echo "   ----------------------------------------------------------------------------------------------------------"
+              echo "    🚀 AWX - Create AWX Template Check $CHECK_NAMESPACE"
+              echo "   ----------------------------------------------------------------------------------------------------------"
+              export result=$(curl -X "POST" -s "$AWX_URL/api/v2/job_templates/" -u "admin:$AWX_PWD" --insecure \
+              -H 'content-type: application/json' \
+              -d $'{
+                "name": "IBM AIOPS Check '$CHECK_NAMESPACE'",
+                "description": "IBM AIOPS Check '$CHECK_NAMESPACE'",
+                "job_type": "run",
+                "inventory": '$AWX_INVENTORY_ID',
+                "project": '$AWX_PROJECT_ID',
+                "playbook": "ibm-aiops/scripts/check-ns-create-event.yaml",
+                "scm_branch": "",
+                "extra_vars": "",
+                "ask_variables_on_launch": true,
+                "extra_vars": "{ \"my_k8s_apiurl\": \"'$API_URL'\", \"my_k8s_apikey\": \"'$API_TOKEN'\", \"resource_namespace\": \"'$CHECK_NAMESPACE'\", \"resource_prefix\": \"\", \"resource_postfix\": \"-deployment\", \"resource_severity\": \"6\" }",
+                "execution_environment": '$EXENV_ID'
+              }')
+
+              echo $result
+              
+              export AWX_TEMPL_CHECK_ID=$(echo $result|jq -c 'select( .name == "IBM AIOPS Check '$CHECK_NAMESPACE'")|.id')
+              echo "AWX_TEMPL_CHECK_ID: $AWX_TEMPL_CHECK_ID"
+              echo "            🛠️ API AWX_TEMPL_ID:      $AWX_TEMPL_CHECK_ID"
+
+              echo "   ----------------------------------------------------------------------------------------------------------"
+              echo "    🚀 🚀 AWX - Create Schedule ROBOTSHOP"
+              export result=$(curl -X "POST" -s "$AWX_URL/api/v2/schedules/" -u "admin:$AWX_PWD" --insecure \
+              -H 'content-type: application/json' \
+              -d $'{
+                      "rrule": "DTSTART;TZID=Europe/Zurich:20250527T140000 RRULE:INTERVAL=15;FREQ=MINUTELY",
+                      "type": "schedule",
+                      "name": "Run Automatically",
+                      "description": "",
+                      "enabled": true,
+                      "dtstart": "2025-05-27T12:00:00Z",
+                      "dtend": null,
+                      "timezone": "Europe/Zurich",
+                      "until": "",
+                      "unified_job_template": '$AWX_TEMPL_CHECK_ID'
+                  }')
+
+              echo $result
+              echo ""
+              echo ""  echo ""
+              echo ""
+
+
+
+
+
+
+              #  ----------------------------------------------------------------------------------------------------------
+              #  ----------------------------------------------------------------------------------------------------------
+              #  ----------------------------------------------------------------------------------------------------------
+              #   🚀 AWX - Create AWX Template to Test Events
+              #  ----------------------------------------------------------------------------------------------------------
+              #  ----------------------------------------------------------------------------------------------------------
+              export CHECK_NAMESPACE=robot-shop
+
+              echo "   ----------------------------------------------------------------------------------------------------------"
+              echo "    🚀 AWX - Create AWX Template TEST $CHECK_NAMESPACE"
+              echo "   ----------------------------------------------------------------------------------------------------------"
+              export result=$(curl -X "POST" -s "$AWX_URL/api/v2/job_templates/" -u "admin:$AWX_PWD" --insecure \
+              -H 'content-type: application/json' \
+              -d $'{
+                "name": "IBM AIOPS Test '$CHECK_NAMESPACE'",
+                "description": "IBM AIOPS Test '$CHECK_NAMESPACE'",
+                "job_type": "run",
+                "inventory": '$AWX_INVENTORY_ID',
+                "project": '$AWX_PROJECT_ID',
+                "playbook": "ibm-aiops/scripts/test-create-event.yaml",
+                "scm_branch": "",
+                "extra_vars": "",
+                "ask_variables_on_launch": true,
+                "extra_vars": "{ \"resource_test_name\": \"ratings\", \"resource_prefix\": \"\", \"resource_postfix\": \"-deployment\", \"resource_severity\": \"6\",  \"my_k8s_apiurl\": \"'$API_URL'\", \"my_k8s_apikey\": \"'$API_TOKEN'\", \"resource_namespace\": \"'$CHECK_NAMESPACE'\" }",
+                "execution_environment": '$EXENV_ID'
+              }')
+
+              echo $result
+              
+              # export AWX_TEMPL_CHECK_ID=$(echo $result|jq -c 'select( .name == "IBM AIOPS Test '$CHECK_NAMESPACE'")|.id')
+              # echo "AWX_TEMPL_CHECK_ID: $AWX_TEMPL_CHECK_ID"
+              # echo "            🛠️ API AWX_TEMPL_ID:      $AWX_TEMPL_CHECK_ID"
+
+              # echo "   ----------------------------------------------------------------------------------------------------------"
+              # echo "    🚀 🚀 AWX - Create Schedule Test"
+              # export result=$(curl -X "POST" -s "$AWX_URL/api/v2/schedules/" -u "admin:$AWX_PWD" --insecure \
+              # -H 'content-type: application/json' \
+              # -d $'{
+              #         "rrule": "DTSTART;TZID=Europe/Zurich:20250527T140000 RRULE:INTERVAL=15;FREQ=MINUTELY",
+              #         "type": "schedule",
+              #         "name": "Run Automatically",
+              #         "description": "",
+              #         "enabled": true,
+              #         "dtstart": "2025-05-27T12:00:00Z",
+              #         "dtend": null,
+              #         "timezone": "Europe/Zurich",
+              #         "until": "",
+              #         "unified_job_template": '$AWX_TEMPL_CHECK_ID'
+              #     }')
+
+              # echo $result
+              # echo ""
+              # echo ""  echo ""
+              # echo ""
+
+
+
+
+
+
+
+
+
+
+
+              echo "  ***************************************************************************************************************************************************"
+              echo "  ***************************************************************************************************************************************************"
+              echo "  ***************************************************************************************************************************************************"
+              echo "                                                                                                                                                     "
+              echo "   🚀 Create Observer                                                                                                                                     "
+              echo "                                                                                                                                                     "
+              echo "  ***************************************************************************************************************************************************"
+              echo "  ***************************************************************************************************************************************************"
+              echo ""
+              echo ""
+
+
+              echo "   ----------------------------------------------------------------------------------------------------------"
+              echo "    🛠️ Initialize"
+              echo "   ----------------------------------------------------------------------------------------------------------"
+              
+              export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
+              # Create Route
+              oc create route passthrough aiops-topology-kubernetes-observer -n $AIOPS_NAMESPACE --insecure-policy="Redirect" --service=aiops-topology-kubernetes-observer --port=https-kubernetes-observer-api
+
+              # Get Credentials
+              export TOPO_REST_USR=$(oc get secret aiops-topology-asm-credentials -n $AIOPS_NAMESPACE -o jsonpath='{.data.username}' | base64 --decode)
+              export TOPO_REST_PWD=$(oc get secret aiops-topology-asm-credentials -n $AIOPS_NAMESPACE -o jsonpath='{.data.password}' | base64 --decode)
+              export LOGIN="$TOPO_REST_USR:$TOPO_REST_PWD"
+
+              export TOPO_ROUTE="https://"$(oc get route -n $AIOPS_NAMESPACE aiops-topology-kubernetes-observer -o jsonpath={.spec.host})
+
+              echo "            🌏 API TOPO_ROUTE:        $TOPO_ROUTE"
+              echo "            🌏 API TOPO LOGIN:        $LOGIN"
+              echo "            🌏 API URL:               $API_URL"
+              echo "            🌏 API SERVER:            $API_SERVER"
+              echo "            🌏 API PORT:              $API_PORT"
+              echo "            🔐 API Token:             $API_TOKEN"
+              echo "            🛠️ API AIOPS_NAMESPACE:   $AIOPS_NAMESPACE"
+
+              echo ""
+
+              echo "   ----------------------------------------------------------------------------------------------------------"
+              echo "    🚀  AIOPS - Create OBSERVER"
+              echo "   ----------------------------------------------------------------------------------------------------------"
+
+              curl -k -X POST "$TOPO_ROUTE/1.0/kubernetes-observer/jobs/load" --header 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255' --header 'Accept: application/json' -u $LOGIN --header "Content-Type: application/json" \
+                -d "{
+                  \"unique_id\": \"aiops-local\",
+                  \"type\": \"load\",
+                  \"description\": \"Automatically created by Nicks scripts\",
+                  \"parameters\": {
+                    \"data_center\": \"aiops.local\",
+                    \"master_ip\": \"$API_SERVER\",
+                    \"api_port\": \"$API_PORT\",
+                    \"token\": {
+                      \"hiddenString\": \"$API_TOKEN\",
+                      \"encrypted\": false
+                    },
+                    \"trust_all_certificate\": true,
+                    \"hide_terminated_pods\": false,
+                    \"connect_read_timeout_ms\": 5000,
+                    \"custom_resource_definitions\": [
+                      \"string\"
+                    ],
+                    \"role_token\": false,
+                    \"namespace\": \"$AIOPS_NAMESPACE\",
+                    \"namespaceGroupParameters\": {
+                      \"correlate\": true
+                    }
+                  },
+                  \"schedule\": {
+                      \"interval\": null,
+                      \"units\": null,
+                      \"nextRunTime\": null
+                    },
+                  \"write_file_observer_file\": false,
+                  \"scheduleRequest\": true
+                }"
+
+
+
+
+
+
+
+
+              echo "  ***************************************************************************************************************************************************"
+              echo "  ***************************************************************************************************************************************************"
+              echo "  ***************************************************************************************************************************************************"
+              echo "                                                                                                                                                     "
+              echo "   🚀 Create Policy                                                                                                                                     "
+              echo "                                                                                                                                                     "
+              echo "  ***************************************************************************************************************************************************"
+              echo "  ***************************************************************************************************************************************************"
+              echo ""
+              echo ""
+
+
+              echo "   ----------------------------------------------------------------------------------------------------------"
+              echo "    🛠️ Initialize"
+              echo "   ----------------------------------------------------------------------------------------------------------"
+              
+
+              export POLICY_USERNAME=$(oc get secret -n $AIOPS_NAMESPACE aiops-ir-lifecycle-policy-registry-svc -o jsonpath='{.data.username}' | base64 --decode)
+              export POLICY_PASSWORD=$(oc get secret -n $AIOPS_NAMESPACE aiops-ir-lifecycle-policy-registry-svc -o jsonpath='{.data.password}' | base64 --decode)
+              export POLICY_LOGIN="$POLICY_USERNAME:$POLICY_PASSWORD"
+              oc create route passthrough --insecure-policy="Redirect" policy-api -n $AIOPS_NAMESPACE --service aiops-ir-lifecycle-policy-registry-svc --port ssl-port
+              export POLICY_ROUTE=$(oc get routes -n $AIOPS_NAMESPACE policy-api -o jsonpath="{['spec']['host']}")
+
+              echo "            🌏 API POLICY_USERNAME:   $POLICY_USERNAME"
+              echo "            🔐 API POLICY_PASSWORD:   $POLICY_PASSWORD"
+              echo "            🌏 API POLICY_LOGIN:      $POLICY_LOGIN"
+              echo "            🌏 API POLICY_ROUTE:      $POLICY_ROUTE"
+              echo "            🛠️ API AIOPS_NAMESPACE:   $AIOPS_NAMESPACE"
+
+
+              echo "   ----------------------------------------------------------------------------------------------------------"
+              echo "    🚀  AIOPS - Create Policy"
+              echo "   ----------------------------------------------------------------------------------------------------------"
+
+              echo '{"metadata": {"labels": {"ibm.com/aiops/uitemplate": "alert:scopebased","ibm.com/is-default": "false"},"name": "DEMO Scope Grouping AIOPS Self","description": "Created by Nicks scripts","createdBy": {"id": "demo","type": "user"}},"state": "enabled","executionPriority": 25,"spec": {"triggers": [{"entityId": "alert","triggerId": "aiops.ibm.com/trigger/alert-pre-create","arguments": {"condition": {"$variable": "constants.baseTriggerCondition"}}}],"constants": {"baseTriggerCondition": {"actionId": "lang/condition/template","arguments": {"template": "{{alert.state}} != \"clear\" and {{alert.state}} != \"closed\""}}},"actions": [{"actionId": "lang/if","arguments": {"name": "Condition set 1","conditions": {"actionId": "lang/condition/and","arguments": {"conditions": [{"actionId": "lang/condition/template","arguments": {"template": "({{alert.state}} == \"open\")"}}]}},"then": [{"actionId": "aiops.ibm.com/action/internal/insights/correlate","output": "alert.insights.[]","arguments": {"correlationKey": {"$template": "{{alert.resource.accessScope}}"},"relationshipType": "aiops.ibm.com/insight-type/relationship/causal","relationshipSource": "aiops.ibm.com/insight-source/relationship/causal/custom","relationshipDetails": {"policyId": {"$variable": "policy.id"}},"window": {"durationMS": 1500000,"type": "rolling"}}}]}}]}}'>/tmp/aiops-self-policy.json
+              
+              export result=$(curl -XPOST -k -s "https://$POLICY_ROUTE/policyregistry.ibm-netcool-prod.aiops.io/v1alpha/system/cfd95b7e-3bc7-4006-a4a8-a73a79c71255/policies"  \
+                -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255' \
+                -H 'content-type: application/json' \
+                -u $POLICY_LOGIN \
+                -d @/tmp/aiops-self-policy.json)
+
+              echo $result
+              echo ""
+              echo ""
+              echo ""
+            
+
+
+
+
+
+
+              echo "  ***************************************************************************************************************************************************"
+              echo "  ***************************************************************************************************************************************************"
+              echo "  ***************************************************************************************************************************************************"
+              echo "                                                                                                                                                     "
+              echo "   🚀 Create Application                                                                                                                                     "
+              echo "                                                                                                                                                     "
+              echo "  ***************************************************************************************************************************************************"
+              echo "  ***************************************************************************************************************************************************"
+              echo ""
+              echo ""
+
+              echo "   ----------------------------------------------------------------------------------------------------------"
+              echo "    🛠️ Initialize"
+              echo "   ----------------------------------------------------------------------------------------------------------"
+              
+              export TOPO_MGT_ROUTE="https://"$(oc get route -n $AIOPS_NAMESPACE aiops-topology-topology -o jsonpath={.spec.host})
+
+              echo "            🌏 API TOPO_MGT_ROUTE:    $TOPO_MGT_ROUTE"
+              echo "            🌏 API TOPO LOGIN:        $LOGIN"
+              echo "            🌏 API URL:               $API_URL"
+              echo "            🌏 API SERVER:            $API_SERVER"
+              echo "            🌏 API PORT:              $API_PORT"
+              echo "            🔐 API Token:             $API_TOKEN"
+              echo "            🛠️ API AIOPS_NAMESPACE:   $AIOPS_NAMESPACE"
+
+              echo ""
+   
+              echo "   ----------------------------------------------------------------------------------------------------------"
+              echo "    🚀  AIOPS - Create Application"
+              echo "   ----------------------------------------------------------------------------------------------------------"
+
+
+
+              curl -X "GET" "$TOPO_MGT_ROUTE/1.0/topology/groups?_field=*" --insecure -u $LOGIN -H 'Content-Type: application/json' -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255' 
+
+
+              export APP_ID=$(curl -X "GET" "$TOPO_MGT_ROUTE/1.0/topology/groups?_field=*&_filter=keyIndexName%3DAIOPS%20Self%20Monitoring" --insecure -u $LOGIN -H 'Content-Type: application/json' -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255'|jq -r -c '._items[]|._id'| tail -1)
+              export TEMPLATE_ID=$(curl -X "GET" "$TOPO_MGT_ROUTE/1.0/topology/groups?_field=*&_filter=name%3Dibm-aiops" --insecure -u $LOGIN -H 'Content-Type: application/json' -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255'|jq -r -c '._items[]|._id'| tail -1)
+
+              echo "    APP_ID:     "$APP_ID
+              echo "    TEMPLATE_ID:"$TEMPLATE_ID
+
+              if [[ $APP_ID == "" ]];
+              then
+                echo "  Creating Application"
+                curl -X "POST" "$TOPO_MGT_ROUTE/1.0/topology/groups" --insecure \
+                -u $LOGIN \
+                -H 'Content-Type: application/json' \
+                -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255' \
+                -d '  {
+                    "keyIndexName": "AIOPS Self Monitoring",
+                    "_correlationEnabled": "true",
+                    "iconId": "application",
+                    "businessCriticality": "Platinum",
+                    "vertexType": "group",
+                    "correlatable": "true",
+                    "disruptionCostPerMin": "200",
+                    "name": "AIOPS Self Monitoring",
+                    "entityTypes": [
+                        "waiopsApplication"
+                    ],
+                    "tags": [
+                      "aiops",
+                      "self monitoring"
+                    ]
+                  }'
+              else
+                echo "  Application already exists"
+              fi
+
+
+
+              echo "----------------------------------------------------------------------------------------------------------"
+              echo "🚀 ADD RESOURCES TO  APPLICATION- $APP_NAME"
+              echo "----------------------------------------------------------------------------------------------------------"
+
+              echo "  Add Template Resources"
+              curl -X "POST" "$TOPO_MGT_ROUTE/1.0/topology/groups/$APP_ID/members" --insecure \
+              -u $LOGIN \
+              -H 'Content-Type: application/json' \
+              -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255' \
+              -d "{
+                \"_id\": \"$TEMPLATE_ID\"
+              }"
+
+
+
+
+
+
+
+
+
+
+              # oc delete pods -n robot-shop --all
+              echo "*****************************************************************************************************************************"
+              echo " ✅ DONE"
+              echo "*****************************************************************************************************************************"
+
+
+
+
+              while true
+              do
+                sleep 1000
+              done
+
+
+          env:
+      restartPolicy: Never
+  backoffLimit: 500
+

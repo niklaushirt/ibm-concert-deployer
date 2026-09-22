@@ -1,0 +1,18 @@
+# https://www.ibm.com/docs/en/tarm/8.14.0?topic=index-actionapidto
+
+
+
+
+{
+    "displayName": "$action.target.displayName",
+   
+    "turboUrl": "<YOUR_TURBONOMIC_URL>",
+    "uuid": "$action.target.uuid",
+    "actionState": "$action.actionState",
+    "actionMode": "$!action.actionMode",
+    "userName": "$!action.userName",
+    "updateTime": "$!action.updateTime",
+    "details": "$action.details",
+    "risk_subCategory": "$action.risk.subCategory",
+    "risk_reasonCommodities": "#foreach($resizeRisk in $action.risk.reasonCommodities) $resizeRisk #end"
+}

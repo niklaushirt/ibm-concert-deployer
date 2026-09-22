@@ -1,0 +1,58 @@
+{
+    "bomFormat": "ConcertDef",
+    "specVersion": "1.0.2",
+    "serialNumber": "urn:ibm:appmgmt:RobotShop:mongo:build:123",
+    "version": 1,
+    "metadata": {
+        "timestamp": "2024-09-06T15:22:21Z",
+        "component": {
+            "type": "build",
+            "name": "mongo",
+            "version": "1.0"
+        },
+        "properties": [
+            {
+                "name": "build-number",
+                "value": "123"
+            }
+        ]
+    },
+    "components": [
+        {
+            "bom-ref": "img:quay.io/niklaushirt/rs-mongo",
+            "type": "container",
+            "name": "quay.io/niklaushirt/rs-mongo",
+            "purl": "quay.io/niklaushirt/rs-mongo:latest",
+            "properties": [
+                {
+                    "name": "uri",
+                    "value": "quay.io/niklaushirt/rs-mongo:latest@none"
+                },
+                {
+                    "name": "tag",
+                    "value": "latest"
+                },
+                {
+                    "name": "digest",
+                    "value": "none"
+                }
+            ]
+        },
+        {
+            "bom-ref": "repository:coderepo:github:mongo",
+            "type": "code",
+            "name": "mongo",
+            "purl": "mongo",
+            "properties": [
+                {
+                    "name": "commit_sha",
+                    "value": "none"
+                },
+                {
+                    "name": "branch",
+                    "value": "main"
+                }
+            ]
+        }
+    ]
+}

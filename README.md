@@ -54,17 +54,17 @@ The idea of this repo is to provide an optimised, complete, pre-trained `🐣 De
 
 > It contains the following components (which can be installed independently):
 >
-> - **IBM AIOps**
-> - **IBM AIOps Demo Content** (optional)
->   - **OpenLDAP** & Register with IBM AIOps
->   - **Runbooks** AWX (Open Source Ansible Tower) with preloaded Playbooks and AIOps Runbooks
+> - **IBM Concert Operate**
+> - **IBM Concert Operate Demo Content** (optional)
+>   - **OpenLDAP** & Register with IBM Concert Operate
+>   - **Runbooks** AWX (Open Source Ansible Tower) with preloaded Playbooks and Concert Operate Runbooks
 >   - **AI Models** - Load and Train
 >     - Load Training Data (LAGS, SNOW, MET, TG)
 >     - Create Training Definitions (TG, LAGS, CR, SI, MET. Turn off RSA)
 >     - Train Models (TG, LAGS, CR, SI, MET)
 >   - **Topology**
 >     - Live Demo Apps (RobotShop. SockShop)
->     - Create IBM AIOps Topology and Applications (RobotShop. SockShop, ACME, London Underground, Telecom FiberCut)
+>     - Create IBM Concert Operate Topology and Applications (RobotShop. SockShop, ACME, London Underground, Telecom FiberCut)
 >     - Dedicated DemoUI that allows you to trigger different scenarios
 >     - Custom Icons (styling and dynamic)
 >   - **Configs**
@@ -101,11 +101,11 @@ Basically:
 
 ### 🐥 Quick Install
 
-- 🚀 [Quick Install - CP4AIOps](#21--install-ibm-aiops-with-demo-content)
+- 🚀 [Quick Install - Concert Operate](#21--install-ibm-aiops-with-demo-content)
 - 🧨 [Troubleshooting](#4-troubleshooting)
 - 🚀 Already have a cluster? [Dive right in](#21--install-ibm-aiops-with-demo-content)
 
-### 🐥 IBM AIOps specific
+### 🐥 IBM Concert Operate specific
 
 - 🚀 [Demo the Solution](#31-demo-the-solution)
 - 🤓 [Demo Setup - Explained](#32-demo-setup---explained)
@@ -137,7 +137,7 @@ Techzone interface changest constantly. Below steps are indicative but should ge
 1. Get a temporary cluster from **Techzone**
    - **OpenShift Cluster OCPv IBM Cloud** from this collection (https://techzone.ibm.com/collection/69c6c2db1bdc18e8109d08ed)
 
-   - 4x worker nodes with **32 CPU / 128 GB** ❗ for Operate/AIOps
+   - 4x worker nodes with **32 CPU / 128 GB** ❗ for Concert Operate
    - 43 worker nodes with **32 CPU / 128 GB** ❗ for Concert platform
 
    You **might** get away with less if you don't install some components but no guarantee.
@@ -199,7 +199,6 @@ If you think that you hit a problem:
 
 - If you have provisioned a cluster with `Managed NFS 2TB` and you have Pods in `0/0` state verify the `nfs-provisioner` Pod is running. If not (this is a bug in Techzone) please apply `./tools/00_troubleshooting/nfs-provisioner.yaml`. The installation should subsequently continue. If not, please [re-run the installer Pod](#re-run-the-installer).
 - Make sure that you have provisioned a cluster with **4 worker nodes with 32 CPU and 128 GB** each. If you have Pods in `0/0` state verify the `Events`. If you get `Not enough CPU` then delete the cluster and provision the correct size.
-- If you want to install IBM AIOps and Turbonomic you **must** select **5 worker nodes with 32 CPU and 128 GB**
 - The complete installation takes about 1.5 to 8 hours depending on your region where and the platform you deployed to.
 - If you see Pods in `CrashLoop` or other error states, try to wait it out (this can be due to dependencies on other componenets that are not ready yet). Chances are that the deployment will eventually go through. If after 8h you are still stuck, ping me.
 
@@ -219,24 +218,119 @@ If you think that you hit a problem:
 
 > ## ❗❗❗❗ If anything goes wrong, please restart/delete the installer pod ❗❗❗❗ and/or refer to [Troubleshooting](#4-troubleshooting)
 
-## 2.1 🐣 Install IBM AIOps with demo content
+## 2.1 🐣 Install IBM Concert platform (❗EXPERIMENTAL)
 
-#### 🚀 Get IBM AIOps installed and pre-trained in one simple script.
+#### 🚀 Get IBM Concert platform installed in one simple script.
 
-Here is a quick video that walks you through the installation process
-![K8s CNI](./doc/pics/JOB_INSTALL.gif)
+❗In order to install Concert platform you need a valid Turbonomic key ❗
+❗If you don't provide one (it will still install) you will miss some features❗
+
+If you have any questions please read up here first https://www.ibm.com/docs/en/concert-platform?topic=platform-overview
 
 <details>
 <summary>📦 2.1.1 What will be installed</summary>
 
 This installation contains:
 
-> - **IBM AIOps**
+> - **IBM Concert platform**
+> - **IBM Concert Optimize (Turbonomic) either Full or Lite**
+> - **IBM Concert platform integration with Keycloak for SSO (optional)**
+> - **Demo Applications**
+>   - RobotShop Demo App
+>   - SockShop Demo App
+
+<div style="page-break-after: always;"></div>
+
+</details>
+
+</details>
+
+<details>
+<summary>🚀 2.1.2 Installation Instructions </summary>
+
+1. In the the OpenShift Web UI click on the `+` sign in the right upper corner
+1. Copy and paste the content from [this file](./Quick_Install/01_INSTALL_IBM_CONCERT_PLATFORM.yaml)
+1. Accept the license by setting `accept_all_licenses` to `True` (line 69)
+1. Replace `<REGISTRY_TOKEN>` at the top of the file with your entitlement key from step 1.1.2 (line 50 - the Entitlement key from https://myibm.ibm.com)
+1. Replace the default Password `global_password: CHANGEME` with a Password of your choice (line 63, ❗ do NOT use the "-" character and do NOT leave empty ❗)
+1. If you want a full Concert Optimize/Turbonomic installed, set `concert_optimise_lite` (line 154) `True`
+1. In `concert_optimise_license` (line 171) provide your licence for Concert Optimize/Turbonomic in base64 (run `cat turbo.lic|base64`)
+1. If you want AI features enbaled, set `enable_WatsonX` to `True` (line 225) and provide your `watsonx_projectid` and `watsonx_token`
+1. If you want to integrate Concert with Keycloak for SSO, set `integrate_keycloak` to `True` (line 252) (the SSO user will be the same as for the standalone)
+1. If you want configure platform AI agents, set `registerAgents` to `True` (line 255)
+1. Click `Create`
+
+> #### If you need the Keycloak Credentials to connect and manage users, search for `Keycloak Credentials` in the installation Log.
+
+> #### If you need the Cluster Credentials for Demo Content (Resilience or Compliance) search for `LOGINS FOR RESILIENCE` in the installation Log.
+
+> #### ❗ If you get a ClusterRoleBinding already exists, just ignore it
+>
+> #### ❗ If you get a warning (Orange or Red Bar on top) please [re-run the installer Pod](#re-run-the-installer) until you are all green.
+
+</details>
+
+<details>
+<summary>🚀 2.1.3 Enable WatsonX for Concert </summary>
+
+Execute the following with your WatsonX Credentials
+
+```bash
+export WATSONX_API_KEY=<WATSONX_API_KEY>
+export WATSONX_API_PROJECT_ID=<WATSONX_API_PROJECT_ID>
+export WATSONX_API_URL=https://us-south.ml.cloud.ibm.com
+export CONCERT_NAMESPACE=ibm-concert
+
+
+kubectl patch secret/app-cfg-secret -n $CONCERT_NAMESPACE --type=merge -p '{
+   "data": {
+   "WATSONX_API_KEY": "'$(echo -n $WATSONX_API_KEY | base64 )'",
+   "WATSONX_API_PROJECT_ID": "'$(echo -n "$WATSONX_API_PROJECT_ID" | base64 )'",
+   "WATSONX_API_URL": "'$(echo -n "$WATSONX_API_URL" | base64 )'"
+   }
+}'
+kubectl rollout restart -n $CONCERT_NAMESPACE deployment/roja-py-utils
+```
+
+<div style="page-break-after: always;"></div>
+
+</details>
+
+</details>
+
+<details>
+<summary>🔎 2.1.4 Follow the installation progress</summary>
+
+- The blue Notification at the top gives you basic information about the running Installation (Name, Version, ...)
+
+  You can open and follow the installation logs by clicking on `Open Logs`
+
+- In addition to this, you also have the bottom Notifications that give you the current step of the Installation
+
+- When the Installation has succeeded, you get the top green Notification bar
+
+  You can directly open IBM Turbonomic by clicking on the link
+
+</details>
+
+## 2.2 🐣 Install IBM Concert Operate with demo content
+
+#### 🚀 Get IBM Concert Operate installed and pre-trained in one simple script.
+
+Here is a quick video that walks you through the installation process
+![K8s CNI](./doc/pics/JOB_INSTALL.gif)
+
+<details>
+<summary>📦 2.2.1 What will be installed</summary>
+
+This installation contains:
+
+> - **IBM Concert Operate**
 >   - IBM Catalog
 >   - IBM Operator
->   - IBM AIOps Instance
-> - **IBM AIOps Demo Content**
->   - **OpenLDAP** & Register with IBM AIOps
+>   - IBM Concert Operate Instance
+> - **IBM Concert Operate Demo Content**
+>   - **OpenLDAP** & Register with IBM Concert Operate
 >   - **AWX** (Open Source Ansible Tower) with preloaded Playbooks
 >   - **AI Models** - Load and Train
 >     - Create Training Definitions (TG, LAGS, CR, SI. Turn off RSA)
@@ -249,7 +343,7 @@ This installation contains:
 >     - Create K8s Observer
 >     - Create ASM merge rules
 >     - Load Overlay Topology
->     - Create IBM AIOps Application
+>     - Create IBM Concert Operate Application
 >   - **Misc**
 >     - Policies for Incident creation
 >     - Custom Alert View
@@ -266,12 +360,12 @@ This installation contains:
 </details>
 
 <details>
-<summary>🚀 2.1.2 Installation Instructions </summary>
+<summary>🚀 2.2.2 Installation Instructions </summary>
 
 ![K8s CNI](./doc/pics/install01.png)
 
 1. In the the OpenShift Web UI click on the `+` sign in the right upper corner
-1. Copy and paste the content from [this file](./Quick_Install/00_INSTALL_IBM_AIOPS.yaml)
+1. Copy and paste the content from [this file](./Quick_Install/02_INSTALL_IBM_CONCERT_OPERATE.yaml)
 1. Replace `<REGISTRY_TOKEN>` at the top of the file with your entitlement key from step 1.1.2 (line 69 - the Entitlement key from https://myibm.ibm.com)
 1. Replace the default Password `global_password: CHANGEME` with a Password of your choice (line 82, ❗ do NOT use the "-" character and do NOT leave empty ❗)
 1. Accept the license by setting `accept_all_licenses` to `True` (line 92)
@@ -289,7 +383,7 @@ This installation contains:
 </details>
 
 <details>
-<summary>🔎 2.1.3 Follow the installation progress</summary>
+<summary>🔎 2.2.3 Follow the installation progress</summary>
 
 - The blue Notification at the top gives you basic information about the running Installation (Name, Version, ...)
 
@@ -316,7 +410,7 @@ This installation contains:
 </details>
 
 <details>
-<summary>🚀 2.1.4 Connecting for the first time</summary>
+<summary>🚀 2.2.4 Connecting for the first time</summary>
 
 ### Access the DemoUI
 
@@ -331,12 +425,12 @@ To access the demo environment:
 
 <div style="page-break-after: always;"></div>
 
-### Login to IBM AIOps as demo User
+### Login to IBM Concert Operate as Demo User
 
 ![demo](./doc/pics/demo01.png)
 
 1. Note the Username and Password
-2. Click on the blue `IBM AIOps` button
+2. Click on the blue `IBM Concert Operate` button
 3. Select `Enterprise LDAP`
 4. Login as User `demo` with the Password `Selected at installation` and shown in the DemoUI
 
@@ -351,11 +445,11 @@ To access the demo environment:
 </details>
 
 <details>
-<summary>✅ 2.1.5 Post Install</summary>
+<summary>✅ 2.2.5 Post Install</summary>
 
 ### Check Training
 
-1. In the `IBM AIOps` "Hamburger" Menu select `Operate`/`AI Model Management`
+1. In the `IBM Concert Operate` "Hamburger" Menu select `Operate`/`AI Model Management`
 2. Check that the Training are displayed as follows
 
    ![install](./doc/pics/post04.png)
@@ -378,7 +472,7 @@ To access the demo environment:
 
 ### Eye Candy
 
-1. In the `IBM AIOps` "Hamburger" Menu select `Operate`/`Alerts`
+1. In the `IBM Concert Operate` "Hamburger" Menu select `Operate`/`Alerts`
 
    ![install](./doc/pics/post05.png)
 
@@ -395,30 +489,30 @@ To access the demo environment:
 </details>
 
 <details>
-<summary>🔎 2.1.6 Detailed Check</summary>
+<summary>🔎 2.2.6 Detailed Check</summary>
 
 ### ❗ If any of the checks is not right, please refer to [Troubleshooting](#4-troubleshooting)
 
-### 2.1.6.1 Check Overall
+### 2.2.6.1 Check Overall
 
 Check that the green notification bar is displayed as follows
 
 ![install](./doc/pics/check01.png)
 
-### 2.1.6.2 Check Training
+### 2.2.6.2 Check Training
 
-1. In the `IBM AIOps` "Hamburger" Menu select `Operate`/`AI Model Management`
+1. In the `IBM Concert Operate` "Hamburger" Menu select `Operate`/`AI Model Management`
 2. Check that the Training are displayed as follows
 
 ![install](./doc/pics/check02.png)
 
 ### ❗ If any of the trainings (particularely Temporal grouping or Metric anomaly detection) displays and error, please re-run the training. This is often due to a limit of resources at install time.
 
-### 2.1.6.3 Check Automations
+### 2.2.6.3 Check Automations
 
 #### Check Policies
 
-1. In the `IBM AIOps` "Hamburger" Menu select `Operate`/`Automations`
+1. In the `IBM Concert Operate` "Hamburger" Menu select `Operate`/`Automations`
 2. Select the `Policies` Tab
 3. Enter `DEMO` into the search field
 4. Check that you have 5 Policies as shown below
@@ -427,7 +521,7 @@ Check that the green notification bar is displayed as follows
 
 #### Check Runbooks
 
-1. In the `IBM AIOps` "Hamburger" Menu select `Operate`/`Automations`
+1. In the `IBM Concert Operate` "Hamburger" Menu select `Operate`/`Automations`
 2. Select the `Runbooks ` Tab
 3. Check that you have 4 Runbooks as shown below
 
@@ -435,7 +529,7 @@ Check that the green notification bar is displayed as follows
 
 #### Check Actions
 
-1. In the `IBM AIOps` "Hamburger" Menu select `Operate`/`Automations`
+1. In the `IBM Concert Operate` "Hamburger" Menu select `Operate`/`Automations`
 2. Select the `Actions ` Tab
 3. 2. Enter `DEMO` into the search field
 4. Check that you have some Actions present as shown below
@@ -444,14 +538,14 @@ Check that the green notification bar is displayed as follows
 
 ### Check Applications
 
-1. In the `IBM AIOps` "Hamburger" Menu select `Operate`/`Resource management`
+1. In the `IBM Concert Operate` "Hamburger" Menu select `Operate`/`Resource management`
 2. Check that the Applications are displayed as follows
 
 ![install](./doc/pics/check07.png)
 
 ### Check Connections
 
-1. In the `IBM AIOps` "Hamburger" Menu select `Define`/`Integrations`
+1. In the `IBM Concert Operate` "Hamburger" Menu select `Define`/`Integrations`
 2. Check that the Connections are displayed as follows
 
 ![install](./doc/pics/check06.png)
@@ -461,7 +555,7 @@ Check that the green notification bar is displayed as follows
 </details>
 
 <details>
-<summary>👩‍💻 2.1.7 Characters to chose from</summary>
+<summary>👩‍💻 2.2.7 Characters to chose from</summary>
 
 In the Quick Install file you can also adapt the Name of your Environment (default is `Bear`)
 
@@ -566,99 +660,6 @@ You can chose from the following:
 
 ---
 
-## 2.2 🐣 Install IBM Concert platform (❗EXPERIMENTAL)
-
-#### 🚀 Get IBM Concert platform installed in one simple script.
-
-❗In order to install Concert platform you need a valid Turbonomic key ❗
-❗If you don't provide one (it will still install) you will miss some features❗
-
-If you have any questions please read up here first https://www.ibm.com/docs/en/concert-platform?topic=platform-overview
-
-<details>
-<summary>📦 2.3.1 What will be installed</summary>
-
-This installation contains:
-
-> - **IBM Concert platform**
-> - **IBM Concert Optimize (Turbonomic) either Full or Lite**
-> - **IBM Concert platform integration with Keycloak for SSO (optional)**
-> - **Demo Applications**
->   - RobotShop Demo App
->   - SockShop Demo App
-
-<div style="page-break-after: always;"></div>
-
-</details>
-
-</details>
-
-<details>
-<summary>🚀 2.3.2 Installation Instructions </summary>
-
-1. In the the OpenShift Web UI click on the `+` sign in the right upper corner
-1. Copy and paste the content from [this file](./Quick_Install/05_INSTALL_IBM_CONCERT_PLATFORM_EXPERIMENTAL.yaml)
-1. Accept the license by setting `accept_all_licenses` to `True` (line 69)
-1. Replace `<REGISTRY_TOKEN>` at the top of the file with your entitlement key from step 1.1.2 (line 50 - the Entitlement key from https://myibm.ibm.com)
-1. Replace the default Password `global_password: CHANGEME` with a Password of your choice (line 63, ❗ do NOT use the "-" character and do NOT leave empty ❗)
-1. If you want a full Concert Optimize/Turbonomic installed, set `turbo_lite` (line 154) `True`
-1. In `turbo_license` (line 171) provide your licence for Concert Optimize/Turbonomic in base64 (run `cat turbo.lic|base64`)
-1. If you want AI features enbaled, set `enable_WatsonX` to `True` (line 225) and provide your `watsonx_projectid` and `watsonx_token`
-1. If you want to integrate Concert with Keycloak for SSO, set `integrate_keycloak` to `True` (line 252) (the SSO user will be the same as for the standalone)
-1. If you want configure platform AI agents, set `registerAgents` to `True` (line 255)
-1. Click `Create`
-
-> #### If you need the Keycloak Credentials to connect and manage users, search for `Keycloak Credentials` in the installation Log.
-
-> #### ❗ If you get a ClusterRoleBinding already exists, just ignore it
->
-> #### ❗ If you get a warning (Orange or Red Bar on top) please [re-run the installer Pod](#re-run-the-installer) until you are all green.
-
-</details>
-
-<details>
-<summary>🚀 2.3.3 Enable WatsonX for Concert </summary>
-
-Execute the following with your WatsonX Credentials
-
-```bash
-export WATSONX_API_KEY=<WATSONX_API_KEY>
-export WATSONX_API_PROJECT_ID=<WATSONX_API_PROJECT_ID>
-export WATSONX_API_URL=https://us-south.ml.cloud.ibm.com
-export CONCERT_NAMESPACE=ibm-concert
-
-
-kubectl patch secret/app-cfg-secret -n $CONCERT_NAMESPACE --type=merge -p '{
-   "data": {
-   "WATSONX_API_KEY": "'$(echo -n $WATSONX_API_KEY | base64 )'",
-   "WATSONX_API_PROJECT_ID": "'$(echo -n "$WATSONX_API_PROJECT_ID" | base64 )'",
-   "WATSONX_API_URL": "'$(echo -n "$WATSONX_API_URL" | base64 )'"
-   }
-}'
-kubectl rollout restart -n $CONCERT_NAMESPACE deployment/roja-py-utils
-```
-
-<div style="page-break-after: always;"></div>
-
-</details>
-
-</details>
-
-<details>
-<summary>🔎 2.3.3 Follow the installation progress</summary>
-
-- The blue Notification at the top gives you basic information about the running Installation (Name, Version, ...)
-
-  You can open and follow the installation logs by clicking on `Open Logs`
-
-- In addition to this, you also have the bottom Notifications that give you the current step of the Installation
-
-- When the Installation has succeeded, you get the top green Notification bar
-
-  You can directly open IBM Turbonomic by clicking on the link
-
-</details>
-
 # 3. IBM Concert Operate (CloudPak for AIOps)
 
 ---
@@ -669,7 +670,7 @@ kubectl rollout restart -n $CONCERT_NAMESPACE deployment/roja-py-utils
 
 ---
 
-❗DEPRECATED❗ Those Resources give you an idea on how to demo CP4AIOps but they are for older versions only.
+❗DEPRECATED❗ Those Resources give you an idea on how to demo Concert Operate but they are for older versions only.
 
 📹 ❗DEPRECATED❗Please use the [Demo Script](/./doc/storytelling/CP4AIOps%20Live%20Environment%20Sample%20Demo%20Script_NO_CHATOPS.md) to prepare for the demo.
 
@@ -685,7 +686,7 @@ kubectl rollout restart -n $CONCERT_NAMESPACE deployment/roja-py-utils
 To access the demo environment:
 
 - Click on the Application Menu <svg fill="currentColor" height="1em" width="1em" viewBox="0 0 512 512" aria-hidden="true" role="img" style="vertical-align: -0.125em;"><path d="M149.333 56v80c0 13.255-10.745 24-24 24H24c-13.255 0-24-10.745-24-24V56c0-13.255 10.745-24 24-24h101.333c13.255 0 24 10.745 24 24zm181.334 240v-80c0-13.255-10.745-24-24-24H205.333c-13.255 0-24 10.745-24 24v80c0 13.255 10.745 24 24 24h101.333c13.256 0 24.001-10.745 24.001-24zm32-240v80c0 13.255 10.745 24 24 24H488c13.255 0 24-10.745 24-24V56c0-13.255-10.745-24-24-24H386.667c-13.255 0-24 10.745-24 24zm-32 80V56c0-13.255-10.745-24-24-24H205.333c-13.255 0-24 10.745-24 24v80c0 13.255 10.745 24 24 24h101.333c13.256 0 24.001-10.745 24.001-24zm-205.334 56H24c-13.255 0-24 10.745-24 24v80c0 13.255 10.745 24 24 24h101.333c13.255 0 24-10.745 24-24v-80c0-13.255-10.745-24-24-24zM0 376v80c0 13.255 10.745 24 24 24h101.333c13.255 0 24-10.745 24-24v-80c0-13.255-10.745-24-24-24H24c-13.255 0-24 10.745-24 24zm386.667-56H488c13.255 0 24-10.745 24-24v-80c0-13.255-10.745-24-24-24H386.667c-13.255 0-24 10.745-24 24v80c0 13.255 10.745 24 24 24zm0 160H488c13.255 0 24-10.745 24-24v-80c0-13.255-10.745-24-24-24H386.667c-13.255 0-24 10.745-24 24v80c0 13.255 10.745 24 24 24zM181.333 376v80c0 13.255 10.745 24 24 24h101.333c13.255 0 24-10.745 24-24v-80c0-13.255-10.745-24-24-24H205.333c-13.255 0-24 10.745-24 24z"></path></svg> in your Openshift Web Console.
-- Select `IBM AIOps Demo UI`
+- Select `IBM Concert Operate Demo UI`
 - Login with the password `Selected at installation`
 
   ![demo](./doc/pics/demo-menu.png)
@@ -694,11 +695,11 @@ To access the demo environment:
 
 </details>
 <details>
-<summary>🔐 3.1.2 Login to IBM AIOps as demo User</summary>
+<summary>🔐 3.1.2 Login to IBM Concert Operate as demo User</summary>
 
-### Login to IBM AIOps as demo User
+### Login to IBM Concert Operate as demo User
 
-- Click on the blue `IBM AIOps` button
+- Click on the blue `IBM Concert Operate` button
 - Login as User `demo` with the Password `Selected at installation`
 
 ![demo](./doc/pics/demo01.png)
@@ -739,11 +740,11 @@ The environement (Kubernetes, Applications, ...) create logs that are being fed 
 
 ![demo](./doc/pics/aiops_arch_overview.jpg)
 
-1. External Systems generate Alerts and send them into the IBM AIOps for Event Grouping.
-1. At the same time IBM AIOps ingests the raw logs coming from the Log Management Tool (ELK) and looks for anomalies in the stream based on the trained model.
+1. External Systems generate Alerts and send them into the IBM Concert Operate for Event Grouping.
+1. At the same time IBM Concert Operate ingests the raw logs coming from the Log Management Tool (ELK) and looks for anomalies in the stream based on the trained model.
 1. It also ingests Metric Data and looks for anomalies
 1. If it finds an anomaly (logs and/or metrics) it forwards it to the Event Grouping as well.
-1. Out of this, IBM AIOps creates an Incident that is being enriched with Topology (Localization and Blast Radius) and with Similar Incidents that might help correct the problem.
+1. Out of this, IBM Concert Operate creates an Incident that is being enriched with Topology (Localization and Blast Radius) and with Similar Incidents that might help correct the problem.
 1. The Incident is then sent to Slack.
 1. A Runbook is available to correct the problem but not launched automatically.
 
@@ -759,11 +760,11 @@ The idea of this repo is to provide a optimised, complete, pre-trained demo envi
 
 It contains the following components (which can be installed independently):
 
-- **IBM AIOps**
+- **IBM Concert Operate**
   - IBM Operator
-  - IBM AIOps Instance
-- **IBM AIOps Demo Content** (optional)
-  - **OpenLDAP** & Register with IBM AIOps
+  - IBM Concert Operate Instance
+- **IBM Concert Operate Demo Content** (optional)
+  - **OpenLDAP** & Register with IBM Concert Operate
   - **AWX** (Open Source Ansible Tower) with preloaded Playbooks
   - **AI Models** - Load and Train
     - Create Training Definitions (TG, LAD, CR, SI. Turn off RSA)
@@ -774,7 +775,7 @@ It contains the following components (which can be installed independently):
     - Create K8s Observer
     - Create ASM merge rules
     - Load Overlay Topology
-    - Create IBM AIOps Application
+    - Create IBM Concert Operate Application
   - **Misc**
     - Creates valid certificate for Ingress (Slack)
     - External Routes (Flink, Topology, ...)
@@ -796,7 +797,7 @@ For the this specific Demo environment:
 
 - ELK is not needed as I am using pre-canned logs for training and for the anomaly detection (inception)
 - Same goes for Metrics, I am using pre-canned metric data for training and for the anomaly detection (inception)
-- The Events are also created from pre-canned content that is injected into IBM AIOps
+- The Events are also created from pre-canned content that is injected into IBM Concert Operate
 - There are also pre-canned ServiceNow Incidents if you don’t want to do the live integration with SNOW
 - The Webpages that are reachable from the Events are static and hosted on my GitHub
 - The same goes for ServiceNow Incident pages if you don’t integrate with live SNOW
@@ -859,9 +860,9 @@ Incidents are being created by using the high level APIs in order to simulate a 
 
 ![demo](./doc/pics/custom01.png)
 
-This feature allows you to easily create custom scenarios for the IBM AIOps Demo UI.
+This feature allows you to easily create custom scenarios for the IBM Concert Operate Demo UI.
 
-By default the custom scenario is disabled. In order to enable it you have to modify the `ibm-aiops-demo-ui-config-custom` ConfigMap in the `ibm-aiops-demo-ui` Namespace.
+By default the custom scenario is disabled. In order to enable it you have to modify the `ibm-concert-demo-ui-config-custom` ConfigMap in the `ibm-concert-demo-ui` Namespace.
 
 > ℹ️ The Topology will be loaded only the first time. Once the Application exists it will not update.
 >
@@ -1072,8 +1073,8 @@ This is a small example containing a Topology, Events, Metrics and Logs.
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  name: ibm-aiops-demo-ui-config-custom
-  namespace: ibm-aiops-demo-ui
+  name: ibm-concert-demo-ui-config-custom
+  namespace: ibm-concert-demo-ui
 data:
   CUSTOM_NAME: "Custom Demo"
   CUSTOM_EVENTS: |-
@@ -1125,7 +1126,7 @@ If not, please [re-run the installer Pod](#re-run-the-installer).
 
 If your CP4AIPS installtion gets stuck at 60-90 Pods in the `ibm-aiops` Namespace, there is not much I can do to help - this is not a problem with the scripts!
 
-✅ Please [try this YAML](https://github.com/niklaushirt/ibm-aiops-deployer/blob/main/tools/00_troubleshooting/CP4AIOPS_INSTALL_HACK.yaml)
+✅ Please [try this YAML](https://github.com/niklaushirt/ibm-concert-deployer/blob/main/tools/00_troubleshooting/CP4AIOPS_INSTALL_HACK.yaml)
 
 </details>
 
@@ -1152,7 +1153,7 @@ If you get a red notification saying `❌ FATAL ERROR: Please check the Installa
 </details>
 
 <details>
-<summary>📥 Missing stuff in CP4AIOps</summary>
+<summary>📥 Missing stuff in Concert Operate</summary>
 
 If you have missing elements:
 
@@ -1254,7 +1255,7 @@ Give your workspace a unique name such as aiops-\<yourname\>.
 
 ![slack4](./doc/pics/slackws4.png)
 
-This is free text, you may simply write “demo for IBM AIOps” or whatever you like.
+This is free text, you may simply write “demo for IBM Concert Operate” or whatever you like.
 
 6.
 
@@ -1344,9 +1345,9 @@ In the Slack App:
 
    ![K8s CNI](./doc/pics/doc48.png)
 
-In the IBM AIOps (IBMAIOPS)
+In the IBM Concert Operate (IBMAIOPS)
 
-1. In the `IBM AIOps` "Hamburger" Menu select `Define`/`Integrations`
+1. In the `IBM Concert Operate` "Hamburger" Menu select `Define`/`Integrations`
 1. Click `Add connection`
 
    ![K8s CNI](./doc/pics/doc14.png)
@@ -1372,7 +1373,7 @@ In the IBM AIOps (IBMAIOPS)
 
 ### 5.1.5 Create the Integration URL
 
-In the IBM AIOps (IBMAIOPS)
+In the IBM Concert Operate (IBMAIOPS)
 
 1. Go to `Define `\`Integrations`
 2. Under `Slack` click on `1 integration`
@@ -1434,11 +1435,11 @@ Now, configure the `welcome` slash command. With this command, you can trigger t
 
    Use the following values:
 
-   | Field             | Value                |
-   | ----------------- | -------------------- |
-   | Command           | /welcome             |
-   | Request URL       | the URL from above   |
-   | Short Description | Welcome to IBM AIOps |
+   | Field             | Value                          |
+   | ----------------- | ------------------------------ |
+   | Command           | /welcome                       |
+   | Request URL       | the URL from above             |
+   | Short Description | Welcome to IBM Concert Operate |
 
 3. Click `Save`.
 
@@ -1516,7 +1517,7 @@ or
 
 ---
 
-As I don't have time to maintain non AIOps resources I put them here for reference
+As I don't have time to maintain non Concert Operate resources I put them here for reference
 
 ## 6.1 🐣 Install IBM Turbonomic with demo content
 

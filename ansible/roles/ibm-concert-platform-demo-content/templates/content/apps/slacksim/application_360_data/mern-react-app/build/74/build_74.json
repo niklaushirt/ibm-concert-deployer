@@ -1,0 +1,73 @@
+{
+  "bomFormat": "ConcertDef",
+  "specVersion": "1.0.2",
+  "serialNumber": "urn:ibm:appmgmt:slacksim:mern-node-app:build:74",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2024-05-05T06:05:56Z",
+    "component": {
+      "type": "build",
+      "name": "mern-react-app",
+      "version": "74"
+    },
+    "properties": [
+      {
+        "name": "build-number",
+        "value": "74"
+      }
+    ]
+  },
+  "components": [
+    {
+      "bom-ref": "img:mern-react-app",
+      "type": "container",
+      "name": "us.icr.io/icr4mcc/mern-react-app",
+      "purl": "us.icr.io/icr4mcc/mern-react-app:74-main-d1a50e6570fc6b02178b8262469072c650e44425",
+      "properties": [
+        {
+          "name": "uri",
+          "value": "us.icr.io/icr4mcc/mern-react-app:74-main-d1a50e6570fc6b02178b8262469072c650e44425@sha256:40514b2e6d89fc9caedae4fd31dff3cb59b60cb76d1250b749abb8a29e03a2b0"
+        },
+        {
+          "name": "tag",
+          "value": "74-main-d1a50e6570fc6b02178b8262469072c650e44425"
+        },
+        {
+          "name": "digest",
+          "value": "sha256:40514b2e6d89fc9caedae4fd31dff3cb59b60cb76d1250b749abb8a29e03a2b0"
+        }
+      ]
+    },
+    {
+      "bom-ref": "repository:coderepo:github:mern-react-app",
+      "type": "code",
+      "name": "mern-react-app",
+      "purl": "https://github.ibm.com/rong/mern-react-app",
+      "properties": [
+        {
+          "name": "commit_sha",
+          "value": "d1a50e6570fc6b02178b8262469072c650e44425"
+        },
+        {
+          "name": "branch",
+          "value": "main"
+        }
+      ]
+    },
+    {
+      "bom-ref": "sbom:coderepo:mern-react-app",
+      "type": "cyclonedx_sbom",
+      "name": "mern-react-app",
+      "serialNumber": "urn:uuid:ab5c852d-2ba3-4851-be23-21fc84b821e5",
+      "version": "1"
+    }
+  ],
+  "dependencies": [
+    {
+      "ref": "sbom:coderepo:mern-react-app",
+      "dependsOn": [
+        "repository:coderepo:github:mern-react-app"
+      ]
+    }
+  ]
+}

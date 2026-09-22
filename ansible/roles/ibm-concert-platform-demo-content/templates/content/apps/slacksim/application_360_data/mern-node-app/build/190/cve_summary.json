@@ -1,0 +1,124 @@
+[
+  {
+    "version": "2",
+    "id": "05da5ef71ab366b7f293d756af272e0bf927586e5f7136383dd1eddec0ea6ea6",
+    "date": "2024-05-05T04:11:39.999Z",
+    "evidence_type_id": "com.ibm.cloud.image_vulnerability_scan",
+    "evidence_type_version": "1.0.0",
+    "details": {
+      "result": "success",
+      "tool": "va"
+    },
+    "assets": [
+      {
+        "hash": "b7d57a85850b47eeee4b9d30a6abd013d1764b72a77360469fe345766fefe67b",
+        "uri": "docker://us.icr.io/icr4mcc/mern-node-app:190-main-4d79c57a3d5f28590b057e68da8fe6ab37f1b348@sha256:b7d57a85850b47eeee4b9d30a6abd013d1764b72a77360469fe345766fefe67b",
+        "url": "https://s3.us-south.cloud-object-storage.appdomain.cloud/cos4scc3mcc/assets/b7d57a85850b47eeee4b9d30a6abd013d1764b72a77360469fe345766fefe67b/index.json"
+      }
+    ],
+    "findings": []
+  },
+  {
+    "version": "2",
+    "id": "ec4b1da57aac7c8e6a914194f9917a16b779cb6a4cfdbbd07d7f711e29a83986",
+    "date": "2024-05-05T04:12:38.235Z",
+    "evidence_type_id": "com.ibm.cloud.image_vulnerability_scan",
+    "evidence_type_version": "1.0.0",
+    "details": {
+      "result": "success",
+      "tool": "sysdig"
+    },
+    "assets": [
+      {
+        "hash": "b7d57a85850b47eeee4b9d30a6abd013d1764b72a77360469fe345766fefe67b",
+        "uri": "docker://us.icr.io/icr4mcc/mern-node-app:190-main-4d79c57a3d5f28590b057e68da8fe6ab37f1b348@sha256:b7d57a85850b47eeee4b9d30a6abd013d1764b72a77360469fe345766fefe67b",
+        "url": "https://s3.us-south.cloud-object-storage.appdomain.cloud/cos4scc3mcc/assets/b7d57a85850b47eeee4b9d30a6abd013d1764b72a77360469fe345766fefe67b/index.json"
+      }
+    ],
+    "findings": [
+      {
+        "id": "CVE-2018-20225 (pip)",
+        "due_date": "n/a",
+        "severity": "high",
+        "first_found": "2024-05-04",
+        "url": "https://github.ibm.com/rong/mern-node-issues/issues/161",
+        "found_status": "existing",
+        "has_exempt": true
+      },
+      {
+        "id": "CVE-2024-28863 (tar)",
+        "due_date": "n/a",
+        "severity": "high",
+        "first_found": "2024-05-04",
+        "url": "https://github.ibm.com/rong/mern-node-issues/issues/162",
+        "found_status": "existing",
+        "has_exempt": true
+      }
+    ]
+  },
+  {
+    "version": "2",
+    "id": "bd2e97bd6f645819466822820352177aee0e2772977a1a68f7ffa1b576b36d7d",
+    "date": "2024-05-05T04:09:56.255Z",
+    "evidence_type_id": "com.ibm.code_vulnerability_scan",
+    "evidence_type_version": "1.0.0",
+    "details": {
+      "result": "success",
+      "tool": "cra"
+    },
+    "assets": [
+      {
+        "hash": "c69a7a10ede6f594a7dde502e4cdd9a5afa206cb6c23f73151b4c715722edd42",
+        "uri": "https://github.ibm.com/rong/mern-node-app.git#4d79c57a3d5f28590b057e68da8fe6ab37f1b348",
+        "url": "https://s3.us-south.cloud-object-storage.appdomain.cloud/cos4scc3mcc/assets/c69a7a10ede6f594a7dde502e4cdd9a5afa206cb6c23f73151b4c715722edd42/index.json"
+      }
+    ],
+    "findings": [
+      {
+        "id": "CVE-2024-29041",
+        "due_date": "2024-06-12",
+        "severity": "medium",
+        "first_found": "2024-04-28",
+        "url": "https://github.ibm.com/rong/mern-node-issues/issues/156",
+        "found_status": "existing",
+        "has_exempt": true
+      },
+      {
+        "id": "CVE-2023-26159",
+        "due_date": "2024-06-12",
+        "severity": "medium",
+        "first_found": "2024-04-28",
+        "url": "https://github.ibm.com/rong/mern-node-issues/issues/157",
+        "found_status": "existing",
+        "has_exempt": true
+      },
+      {
+        "id": "CVE-2024-28849",
+        "due_date": "2024-06-12",
+        "severity": "medium",
+        "first_found": "2024-04-28",
+        "url": "https://github.ibm.com/rong/mern-node-issues/issues/158",
+        "found_status": "existing",
+        "has_exempt": true
+      },
+      {
+        "id": "CVE-2023-42282",
+        "due_date": "2024-05-13",
+        "severity": "critical",
+        "first_found": "2024-04-28",
+        "url": "https://github.ibm.com/rong/mern-node-issues/issues/159",
+        "found_status": "existing",
+        "has_exempt": true
+      },
+      {
+        "id": "CVE-2024-28863",
+        "due_date": "2024-06-12",
+        "severity": "medium",
+        "first_found": "2024-04-28",
+        "url": "https://github.ibm.com/rong/mern-node-issues/issues/160",
+        "found_status": "existing",
+        "has_exempt": true
+      }
+    ]
+  }
+]

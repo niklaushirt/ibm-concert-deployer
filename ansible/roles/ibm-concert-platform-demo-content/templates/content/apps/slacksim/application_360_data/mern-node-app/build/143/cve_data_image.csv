@@ -1,0 +1,2 @@
+CVE,Image,Package,Package Version,Package Path,severity,Score,hasFix,Fixed Version,Description,Tag,Digest
+CVE-2024-2511,mern-node-app,apk/alpine/libcrypto3,3.1.0-r4,./lib64/libcrypto.so.3,high,8.1,Y,fixed in 1.67,"Some non-default TLS server configurations can cause unbounded memory growth when processing TLSv1.3 sessions.",143,sha256:a3749745d03cd86f04fc7b615c5ca809465ba4d917b215a5d2f817ca6a7b624e

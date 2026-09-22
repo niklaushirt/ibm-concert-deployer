@@ -1,0 +1,416 @@
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#     ________  __  ___   __________    ___         __                        __  _
+#    /  _/ __ )/  |/  /  /  _/_  __/   /   | __  __/ /_____  ____ ___  ____ _/ /_(_)___  ____
+#    / // __  / /|_/ /   / /  / /     / /| |/ / / / __/ __ \/ __ `__ \/ __ `/ __/ / __ \/ __ \
+#  _/ // /_/ / /  / /  _/ /  / /     / ___ / /_/ / /_/ /_/ / / / / / / /_/ / /_/ / /_/ / / / /
+# /___/_____/_/  /_/  /___/ /_/     /_/  |_\__,_/\__/\____/_/ /_/ /_/\__,_/\__/_/\____/_/ /_/
+#
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------------------------------------------------------"
+---
+apiVersion: v1                     
+kind: Namespace
+metadata:
+  name: ibm-installer
+---
+
+
+
+
+# ------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# DO NOT MODIFY BELOW
+# ------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------------------------------------------------------------------------------------------
+---
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  name: ibm-installer-admin
+  namespace: ibm-installer
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: ibm-installer-admin
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+  - kind: ServiceAccount
+    name: ibm-installer-admin
+    namespace: ibm-installer
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: ibm-installer-default-admin
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+  - kind: ServiceAccount
+    name: default
+    namespace: ibm-installer
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: troubleshoot-2-1-create-missing-playbooks
+  namespace: ibm-installer
+  labels:
+   aiops-type: data-load-job
+spec:
+  serviceAccount: ibm-installer-admin
+  template:
+    metadata:
+      labels:
+        app: ibm-installer
+    spec:
+      serviceAccount: ibm-installer-admin
+      containers:
+        - name: install
+          image: quay.io/niklaushirt/ibm-concert-tools:1.0.0
+          imagePullPolicy: IfNotPresent
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "150m"
+            limits:
+              memory: "2024Mi"
+              cpu: "1200m"
+          command:
+            - /bin/bash
+            - -c
+            - |
+              #!/bin/bash
+              #set +x
+              echo "***************************************************************************************************************************************************"
+              echo "***************************************************************************************************************************************************"
+              echo "                                                                                                                                                   "
+              echo " 🚀 Create missing Playbooks                                                                                                                                            "
+              echo "                                                                                                                                                   "
+              echo "***************************************************************************************************************************************************"
+
+
+
+
+                # -----------------------------------------------------------------------------------------------------------------------------
+                # 🚀 AWX - Get AWX URL
+                export AWX_ROUTE=$(oc get route -n awx awx -o jsonpath={.spec.host})
+                export AWX_URL=$(echo "https://$AWX_ROUTE")
+                echo "AWX_URL: $AWX_URL"
+
+
+
+
+                # -----------------------------------------------------------------------------------------------------------------------------
+                # 🚀 AWX - Get AWX Password
+                export AWX_PWD=$(oc -n awx get secret awx-admin-password -o jsonpath='{.data.password}' | base64 --decode && echo)
+                echo "AWX_PWD: $AWX_PWD"
+
+
+
+                # -----------------------------------------------------------------------------------------------------------------------------
+                # 🚀 AWX - Create AWX Execution Environment
+                export RUNNER_IMAGE=quay.io/niklaushirt/ibm-aiops-awx:0.1.4
+                export result=$(curl -X "POST" -s "$AWX_URL/api/v2/execution_environments/" -u "admin:$AWX_PWD" --insecure \
+                -H 'content-type: application/json' \
+                -d $'{
+                  "name": "IBM AIOPS Execution Environment",
+                  "description": "IBM AIOPS Execution Environment",
+                  "organization": null,
+                  "image": "'$RUNNER_IMAGE'",
+                  "credential": null,
+                  "pull": "missing"
+                }')
+
+                if [[ $result =~ " already exists" ]];
+                then
+                    export EXENV_ID=$(curl -X "GET" -s "$AWX_URL/api/v2/execution_environments/" -u "admin:$AWX_PWD" --insecure|jq -c '.results[]| select( .name == "IBM AIOPS Execution Environment")|.id')
+                else
+                    export EXENV_ID=$(echo $result|jq ".id")
+                    sleep 60
+                fi 
+                echo "EXENV_ID: '$EXENV_ID'"
+
+
+
+
+
+                # -----------------------------------------------------------------------------------------------------------------------------
+                # 🚀 AWX - Create AWX Project
+                export AWX_REPO=https://github.com/niklaushirt/ansible-demo
+                export result=$(curl -X "POST" -s "$AWX_URL/api/v2/projects/" -u "admin:$AWX_PWD" --insecure \
+                -H 'content-type: application/json' \
+                -d $'{
+                    "name": "IBM AIOPS Runbooks",
+                    "description": "IBM AIOPS Runbooks",
+                    "local_path": "",
+                    "scm_type": "git",
+                    "scm_url": "'$AWX_REPO'",
+                    "scm_branch": "",
+                    "scm_refspec": "",
+                    "scm_clean": false,
+                    "scm_track_submodules": false,
+                    "scm_delete_on_update": false,
+                    "credential": null,
+                    "timeout": 0,
+                    "organization": 1,
+                    "scm_update_on_launch": false,
+                    "scm_update_cache_timeout": 0,
+                    "allow_override": false,
+                    "default_environment": null
+                }')
+
+                if [[ $result =~ " already exists" ]];
+                then
+                    export AWX_PROJECT_ID=$(curl -X "GET" -s "$AWX_URL/api/v2/projects/" -u "admin:$AWX_PWD" --insecure|jq -c '.results[]| select( .name == "IBM AIOPS Runbooks")|.id')
+                else
+                    export AWX_PROJECT_ID=$(echo $result|jq ".id")
+                fi
+                #sleep 60
+                echo "AWX_PROJECT_ID: $AWX_PROJECT_ID"
+
+
+
+
+
+
+                # -----------------------------------------------------------------------------------------------------------------------------
+                # 🚀 AWX - Create AWX Inventory (Project is $STATUS)
+                export result=$(curl -X "POST" -s "$AWX_URL/api/v2/inventories/" -u "admin:$AWX_PWD" --insecure \
+                -H 'content-type: application/json' \
+                -d $'{
+                  "name": "IBM AIOPS Runbooks",
+                  "description": "IBM AIOPS Runbooks",
+                  "organization": 1,
+                  "project": '$AWX_PROJECT_ID',
+                  "kind": "",
+                  "host_filter": null,
+                  "variables": ""
+                }')
+
+                if [[ $result =~ " already exists" ]];
+                then
+                    export AWX_INVENTORY_ID=$(curl -X "GET" -s "$AWX_URL/api/v2/inventories/" -u "admin:$AWX_PWD" --insecure|jq -c '.results[]| select( .name == "IBM AIOPS Runbooks")|.id')
+                else
+                    export AWX_INVENTORY_ID=$(echo $result|tr -d '\n'|jq ".id")
+                    sleep 15
+                fi
+                echo "AWX_INVENTORY_ID: $AWX_INVENTORY_ID"
+
+
+
+
+
+                # -----------------------------------------------------------------------------------------------------------------------------
+                # 🚀 AWX - Create AWX Template Mitigate Robotshop Ratings Outage
+                export result=$(curl -X "POST" -s "$AWX_URL/api/v2/job_templates/" -u "admin:$AWX_PWD" --insecure \
+                -H 'content-type: application/json' \
+                -d $'{
+                  "name": "IBM AIOPS Mitigate Robotshop Ratings Outage",
+                  "description": "Mitigate Robotshop Ratings Outage",
+                  "job_type": "run",
+                  "inventory": '$AWX_INVENTORY_ID',
+                  "project": '$AWX_PROJECT_ID',
+                  "playbook": "ibm-aiops/robotshop-restart/start-ratings.yaml",
+                  "scm_branch": "",
+                  "extra_vars": "",
+                  "ask_variables_on_launch": true,
+                  "extra_vars": "PROVIDE: my_k8s_apiurl and my_k8s_apikey",
+                  "execution_environment": '$EXENV_ID'
+                }')
+
+                echo $result
+
+
+
+
+
+                # -----------------------------------------------------------------------------------------------------------------------------
+                # 🚀 AWX - Create AWX Template Create Robotshop Ratings Outage
+                export result=$(curl -X "POST" -s "$AWX_URL/api/v2/job_templates/" -u "admin:$AWX_PWD" --insecure \
+                -H 'content-type: application/json' \
+                -d $'{
+                  "name": "IBM AIOPS Create Robotshop Ratings Outage",
+                  "description": "Create Robotshop Ratings Outage",
+                  "job_type": "run",
+                  "inventory": '$AWX_INVENTORY_ID',
+                  "project": '$AWX_PROJECT_ID',
+                  "playbook": "ibm-aiops/robotshop-restart/stop-ratings.yaml",
+                  "scm_branch": "",
+                  "extra_vars": "",
+                  "ask_variables_on_launch": true,
+                  "extra_vars": "PROVIDE: my_k8s_apiurl and my_k8s_apikey",
+                  "execution_environment": '$EXENV_ID'
+                }')
+
+                echo $result
+
+
+
+
+                # -----------------------------------------------------------------------------------------------------------------------------
+                # 🚀 AWX - Create AWX Template Start Robotshop Ratings
+                export result=$(curl -X "POST" -s "$AWX_URL/api/v2/job_templates/" -u "admin:$AWX_PWD" --insecure \
+                -H 'content-type: application/json' \
+                -d $'{
+                  "name": "IBM AIOPS Start Robotshop Ratings",
+                  "description": "Start Robotshop Ratings",
+                  "job_type": "run",
+                  "inventory": '$AWX_INVENTORY_ID',
+                  "project": '$AWX_PROJECT_ID',
+                  "playbook": "ibm-aiops/robotshop-restart/restart-ratings-start.yaml",
+                  "scm_branch": "",
+                  "extra_vars": "",
+                  "ask_variables_on_launch": true,
+                  "extra_vars": "PROVIDE: my_k8s_apiurl and my_k8s_apikey",
+                  "execution_environment": '$EXENV_ID'
+                }')
+
+                echo $result
+
+
+
+
+                # -----------------------------------------------------------------------------------------------------------------------------
+                # 🚀 AWX - Create AWX Template Restart Network Interface
+                export result=$(curl -X "POST" -s "$AWX_URL/api/v2/job_templates/" -u "admin:$AWX_PWD" --insecure \
+                -H 'content-type: application/json' \
+                -d $'{
+                  "name": "IBM AIOPS Restart Network Interface",
+                  "description": "Restart Network Interface",
+                  "job_type": "run",
+                  "inventory": '$AWX_INVENTORY_ID',
+                  "project": '$AWX_PROJECT_ID',
+                  "playbook": "ibm-aiops/robotshop-restart/restart-ratings-start.yaml",
+                  "scm_branch": "",
+                  "extra_vars": "",
+                  "ask_variables_on_launch": true,
+                  "extra_vars": "PROVIDE: my_k8s_apiurl and my_k8s_apikey",
+                  "execution_environment": '$EXENV_ID'
+                }')
+
+                echo $result
+
+
+
+                # -----------------------------------------------------------------------------------------------------------------------------
+                # 🚀 AWX - Create AWX Template Stop Robotshop Ratings
+                export result=$(curl -X "POST" -s "$AWX_URL/api/v2/job_templates/" -u "admin:$AWX_PWD" --insecure \
+                -H 'content-type: application/json' \
+                -d $'{
+                  "name": "IBM AIOPS Stop Robotshop Ratings",
+                  "description": "Stop Robotshop Ratings",
+                  "job_type": "run",
+                  "inventory": '$AWX_INVENTORY_ID',
+                  "project": '$AWX_PROJECT_ID',
+                  "playbook": "ibm-aiops/robotshop-restart/restart-ratings-stop.yaml",
+                  "scm_branch": "",
+                  "extra_vars": "",
+                  "ask_variables_on_launch": true,
+                  "extra_vars": "PROVIDE: my_k8s_apiurl and my_k8s_apikey",
+                  "execution_environment": '$EXENV_ID'
+                }')
+
+                echo $result
+
+
+
+
+
+                # -----------------------------------------------------------------------------------------------------------------------------
+                # 🚀 AWX - Create AWX Template Mitigate SockShop Switch Outage
+                export result=$(curl -X "POST" -s "$AWX_URL/api/v2/job_templates/" -u "admin:$AWX_PWD" --insecure \
+                -H 'content-type: application/json' \
+                -d $'{
+                  "name": "IBM AIOPS Mitigate SockShop Switch Outage",
+                  "description": "Mitigate SockShop Switch Outage",
+                  "job_type": "run",
+                  "inventory": '$AWX_INVENTORY_ID',
+                  "project": '$AWX_PROJECT_ID',
+                  "playbook": "ibm-aiops/sockshop/mitigate-sockshop.yaml",
+                  "scm_branch": "",
+                  "extra_vars": "",
+                  "ask_variables_on_launch": true,
+                  "extra_vars": "PROVIDE: my_k8s_apiurl and my_k8s_apikey",
+                  "execution_environment": '$EXENV_ID'
+                }')
+
+                echo $result
+
+
+
+
+
+                # -----------------------------------------------------------------------------------------------------------------------------
+                # 🚀 AWX - Create AWX Template Reset Fiber Uplink
+                export result=$(curl -X "POST" -s "$AWX_URL/api/v2/job_templates/" -u "admin:$AWX_PWD" --insecure \
+                -H 'content-type: application/json' \
+                -d $'{
+                  "name": "IBM AIOPS Reset Fiber Uplink",
+                  "description": "Reset Fiber Uplink",
+                  "job_type": "run",
+                  "inventory": '$AWX_INVENTORY_ID',
+                  "project": '$AWX_PROJECT_ID',
+                  "playbook": "ibm-aiops/robotshop-restart/reset-fiber.yaml",
+                  "scm_branch": "",
+                  "extra_vars": "",
+                  "ask_variables_on_launch": true,
+                  "extra_vars": "PROVIDE: my_k8s_apiurl and my_k8s_apikey",
+                  "execution_environment": '$EXENV_ID'
+                }')
+
+                echo $result
+
+
+
+
+
+
+                # -----------------------------------------------------------------------------------------------------------------------------
+                # 🚀 AWX - Create AWX Template Cut Fiber Uplink
+                export result=$(curl -X "POST" -s "$AWX_URL/api/v2/job_templates/" -u "admin:$AWX_PWD" --insecure \
+                -H 'content-type: application/json' \
+                -d $'{
+                  "name": "IBM AIOPS Cut Fiber Uplink",
+                  "description": "Cut Fiber Uplink",
+                  "job_type": "run",
+                  "inventory": '$AWX_INVENTORY_ID',
+                  "project": '$AWX_PROJECT_ID',
+                  "playbook": "ibm-aiops/robotshop-restart/cut-fiber.yaml",
+                  "scm_branch": "",
+                  "extra_vars": "",
+                  "ask_variables_on_launch": true,
+                  "extra_vars": "PROVIDE: my_k8s_apiurl and my_k8s_apikey",
+                  "execution_environment": '$EXENV_ID'
+                }')
+
+                echo $result
+
+
+
+
+
+              echo "*****************************************************************************************************************************"
+              echo " ✅ DONE"
+              echo "*****************************************************************************************************************************"
+
+
+
+
+              while true
+              do
+                sleep 1000
+              done
+
+
+          env:
+      restartPolicy: Never
+  backoffLimit: 500
+

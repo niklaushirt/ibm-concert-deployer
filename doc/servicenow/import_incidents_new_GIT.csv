@@ -1,0 +1,35 @@
+number,title,body,created_at,closed_at,state
+1,RobotShop call rate is too high - RobotShop call rate stays at a high level for an extended period of time,"RobotShop call rate is too high - RobotShop call rate stays at a high level for an extended period of timeRatings are not displayed anymore after a GIT Commit by DEV.
+Predictive Insights indicates an anomaly with MySQL memory peak usage. 
+Could be memory leak or a code change in the GIT Commit?.",4/27/23 20:47,4/30/23 4:24,closed
+2,RobotShop sudden increase in the number of erroneous calls - This can be a sign of a problem on one side of the connection,"RobotShop sudden increase in the number of erroneous calls - This can be a sign of a problem on one side of the connectionRatings are not displayed anymore after a GIT Commit by DEV.
+Predictive Insights indicates an anomaly with MySQL memory peak usage. 
+Could be memory leak or a code change in the GIT Commit?.",4/28/23 20:47,5/1/23 4:24,closed
+3,Sudden increase in the number of erroneous calls - This can be a sign of a problem on one side of the connection,"Sudden increase in the number of erroneous calls - This can be a sign of a problem on one side of the connectionRatings are not displayed anymore after a GIT Commit by DEV.
+Predictive Insights indicates an anomaly with MySQL memory peak usage. 
+Could be memory leak or a code change in the GIT Commit?.",5/9/23 20:47,5/12/23 4:24,closed
+4,RobotShop call rate is too high - RobotShop call rate stays at a high level for an extended period of time,"RobotShop call rate is too high - RobotShop call rate stays at a high level for an extended period of timeRatings are not displayed anymore after a GIT Commit by DEV.
+Predictive Insights indicates an anomaly with MySQL memory peak usage. 
+Could be memory leak or a code change in the GIT Commit?.",4/27/23 20:47,4/30/23 4:24,closed
+5,RobotShop sudden increase in the number of erroneous calls - This can be a sign of a problem on one side of the connection,"RobotShop sudden increase in the number of erroneous calls - This can be a sign of a problem on one side of the connectionRatings are not displayed anymore after a GIT Commit by DEV.
+Predictive Insights indicates an anomaly with MySQL memory peak usage. 
+Could be memory leak or a code change in the GIT Commit?.",4/28/23 20:47,5/1/23 4:24,closed
+6,Sudden increase in the number of erroneous calls - This can be a sign of a problem on one side of the connection,"Sudden increase in the number of erroneous calls - This can be a sign of a problem on one side of the connectionRatings are not displayed anymore after a GIT Commit by DEV.
+Predictive Insights indicates an anomaly with MySQL memory peak usage. 
+Could be memory leak or a code change in the GIT Commit?.",5/9/23 20:47,5/12/23 4:24,closed
+7,RobotShop sudden increase in the number of erroneous calls - This can be a sign of a problem on one side of the connection,"RobotShop sudden increase in the number of erroneous calls - This can be a sign of a problem on one side of the connectionRatings are not displayed anymore after a GIT Commit by DEV.
+Predictive Insights indicates an anomaly with MySQL memory peak usage. 
+Could be memory leak or a code change in the GIT Commit?.",5/11/23 20:47,5/14/23 4:24,closed
+8,Commit in repository robot-shop by Niklaus Hirt on file robot-shop.yaml - New Memory Limits,Commit in repository robot-shop by Niklaus Hirt on file robot-shop.yaml - New Memory LimitsCommit in repository robot-shop by Niklaus Hirt on file robot-shop.yaml - New Memory Limits,5/15/23 20:47,5/18/23 4:24,closed
+9,MySQL - change detected - The value **resources/limits** has changed,MySQL - change detected - The value **resources/limits** has changedCommit in repository robot-shop by Niklaus Hirt on file robot-shop.yaml - New Memory Limits,5/16/23 20:47,5/19/23 4:24,closed
+10,MySQL - K8s Deployment Modified,MySQL - K8s Deployment ModifiedCommit in repository robot-shop by Niklaus Hirt on file robot-shop.yaml - New Memory Limits,5/17/23 20:47,5/20/23 4:24,closed
+11,MySQL K8s Pod Created,MySQL K8s Pod CreatedCommit in repository robot-shop by Niklaus Hirt on file robot-shop.yaml - New Memory Limits,5/18/23 20:47,5/21/23 4:24,closed
+12,MySQL memory peak usage anomaly,MySQL memory peak usage anomalyCommit in repository robot-shop by Niklaus Hirt on file robot-shop.yaml - New Memory Limits,5/19/23 20:47,5/22/23 4:24,closed
+13,MySQL memory peak usage anomaly,MySQL memory peak usage anomalyCommit in repository robot-shop by Niklaus Hirt on file robot-shop.yaml - New Memory Limits,5/19/23 20:47,5/22/23 4:24,closed
+14,Robotshop Homepage - Functional verification failed,Robotshop Homepage - Functional verification failedCommit in repository robot-shop by Niklaus Hirt on file robot-shop.yaml - New Memory Limits,5/20/23 20:47,5/23/23 4:24,closed
+15,Ratings Service outage after K8s Node Failure,Ratings Service outage after K8s Node FailureCommit in repository robot-shop by Niklaus Hirt on file robot-shop.yaml - New Memory Limits,5/21/23 20:47,5/24/23 4:24,closed
+16,MySQL - available replicas is less than desired replicas - Check conditions and error events,MySQL - available replicas is less than desired replicas - Check conditions and error eventsCommit in repository robot-shop by Niklaus Hirt on file robot-shop.yaml - New Memory Limits,5/24/23 20:47,5/27/23 4:24,closed
+17,Robotshop Homepage call rate is too high- Robotshop call rate stays at a high level for an extended period of time,Robotshop Homepage call rate is too high- Robotshop call rate stays at a high level for an extended period of timeCommit in repository robot-shop by Niklaus Hirt on file robot-shop.yaml - New Memory Limits,5/25/23 20:47,5/28/23 4:24,closed
+18,<*> stdout F <*> - - [<*>/May/<*>:<*>:<*>:<*> <*>] <*>,<*> stdout F <*> - - [<*>/May/<*>:<*>:<*>:<*> <*>] <*>Commit in repository robot-shop by Niklaus Hirt on file robot-shop.yaml - New Memory Limits,5/28/23 20:47,5/31/23 4:24,closed
+19,vSphere Switch Outage: dcwest1-switch023,vSphere Switch Outage: dcwest1-switch023vSphere Switch Outage: dcwest1-switch023,5/23/23 20:47,5/26/23 4:24,closed
+20,Server failure after Fan outage,Server failure after Fan outageBlade DCWest1-Rack045-DELL3762 is overheating and shutting down.,5/22/23 20:47,5/25/23 4:24,closed

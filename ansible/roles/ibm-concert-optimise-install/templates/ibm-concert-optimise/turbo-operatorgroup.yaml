@@ -1,0 +1,11 @@
+apiVersion: operators.coreos.com/v1
+kind: OperatorGroup
+metadata:
+  name: ibm-concert-optimise
+  namespace: ibm-concert-optimise
+spec:
+  targetNamespaces:
+    - ibm-concert-optimise
+status:
+  namespaces:
+    - ibm-concert-optimise

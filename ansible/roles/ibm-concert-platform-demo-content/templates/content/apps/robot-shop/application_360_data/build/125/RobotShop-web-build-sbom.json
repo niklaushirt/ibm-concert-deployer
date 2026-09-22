@@ -1,0 +1,58 @@
+{
+    "bomFormat": "ConcertDef",
+    "specVersion": "1.0.2",
+    "serialNumber": "urn:ibm:appmgmt:RobotShop:web:build:123",
+    "version": 1,
+    "metadata": {
+        "timestamp": "2024-09-06T15:22:21Z",
+        "component": {
+            "type": "build",
+            "name": "web",
+            "version": "1.0"
+        },
+        "properties": [
+            {
+                "name": "build-number",
+                "value": "125"
+            }
+        ]
+    },
+    "components": [
+        {
+            "bom-ref": "img:quay.io/niklaushirt/rs-web",
+            "type": "container",
+            "name": "quay.io/niklaushirt/rs-web",
+            "purl": "quay.io/niklaushirt/rs-web:latest",
+            "properties": [
+                {
+                    "name": "uri",
+                    "value": "quay.io/niklaushirt/rs-web:latest@none"
+                },
+                {
+                    "name": "tag",
+                    "value": "latest"
+                },
+                {
+                    "name": "digest",
+                    "value": "none"
+                }
+            ]
+        },
+        {
+            "bom-ref": "repository:coderepo:github:web",
+            "type": "code",
+            "name": "web",
+            "purl": "web",
+            "properties": [
+                {
+                    "name": "commit_sha",
+                    "value": "none"
+                },
+                {
+                    "name": "branch",
+                    "value": "main"
+                }
+            ]
+        }
+    ]
+}

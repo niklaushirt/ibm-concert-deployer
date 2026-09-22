@@ -1,0 +1,143 @@
+{
+  "bomFormat": "ConcertDef",
+  "specVersion": "1.0.2",
+  "serialNumber": "urn:ibm:appmgmt:slacksim:mern-react-app:deploy:stage:55",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2024-04-23T11:56:53Z",
+    "component": {
+      "bom-ref": "mern-react-app",
+      "type": "deploy",
+      "name": "mern-react-app",
+      "version": "55"
+    },
+    "properties": [
+      {
+        "name": "environment-id",
+        "value": "stage"
+      },
+      {
+        "name": "change-management-url",
+        "value": "https://us-south.git.cloud.ibm.com/rong/mern-react-change"
+      },
+      {
+        "name": "change-request-url",
+        "value": "https://us-south.git.cloud.ibm.com/rong/mern-react-change/issues/55"
+      },
+      {
+        "name": "change-request-number",
+        "value": "55"
+      }
+    ]
+  },
+  "components": [
+    {
+      "bom-ref": "deploy:mern-react-deployment",
+      "type": "deployment",
+      "name": "mern-react-deployment",
+      "components": [
+        {
+          "bom-ref": "repository:coderepo:github:mern-react-deployment",
+          "type": "code",
+          "name": "mern-react-deployment",
+          "purl": "https://github.ibm.com/rong/mern-react-deployment"
+        }
+      ],
+      "properties": [
+        {
+          "name": "commit_sha",
+          "value": "a2cee1223cae6f356b7ce7abbaf6ff010bbfe73f"
+        },
+        {
+          "name": "bom-link-build",
+          "value": "urn:ibm:appmgmt:slacksim:mern-react-app:build:73/1"
+        }
+      ]
+    }
+  ],
+  "services": [
+    {
+      "bom-ref": "k8:roks",
+      "name": "roks",
+      "properties": [
+        {
+          "name": "platform",
+          "value": "ibmcloud"
+        },
+        {
+          "name": "cluster_platform",
+          "value": "ROKS"
+        },
+        {
+          "name": "cluster_id",
+          "value": "ckri4n4w0upk39imvl30"
+        },
+        {
+          "name": "cluster_region",
+          "value": "us-east"
+        },
+        {
+          "name": "cluster_name",
+          "value": "roks2"
+        },
+        {
+          "name": "cluster_namespace",
+          "value": "roja3mern"
+        }
+      ]
+    },
+    {
+      "bom-ref": "appapi:mern-react-app_api",
+      "name": "mern-react-app_api",
+      "properties": [
+        {
+          "name": "base_url",
+          "value": "https://mern-react-app.roks2-b12d73cc7b0aedf0e30addbf16d8fc5a-0000.us-east.containers.appdomain.cloud"
+        }
+      ]
+    },
+    {
+      "bom-ref": "appapi:mern-react-app-cos",
+      "name": "mern-react-app-cos",
+      "endpoints": [
+        "s3.us-south.cloud-object-storage.appdomain.cloud",
+        "https://control.cloud-object-storage.cloud.ibm.com/v2/endpoints"
+      ],
+      "properties": [
+        {
+          "name": "crn",
+          "value": "crn:v1:bluemix:public:cloud-object-storage:global:a/f46c40f47b6842e68835243ffeacb614:97ac0105-fe81-4ff6-b7ae-91802c23fae5::"
+        },
+        {
+          "name": "bucket-name",
+          "value": "cos4scc3mcc"
+        },
+        {
+          "name": "key-prefix",
+          "value": "concert/mern-react-app/54c20a53c02c07a4a78acef611ab42e81f7fa609/stage"
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "ref": "k8:roks",
+      "dependsOn": [
+        "deploy:mern-react-deployment",
+        "appapi:mern-react-app_api"
+      ]
+    },
+    {
+      "ref": "deploy:mern-react-deployment",
+      "dependsOn": [
+        "appapi:mern-react-app_api"
+      ]
+    },
+    {
+      "ref": "repository:coderepo:github:mern-react-deployment",
+      "dependsOn": [
+        "appapi:mern-react-app-cos"
+      ]
+    }
+  ]
+}

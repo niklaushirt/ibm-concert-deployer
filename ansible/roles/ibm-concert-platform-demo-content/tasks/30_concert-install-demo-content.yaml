@@ -1,0 +1,270 @@
+
+# *************************************************************************************************************************************************
+# --------------------------------------------------------------------------------------------------------------------------------------
+# Install IBM Concert
+# --------------------------------------------------------------------------------------------------------------------------------------
+# *************************************************************************************************************************************************
+
+# --------------------------------------------------------------------------------------------------------------------------------------
+# Install IBM Concert Demo Content
+# --------------------------------------------------------------------------------------------------------------------------------------
+
+- name: 🛰️  START - INSTALL IBM Concert
+  debug: 
+    msg="{{ lookup('pipe','date +%d.%m.%Y---%H:%M:%S') }}"
+
+
+- name: Log
+  shell: |
+    export MESSAGE="Installing IBM Concert Demo Content"
+    export currentDate=$(date +%Y-%m-%d_%H:%M)
+    echo "---------------------------------------------------------------------------------------------------------------------------------------------------" >> ../install_{{current_feature.kind}}.log
+    echo $currentDate" - "$MESSAGE  >> ../install_{{current_feature.kind}}.log
+  ignore_errors: true
+
+
+
+
+
+- name: 🚀 IBM Concert - Set IBM Concert Password 
+  set_fact: current_admin_pass={{global_config.global_password}}
+
+
+- name: 🟣  IBM Concert -  IBM Concert Password {{current_admin_pass}}
+  debug:
+    var: current_admin_pass
+    verbosity: 1
+
+
+- name:   🚀 IBM Concert - Load Default Demo Content
+  shell: |
+    set -x
+
+
+    echo ""
+    echo ""
+    echo ""
+    echo ""
+    echo "------------------------------------------------------------------------------------------------------------------------------"
+    echo " 🚀 Set Variables"
+    echo "------------------------------------------------------------------------------------------------------------------------------"
+    export CONCERT_NAMESPACE=ibm-concert
+    echo "       🛠️   Get Route"
+    export ROUTE=$(oc get route -n $CONCERT_NAMESPACE cp-console  -o jsonpath={.spec.host})          
+    echo "        Route: $ROUTE"
+    echo ""
+    export USER_PWD={{current_admin_pass}}
+    export USER_NAME=demo
+    export ACCESS_TOKEN=$(curl -s -k -H "Content-Type: application/x-www-form-urlencoded;charset=UTF-8" -d "grant_type=password&username=$USER_NAME&password=$USER_PWD&scope=openid" https://$ROUTE/idprovider/v1/auth/identitytoken|jq -r '.access_token')
+    echo "        CPADMIN_USER: $USER_NAME"
+    echo "        CPADMIN_PWD:  $USER_PWD"
+    echo "        ACCESS_TOKEN: $ACCESS_TOKEN"
+
+ 
+    echo "       🛠️   Getting ZEN Token"
+  
+    ZEN_API_HOST=$(oc get route -n $CONCERT_NAMESPACE concert -o jsonpath='{.spec.host}')
+
+    ZEN_LOGIN_RESPONSE=$(curl -k -X "GET" "https://$ZEN_API_HOST/v1/preauth/validateAuth" \
+    -H 'username: demo' \
+    -H "iam-token: $ACCESS_TOKEN")
+
+    ZEN_LOGIN_MESSAGE=$(echo "${ZEN_LOGIN_RESPONSE}" | jq -r .message)
+    echo $ZEN_LOGIN_MESSAGE
+
+    ZEN_TOKEN=$(echo "${ZEN_LOGIN_RESPONSE}" | jq -r .accessToken)
+    echo "${ZEN_TOKEN}"
+    echo "Sucessfully logged in" 1>&2
+    echo ""
+    echo ""
+    echo ""
+    echo ""
+    echo ""
+    echo "------------------------------------------------------------------------------------------------------------------------------"
+    echo " 🚀 Load Default Demo Content"
+    echo "------------------------------------------------------------------------------------------------------------------------------"
+    curl -X "POST" -k "https://$ZEN_API_HOST/ibm/concert/ingestion/api/v1/load_sample_data" \
+              -H "Authorization: Bearer $ZEN_TOKEN" \
+              -H 'accept: application/json' \
+              -H 'instanceId: 0000-0000-0000-0000' 
+
+  register: output_string
+  ignore_errors: true
+  args:
+    executable: /bin/bash
+
+- name: 🟣  OUTPUT
+  debug: 
+    var: output_string.stdout_lines
+    #verbosity: 1
+
+
+- name:   🚀 IBM Concert - Demo Content Compliance
+  shell: |
+    set -x
+
+
+    echo ""
+    echo ""
+    echo ""
+    echo ""
+    echo "------------------------------------------------------------------------------------------------------------------------------"
+    echo " 🚀 Set Variables"
+    echo "------------------------------------------------------------------------------------------------------------------------------"
+    export CONCERT_NAMESPACE=ibm-concert
+    echo "       🛠️   Get Route"
+    export ROUTE=$(oc get route -n $CONCERT_NAMESPACE cp-console  -o jsonpath={.spec.host})          
+    echo "        Route: $ROUTE"
+    echo ""
+    export USER_PWD={{current_admin_pass}}
+    export USER_NAME=demo
+    export ACCESS_TOKEN=$(curl -s -k -H "Content-Type: application/x-www-form-urlencoded;charset=UTF-8" -d "grant_type=password&username=$USER_NAME&password=$USER_PWD&scope=openid" https://$ROUTE/idprovider/v1/auth/identitytoken|jq -r '.access_token')
+    echo "        CPADMIN_USER: $USER_NAME"
+    echo "        CPADMIN_PWD:  $USER_PWD"
+    echo "        ACCESS_TOKEN: $ACCESS_TOKEN"
+
+ 
+    echo "       🛠️   Getting ZEN Token"
+  
+    ZEN_API_HOST=$(oc get route -n $CONCERT_NAMESPACE concert -o jsonpath='{.spec.host}')
+
+    ZEN_LOGIN_RESPONSE=$(curl -k -X "GET" "https://$ZEN_API_HOST/v1/preauth/validateAuth" \
+    -H 'username: demo' \
+    -H "iam-token: $ACCESS_TOKEN")
+
+    ZEN_LOGIN_MESSAGE=$(echo "${ZEN_LOGIN_RESPONSE}" | jq -r .message)
+    echo $ZEN_LOGIN_MESSAGE
+
+    ZEN_TOKEN=$(echo "${ZEN_LOGIN_RESPONSE}" | jq -r .accessToken)
+    echo "${ZEN_TOKEN}"
+    echo "Sucessfully logged in" 1>&2
+    echo ""
+    echo ""
+    echo ""
+    echo ""
+    echo ""
+    echo "------------------------------------------------------------------------------------------------------------------------------"
+    echo " 🚀 Upload Compliance Catalog"
+    echo "------------------------------------------------------------------------------------------------------------------------------"
+    curl -X "POST" -k "https://$ZEN_API_HOST/ibm/concert/compliance/api/v1/import_catalogs" \
+          -H "Authorization: Bearer $ZEN_TOKEN" \
+          -H 'accept: application/json' \
+          -H 'instanceId: 0000-0000-0000-0000' \
+          -H 'Content-Type: multipart/form-data' \
+          -F 'file=@./roles/ibm-concert-demo-content/templates/content/compliance/sample-compliance/NIST_SP-800-53_rev4_LOW-baseline-resolved-profile_catalog.json;type=application/json'
+
+    echo ""
+    echo ""
+    echo ""
+    echo ""
+    echo ""
+    echo "------------------------------------------------------------------------------------------------------------------------------"
+    echo " 🚀 Upload Compliance Profile"
+    echo "------------------------------------------------------------------------------------------------------------------------------"
+    curl -X "POST" -k "https://$ZEN_API_HOST/ibm/concert/compliance/api/v1/import_profiles" \
+          -H "Authorization: Bearer $ZEN_TOKEN" \
+          -H 'accept: application/json' \
+          -H 'instanceId: 0000-0000-0000-0000' \
+          -H 'Content-Type: multipart/form-data' \
+          -F 'file=@./roles/ibm-concert-demo-content/templates/content/compliance/sample-compliance/profileupload.json;type=application/json'
+
+    echo ""
+    echo ""
+    echo ""
+    echo ""
+    echo ""
+    echo "------------------------------------------------------------------------------------------------------------------------------"
+    echo " 🚀 Upload Compliance Posture"
+    echo "------------------------------------------------------------------------------------------------------------------------------"
+    curl -X "POST" -k "https://$ZEN_API_HOST/ibm/concert/ingestion/api/v1/upload_files" \
+        -H 'accept: application/json' \
+        -H 'InstanceID: 0000-0000-0000-0000' \
+        -H "Authorization: Bearer $ZEN_TOKEN" \
+        -H 'Content-Type: multipart/form-data' \
+        -F "data_type=compliance" \
+        -F "filename=@./roles/ibm-concert-demo-content/templates/content/compliance/sample-compliance/posture_results.json"
+
+  register: output_string
+  ignore_errors: true
+  args:
+    executable: /bin/bash
+
+- name: 🟣  OUTPUT
+  debug: 
+    var: output_string.stdout_lines
+    #verbosity: 1
+
+
+
+
+- name:   🚀 IBM Concert - Demo Content Certificate
+  shell: |
+    set -x
+
+
+    echo ""
+    echo ""
+    echo ""
+    echo ""
+    echo "------------------------------------------------------------------------------------------------------------------------------"
+    echo " 🚀 Set Variables"
+    echo "------------------------------------------------------------------------------------------------------------------------------"
+    export CONCERT_NAMESPACE=ibm-concert
+    echo "       🛠️   Get Route"
+    export ROUTE=$(oc get route -n $CONCERT_NAMESPACE cp-console  -o jsonpath={.spec.host})          
+    echo "        Route: $ROUTE"
+    echo ""
+    export USER_PWD={{current_admin_pass}}
+    export USER_NAME=demo
+    export ACCESS_TOKEN=$(curl -s -k -H "Content-Type: application/x-www-form-urlencoded;charset=UTF-8" -d "grant_type=password&username=$USER_NAME&password=$USER_PWD&scope=openid" https://$ROUTE/idprovider/v1/auth/identitytoken|jq -r '.access_token')
+    echo "        CPADMIN_USER: $USER_NAME"
+    echo "        CPADMIN_PWD:  $USER_PWD"
+    echo "        ACCESS_TOKEN: $ACCESS_TOKEN"
+
+ 
+    echo "       🛠️   Getting ZEN Token"
+  
+    ZEN_API_HOST=$(oc get route -n $CONCERT_NAMESPACE concert -o jsonpath='{.spec.host}')
+
+    ZEN_LOGIN_RESPONSE=$(curl -k -X "GET" "https://$ZEN_API_HOST/v1/preauth/validateAuth" \
+    -H 'username: demo' \
+    -H "iam-token: $ACCESS_TOKEN")
+
+    ZEN_LOGIN_MESSAGE=$(echo "${ZEN_LOGIN_RESPONSE}" | jq -r .message)
+    echo $ZEN_LOGIN_MESSAGE
+
+    ZEN_TOKEN=$(echo "${ZEN_LOGIN_RESPONSE}" | jq -r .accessToken)
+    echo "${ZEN_TOKEN}"
+    echo "Sucessfully logged in" 1>&2
+    echo ""
+    echo ""
+    echo ""
+    echo ""
+    echo ""
+    echo "------------------------------------------------------------------------------------------------------------------------------"
+    echo " 🚀 Upload Prod Certificates"
+    echo "------------------------------------------------------------------------------------------------------------------------------"
+    curl -X "POST" -k "https://$ZEN_API_HOST/ibm/concert/ingestion/api/v1/upload_files" \
+        -H 'accept: application/json' \
+        -H 'InstanceID: 0000-0000-0000-0000' \
+        -H "Authorization: Bearer $ZEN_TOKEN" \
+        -H 'Content-Type: multipart/form-data' \
+        -F "data_type=certificate" \
+        -F 'metadata={"env_name": "prod"}' \
+        -F "filename=@./roles/ibm-concert-demo-content/templates/content/certificates/certificates-demo.json"
+
+  register: output_string
+  ignore_errors: true
+  args:
+    executable: /bin/bash
+
+- name: 🟣  OUTPUT
+  debug: 
+    var: output_string.stdout_lines
+    #verbosity: 1
+
+
+
+
+
+

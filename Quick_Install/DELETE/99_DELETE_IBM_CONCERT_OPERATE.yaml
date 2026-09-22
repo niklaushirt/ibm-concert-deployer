@@ -1,0 +1,225 @@
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#         ________  __  ___     ___    ________       
+#        /  _/ __ )/  |/  /    /   |  /  _/ __ \____  _____
+#        / // __  / /|_/ /    / /| |  / // / / / __ \/ ___/
+#      _/ // /_/ / /  / /    / ___ |_/ // /_/ / /_/ (__  ) 
+#     /___/_____/_/  /_/    /_/  |_/___/\____/ .___/____/  
+#                                           /_/
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------------------------------------------------------"
+#  Delete IBM CONCERT OPERATE
+#
+#  IBM CONCERT OPERATE
+#
+#  ©2026 nikh@ch.ibm.com
+# ---------------------------------------------------------------------------------------------------------------------------------------------------"
+# ---------------------------------------------------------------------------------------------------------------------------------------------------"
+# ---------------------------------------------------------------------------------------------------------------------------------------------------"
+# ---------------------------------------------------------------------------------------------------------------------------------------------------"
+
+
+apiVersion: v1                     
+kind: Namespace
+metadata:
+  name: ibm-installer
+---
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  name: ibm-installer-admin
+  namespace: ibm-installer
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: ibm-installer-admin
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+  - kind: ServiceAccount
+    name: ibm-installer-admin
+    namespace: ibm-installer
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: ibm-installer-default-admin
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+  - kind: ServiceAccount
+    name: default
+    namespace: ibm-installer
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ibm-delete-aiops
+  namespace: ibm-installer
+  annotations: {}
+spec:
+  selector:
+    matchLabels:
+      app: ibm-concert-operate-wipe-aiops-install
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: ibm-concert-operate-wipe-aiops-install
+    spec:
+      containers:
+        - name: tools
+          image: quay.io/niklaushirt/ibm-concert-tools:1.0.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          env: []
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "150m"
+            limits:
+              memory: "2024Mi"
+              cpu: "1200m"
+          command:
+            - /bin/sh
+            - -c
+            - |
+              #!/bin/bash
+              #set -x
+
+              echo "*****************************************************************************************************************************"
+              echo " ✅ STARTING: DELETE CP4AIOPS"
+              echo "*****************************************************************************************************************************"
+              echo ""
+              echo "  ⏳ INSTALLATION START TIMESTAMP: $(date)"
+              echo ""
+              echo "------------------------------------------------------------------------------------------------------------------------------"
+    
+
+              echo "------------------------------------------------------------------------------------------------------------------------------"
+              echo " 🚀 Getting Installation source from GitHub"
+              echo "------------------------------------------------------------------------------------------------------------------------------"
+              echo "   📥 Clone Repo https://github.com/niklaushirt/ibm-concert-operate-deployer.git -b dev_latest"
+              git clone https://github.com/niklaushirt/ibm-concert-operate-deployer.git -b dev_latest
+              cd ibm-concert-operate-deployer/
+
+              echo ""
+              echo ""
+              echo "------------------------------------------------------------------------------------------------------------------------------"
+              echo "   🔎 This Repo includes those latestet Commits"
+              git log|head -n 17
+              echo ""
+              echo ""
+
+
+              #oc delete ConsoleNotification --all &
+
+              echo "*****************************************************************************************************************************"
+              echo " 💣 WIPE CUSTOM AIOPS NAMESPACES"
+              echo "*****************************************************************************************************************************"
+              echo "------------------------------------------------------------------------------------------------------------------------------"
+              echo " 🧻 Delete Namespace sock-shop"
+              oc delete ns sock-shop &
+              echo "------------------------------------------------------------------------------------------------------------------------------"
+              echo " 🧻 Delete Namespace robot-shop"
+              oc delete ns robot-shop &
+              echo "------------------------------------------------------------------------------------------------------------------------------"
+              echo " 🧻 Delete Namespace awx"
+              oc delete ns awx &
+              echo "------------------------------------------------------------------------------------------------------------------------------"
+              echo " 🧻 Delete awx.ansible.com CustomResourceDefinition"
+              oc delete CustomResourceDefinition $(oc get CustomResourceDefinition| grep awx.ansible.com|awk '{print$1}') --ignore-not-found
+              echo "------------------------------------------------------------------------------------------------------------------------------"
+              echo " 🧻 Delete Namespace ibm-concert-operate-demo-ui"
+              oc delete ns ibm-concert-operate-demo-ui &
+              echo "------------------------------------------------------------------------------------------------------------------------------"
+              echo " 🧻 Delete Namespace ibm-concert-operate-tools"
+              oc delete ns ibm-concert-operate-tools &
+              echo "------------------------------------------------------------------------------------------------------------------------------"
+              echo " 🧻 Delete Namespace openldap"
+              oc delete ns openldap &
+
+
+              echo "*****************************************************************************************************************************"
+              echo " 💣 WIPE CP4AIOPS"
+              echo "*****************************************************************************************************************************"
+              cd ./tools/99_uninstall/ibm-concert-operate/
+              ./uninstall-cp4waiops.sh -s
+
+
+              echo "*****************************************************************************************************************************"
+              echo " 💣 WIPE REMAINING AIOPS STUFF"
+              echo "*****************************************************************************************************************************"
+              echo ""
+              echo "  ⏳ INSTALLATION START TIMESTAMP: $(date)"
+              echo ""
+
+
+              oc delete serviceaccount -n default demo-admin
+
+              oc delete ClusterRoleBinding admin-demo-user                   
+              oc delete ClusterRoleBinding admin-nik-user                    
+              oc delete ClusterRoleBinding awx-default                       
+              oc delete ClusterRoleBinding default-robotinfo1-admin          
+              oc delete ClusterRoleBinding default-robotinfo2-admin          
+              oc delete ClusterRoleBinding default-sockinfo1-admin           
+              oc delete ClusterRoleBinding default-sockinfo2-admin           
+              oc delete ClusterRoleBinding ibm-concert-operate-demo-ui-admin-crb       
+              oc delete ClusterRoleBinding ibm-installer-admin         
+              oc delete ClusterRoleBinding robot-shop                        
+              oc delete ClusterRoleBinding test-admin    
+
+
+
+              oc delete ConsoleLink ibm-concert-operate-aimanager
+              oc delete ConsoleLink ibm-concert-operate-aimanager-demo
+              oc delete ConsoleLink ibm-concert-operate-awx
+              oc delete ConsoleLink ibm-concert-operate-flink-connectors
+              oc delete ConsoleLink ibm-concert-operate-flink-policy
+              oc delete ConsoleLink ibm-concert-operate-ldap
+              oc delete ConsoleLink ibm-concert-operate-robotshop
+              oc delete ConsoleLink ibm-concert-operate-sockshop
+              oc delete ConsoleLink ibm-concert-operate-spark
+
+
+              echo "------------------------------------------------------------------------------------------------------------------------------"
+              echo " 🧻 Delete Namespace ibm-concert-operate"
+              oc delete ns ibm-concert-operate
+
+              echo "------------------------------------------------------------------------------------------------------------------------------"
+              echo " 🧻 Restart OLM Pod"
+              oc -n openshift-operator-lifecycle-manager delete $(oc get pods  -l app=catalog-operator -o NAME -n openshift-operator-lifecycle-manager)
+
+              echo "------------------------------------------------------------------------------------------------------------------------------"
+              echo " 🧻 Delete Namespace ibm-installer"
+              oc delete ns ibm-installer &
+              oc delete ClusterRoleBinding ibm-installer-default-admin &
+              oc delete deployment ibm-concert-operate-wipe-aiops-install &
+
+              echo ""
+              echo ""
+              echo "  ⏳ INSTALLATION END TIMESTAMP: $(date)"
+              echo ""
+              echo "*****************************************************************************************************************************"
+              echo " ✅ INITIALIZATION - WAITING FOREVER"
+              echo "*****************************************************************************************************************************"
+
+
+              while true
+              do
+                sleep 1000
+              done
+
+      imagePullSecrets: []
+  paused: false
+
+

@@ -1,0 +1,8 @@
+apiVersion: operators.coreos.com/v1
+kind: OperatorGroup
+metadata:
+  name: ibm-aiops-operator-group
+  namespace: {{ current_ibm_feature.project }}
+spec:
+  targetNamespaces:
+    - {{ current_ibm_feature.project }}

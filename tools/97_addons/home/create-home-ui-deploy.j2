@@ -1,0 +1,109 @@
+---
+apiVersion: v1                     
+kind: Namespace
+metadata:
+  name: home-ui
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: home-ui-admin
+  namespace: home-ui
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: home-ui-admin-crb
+subjects:
+  - kind: ServiceAccount
+    name: home-ui-admin
+    namespace: home-ui
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name:  home-ui-config
+  namespace: home-ui
+data:
+  INSTANCE_NAME: Tyrion
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: home-ui
+  namespace: home-ui
+  labels:
+      app: home-ui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: home-ui
+  template:
+    metadata:
+      labels:
+        app: home-ui
+    spec:
+      containers:
+      - image: quay.io/niklaushirt/home-ui:1.1
+        imagePullPolicy: Always
+        name: home-ui
+        command:
+        ports:
+        - containerPort: 8000
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "128Mi"
+          limits:
+            cpu: "256m"
+            memory: "512Mi"
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8000
+            scheme: HTTP
+          initialDelaySeconds: 10
+          timeoutSeconds: 1
+          periodSeconds: 20
+          successThreshold: 1
+          failureThreshold: 300
+        envFrom:
+        - configMapRef:
+            name:  home-ui-config
+      serviceAccount: home-ui-admin
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: home-ui-service
+  namespace: home-ui
+spec:
+  selector:
+    app: home-ui
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
+---
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name:  home-ui
+  namespace: home-ui
+spec:
+  to:
+    kind: Service
+    name: home-ui-service
+    weight: 100
+  port:
+    targetPort: 8000
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Allow
+  wildcardPolicy: None
