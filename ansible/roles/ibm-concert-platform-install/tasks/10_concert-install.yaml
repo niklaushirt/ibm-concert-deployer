@@ -368,7 +368,7 @@
 
 - name:   🚀 IBM Concert - IBM Concert Integrate ITOM and TurboLite
   shell: |
-    export TURBO_URL=$(oc get route -n turbonomic nginx -o jsonpath={.spec.host})
+    export TURBO_URL=$(oc get route -n ibm-concert-optimise nginx -o jsonpath={.spec.host})
 
     echo "------------------------------------------------------------------------------------------------------------------------------"
     echo " ✅ Register Turbo with ITOM"
@@ -628,7 +628,7 @@
 
     echo "------------------------------------------------------------------------------------------------------------------------------"
     echo "    ✅ Register: OPTIMIZATION_COORDINATOR_AGENT"
-    export OPTIMIZE_HOST=$(oc get route -n turbonomic nginx -o jsonpath={.spec.host})
+    export OPTIMIZE_HOST=$(oc get route -n ibm-concert-optimise nginx -o jsonpath={.spec.host})
     OPTIMIZATION_COORDINATOR_AGENT_URL="https://$OPTIMIZE_HOST/turbonomic/turboai/a2a"
 
     curl -k -X POST "$AGENT_CARD_REGISTRATION_URL" \

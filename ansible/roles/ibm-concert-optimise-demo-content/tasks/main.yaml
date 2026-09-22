@@ -22,8 +22,8 @@
 # ---------------------------------------------------------------------------------------------------------------------------------------------------"
 # Installs:
 #
-#  - Turbonomic
-#  - Turbonomic Demo Content
+#  - concert Optimise
+#  - concert Optimise Demo Content
 #     - Demo User
 #     - RobotShop Demo App with synthetic metric
 #     - Instana target (if Instana is installed - you have to enter the API Token Manually)
@@ -146,7 +146,7 @@
       OS=$(uname -s | tr '[:upper:]' '[:lower:]')
       if [ "${OS}" == "darwin" ]; then
             echo "MAC"
-            LICENSE_FILE=$(pwd)"/roles/ibm-turbonomic-demo-content/vars/lic.yaml"
+            LICENSE_FILE=$(pwd)"/roles/ibm-ibm-concert-optimise-demo-content/vars/lic.yaml"
       else
             LICENSE_FILE="{{role_path}}/vars/lic.yaml"
       fi    
@@ -222,11 +222,11 @@
 
 
 # ---------------------------------------------------------------------------------------------------------------------------------------------------"
-# INSTALL TURBONOMIC DEMO CONTENT
+# INSTALL CONCERT OPTIMISE DEMO CONTENT
 # ---------------------------------------------------------------------------------------------------------------------------------------------------"
-# Install TURBONOMIC
-- name: (001/003) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Install Turbonomic Demo Content
-  include_tasks: 10_addons-turbonomic-demo-content.yaml
+# Install CONCERT OPTIMISE
+- name: (001/003) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Install concert Optimise Demo Content
+  include_tasks: 10_addons-ibm-concert-optimise-demo-content.yaml
 
 
 
@@ -265,7 +265,7 @@
     oc delete ConsoleNotification ibm-concert-operate-notification-turbo>/dev/null 2>/dev/null
     oc delete ConsoleNotification ibm-concert-operate-notification-password>/dev/null 2>/dev/null
     oc delete ConsoleNotification ibm-concert-operate-notification-status>/dev/null 2>/dev/null
-    export appURL=$(oc get routes -n turbonomic nginx -o jsonpath="{['spec']['host']}")|| true
+    export appURL=$(oc get routes -n ibm-concert-optimise nginx -o jsonpath="{['spec']['host']}")|| true
     cat <<EOF | oc apply -f -
     apiVersion: console.openshift.io/v1
     kind: ConsoleNotification
@@ -276,9 +276,9 @@
         color: '#fff'
         link:
             href: "https://$appURL"
-            text: Turbonomic
+            text: concert Optimise
         location: BannerTop
-        text: "✅ IBM Turbonomic is installed in this cluster. 🚀 Access it here:"
+        text: "✅ IBM concert Optimise is installed in this cluster. 🚀 Access it here:"
     EOF
 
   ignore_errors: true

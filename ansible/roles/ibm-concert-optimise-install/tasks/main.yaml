@@ -22,8 +22,8 @@
 # ---------------------------------------------------------------------------------------------------------------------------------------------------"
 # Installs:
 #
-#  - Turbonomic
-#  - Turbonomic Demo Content
+#  - Concert Optimise
+#  - Concert Optimise Demo Content
 #     - Demo User
 #     - RobotShop Demo App with synthetic metric
 #     - Instana target (if Instana is installed - you have to enter the API Token Manually)
@@ -127,18 +127,18 @@
 
 
 # ---------------------------------------------------------------------------------------------------------------------------------------------------"
-# INSTALL TURBONOMIC
+# INSTALL CONCERT OPTIMISE
 # ---------------------------------------------------------------------------------------------------------------------------------------------------"
-# Install TURBONOMIC
-- name: 🟡🟡🟡 Install Turbonomic
-  include_tasks: 10_addons-turbonomic.yaml
+# Install CONCERT OPTIMISE
+- name: 🟡🟡🟡 Install Concert Optimise
+  include_tasks: 10_addons-ibm-concert-optimise.yaml
 
 
 - name: 🟡🟡🟡 Restart Demo UI
-  include_tasks: 21_addons-turbonomic-restart-demoui.yaml
+  include_tasks: 21_addons-ibm-concert-optimise-restart-demoui.yaml
 
 - name: 🟡🟡🟡 Install OCP Menu Item
-  include_tasks: 91_addons-turbonomic-create-ocp-tools-menu.yaml
+  include_tasks: 91_addons-ibm-concert-optimise-create-ocp-tools-menu.yaml
   when: (global_config.create_ocp_items | default(true))|bool == true  
 
 # Update IBMAIOps Cards
@@ -151,7 +151,7 @@
     oc delete ConsoleNotification ibm-concert-operate-notification-turbo>/dev/null 2>/dev/null
     oc delete ConsoleNotification ibm-concert-operate-notification-password>/dev/null 2>/dev/null
     oc delete ConsoleNotification ibm-concert-operate-notification-status>/dev/null 2>/dev/null
-    export appURL=$(oc get routes -n turbonomic nginx -o jsonpath="{['spec']['host']}")|| true
+    export appURL=$(oc get routes -n ibm-concert-optimise nginx -o jsonpath="{['spec']['host']}")|| true
     cat <<EOF | oc apply -f -
     apiVersion: console.openshift.io/v1
     kind: ConsoleNotification
@@ -162,9 +162,9 @@
         color: '#fff'
         link:
             href: "https://$appURL"
-            text: Turbonomic
+            text: Concert Optimise
         location: BannerTop
-        text: "✅ IBM Turbonomic is installed in this cluster. 🚀 Access it here:"
+        text: "✅ IBM Concert Optimise is installed in this cluster. 🚀 Access it here:"
     EOF
 
   ignore_errors: true

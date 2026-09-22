@@ -3,13 +3,13 @@ export TURBO_PASSWORD=CHANGEME
 
 
 
-# 🚀 TURBONOMIC - Get ROUTE
+# 🚀 CONCERT OPTIMISE - Get ROUTE
 
-    export TURBO_URL=$(oc get route -n turbonomic nginx -o jsonpath={.spec.host})
+    export TURBO_URL=$(oc get route -n concert-optimise nginx -o jsonpath={.spec.host})
     echo $TURBO_URL
 
 
-# 🚀 TURBONOMIC - Init Admin
+# 🚀 CONCERT OPTIMISE - Init Admin
 
     echo "------------------------------------------------------------------------------------------------------------------------------"
     echo " 📥 Initialization"
@@ -24,7 +24,7 @@ export TURBO_PASSWORD=CHANGEME
 
 
 
-# 🚀 TURBONOMIC - Login
+# 🚀 CONCERT OPTIMISE - Login
 
     echo "------------------------------------------------------------------------------------------------------------------------------"
     echo " 📥 Initialization"
@@ -49,7 +49,7 @@ export TURBO_PASSWORD=CHANGEME
 # --------------------------------------------------------------------------------------------------------
 
 
-# 🚀 TURBONOMIC - Create demo User
+# 🚀 CONCERT OPTIMISE - Create demo User
 
     echo "------------------------------------------------------------------------------------------------------------------------------"
     echo " 📥 Create demo User"
@@ -76,7 +76,7 @@ export TURBO_PASSWORD=CHANGEME
 # --------------------------------------------------------------------------------------------------------
 # CREATE GROUPS
 # --------------------------------------------------------------------------------------------------------
-# 🚀 TURBONOMIC - Create Group vSphere VMs
+# 🚀 CONCERT OPTIMISE - Create Group vSphere VMs
 
     echo "------------------------------------------------------------------------------------------------------------------------------"
     echo " 📥 Create demo User"
@@ -116,7 +116,7 @@ export TURBO_PASSWORD=CHANGEME
 
 
 
-# 🚀 TURBONOMIC - Create Group Azure VMs
+# 🚀 CONCERT OPTIMISE - Create Group Azure VMs
 
     echo "------------------------------------------------------------------------------------------------------------------------------"
     echo " 📥 Create demo User"
@@ -153,7 +153,7 @@ export TURBO_PASSWORD=CHANGEME
     echo ""
 
 
-# 🚀 TURBONOMIC - Create Group AWS VMs
+# 🚀 CONCERT OPTIMISE - Create Group AWS VMs
 
     echo "------------------------------------------------------------------------------------------------------------------------------"
     echo " 📥 Create demo User"
@@ -192,7 +192,7 @@ export TURBO_PASSWORD=CHANGEME
 
 
 
-# 🚀 TURBONOMIC - Create Group Google VMs
+# 🚀 CONCERT OPTIMISE - Create Group Google VMs
 
     echo "------------------------------------------------------------------------------------------------------------------------------"
     echo " 📥 Create demo User"
@@ -229,7 +229,7 @@ export TURBO_PASSWORD=CHANGEME
     echo ""
 
 
-# 🚀 TURBONOMIC - Create Group Kubernetes VMs
+# 🚀 CONCERT OPTIMISE - Create Group Kubernetes VMs
 
     echo "------------------------------------------------------------------------------------------------------------------------------"
     echo " 📥 Create demo User"
@@ -268,7 +268,7 @@ export TURBO_PASSWORD=CHANGEME
     echo ""
 
 
-# 🚀 TURBONOMIC - Create Group RobotShop AppComponents
+# 🚀 CONCERT OPTIMISE - Create Group RobotShop AppComponents
 
     result=$(curl -s -k -X 'POST' \
       "https://$TURBO_URL/api/v3/groups" -b /tmp/cookies\
@@ -314,7 +314,7 @@ export TURBO_PASSWORD=CHANGEME
 
 
 
-# 🚀 TURBONOMIC - Create Licensing Groups
+# 🚀 CONCERT OPTIMISE - Create Licensing Groups
 
     result=$(curl -s -k -X 'POST' \
       "https://$TURBO_URL/api/v3/groups" -b /tmp/cookies\
@@ -453,7 +453,7 @@ export TURBO_PASSWORD=CHANGEME
 
 
 
-# 🚀 TURBONOMIC - Create Schedule and Maintenance Policy
+# 🚀 CONCERT OPTIMISE - Create Schedule and Maintenance Policy
 
     result=$(curl -s -k -X 'POST' \
       "https://$TURBO_URL/api/v3/schedules" -b /tmp/cookies \
@@ -492,7 +492,7 @@ export TURBO_PASSWORD=CHANGEME
 # --------------------------------------------------------------------------------------------------------
 
 
-# 🚀 TURBONOMIC - Create RobotShop BusinessApp
+# 🚀 CONCERT OPTIMISE - Create RobotShop BusinessApp
 
     echo "------------------------------------------------------------------------------------------------------------------------------"
     echo " 📥 Create demo User"
@@ -555,11 +555,11 @@ export TURBO_PASSWORD=CHANGEME
 
 
 
-# 🚀 TURBONOMIC - Deploy Synthetic Metrics Server for DIF
+# 🚀 CONCERT OPTIMISE - Deploy Synthetic Metrics Server for DIF
 
     echo "------------------------------------------------------------------------------------------------------------------------------"
     echo " 🚀 Deploy Synthetic Metrics Server for DIF"
-    oc apply -f ./roles/ibm-turbonomic-demo-content/templates/create-data-ingestion.yaml
+    oc apply -f ./roles/ibm-concert-optimise-demo-content/templates/create-data-ingestion.yaml
     echo ""
     echo ""
     export robotshopUUID=$(curl -XGET -s -k "https://$TURBO_URL/api/v3/topologydefinitions" -b /tmp/cookies  -H 'Content-Type: application/json;' -H 'accept: application/json'|jq -r '.[]|select(.displayName=="RobotShopSynthetic").uuid')
@@ -570,7 +570,7 @@ export TURBO_PASSWORD=CHANGEME
 
 
 
-# 🚀 TURBONOMIC - Create SyntheticMetricsHelloWorld
+# 🚀 CONCERT OPTIMISE - Create SyntheticMetricsHelloWorld
 
     echo "------------------------------------------------------------------------------------------------------------------------------"
     echo " 📥 Create Hello Metrics"
@@ -588,7 +588,7 @@ export TURBO_PASSWORD=CHANGEME
             "value": "http://turbo-metrics-dif-service.turbonomic:3000/helloworld"
           }
         ],
-        "type": "DataIngestionFramework-Turbonomic",
+        "type": "DataIngestionFramework-concert Optimise",
         "readonly": false
       }')
 
@@ -598,7 +598,7 @@ export TURBO_PASSWORD=CHANGEME
 
 
 
-# 🚀 TURBONOMIC - Create SyntheticMetricsRobotShop
+# 🚀 CONCERT OPTIMISE - Create SyntheticMetricsRobotShop
 
     echo "------------------------------------------------------------------------------------------------------------------------------"
     echo " 📥 Create RobotShop Metrics"
@@ -618,7 +618,7 @@ export TURBO_PASSWORD=CHANGEME
             "value": "http://turbo-metrics-dif-service.turbonomic:3000/businessApplication/RobotShopSynthetic/'$robotshopUUID'"
           }
         ],
-        "type": "DataIngestionFramework-Turbonomic",
+        "type": "DataIngestionFramework-concert Optimise",
         "readonly": false
         }
       }')
@@ -638,7 +638,7 @@ export TURBO_PASSWORD=CHANGEME
 # DEPLOY MEMORY AND CPU HOGS
 # --------------------------------------------------------------------------------------------------------
 
-# 🚀 TURBONOMIC - Deploy Memory and CPU Hogs
+# 🚀 CONCERT OPTIMISE - Deploy Memory and CPU Hogs
 
     echo "------------------------------------------------------------------------------------------------------------------------------"
     echo " 🚀 Deploy Memory and CPU Hogs"
@@ -655,7 +655,7 @@ export TURBO_PASSWORD=CHANGEME
 # WEBHOOKS
 # --------------------------------------------------------------------------------------------------------
 
-# 🚀 TURBONOMIC - Sample Webhook
+# 🚀 CONCERT OPTIMISE - Sample Webhook
 
     echo "------------------------------------------------------------------------------------------------------------------------------"
     echo " 🚀 Deploy Sample Webhook"
@@ -699,13 +699,13 @@ export TURBO_PASSWORD=CHANGEME
         oc get secret -n openshift-ingress letsencrypt-certs -o jsonpath='{.data.tls\.crt}'| base64 -d > cert.crt
         oc get secret -n openshift-ingress letsencrypt-certs -o jsonpath='{.data.tls\.key}'| base64 -d > cert.key
 
-        oc create secret tls -n turbonomic nginx-ingressgateway-certs --cert=cert.crt --key=cert.key --dry-run=client -o yaml | oc apply -f -
+        oc create secret tls -n concert-optimise nginx-ingressgateway-certs --cert=cert.crt --key=cert.key --dry-run=client -o yaml | oc apply -f -
 
 
-        REPLICAS=$(oc get pods -n turbonomic |grep nginx|wc -l |xargs)
-        oc scale Deployment/nginx --replicas=0 -n turbonomic
+        REPLICAS=$(oc get pods -n concert-optimise |grep nginx|wc -l |xargs)
+        oc scale Deployment/nginx --replicas=0 -n concert-optimise
         sleep 10
-        oc scale Deployment/nginx --replicas=${REPLICAS} -n turbonomic
+        oc scale Deployment/nginx --replicas=${REPLICAS} -n concert-optimise
     else
         echo "✅ Seems that you're NOT on Techzone IPI/UPI"  
         echo "✅ No need to patch the certificates any further"  
@@ -723,7 +723,7 @@ export TURBO_PASSWORD=CHANGEME
 
 
 
-# 🚀 TURBONOMIC - Create RobotShop Optimisation Automation
+# 🚀 CONCERT OPTIMISE - Create RobotShop Optimisation Automation
 
     curl -XPOST -s -k "https://$TURBO_URL/api/v3/settingspolicies" -b /tmp/cookies  -H 'Content-Type: application/json;' -H 'accept: application/json' \
             -d '{

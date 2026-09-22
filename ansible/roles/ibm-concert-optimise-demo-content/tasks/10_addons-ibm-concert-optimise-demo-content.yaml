@@ -1,22 +1,22 @@
 
 # *************************************************************************************************************************************************
 # --------------------------------------------------------------------------------------------------------------------------------------
-# Install Turbonomic
+# Install concert Optimise
 # --------------------------------------------------------------------------------------------------------------------------------------
 # *************************************************************************************************************************************************
 
 # --------------------------------------------------------------------------------------------------------------------------------------
-# Install Turbonomic Demo Content
+# Install concert Optimise Demo Content
 # --------------------------------------------------------------------------------------------------------------------------------------
 
-- name: 🛰️  START - INSTALL TURBONOMIC
+- name: 🛰️  START - INSTALL CONCERT OPTIMISE
   debug: 
     msg="{{ lookup('pipe','date +%d.%m.%Y---%H:%M:%S') }}"
 
 
 - name: Log
   shell: |
-    export MESSAGE="Installing TURBONOMIC Demo Content"
+    export MESSAGE="Installing CONCERT OPTIMISE Demo Content"
     export currentDate=$(date +%Y-%m-%d_%H:%M)
     echo "---------------------------------------------------------------------------------------------------------------------------------------------------" >> ../install_{{current_feature.kind}}.log
     echo $currentDate" - "$MESSAGE  >> ../install_{{current_feature.kind}}.log
@@ -41,21 +41,21 @@
   when: (global_config.create_ocp_notifications | default(true))|bool == true  
 
 
-- name: 🚀 TURBONOMIC - Set ADMIN Password 
+- name: 🚀 CONCERT OPTIMISE - Set ADMIN Password 
   set_fact: current_admin_pass={{current_feature.concert_optimise_admin_password  | default( global_config.global_password )}}
 
 
-- name: 🟣  TURBONOMIC -  ADMIN Password {{current_admin_pass}}
+- name: 🟣  CONCERT OPTIMISE -  ADMIN Password {{current_admin_pass}}
   debug:
     var: current_admin_pass
     verbosity: 1
 
 
-- name: 🚀 TURBONOMIC - Set DEMO Password 
+- name: 🚀 CONCERT OPTIMISE - Set DEMO Password 
   set_fact: current_demo_pass={{current_feature.concert_optimise_admin_password  | default( global_config.global_password )}}
 
 
-- name: 🟣  TURBONOMIC -  DEMO Password {{current_demo_pass}}
+- name: 🟣  CONCERT OPTIMISE -  DEMO Password {{current_demo_pass}}
   debug:
     var: current_demo_pass
     verbosity: 1
@@ -63,18 +63,18 @@
 
 
 
-- name: 🚀 TURBONOMIC - Get ROUTE
+- name: 🚀 CONCERT OPTIMISE - Get ROUTE
   shell: |
-    export TURBO_URL=$(oc get route -n turbonomic nginx -o jsonpath={.spec.host})
+    export TURBO_URL=$(oc get route -n ibm-concert-optimise nginx -o jsonpath={.spec.host})
     echo $TURBO_URL
   ignore_errors: true
   register: output
         
-- name: 🚀 TURBONOMIC - Set ROUTE - {{ output.stdout_lines }} 
+- name: 🚀 CONCERT OPTIMISE - Set ROUTE - {{ output.stdout_lines }} 
   set_fact: TURBO_URL={{ output.stdout_lines[0] }} 
 
 
-- name: 🚀 TURBONOMIC - Init Admin
+- name: 🚀 CONCERT OPTIMISE - Init Admin
   shell: |
     echo "------------------------------------------------------------------------------------------------------------------------------"
     echo " 📥 Initialization"
@@ -99,7 +99,7 @@
 
 
 
-- name: 🚀 TURBONOMIC - Login
+- name: 🚀 CONCERT OPTIMISE - Login
   shell: |
     echo "------------------------------------------------------------------------------------------------------------------------------"
     echo " 📥 Initialization"
@@ -128,7 +128,7 @@
 # --------------------------------------------------------------------------------------------------------
 # LOAD LICENSE IF PROVIDED
 # --------------------------------------------------------------------------------------------------------
-- name: 🚀 TURBONOMIC - Add License if provided - {{current_concert_optimise_license}}
+- name: 🚀 CONCERT OPTIMISE - Add License if provided - {{current_concert_optimise_license}}
   shell: |
     export TURBO_URL={{TURBO_URL}}
 
@@ -159,7 +159,7 @@
 # --------------------------------------------------------------------------------------------------------
 
 
-- name: 🚀 TURBONOMIC - Create demo User
+- name: 🚀 CONCERT OPTIMISE - Create demo User
   shell: |
     echo "------------------------------------------------------------------------------------------------------------------------------"
     echo " 📥 Create demo User"
@@ -197,7 +197,7 @@
 # --------------------------------------------------------------------------------------------------------
 # CREATE GROUPS
 # --------------------------------------------------------------------------------------------------------
-- name: 🚀 TURBONOMIC - Create Group vSphere VMs
+- name: 🚀 CONCERT OPTIMISE - Create Group vSphere VMs
   shell: |
     echo "------------------------------------------------------------------------------------------------------------------------------"
     echo " 📥 Create demo User"
@@ -247,7 +247,7 @@
 
 
 
-- name: 🚀 TURBONOMIC - Create Group Azure VMs
+- name: 🚀 CONCERT OPTIMISE - Create Group Azure VMs
   shell: |
     echo "------------------------------------------------------------------------------------------------------------------------------"
     echo " 📥 Create demo User"
@@ -295,7 +295,7 @@
 
 
 
-- name: 🚀 TURBONOMIC - Create Group AWS VMs
+- name: 🚀 CONCERT OPTIMISE - Create Group AWS VMs
   shell: |
     echo "------------------------------------------------------------------------------------------------------------------------------"
     echo " 📥 Create demo User"
@@ -342,7 +342,7 @@
   when: current_feature.group_vcenter_vms|bool == true
 
 
-- name: 🚀 TURBONOMIC - Create Group Google VMs
+- name: 🚀 CONCERT OPTIMISE - Create Group Google VMs
   shell: |
     echo "------------------------------------------------------------------------------------------------------------------------------"
     echo " 📥 Create demo User"
@@ -389,7 +389,7 @@
   when: current_feature.group_vcenter_vms|bool == true
 
 
-- name: 🚀 TURBONOMIC - Create Group Kubernetes VMs
+- name: 🚀 CONCERT OPTIMISE - Create Group Kubernetes VMs
   shell: |
     echo "------------------------------------------------------------------------------------------------------------------------------"
     echo " 📥 Create demo User"
@@ -439,7 +439,7 @@
 
 
 
-- name: 🚀 TURBONOMIC - Create Group RobotShop AppComponents
+- name: 🚀 CONCERT OPTIMISE - Create Group RobotShop AppComponents
   shell: |
     result=$(curl -s -k -X 'POST' \
       "https://{{TURBO_URL}}/api/v3/groups" -b /tmp/cookies\
@@ -495,7 +495,7 @@
 
 
 
-- name: 🚀 TURBONOMIC - Create Licensing Groups
+- name: 🚀 CONCERT OPTIMISE - Create Licensing Groups
   shell: |
     result=$(curl -s -k -X 'POST' \
       "https://{{TURBO_URL}}/api/v3/groups" -b /tmp/cookies\
@@ -646,7 +646,7 @@
 
 
 
-- name: 🚀 TURBONOMIC - Create Schedule and Maintenance Policy
+- name: 🚀 CONCERT OPTIMISE - Create Schedule and Maintenance Policy
   shell: |
     result=$(curl -s -k -X 'POST' \
       "https://{{TURBO_URL}}/api/v3/schedules" -b /tmp/cookies \
@@ -695,7 +695,7 @@
 # --------------------------------------------------------------------------------------------------------
 
 
-# - name: 🚀 TURBONOMIC - Create Instana Target
+# - name: 🚀 CONCERT OPTIMISE - Create Instana Target
 #   shell: |
 #     echo "------------------------------------------------------------------------------------------------------------------------------"
 #     echo " 📥 Create Instana Target"
@@ -746,7 +746,7 @@
 # --------------------------------------------------------------------------------------------------------
 
 
-- name: 🚀 TURBONOMIC - Create RobotShop BusinessApp
+- name: 🚀 CONCERT OPTIMISE - Create RobotShop BusinessApp
   shell: |
     echo "------------------------------------------------------------------------------------------------------------------------------"
     echo " 📥 Create demo User"
@@ -819,11 +819,11 @@
 
 
 
-- name: 🚀 TURBONOMIC - Deploy Synthetic Metrics Server for DIF
+- name: 🚀 CONCERT OPTIMISE - Deploy Synthetic Metrics Server for DIF
   shell: |
     echo "------------------------------------------------------------------------------------------------------------------------------"
     echo " 🚀 Deploy Synthetic Metrics Server for DIF"
-    oc apply -f ./roles/ibm-turbonomic-demo-content/templates/create-data-ingestion.yaml
+    oc apply -f ./roles/ibm-ibm-concert-optimise-demo-content/templates/create-data-ingestion.yaml
     echo ""
     echo ""
     export robotshopUUID=$(curl -XGET -s -k "https://{{TURBO_URL}}/api/v3/topologydefinitions" -b /tmp/cookies  -H 'Content-Type: application/json;' -H 'accept: application/json'|jq -r '.[]|select(.displayName=="RobotShopSynthetic").uuid')
@@ -847,7 +847,7 @@
 
 
 
-- name: 🚀 TURBONOMIC - Create SyntheticMetricsHelloWorld
+- name: 🚀 CONCERT OPTIMISE - Create SyntheticMetricsHelloWorld
   shell: |
     echo "------------------------------------------------------------------------------------------------------------------------------"
     echo " 📥 Create Hello Metrics"
@@ -859,14 +859,14 @@
     kind: ConfigMap
     metadata:
       name: turbodif-config-turbodif-helloworld
-      namespace: turbonomic
+      namespace: ibm-concert-optimise
     data:
       turbodif-config.json: |-
         {
           "communicationConfig": {
             "serverMeta": {
               "version": "8.15.1",
-              "turboServer": "https://nginx-turbonomic.apps.itz-jdly7v.osv.techzone.ibm.com"
+              "turboServer": "https://nginx-ibm-concert-optimise.apps.itz-jdly7v.osv.techzone.ibm.com"
             },
             "restAPIConfig": {
               "opsManagerUserName": "administrator",
@@ -875,7 +875,7 @@
           },
           "targetConfig": {
             "targetName": "SyntheticMetricsHelloWorld",
-            "targetAddress": "http://turbo-metrics-dif-service.turbonomic:3000/helloworld"
+            "targetAddress": "http://turbo-metrics-dif-service.ibm-concert-optimise:3000/helloworld"
           }
         }
 
@@ -885,7 +885,7 @@
     kind: Deployment
     metadata:
       name: turbodif-helloworld
-      namespace: turbonomic-helloworld
+      namespace: ibm-concert-optimise-helloworld
       labels:
         app.kubernetes.io/name: turbodif-helloworld
         helm.sh/chart: turbodif-1.0.0
@@ -905,7 +905,7 @@
         spec:
           containers:
             - name: turbodif-helloworld
-              image: cp.icr.io/cpopen/turbonomic/turbodif:8.15.1
+              image: cp.icr.io/cpopen/ibm-concert-optimise/turbodif:8.15.1
               imagePullPolicy: IfNotPresent
               args:
                 - --v=2
@@ -914,8 +914,8 @@
               - name: turbodif-config
                 mountPath: /etc/turbodif
                 readOnly: true
-              - name: turbonomic-credentials-volume
-                mountPath: /etc/turbonomic-credentials
+              - name: ibm-concert-optimise-credentials-volume
+                mountPath: /etc/ibm-concert-optimise-credentials
                 readOnly: true
               - name: varlog
                 mountPath: /var/log
@@ -923,11 +923,11 @@
           - name: turbodif-config
             configMap:
               name: turbodif-config-turbodif-helloworld
-          - name: turbonomic-credentials-volume
+          - name: ibm-concert-optimise-credentials-volume
             secret:
               defaultMode: 420
               optional: true
-              secretName: "turbonomic-credentials"
+              secretName: "ibm-concert-optimise-credentials"
           - name: varlog
             emptyDir: {}
           restartPolicy: Always
@@ -948,7 +948,7 @@
 
 
 
-- name: 🚀 TURBONOMIC - Create SyntheticMetricsRobotShop
+- name: 🚀 CONCERT OPTIMISE - Create SyntheticMetricsRobotShop
   shell: |
     echo "------------------------------------------------------------------------------------------------------------------------------"
     echo " 📥 Create RobotShop Metrics"
@@ -962,14 +962,14 @@
     kind: ConfigMap
     metadata:
       name: turbodif-config-turbodif
-      namespace: turbonomic
+      namespace: ibm-concert-optimise
     data:
       turbodif-config.json: |-
         {
           "communicationConfig": {
             "serverMeta": {
               "version": "8.15.1",
-              "turboServer": "https://nginx-turbonomic.apps.itz-jdly7v.osv.techzone.ibm.com"
+              "turboServer": "https://nginx-ibm-concert-optimise.apps.itz-jdly7v.osv.techzone.ibm.com"
             },
             "restAPIConfig": {
               "opsManagerUserName": "administrator",
@@ -978,7 +978,7 @@
           },
           "targetConfig": {
             "targetName": "RobotShopSynthetic",
-            "targetAddress": "http://turbo-metrics-dif-service.turbonomic:3000/businessApplication/RobotShopSynthetic/$robotshopUUID"
+            "targetAddress": "http://turbo-metrics-dif-service.ibm-concert-optimise:3000/businessApplication/RobotShopSynthetic/$robotshopUUID"
           }
         }
 
@@ -988,7 +988,7 @@
     kind: Deployment
     metadata:
       name: turbodif
-      namespace: turbonomic
+      namespace: ibm-concert-optimise
       labels:
         app.kubernetes.io/name: turbodif
         helm.sh/chart: turbodif-1.0.0
@@ -1008,7 +1008,7 @@
         spec:
           containers:
             - name: turbodif
-              image: cp.icr.io/cpopen/turbonomic/turbodif:8.15.1
+              image: cp.icr.io/cpopen/ibm-concert-optimise/turbodif:8.15.1
               imagePullPolicy: IfNotPresent
               args:
                 - --v=2
@@ -1017,8 +1017,8 @@
               - name: turbodif-config
                 mountPath: /etc/turbodif
                 readOnly: true
-              - name: turbonomic-credentials-volume
-                mountPath: /etc/turbonomic-credentials
+              - name: ibm-concert-optimise-credentials-volume
+                mountPath: /etc/ibm-concert-optimise-credentials
                 readOnly: true
               - name: varlog
                 mountPath: /var/log
@@ -1026,11 +1026,11 @@
           - name: turbodif-config
             configMap:
               name: turbodif-config-turbodif
-          - name: turbonomic-credentials-volume
+          - name: ibm-concert-optimise-credentials-volume
             secret:
               defaultMode: 420
               optional: true
-              secretName: "turbonomic-credentials"
+              secretName: "ibm-concert-optimise-credentials"
           - name: varlog
             emptyDir: {}
           restartPolicy: Always
@@ -1062,12 +1062,12 @@
 # DEPLOY MEMORY AND CPU HOGS
 # --------------------------------------------------------------------------------------------------------
 
-- name: 🚀 TURBONOMIC - Deploy Memory and CPU Hogs
+- name: 🚀 CONCERT OPTIMISE - Deploy Memory and CPU Hogs
   shell: |
     echo "------------------------------------------------------------------------------------------------------------------------------"
     echo " 🚀 Deploy Memory and CPU Hogs"
-    oc apply  -f ./roles/ibm-turbonomic-demo-content/templates/prime_numbers-deploy.yaml
-    oc apply  -f ./roles/ibm-turbonomic-demo-content/templates/memory_grabber.yaml
+    oc apply  -f ./roles/ibm-ibm-concert-optimise-demo-content/templates/prime_numbers-deploy.yaml
+    oc apply  -f ./roles/ibm-ibm-concert-optimise-demo-content/templates/memory_grabber.yaml
     echo ""
     echo ""
   ignore_errors: true
@@ -1089,7 +1089,7 @@
 # WEBHOOKS
 # --------------------------------------------------------------------------------------------------------
 
-- name: 🚀 TURBONOMIC - Sample Webhook
+- name: 🚀 CONCERT OPTIMISE - Sample Webhook
   shell: |
     echo "------------------------------------------------------------------------------------------------------------------------------"
     echo " 🚀 Deploy Sample Webhook"
@@ -1143,13 +1143,13 @@
         oc get secret -n openshift-ingress letsencrypt-certs -o jsonpath='{.data.tls\.crt}'| base64 -d > cert.crt
         oc get secret -n openshift-ingress letsencrypt-certs -o jsonpath='{.data.tls\.key}'| base64 -d > cert.key
 
-        oc create secret tls -n turbonomic nginx-ingressgateway-certs --cert=cert.crt --key=cert.key --dry-run=client -o yaml | oc apply -f -
+        oc create secret tls -n ibm-concert-optimise nginx-ingressgateway-certs --cert=cert.crt --key=cert.key --dry-run=client -o yaml | oc apply -f -
 
 
-        REPLICAS=$(oc get pods -n turbonomic |grep nginx|wc -l |xargs)
-        oc scale Deployment/nginx --replicas=0 -n turbonomic
+        REPLICAS=$(oc get pods -n ibm-concert-optimise |grep nginx|wc -l |xargs)
+        oc scale Deployment/nginx --replicas=0 -n ibm-concert-optimise
         sleep 10
-        oc scale Deployment/nginx --replicas=${REPLICAS} -n turbonomic
+        oc scale Deployment/nginx --replicas=${REPLICAS} -n ibm-concert-optimise
     else
         echo "✅ Seems that you're NOT on Techzone IPI/UPI"  
         echo "✅ No need to patch the certificates any further"  
@@ -1184,7 +1184,7 @@
 
 
 
-- name: 🚀 TURBONOMIC - Create RobotShop Optimisation Automation
+- name: 🚀 CONCERT OPTIMISE - Create RobotShop Optimisation Automation
   shell: |
     curl -XPOST -s -k "https://{{TURBO_URL}}/api/v3/settingspolicies" -b /tmp/cookies  -H 'Content-Type: application/json;' -H 'accept: application/json' \
             -d '{

@@ -42,15 +42,15 @@
 
 
 
-- name: 🌏 OCP MENU - Create Openshift WebConsole Menu Item - Turbonomic
+- name: 🌏 OCP MENU - Create Openshift WebConsole Menu Item - Concert Optimise
   shell: |
-    appURL=$(oc get route -n turbonomic nginx -o jsonpath={.spec.host})|| true
+    appURL=$(oc get route -n ibm-concert-optimise nginx -o jsonpath={.spec.host})|| true
 
     cat <<EOF | oc apply -f -
       apiVersion: console.openshift.io/v1
       kind: ConsoleLink
       metadata:
-        name: ibm-turbonomic-install
+        name: ibm-ibm-concert-optimise-install
       spec:
         applicationMenu:
           imageURL: >-

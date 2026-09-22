@@ -1691,7 +1691,7 @@ spec:
                 export openldap_app_route=$(oc get route -n openldap openldap-admin -o jsonpath={.spec.host})          
                 export awx_app_route=$(oc get route -n awx awx  -o jsonpath={.spec.host})          
                 export instana_app_route=$(oc get route -n instana-core dev-aiops  -o jsonpath={.spec.host})          
-                export turbonomic_app_route=$(oc get route -n turbonomic nginx  -o jsonpath={.spec.host})          
+                export turbonomic_app_route=$(oc get route -n ibm-concert-optimise nginx  -o jsonpath={.spec.host})          
 
 
                 echo "syntpop_id:             $syntpop_id"

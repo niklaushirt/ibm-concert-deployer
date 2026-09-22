@@ -104,13 +104,13 @@ spec:
               oc get secret -n openshift-ingress -o 'go-template={{index .data "tls.crt"}}' letsencrypt-certs | base64 -d > cert.crt
               oc get secret -n openshift-ingress -o 'go-template={{index .data "tls.key"}}' letsencrypt-certs | base64 -d > cert.key
 
-              oc create secret tls -n turbonomic nginx-ingressgateway-certs --cert=cert.crt --key=cert.key --dry-run=client -o yaml | oc apply -f -
+              oc create secret tls -n ibm-concert-optimise nginx-ingressgateway-certs --cert=cert.crt --key=cert.key --dry-run=client -o yaml | oc apply -f -
 
 
-              REPLICAS=$(oc get pods -n turbonomic |grep nginx|wc -l |xargs)
-              oc scale Deployment/nginx --replicas=0 -n turbonomic
+              REPLICAS=$(oc get pods -n ibm-concert-optimise |grep nginx|wc -l |xargs)
+              oc scale Deployment/nginx --replicas=0 -n ibm-concert-optimise
               sleep 10
-              oc scale Deployment/nginx --replicas=${REPLICAS} -n turbonomic
+              oc scale Deployment/nginx --replicas=${REPLICAS} -n ibm-concert-optimise
 
 
 

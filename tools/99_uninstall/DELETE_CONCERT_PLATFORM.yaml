@@ -131,7 +131,7 @@ spec:
               echo "------------------------------------------------------------------------------------------------------------------------------"
       
 
-              oc delete Xl -n turbonomic xl-release 
+              oc delete Xl -n ibm-concert-optimise xl-release 
               sleep 15
               oc delete ns home-ui &
 

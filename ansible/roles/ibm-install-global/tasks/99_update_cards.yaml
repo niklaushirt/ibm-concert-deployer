@@ -164,7 +164,7 @@
   #       export ROUTE=$(oc get route -n $AIOPS_NAMESPACE cpd  -o jsonpath={.spec.host})          
 
   #       instanaURL=$(oc get routes -n instana-core dev-aiops -o jsonpath={.spec.host})
-  #       turboURL=$(oc get route -n turbonomic nginx -o jsonpath={.spec.host})
+  #       turboURL=$(oc get route -n ibm-concert-optimise nginx -o jsonpath={.spec.host})
   #       export ROWS=""
 
   #       if [[ $instanaURL =~ "dev-aiops" ]]; then

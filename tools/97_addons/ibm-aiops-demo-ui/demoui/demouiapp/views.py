@@ -501,7 +501,7 @@ stream = capture_shell('oc get route -n openshift-logging kibana -o jsonpath={.s
 elk_url = stream.read().strip()
 
 print('     ❓ Getting Details Turbonomic Dashboard')
-stream = capture_shell('oc get route -n turbonomic nginx -o jsonpath={.spec.host}')
+stream = capture_shell('oc get route -n ibm-concert-optimise nginx -o jsonpath={.spec.host}')
 turbonomic_url = stream.read().strip()
 
 print('     ❓ Getting Details Instana Dashboard')

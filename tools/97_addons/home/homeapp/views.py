@@ -44,7 +44,7 @@ else:
 
 
 print('     ❓ Getting Details Turbonomic Route')
-stream = os.popen('oc get route -n turbonomic nginx -o jsonpath={.spec.host}')
+stream = os.popen('oc get route -n ibm-concert-optimise nginx -o jsonpath={.spec.host}')
 TURBO_URL = stream.read().strip()
 
 print('     ❓ Getting Details Instana Route')
