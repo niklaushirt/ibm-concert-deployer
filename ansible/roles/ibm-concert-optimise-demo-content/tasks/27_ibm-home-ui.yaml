@@ -56,8 +56,8 @@
     export currentDate=$(date +%Y-%m-%d_%H:%M)
     echo "              📥 DEMO UI Login:"  >> ../install_{{current_feature.kind}}.log
     echo ""  >> ../install_{{current_feature.kind}}.log
-    echo "                🌏 URL:      http://$(oc get route -n $AIOPS_NAMESPACE-demo-ui ibm-demo-ui -o jsonpath={.spec.host})"  >> ../install_{{current_feature.kind}}.log
-    echo "                🔐 Token:    $(oc get cm -n $AIOPS_NAMESPACE-demo-ui ibm-demo-ui-config -o jsonpath='{.data.TOKEN}' && echo)"  >> ../install_{{current_feature.kind}}.log
+    echo "                🌏 URL:      http://$(oc get route -n ibm-demo-ui ibm-demo-ui -o jsonpath={.spec.host})"  >> ../install_{{current_feature.kind}}.log
+    echo "                🔐 Token:    $(oc get cm -n ibm-demo-ui ibm-demo-ui-config -o jsonpath='{.data.TOKEN}' && echo)"  >> ../install_{{current_feature.kind}}.log
     echo "---------------------------------------------------------------------------------------------------------------------------------------------------" >> ../install_{{current_feature.kind}}.log
   ignore_errors: true
 

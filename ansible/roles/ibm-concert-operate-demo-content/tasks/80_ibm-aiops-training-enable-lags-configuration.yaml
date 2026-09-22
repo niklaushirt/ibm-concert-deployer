@@ -91,7 +91,7 @@
 
     echo "***************************************************************************************************************************************************"
     echo "   🛠️   RESTART - LOG INJECTION POD"
-    oc delete pod -n $AIOPS_NAMESPACE-demo-ui --ignore-not-found $(oc get po -n $AIOPS_NAMESPACE-demo-ui|grep ibm-aiops-stream-lags-normal|awk '{print$1}')
+    oc delete pod -n ibm-demo-ui --ignore-not-found $(oc get po -n ibm-demo-ui|grep ibm-aiops-stream-lags-normal|awk '{print$1}')
 
 
 

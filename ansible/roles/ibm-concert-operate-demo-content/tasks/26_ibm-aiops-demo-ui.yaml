@@ -43,15 +43,15 @@
 - name: 🚀 DEMO-UI - Delete old instance (ignore problems in this step))
   shell: |
     export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
-    oc delete deployment -n $AIOPS_NAMESPACE-demo-ui ibm-demo-ui --ignore-not-found
-    oc delete job -n $AIOPS_NAMESPACE-demo-ui ibm-demo-ui-create-config --ignore-not-found
-    oc delete job -n $AIOPS_NAMESPACE-demo-ui ibm-demo-ui-create-config-events --ignore-not-found
-    oc delete job -n $AIOPS_NAMESPACE-demo-ui ibm-demo-ui-create-config-logs --ignore-not-found
-    oc delete job -n $AIOPS_NAMESPACE-demo-ui ibm-demo-ui-create-config-metrics --ignore-not-found
-    oc delete cm -n $AIOPS_NAMESPACE-demo-ui ibm-demo-ui-config --ignore-not-found
-    oc delete cm -n $AIOPS_NAMESPACE-demo-ui ibm-demo-ui-config-events --ignore-not-found
-    oc delete cm -n $AIOPS_NAMESPACE-demo-ui ibm-demo-ui-config-logs --ignore-not-found
-    oc delete cm -n $AIOPS_NAMESPACE-demo-ui ibm-demo-ui-config-metrics --ignore-not-found
+    oc delete deployment -n ibm-demo-ui ibm-demo-ui --ignore-not-found
+    oc delete job -n ibm-demo-ui ibm-demo-ui-create-config --ignore-not-found
+    oc delete job -n ibm-demo-ui ibm-demo-ui-create-config-events --ignore-not-found
+    oc delete job -n ibm-demo-ui ibm-demo-ui-create-config-logs --ignore-not-found
+    oc delete job -n ibm-demo-ui ibm-demo-ui-create-config-metrics --ignore-not-found
+    oc delete cm -n ibm-demo-ui ibm-demo-ui-config --ignore-not-found
+    oc delete cm -n ibm-demo-ui ibm-demo-ui-config-events --ignore-not-found
+    oc delete cm -n ibm-demo-ui ibm-demo-ui-config-logs --ignore-not-found
+    oc delete cm -n ibm-demo-ui ibm-demo-ui-config-metrics --ignore-not-found
   register: CERT_ELEMENT
   ignore_errors: true
 
@@ -89,7 +89,7 @@
 - name: 🕦 DEMO-UI - Wait for Demo UI Configuration being ready
   shell: |   
           export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
-          oc get cm -n $AIOPS_NAMESPACE-demo-ui ibm-demo-ui-config --ignore-not-found --no-headers|grep -c ""
+          oc get cm -n ibm-demo-ui ibm-demo-ui-config --ignore-not-found --no-headers|grep -c ""
   register: kubectl_get_pods
   until: kubectl_get_pods.stdout == "1"
   retries: 500
@@ -107,7 +107,7 @@
 - name: 🕦 DEMO-UI - Wait for Demo UI being ready
   shell: | 
             export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
-            oc get pod -n $AIOPS_NAMESPACE-demo-ui |grep ibm-demo-ui|grep "1/1"|grep -v "Terminating"|grep -c ""
+            oc get pod -n ibm-demo-ui |grep ibm-demo-ui|grep "1/1"|grep -v "Terminating"|grep -c ""
   register: kubectl_get_pods
   until: kubectl_get_pods.stdout == "1"
   retries: 50
@@ -122,8 +122,8 @@
     export currentDate=$(date +%Y-%m-%d_%H:%M)
     echo "              📥 DEMO UI Login:"  >> ../install_{{current_feature.kind}}.log
     echo ""  >> ../install_{{current_feature.kind}}.log
-    echo "                🌏 URL:      http://$(oc get route -n $AIOPS_NAMESPACE-demo-ui ibm-demo-ui -o jsonpath={.spec.host})"  >> ../install_{{current_feature.kind}}.log
-    echo "                🔐 Token:    $(oc get cm -n $AIOPS_NAMESPACE-demo-ui ibm-demo-ui-config -o jsonpath='{.data.TOKEN}' && echo)"  >> ../install_{{current_feature.kind}}.log
+    echo "                🌏 URL:      http://$(oc get route -n ibm-demo-ui ibm-demo-ui -o jsonpath={.spec.host})"  >> ../install_{{current_feature.kind}}.log
+    echo "                🔐 Token:    $(oc get cm -n ibm-demo-ui ibm-demo-ui-config -o jsonpath='{.data.TOKEN}' && echo)"  >> ../install_{{current_feature.kind}}.log
     echo "---------------------------------------------------------------------------------------------------------------------------------------------------" >> ../install_{{current_feature.kind}}.log
   ignore_errors: true
 

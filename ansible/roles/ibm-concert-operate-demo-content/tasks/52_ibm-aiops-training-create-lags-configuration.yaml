@@ -295,7 +295,7 @@
     oc set env deploy -n $AIOPS_NAMESPACE aimanager-aio-log-anomaly-golden-signals --overwrite HISTORIC_START_TIMESTAMP-
     oc set env deploy -n $AIOPS_NAMESPACE aimanager-aio-log-anomaly-golden-signals --overwrite HISTORIC_TIME_RANGE-
     
-    oc create ns $AIOPS_NAMESPACE-demo-ui
+    oc create ns ibm-demo-ui
 
   register: output_string
   ignore_errors: true

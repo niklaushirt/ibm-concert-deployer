@@ -494,7 +494,7 @@ EOF
 
                   echo "      ***************************************************************************************************************************************************"
                   echo "      🛠️   RESTART - LOG INJECTION POD"
-                  oc delete pod -n $AIOPS_NAMESPACE-demo-ui --ignore-not-found $(oc get po -n $AIOPS_NAMESPACE-demo-ui|grep ibm-aiops-stream-lags-normal|awk '{print$1}')
+                  oc delete pod -n ibm-demo-ui --ignore-not-found $(oc get po -n ibm-demo-ui|grep ibm-aiops-stream-lags-normal|awk '{print$1}')
 
 
 
@@ -723,8 +723,8 @@ spec:
         text: Open Logs
 EOF
 export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
-export appURL=$(oc get routes -n $AIOPS_NAMESPACE-demo-ui ibm-demo-ui  -o jsonpath="{['spec']['host']}")|| true
-export DEMO_PWD=$(oc get cm -n $AIOPS_NAMESPACE-demo-ui ibm-demo-ui-config -o jsonpath='{.data.TOKEN}')
+export appURL=$(oc get routes -n ibm-demo-ui ibm-demo-ui  -o jsonpath="{['spec']['host']}")|| true
+export DEMO_PWD=$(oc get cm -n ibm-demo-ui ibm-demo-ui-config -o jsonpath='{.data.TOKEN}')
 cat <<EOF | oc apply -f -
 apiVersion: console.openshift.io/v1
 kind: ConsoleNotification
@@ -764,8 +764,8 @@ EOF
         echo ""
 
 export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
-export appURL=$(oc get routes -n $AIOPS_NAMESPACE-demo-ui ibm-demo-ui  -o jsonpath="{['spec']['host']}")|| true
-export DEMO_PWD=$(oc get cm -n $AIOPS_NAMESPACE-demo-ui ibm-demo-ui-config -o jsonpath='{.data.TOKEN}')
+export appURL=$(oc get routes -n ibm-demo-ui ibm-demo-ui  -o jsonpath="{['spec']['host']}")|| true
+export DEMO_PWD=$(oc get cm -n ibm-demo-ui ibm-demo-ui-config -o jsonpath='{.data.TOKEN}')
 #oc delete ConsoleNotification --all>/dev/null 2>/dev/null
 cat <<EOF | oc apply -f -
 apiVersion: console.openshift.io/v1
@@ -796,8 +796,8 @@ EOF
         echo "***************************************************************************************************************************************************"
 
 export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
-export appURL=$(oc get routes -n $AIOPS_NAMESPACE-demo-ui ibm-demo-ui  -o jsonpath="{['spec']['host']}")|| true
-export DEMO_PWD=$(oc get cm -n $AIOPS_NAMESPACE-demo-ui ibm-demo-ui-config -o jsonpath='{.data.TOKEN}')
+export appURL=$(oc get routes -n ibm-demo-ui ibm-demo-ui  -o jsonpath="{['spec']['host']}")|| true
+export DEMO_PWD=$(oc get cm -n ibm-demo-ui ibm-demo-ui-config -o jsonpath='{.data.TOKEN}')
 #oc delete ConsoleNotification --all>/dev/null 2>/dev/null
 cat <<EOF | oc apply -f -
 apiVersion: console.openshift.io/v1

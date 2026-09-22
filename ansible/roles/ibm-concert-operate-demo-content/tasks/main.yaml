@@ -62,7 +62,7 @@
 - name: 📣 OCP CONSOLE - Create Openshift NOTIFICATION
   shell: |
     export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
-    appURL=$(oc get routes -n $AIOPS_NAMESPACE-demo-ui ibm-demo-ui  -o jsonpath="{['spec']['host']}")|| true
+    appURL=$(oc get routes -n ibm-demo-ui ibm-demo-ui  -o jsonpath="{['spec']['host']}")|| true
     OPENSHIFT_ROUTE=$(oc get route -n openshift-console console -o jsonpath={.spec.host})
     INSTALL_POD=$(oc get po -n ibm-installer -l app=ibm-installer --no-headers|grep "Running"|grep "1/1"|grep 'install-aiops'|awk '{print$1}')
 
@@ -553,7 +553,7 @@
     oc delete ConsoleNotification ibm-concert-operate-notification-status>/dev/null 2>/dev/null    
     export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
     export appURL=$(oc get routes -n {{ current_ibm_feature.project }} concert  -o jsonpath="{['spec']['host']}")|| true
-    export DEMO_PWD=$(oc get cm -n $AIOPS_NAMESPACE-demo-ui ibm-demo-ui-config -o jsonpath='{.data.TOKEN}')
+    export DEMO_PWD=$(oc get cm -n ibm-demo-ui ibm-demo-ui-config -o jsonpath='{.data.TOKEN}')
     cat <<EOF | oc apply -f -
     apiVersion: console.openshift.io/v1
     kind: ConsoleNotification

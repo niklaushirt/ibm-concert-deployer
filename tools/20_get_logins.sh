@@ -72,7 +72,7 @@ echo "🚀 1. IBM AIOps"
 echo "***************************************************************************************************************************************************"
 echo "***************************************************************************************************************************************************"
 echo "    "
-DEMOUI_READY=$(oc get pod -n $AIOPS_NAMESPACE-demo-ui | grep 'demo-ui' || true) 
+DEMOUI_READY=$(oc get pod -n ibm-demo-ui | grep 'demo-ui' || true) 
 if [[ $DEMOUI_READY =~ "1/1" ]]; 
 then
 
@@ -82,8 +82,8 @@ then
     echo "    -----------------------------------------------------------------------------------------------------------------------------------------------"
     echo "    -----------------------------------------------------------------------------------------------------------------------------------------------"
     echo "    "
-    appURL=$(oc get routes -n $AIOPS_NAMESPACE-demo-ui ibm-demo-ui  -o jsonpath="{['spec']['host']}")|| true
-    appToken=$(oc get cm -n $AIOPS_NAMESPACE-demo-ui ibm-demo-ui-config -o jsonpath='{.data.TOKEN}')
+    appURL=$(oc get routes -n ibm-demo-ui ibm-demo-ui  -o jsonpath="{['spec']['host']}")|| true
+    appToken=$(oc get cm -n ibm-demo-ui ibm-demo-ui-config -o jsonpath='{.data.TOKEN}')
     echo "            🐣 Demo UI:"   
     echo "    " 
     echo "                🌏 URL:           https://$appURL/"
