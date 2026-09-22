@@ -66,9 +66,14 @@ data:
       environment_name: Demo
       cloud_platform: existing-ocp
       # Set this value to True to accept all licenses
-      accept_all_licenses: False
       # Key to decrypt Licenses
       #license_token: NONE
+
+      # --------------------------------------------------------------------------------------------------------------------------------------
+      # Passwords and Licenses
+      # --------------------------------------------------------------------------------------------------------------------------------------
+      # Set this value to True to accept all licenses
+      accept_all_licenses: False
 
 
       # --------------------------------------------------------------------------------------------------------------------------------------
@@ -78,6 +83,7 @@ data:
       entitled_registry_user: cp
       catalog_image: icr.io/cpopen/ibm-operator-catalog:latest
       current_supported_aiops_version: v4.7
+
 
       # --------------------------------------------------------------------------------------------------------------------------------------
       # Notifications and Cards
@@ -91,12 +97,6 @@ data:
       position_ocp_notifications: BannerBottom
       position_final_ocp_notification: BannerTop
 
-
-      # --------------------------------------------------------------------------------------------------------------------------------------
-      # Passwords and Licenses
-      # --------------------------------------------------------------------------------------------------------------------------------------
-      # Set this value to True to accept all licenses
-      accept_all_licenses: False
 
 
     # *************************************************************************************************************************************************

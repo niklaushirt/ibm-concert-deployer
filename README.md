@@ -250,7 +250,7 @@ This installation contains:
 
 1. In the the OpenShift Web UI click on the `+` sign in the right upper corner
 1. Copy and paste the content from [this file](./Quick_Install/01_INSTALL_IBM_CONCERT_PLATFORM.yaml)
-1. Accept the license by setting `accept_all_licenses` to `True` (line 69)
+1. Accept the license by setting `accept_all_licenses` to `True` (line 76)
 1. Replace `<REGISTRY_TOKEN>` at the top of the file with your entitlement key from step 1.1.2 (line 50 - the Entitlement key from https://myibm.ibm.com)
 1. Replace the default Password `global_password: CHANGEME` with a Password of your choice (line 63, ❗ do NOT use the "-" character and do NOT leave empty ❗)
 1. If you want a full Concert Optimize/Turbonomic installed, set `concert_optimise_lite` (line 154) `True`
