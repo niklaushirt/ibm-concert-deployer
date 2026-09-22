@@ -92,7 +92,7 @@
 
 
     export PROBE_AUTH_SECRET=turbonomic-probe-client-basic-auth
-    oc create secret generic $PROBE_AUTH_SECRET --from-literal=serverBasicAuthenticationUsername=administrator  --from-literal=serverBasicAuthenticationPassword={{current_feature.turbo_admin_password  | default( global_config.global_password )}}
+    oc create secret generic $PROBE_AUTH_SECRET --from-literal=serverBasicAuthenticationUsername=administrator  --from-literal=serverBasicAuthenticationPassword={{current_feature.concert_optimise_admin_password  | default( global_config.global_password )}}
 
 
 

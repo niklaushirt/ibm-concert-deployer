@@ -433,11 +433,11 @@ spec:
               configMapKeyRef:
                 name: ibm-aiops-install-configuration-missing-topology
                 key: INSTALL_REPO
-          - name: TURBO_LICENSE
+          - name: concert_optimise_license
             valueFrom:
               configMapKeyRef:
                 name: ibm-aiops-install-configuration-missing-topology
-                key: TURBO_LICENSE
+                key: concert_optimise_license
                 optional: true
           - name: INSTANA_SALES_KEY
             valueFrom:

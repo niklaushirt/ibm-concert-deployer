@@ -175,7 +175,7 @@
   #       if [[ $turboURL =~ "-turbonomic" ]]; then
   #       echo "Turbonomic Present"
   #       ROWS=$ROWS'{"drilldown_url":  "https://'$turboURL'", "label": "→   Turbonomic", "sub_text": " "},'
-  #       ROWS=$ROWS'{"drilldown_url":  "", "label": "", "sub_text": "User: administrator - Password: {{current_feature.turbo_admin_password  | default( global_config.global_password )}} "},'
+  #       ROWS=$ROWS'{"drilldown_url":  "", "label": "", "sub_text": "User: administrator - Password: {{current_feature.concert_optimise_admin_password  | default( global_config.global_password )}} "},'
   #       fi
 
   #       ROWS=$ROWS'{"drilldown_url":  "", "label": "Select your IBM AIOps Application above.", "sub_text": ""}'

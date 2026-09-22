@@ -601,8 +601,8 @@ This installation contains:
 1. Accept the license by setting `accept_all_licenses` to `True` (line 69)
 1. Replace `<REGISTRY_TOKEN>` at the top of the file with your entitlement key from step 1.1.2 (line 50 - the Entitlement key from https://myibm.ibm.com)
 1. Replace the default Password `global_password: CHANGEME` with a Password of your choice (line 63, ❗ do NOT use the "-" character and do NOT leave empty ❗)
-1. If you want a full Concert Optimize/Turbonomic installed, set `turbo_lite` (line 154) `True`
-1. In `turbo_license` (line 171) provide your licence for Concert Optimize/Turbonomic in base64 (run `cat turbo.lic|base64`)
+1. If you want a full Concert Optimize/Turbonomic installed, set `concert_optimise_lite` (line 154) `True`
+1. In `concert_optimise_license` (line 171) provide your licence for Concert Optimize/Turbonomic in base64 (run `cat turbo.lic|base64`)
 1. If you want AI features enbaled, set `enable_WatsonX` to `True` (line 225) and provide your `watsonx_projectid` and `watsonx_token`
 1. If you want to integrate Concert with Keycloak for SSO, set `integrate_keycloak` to `True` (line 252) (the SSO user will be the same as for the standalone)
 1. If you want configure platform AI agents, set `registerAgents` to `True` (line 255)

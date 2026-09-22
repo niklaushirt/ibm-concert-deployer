@@ -139,19 +139,19 @@ data:
 
 
     # --------------------------------------------------------------------------------------------------------------------------------------
-    # IBM CONCERT OPTIMIZE (TURBO - Prerequisite for IBM CONCERT platform)
+    # IBM CONCERT OPTIMIZE (CONCERT OPTIMISE - Prerequisite for IBM CONCERT platform)
     # --------------------------------------------------------------------------------------------------------------------------------------
 
-    - project: ibm-turbonomic
+    - project: ibm-concert-optimise
       instances:
 
-      - name: ibm-turbonomic
-        kind: IBMTurbonomic
+      - name: ibm-concert-optimise
+        kind: IBMConcertOptimise
         install: true
-        turbo_version: 8.20.6
+        concert_optimise_version: 8.20.6
 
-        # Only install Turbo Lite (no additional add-ons) if set to true - as Concert platform Backend
-        turbo_lite: true
+        # Only install Concert Optimise Lite (no additional add-ons) if set to true - as Concert platform Backend
+        concert_optimise_lite: true
 
         # --------------------------------------------------------------------------------------------------------------------------------------
         # Storage Classes Override for this Instance (see comment below)
@@ -160,15 +160,15 @@ data:
         #storage_class_block: automatic
 
 
-      - name: ibm-turbonomic-demo-content
-        kind: IBMTurbonomicDemoContent
+      - name: ibm-concert-optimise-demo-content
+        kind: IBMConcertOptimiseDemoContent
         install: true
         # Admin User Password (OVERRIDES GLOBAL PASSWORD)
-        #turbo_admin_password: CHANGEME
+        #concert_optimise_admin_password: CHANGEME
 
         # ---------------------------------------------------------------------
-        # Turbo License (must be base64 encoded)
-        turbo_license: NONE
+        # Concert Optimise License (must be base64 encoded)
+        concert_optimise_license: NONE
 
         # ---------------------------------------------------------------------
         # Create Demo User
@@ -176,7 +176,7 @@ data:
         # Demo User Name
         demo_user: demo
         # Demo User Password (OVERRIDES GLOBAL PASSWORD)
-        #turbo_demo_password: CHANGEME
+        #concert_optimise_demo_password: CHANGEME
         # ---------------------------------------------------------------------
         # Create Groups
         group_vcenter_vms: false
@@ -212,7 +212,7 @@ data:
     - project: ibm-concert
       instances:
       - name: ibm-concert
-        kind: IBMConcert
+        kind: IBMConcertPlatform
         install: true
 
         # ---------------------------------------------------------------------
@@ -286,7 +286,7 @@ data:
 
 
       - name: ibm-concert-demo-content
-        kind: IBMConcertDemoContent
+        kind: IBMConcertPlatformDemoContent
         install: true
 
         # ---------------------------------------------------------------------

@@ -214,7 +214,7 @@
     state: present
     namespace: turbonomic
     template: ./templates/turbonomic/turbo-instance.j2
-  when: (current_feature.turbo_lite | default(false))|bool == false  
+  when: (current_feature.concert_optimise_lite | default(false))|bool == false  
 
 
 
@@ -223,7 +223,7 @@
     state: present
     namespace: turbonomic
     template: ./templates/turbonomic/turbo-instance_lite.j2
-  when: (current_feature.turbo_lite | default(false))|bool == true  
+  when: (current_feature.concert_optimise_lite | default(false))|bool == true  
   
 
 
@@ -262,7 +262,7 @@
   until: kubectl_num_pods.stdout|int > 80
   retries: 500
   delay: 15
-  when: (current_feature.turbo_lite | default(false))|bool == false  
+  when: (current_feature.concert_optimise_lite | default(false))|bool == false  
 
 
 - name: 🕦 TURBONOMIC - Wait for >20 pods in namespace turbonomic
@@ -271,7 +271,7 @@
   until: kubectl_num_pods.stdout|int > 16
   retries: 500
   delay: 15
-  when: (current_feature.turbo_lite | default(false))|bool == true  
+  when: (current_feature.concert_optimise_lite | default(false))|bool == true  
 
 
 - name: 🕦 TURBONOMIC - Wait for turbonomic to become ready

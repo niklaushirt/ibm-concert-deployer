@@ -108,29 +108,29 @@
 # --------------------------------------------------------------------------------------------------------------------------------------
 # *************************************************************************************************************************************************
 - name: 💾 INIT Turbo License to Empty
-  set_fact: current_turbo_license="NONE"
+  set_fact: current_concert_optimise_license="NONE"
 
 
-- name: 💾 DECODE Turbo License from Config File - {{current_feature.turbo_license}} 
+- name: 💾 DECODE Turbo License from Config File - {{current_feature.concert_optimise_license}} 
   shell: |
-    echo "{{current_feature.turbo_license}}" | base64 -d
+    echo "{{current_feature.concert_optimise_license}}" | base64 -d
   ignore_errors: true
   register: output
   args:
     executable: /bin/bash
-  when: current_feature.turbo_license | default("NONE") != "NONE"
+  when: current_feature.concert_optimise_license | default("NONE") != "NONE"
 
 - name: 💾 SET Turbo License from Config File - {{output.stdout}} 
-  set_fact: current_turbo_license={{output.stdout}} 
-  when: current_feature.turbo_license | default("NONE") != "NONE"
+  set_fact: current_concert_optimise_license={{output.stdout}} 
+  when: current_feature.concert_optimise_license | default("NONE") != "NONE"
 
 
 
 - name: Get Licenses from Env Variable
   block:
-    - name: 💾 SET Turbo License from Env Variable - {{ lookup('ansible.builtin.env', 'TURBO_LICENSE', default='NONE') }}
-      set_fact: current_turbo_license={{ lookup('ansible.builtin.env', 'TURBO_LICENSE', default='NONE') }}
-  when: current_turbo_license == "NONE" 
+    - name: 💾 SET Turbo License from Env Variable - {{ lookup('ansible.builtin.env', 'concert_optimise_license', default='NONE') }}
+      set_fact: current_concert_optimise_license={{ lookup('ansible.builtin.env', 'concert_optimise_license', default='NONE') }}
+  when: current_concert_optimise_license == "NONE" 
 
 
 - name: Decrypt Licenses 
@@ -167,37 +167,37 @@
     ignore_errors: true
 
   - name: 💾 SET Turbo License from Vault
-    set_fact: current_turbo_license={{licenses.turbo_license }} 
+    set_fact: current_concert_optimise_license={{licenses.concert_optimise_license }} 
   when: global_config.license_token is defined 
 
 
 
 
-- name:  🟣 Check Turbo License - {{current_turbo_license}}"
+- name:  🟣 Check Turbo License - {{current_concert_optimise_license}}"
   debug:
     msg:
     - "** Missing License Information ***********************************************************************"
-    - " Turbo License:      {{ current_turbo_license}}"
+    - " Turbo License:      {{ current_concert_optimise_license}}"
     - " ❌ Most of the customization won't work...."
     - ""
-  when: current_turbo_license == "NONE"
+  when: current_concert_optimise_license == "NONE"
 
 
 - name:  🟣 Check Sales and Agent Key
   fail: msg="❌ Missing License Information - Aborting"
-  when: current_turbo_license == "NONE"
+  when: current_concert_optimise_license == "NONE"
 
 
 
-- name:  🟢 Turbo License - OK - {{current_turbo_license}}"
+- name:  🟢 Turbo License - OK - {{current_concert_optimise_license}}"
   debug:
     msg:
     - "** License Information ***********************************************************************"
-    - " Turbo License:      {{ current_turbo_license}}"
+    - " Turbo License:      {{ current_concert_optimise_license}}"
     - " ✅ OK...."
     - ""
     verbosity: 2
-  when: current_turbo_license != "NONE"
+  when: current_concert_optimise_license != "NONE"
 
 
 

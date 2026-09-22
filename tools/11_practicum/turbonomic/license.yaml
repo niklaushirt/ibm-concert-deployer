@@ -17,7 +17,7 @@ spec:
             - -c
             - |
               #!/bin/bash
-              git clone https://github.com/niklaushirt/ibm-concert-deployer.git -b main && cd ibm-concert-deployer && echo $LICENSE_KEY > /tmp/SCRIPT_PWD.txt && ansible-vault decrypt  --vault-password-file /tmp/SCRIPT_PWD.txt ./tools/11_practicum/turbonomic/TURBO_LICENSE.enc --output /tmp/TURBO_LICENSE.sh && chmod +x /tmp/TURBO_LICENSE.sh && /tmp/TURBO_LICENSE.sh
+              git clone https://github.com/niklaushirt/ibm-concert-deployer.git -b main && cd ibm-concert-deployer && echo $LICENSE_KEY > /tmp/SCRIPT_PWD.txt && ansible-vault decrypt  --vault-password-file /tmp/SCRIPT_PWD.txt ./tools/11_practicum/turbonomic/concert_optimise_license.enc --output /tmp/concert_optimise_license.sh && chmod +x /tmp/concert_optimise_license.sh && /tmp/concert_optimise_license.sh
           env:
           - name: LICENSE_KEY
             value : "CHANGEME"

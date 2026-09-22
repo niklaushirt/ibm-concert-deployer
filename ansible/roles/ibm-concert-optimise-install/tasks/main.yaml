@@ -66,7 +66,7 @@
       backgroundColor: '#141a6b'
       color: '#fff'
       location: {{global_config.position_final_ocp_notification | default("BannerBottom")}}
-      text: 'Installing  {{current_feature.kind}} - Version {{ current_feature.turbo_version }} - '  
+      text: 'Installing  {{current_feature.kind}} - Version {{ current_feature.concert_optimise_version }} - '  
       link:
           href: "https://$OPENSHIFT_ROUTE/k8s/ns/ibm-installer/pods/$INSTALL_POD/logs"
           text: Open Logs    

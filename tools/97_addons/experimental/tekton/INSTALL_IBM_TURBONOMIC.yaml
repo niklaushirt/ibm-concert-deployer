@@ -45,7 +45,7 @@ metadata:
   namespace: ibm-installer
 immutable: false
 data:
-  TURBO_LICENSE: >-
+  concert_optimise_license: >-
     <NONE>
   INSTALLATION_CONFIG.yaml: >+
     #*************************************************************************************************************************************************
@@ -136,7 +136,7 @@ data:
       - name: ibm-turbonomic
         kind: IBMTurbonomic
         install: true
-        turbo_version: 8.13.3
+        concert_optimise_version: 8.13.3
 
         # --------------------------------------------------------------------------------------------------------------------------------------
         # Storage Classes Override for this Instance (see comment below)
@@ -149,14 +149,14 @@ data:
         kind: IBMTurbonomicDemoContent
         install: true
         # Admin User Password (OVERRIDES GLOBAL PASSWORD)
-        #turbo_admin_password: CHANGEME
+        #concert_optimise_admin_password: CHANGEME
         # ---------------------------------------------------------------------
         # Create Demo User
         create_user: true
         # Demo User Name
         demo_user: demo
         # Demo User Password (OVERRIDES GLOBAL PASSWORD)
-        #turbo_demo_password: CHANGEME
+        #concert_optimise_demo_password: CHANGEME
         # ---------------------------------------------------------------------
         # Create Groups
         group_vcenter_vms: true
@@ -182,7 +182,7 @@ data:
         metrics_dif: true
         # ---------------------------------------------------------------------
         # Turbo License (optional)
-        turbo_license: NONE
+        concert_optimise_license: NONE
         # ---------------------------------------------------------------------
         # Create a valid ingress certificate when on ITZ
         create_valid_ingress_itz: false
@@ -357,11 +357,11 @@ spec:
               configMapKeyRef:
                 name: ibm-install-configuration-turbo
                 key: INSTALL_REPO
-          - name: TURBO_LICENSE
+          - name: concert_optimise_license
             valueFrom:
               configMapKeyRef:
                 name: ibm-install-configuration-turbo
-                key: TURBO_LICENSE
+                key: concert_optimise_license
                 optional: true
           - name: INSTANA_SALES_KEY
             valueFrom:
