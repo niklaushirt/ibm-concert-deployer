@@ -1,0 +1,284 @@
+{
+    "assessment-results": {
+      "uuid": "11b9bba4-e626-471c-8264-4fb240b2ab78",
+      "scan_date": "2024-05-12 07:44:20 +0000 UTC",
+      "metadata":{
+      "title":"Demo NIST scan results",
+      "description":"This result provides the scan results for compliance check for the system"
+      },
+       "evidence":{
+        "filepath":"randomFilepath"
+      },
+      "environment": "prod",
+      "profile_name": "Demo Compliance profile",
+      "profile_id": "11ca4579-7ed9-4552-5da6-738126660be3",
+      "total_reviewed_controls": 12,
+      "controls_passed": 5,
+      "controls_failed": 7,
+      "results": [
+        {
+          "observations": [
+            {
+              "uuid": "1107eb6e-0c05-43bc-8438-799739615e34",
+              "subjects": [
+                {
+                  "subject-uuid": "11d3a95e-ea1d-47f2-b512-301260407e54",
+                  "title": "clould object storage",
+                  "type": "component"
+                }
+              ],
+              "remarks": "One or more conditions in rule rc7a326e9-77e3-41ab-957f-eeaaaea12999 were not met",
+              "relevant-evidence": [
+                {
+                  "description": "Log file containing configuration changes made to the system",
+                  "href": ""
+                }
+              ]
+            },
+            {
+              "uuid": "1107eb6e-0c05-43bc-8438-799739615e35",
+              "subjects": [
+                {
+                  "subject-uuid": "11d3a95e-ea1d-47f2-b512-301260407e53",
+                  "title": "IAM User",
+                  "type": "component"
+                }
+              ],
+              "remarks": "One or more conditions in rule rc7a326e9-77e3-41ab-957f-eeaaaea12999 were not met",
+              "relevant-evidence": [
+                {
+                  "description": "Log file containing configuration changes made to the system",
+                  "href": ""
+                }
+              ]
+            }
+          ],
+          "findings": [
+            {
+              "uuid": "11d8a6c2-1368-4bad-9ba0-7141f0a32889",
+              "title": "GoodRead AwesomeCloud Account's System Engineer Role Permits High Risk Actions",
+              "description": "The assessor's security automation platform detected that the system engineer's role is permitted to perform the following actions in the GoodRead AwesomeCloud account:\n\n* Delete and reset account audit logs.\n* Add, change, or delete security monitoring configurations in the Awesome Security Monitor service used by the IFA Security Operations Center.\n\nThe system engineer is not permitted to modify these services, and their role was incorrectly configured.",
+              "target": {
+                "type": "control-id",
+                "target-id": "ac-1",
+                "status": {
+                  "state": "not-satisfied"
+                },
+                "remediation": "Use context-based restrictions to restrict access to Cloud Object Storage buckets."
+              },
+              "related-observations": [
+                {
+                  "observation-uuid": "1107eb6e-0c05-43bc-8438-799739615e34"
+                }
+              ]
+            },
+            {
+              "uuid": "11d8a6c2-1368-4bad-9ba0-7141f0a32889",
+              "title": "GoodRead AwesomeCloud Account's System Engineer Role Permits High Risk Actions",
+              "description": "The assessor's security automation platform detected that the system engineer's role is permitted to perform the following actions in the GoodRead AwesomeCloud account:\n\n* Delete and reset account audit logs.\n* Add, change, or delete security monitoring configurations in the Awesome Security Monitor service used by the IFA Security Operations Center.\n\nThe system engineer is not permitted to modify these services, and their role was incorrectly configured.",
+              "target": {
+                "type": "control-id",
+                "target-id": "ac-2",
+                "status": {
+                  "state": "not-satisfied"
+                },
+                "remediation": "Use the Cloud Object Storage Buckets firewall to restrict IP addresses.\n\nCurrently, this rule is specific to the Cloud Object Storage Bucket firewall. However, the rule will be updated to also address context-based restrictions.\n\nAn independent software vendor (ISV) can choose whether to use context-based restrictions. Because the context of a rule can be a network zone, an endpoint, a service, or other contexts, it is recommended that you use the context-based restrictions approach."
+              },
+              "related-observations": [
+                {
+                  "observation-uuid": "1107eb6e-0c05-43bc-8438-799739615e34"
+                }
+              ]
+            },
+            {
+              "uuid": "11d8a6c2-1368-4bad-9ba0-7141f0a32889",
+              "title": "GoodRead AwesomeCloud Account's System Engineer Role Permits High Risk Actions",
+              "description": "The assessor's security automation platform detected that the system engineer's role is permitted to perform the following actions in the GoodRead AwesomeCloud account:\n\n* Delete and reset account audit logs.\n* Add, change, or delete security monitoring configurations in the Awesome Security Monitor service used by the IFA Security Operations Center.\n\nThe system engineer is not permitted to modify these services, and their role was incorrectly configured.",
+              "target": {
+                "type": "control-id",
+                "target-id": "ac-3",
+                "status": {
+                  "state": "not-satisfied"
+                },
+                "remediation": "Use the Cloud Object Storage Buckets firewall to restrict IP addresses.\n\nCurrently, this rule is specific to the Cloud Object Storage Bucket firewall. However, the rule will be updated to also address context-based restrictions.\n\nAn independent software vendor (ISV) can choose whether to use context-based restrictions. Because the context of a rule can be a network zone, an endpoint, a service, or other contexts, it is recommended that you use the context-based restrictions approach."
+              },
+              "related-observations": [
+                {
+                  "observation-uuid": "1107eb6e-0c05-43bc-8438-799739615e34"
+                }
+              ]
+            },
+            {
+              "uuid": "11d8a6c2-1368-4bad-9ba0-7141f0a32889",
+              "title": "GoodRead AwesomeCloud Account's System Engineer Role Permits High Risk Actions",
+              "description": "The assessor's security automation platform detected that the system engineer's role is permitted to perform the following actions in the GoodRead AwesomeCloud account:\n\n* Delete and reset account audit logs.\n* Add, change, or delete security monitoring configurations in the Awesome Security Monitor service used by the IFA Security Operations Center.\n\nThe system engineer is not permitted to modify these services, and their role was incorrectly configured.",
+              "target": {
+                "type": "control-id",
+                "target-id": "ac-7",
+                "status": {
+                  "state": "not-satisfied"
+                },
+                "remediation": "Use the Cloud Object Storage Buckets firewall to restrict IP addresses.\n\nCurrently, this rule is specific to the Cloud Object Storage Bucket firewall. However, the rule will be updated to also address context-based restrictions.\n\nAn independent software vendor (ISV) can choose whether to use context-based restrictions. Because the context of a rule can be a network zone, an endpoint, a service, or other contexts, it is recommended that you use the context-based restrictions approach."
+              },
+              "related-observations": [
+                {
+                  "observation-uuid": "1107eb6e-0c05-43bc-8438-799739615e34"
+                }
+              ]
+            },
+            {
+                "uuid": "11d8a6c2-1368-4bad-9ba0-7141f0a32889",
+                "title": "GoodRead AwesomeCloud Account's System Engineer Role Permits High Risk Actions",
+                "description": "The assessor's security automation platform detected that the system engineer's role is permitted to perform the following actions in the GoodRead AwesomeCloud account:\n\n* Delete and reset account audit logs.\n* Add, change, or delete security monitoring configurations in the Awesome Security Monitor service used by the IFA Security Operations Center.\n\nThe system engineer is not permitted to modify these services, and their role was incorrectly configured.",
+                "target": {
+                  "type": "control-id",
+                  "target-id": "ac-8",
+                  "status": {
+                    "state": "satisfied"
+                  },
+                  "remediation": "Use the Cloud Object Storage Buckets firewall to restrict IP addresses.\n\nCurrently, this rule is specific to the Cloud Object Storage Bucket firewall. However, the rule will be updated to also address context-based restrictions.\n\nAn independent software vendor (ISV) can choose whether to use context-based restrictions. Because the context of a rule can be a network zone, an endpoint, a service, or other contexts, it is recommended that you use the context-based restrictions approach."
+                },
+                "related-observations": [
+                  {
+                    "observation-uuid": "1107eb6e-0c05-43bc-8438-799739615e34"
+                  }
+                ]
+              }
+              ,
+            {
+                "uuid": "11d8a6c2-1368-4bad-9ba0-7141f0a32889",
+                "title": "GoodRead AwesomeCloud Account's System Engineer Role Permits High Risk Actions",
+                "description": "The assessor's security automation platform detected that the system engineer's role is permitted to perform the following actions in the GoodRead AwesomeCloud account:\n\n* Delete and reset account audit logs.\n* Add, change, or delete security monitoring configurations in the Awesome Security Monitor service used by the IFA Security Operations Center.\n\nThe system engineer is not permitted to modify these services, and their role was incorrectly configured.",
+                "target": {
+                  "type": "control-id",
+                  "target-id": "ac-14",
+                  "status": {
+                    "state": "satisfied"
+                  },
+                  "remediation": "Use the Cloud Object Storage Buckets firewall to restrict IP addresses.\n\nCurrently, this rule is specific to the Cloud Object Storage Bucket firewall. However, the rule will be updated to also address context-based restrictions.\n\nAn independent software vendor (ISV) can choose whether to use context-based restrictions. Because the context of a rule can be a network zone, an endpoint, a service, or other contexts, it is recommended that you use the context-based restrictions approach."
+                },
+                "related-observations": [
+                  {
+                    "observation-uuid": "1107eb6e-0c05-43bc-8438-799739615e34"
+                  }
+                ]
+              }
+              ,
+            {
+                "uuid": "11d8a6c2-1368-4bad-9ba0-7141f0a32889",
+                "title": "GoodRead AwesomeCloud Account's System Engineer Role Permits High Risk Actions",
+                "description": "The assessor's security automation platform detected that the system engineer's role is permitted to perform the following actions in the GoodRead AwesomeCloud account:\n\n* Delete and reset account audit logs.\n* Add, change, or delete security monitoring configurations in the Awesome Security Monitor service used by the IFA Security Operations Center.\n\nThe system engineer is not permitted to modify these services, and their role was incorrectly configured.",
+                "target": {
+                  "type": "control-id",
+                  "target-id": "at-2",
+                  "status": {
+                    "state": "not-satisfied"
+                  },
+                  "remediation": "Use the Cloud Object Storage Buckets firewall to restrict IP addresses.\n\nCurrently, this rule is specific to the Cloud Object Storage Bucket firewall. However, the rule will be updated to also address context-based restrictions.\n\nAn independent software vendor (ISV) can choose whether to use context-based restrictions. Because the context of a rule can be a network zone, an endpoint, a service, or other contexts, it is recommended that you use the context-based restrictions approach."
+                },
+                "related-observations": [
+                  {
+                    "observation-uuid": "1107eb6e-0c05-43bc-8438-799739615e35"
+                  }
+                ]
+              }
+              ,
+              {
+                  "uuid": "11d8a6c2-1368-4bad-9ba0-7141f0a32889",
+                  "title": "GoodRead AwesomeCloud Account's System Engineer Role Permits High Risk Actions",
+                  "description": "The assessor's security automation platform detected that the system engineer's role is permitted to perform the following actions in the GoodRead AwesomeCloud account:\n\n* Delete and reset account audit logs.\n* Add, change, or delete security monitoring configurations in the Awesome Security Monitor service used by the IFA Security Operations Center.\n\nThe system engineer is not permitted to modify these services, and their role was incorrectly configured.",
+                  "target": {
+                    "type": "control-id",
+                    "target-id": "pe-13",
+                    "status": {
+                      "state": "not-satisfied"
+                    },
+                    "remediation": "Use the Cloud Object Storage Buckets firewall to restrict IP addresses.\n\nCurrently, this rule is specific to the Cloud Object Storage Bucket firewall. However, the rule will be updated to also address context-based restrictions.\n\nAn independent software vendor (ISV) can choose whether to use context-based restrictions. Because the context of a rule can be a network zone, an endpoint, a service, or other contexts, it is recommended that you use the context-based restrictions approach."
+                  },
+                  "related-observations": [
+                    {
+                      "observation-uuid": "1107eb6e-0c05-43bc-8438-799739615e35"
+                    }
+                  ]
+                }
+                ,
+              {
+                  "uuid": "11d8a6c2-1368-4bad-9ba0-7141f0a32889",
+                  "title": "GoodRead AwesomeCloud Account's System Engineer Role Permits High Risk Actions",
+                  "description": "The assessor's security automation platform detected that the system engineer's role is permitted to perform the following actions in the GoodRead AwesomeCloud account:\n\n* Delete and reset account audit logs.\n* Add, change, or delete security monitoring configurations in the Awesome Security Monitor service used by the IFA Security Operations Center.\n\nThe system engineer is not permitted to modify these services, and their role was incorrectly configured.",
+                  "target": {
+                    "type": "control-id",
+                    "target-id": "ac-17",
+                    "status": {
+                      "state": "not-satisfied"
+                    },
+                    "remediation": "Use the Cloud Object Storage Buckets firewall to restrict IP addresses.\n\nCurrently, this rule is specific to the Cloud Object Storage Bucket firewall. However, the rule will be updated to also address context-based restrictions.\n\nAn independent software vendor (ISV) can choose whether to use context-based restrictions. Because the context of a rule can be a network zone, an endpoint, a service, or other contexts, it is recommended that you use the context-based restrictions approach."
+                  },
+                  "related-observations": [
+                    {
+                      "observation-uuid": "1107eb6e-0c05-43bc-8438-799739615e35"
+                    }
+                  ]
+                }
+                ,
+                {
+                    "uuid": "11d8a6c2-1368-4bad-9ba0-7141f0a32889",
+                    "title": "GoodRead AwesomeCloud Account's System Engineer Role Permits High Risk Actions",
+                    "description": "The assessor's security automation platform detected that the system engineer's role is permitted to perform the following actions in the GoodRead AwesomeCloud account:\n\n* Delete and reset account audit logs.\n* Add, change, or delete security monitoring configurations in the Awesome Security Monitor service used by the IFA Security Operations Center.\n\nThe system engineer is not permitted to modify these services, and their role was incorrectly configured.",
+                    "target": {
+                      "type": "control-id",
+                      "target-id": "ac-18",
+                      "status": {
+                        "state": "satisfied"
+                      },
+                      "remediation": "Use the Cloud Object Storage Buckets firewall to restrict IP addresses.\n\nCurrently, this rule is specific to the Cloud Object Storage Bucket firewall. However, the rule will be updated to also address context-based restrictions.\n\nAn independent software vendor (ISV) can choose whether to use context-based restrictions. Because the context of a rule can be a network zone, an endpoint, a service, or other contexts, it is recommended that you use the context-based restrictions approach."
+                    },
+                    "related-observations": [
+                      {
+                        "observation-uuid": "1107eb6e-0c05-43bc-8438-799739615e35"
+                      }
+                    ]
+                  }
+                  ,
+                  {
+                      "uuid": "11d8a6c2-1368-4bad-9ba0-7141f0a32889",
+                      "title": "GoodRead AwesomeCloud Account's System Engineer Role Permits High Risk Actions",
+                      "description": "The assessor's security automation platform detected that the system engineer's role is permitted to perform the following actions in the GoodRead AwesomeCloud account:\n\n* Delete and reset account audit logs.\n* Add, change, or delete security monitoring configurations in the Awesome Security Monitor service used by the IFA Security Operations Center.\n\nThe system engineer is not permitted to modify these services, and their role was incorrectly configured.",
+                      "target": {
+                        "type": "control-id",
+                        "target-id": "ac-19",
+                        "status": {
+                          "state": "satisfied"
+                        },
+                        "remediation": "Use the Cloud Object Storage Buckets firewall to restrict IP addresses.\n\nCurrently, this rule is specific to the Cloud Object Storage Bucket firewall. However, the rule will be updated to also address context-based restrictions.\n\nAn independent software vendor (ISV) can choose whether to use context-based restrictions. Because the context of a rule can be a network zone, an endpoint, a service, or other contexts, it is recommended that you use the context-based restrictions approach."
+                      },
+                      "related-observations": [
+                        {
+                          "observation-uuid": "1107eb6e-0c05-43bc-8438-799739615e35"
+                        }
+                      ]
+                    }
+                    ,
+                    {
+                        "uuid": "11d8a6c2-1368-4bad-9ba0-7141f0a32889",
+                        "title": "GoodRead AwesomeCloud Account's System Engineer Role Permits High Risk Actions",
+                        "description": "The assessor's security automation platform detected that the system engineer's role is permitted to perform the following actions in the GoodRead AwesomeCloud account:\n\n* Delete and reset account audit logs.\n* Add, change, or delete security monitoring configurations in the Awesome Security Monitor service used by the IFA Security Operations Center.\n\nThe system engineer is not permitted to modify these services, and their role was incorrectly configured.",
+                        "target": {
+                          "type": "control-id",
+                          "target-id": "ac-20",
+                          "status": {
+                            "state": "satisfied"
+                          },
+                          "remediation": "Use the Cloud Object Storage Buckets firewall to restrict IP addresses.\n\nCurrently, this rule is specific to the Cloud Object Storage Bucket firewall. However, the rule will be updated to also address context-based restrictions.\n\nAn independent software vendor (ISV) can choose whether to use context-based restrictions. Because the context of a rule can be a network zone, an endpoint, a service, or other contexts, it is recommended that you use the context-based restrictions approach."
+                        },
+                        "related-observations": [
+                          {
+                            "observation-uuid": "1107eb6e-0c05-43bc-8438-799739615e35"
+                          }
+                        ]
+                      }
+          ]
+        }
+      ]
+    }
+  }

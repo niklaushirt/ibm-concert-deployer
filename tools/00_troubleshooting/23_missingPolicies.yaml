@@ -1,0 +1,559 @@
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#     ________  __  ___   __________    ___         __                        __  _
+#    /  _/ __ )/  |/  /  /  _/_  __/   /   | __  __/ /_____  ____ ___  ____ _/ /_(_)___  ____
+#    / // __  / /|_/ /   / /  / /     / /| |/ / / / __/ __ \/ __ `__ \/ __ `/ __/ / __ \/ __ \
+#  _/ // /_/ / /  / /  _/ /  / /     / ___ / /_/ / /_/ /_/ / / / / / / /_/ / /_/ / /_/ / / / /
+# /___/_____/_/  /_/  /___/ /_/     /_/  |_\__,_/\__/\____/_/ /_/ /_/\__,_/\__/_/\____/_/ /_/
+#
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------------------------------------------------------"
+---
+apiVersion: v1                     
+kind: Namespace
+metadata:
+  name: ibm-installer
+---
+
+
+
+
+# ------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# DO NOT MODIFY BELOW
+# ------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------------------------------------------------------------------------------------------
+---
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  name: ibm-installer-admin
+  namespace: ibm-installer
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: ibm-installer-admin
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+  - kind: ServiceAccount
+    name: ibm-installer-admin
+    namespace: ibm-installer
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: ibm-installer-default-admin
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+  - kind: ServiceAccount
+    name: default
+    namespace: ibm-installer
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: troubleshoot-2-3-create-missing-policies
+  namespace: ibm-installer
+  labels:
+   aiops-type: data-load-job
+spec:
+  serviceAccount: ibm-installer-admin
+  template:
+    metadata:
+      labels:
+        app: ibm-installer
+    spec:
+      serviceAccount: ibm-installer-admin
+      containers:
+        - name: install
+          image: quay.io/niklaushirt/ibm-aiops-tools:5.1.0
+          imagePullPolicy: IfNotPresent
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "150m"
+            limits:
+              memory: "2024Mi"
+              cpu: "1200m"
+          command:
+            - /bin/bash
+            - -c
+            - |
+              #!/bin/bash
+              #set +x
+              echo "***************************************************************************************************************************************************"
+              echo "***************************************************************************************************************************************************"
+              echo "                                                                                                                                                   "
+              echo " 🚀 Create missing Policies                                                                                                                                            "
+              echo "                                                                                                                                                   "
+              echo "***************************************************************************************************************************************************"
+
+
+              echo "------------------------------------------------------------------------------------------------------------------------------"
+              echo " 🚀 Getting Installation source from GitHub"
+              echo "------------------------------------------------------------------------------------------------------------------------------"
+              echo "   📥 Clone Repo https://github.com/niklaushirt/ibm-aiops-deployer.git -b dev_latest"
+              git clone https://github.com/niklaushirt/ibm-aiops-deployer.git -b dev_latest
+              cd ibm-aiops-deployer
+
+              echo ""
+              echo ""
+              echo "------------------------------------------------------------------------------------------------------------------------------"
+              echo "   🔎 This Repo includes those latestet Commits"
+              git log|head -n 17
+              echo ""
+              echo ""
+
+                # -----------------------------------------------------------------------------------------------------------------------------
+                # 🚀 POLICIES - Get ZEN TOKEN
+                export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
+                export CONSOLE_ROUTE=$(oc get route -n $AIOPS_NAMESPACE cp-console  -o jsonpath={.spec.host})          
+                export CPD_ROUTE=$(oc get route -n $AIOPS_NAMESPACE cpd  -o jsonpath={.spec.host})          
+                export CPADMIN_PWD=$(oc -n $AIOPS_NAMESPACE get secret platform-auth-idp-credentials -o jsonpath='{.data.admin_password}' | base64 -d && echo)
+                export CPADMIN_USER=$(oc -n $AIOPS_NAMESPACE get secret platform-auth-idp-credentials -o jsonpath='{.data.admin_username}' | base64 -d && echo)
+                export ACCESS_TOKEN=$(curl -s -k -H "Content-Type: application/x-www-form-urlencoded;charset=UTF-8" -d "grant_type=password&username=$CPADMIN_USER&password=$CPADMIN_PWD&scope=openid" https://$CONSOLE_ROUTE/idprovider/v1/auth/identitytoken|jq -r '.access_token')
+                export ZEN_API_HOST=$(oc get route -n $AIOPS_NAMESPACE cpd -o jsonpath='{.spec.host}')
+                export ZEN_TOKEN=$(curl -k -XGET https://$ZEN_API_HOST/v1/preauth/validateAuth \
+                -H "username: $CPADMIN_USER" \
+                -H "iam-token: $ACCESS_TOKEN"|jq -r '.accessToken')
+                echo $ZEN_TOKEN
+
+
+
+
+                # -----------------------------------------------------------------------------------------------------------------------------
+                # 🛠️  POLICIES - Create Runbooks Trigger Policy ROBOTSHOP
+                    export ROUTE=$(oc get route -n $AIOPS_NAMESPACE cpd -o jsonpath={.spec.host})
+                    echo "ROUTE: "$ROUTE
+                    export result=$(curl -X "GET" -k "https://$ROUTE/aiops/api/story-manager/rba/v1/runbooks" \
+                          -H "Authorization: bearer $ZEN_TOKEN" \
+                          -H 'Content-Type: application/json; charset=utf-8' )
+
+                    echo "RESULT:"$result
+
+                    export RUNBOOK_ID=$(echo $result| sed 's/\\\\"/\"/g'|jq -r '.[]| select(.name|contains("Mitigate MySQL Low Memory"))|._runbookId'| head -n 1)
+                    echo "RUNBOOK_ID: $RUNBOOK_ID"
+
+
+                    # Create Runbook Trigger Policy
+                    export POLICY_FILE="/ibm-aiops-deployer/ansible/roles/ibm-aiops-demo-content/templates/policies/runbook-trigger-policy-robot.json"
+                    cp $POLICY_FILE /tmp/runbook_policy.json
+                    cat /tmp/runbook_policy.json
+                    echo "RUNBOOK_ID: $RUNBOOK_ID"
+
+                    sed -i -e "s/MY_RUNBOOK_ID/$RUNBOOK_ID/g" /tmp/runbook_policy.json
+                    cat /tmp/runbook_policy.json
+
+
+                    export POLICY_USERNAME=$(oc get secret -n $AIOPS_NAMESPACE aiops-ir-lifecycle-policy-registry-svc -o jsonpath='{.data.username}' | base64 --decode)
+                    export POLICY_PASSWORD=$(oc get secret -n $AIOPS_NAMESPACE aiops-ir-lifecycle-policy-registry-svc -o jsonpath='{.data.password}' | base64 --decode)
+                    export POLICY_LOGIN="$POLICY_USERNAME:$POLICY_PASSWORD"
+                    echo $POLICY_LOGIN
+
+                    oc create route passthrough --insecure-policy="Redirect" policy-api -n $AIOPS_NAMESPACE --service aiops-ir-lifecycle-policy-registry-svc --port ssl-port
+
+                    export POLICY_ROUTE=$(oc get routes -n $AIOPS_NAMESPACE policy-api -o jsonpath="{['spec']['host']}")
+                    echo $POLICY_ROUTE
+
+
+                    export policyID=$(curl -XGET -k -s "https://$POLICY_ROUTE/policyregistry.ibm-netcool-prod.aiops.io/v1alpha/system/cfd95b7e-3bc7-4006-a4a8-a73a79c71255/"  \
+                      -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255' \
+                      -H 'content-type: application/json' \
+                      -u $POLICY_LOGIN|jq -r '.[] | select(.metadata |  contains("DEMO RobotShop Mitigation" ) )| .policyid')
+                      
+                    if [[ -z $policyID  ]]; then
+                      echo "Create Policy"
+
+                      export result=$(curl -XPOST -k -s "https://$POLICY_ROUTE/policyregistry.ibm-netcool-prod.aiops.io/v1alpha/system/cfd95b7e-3bc7-4006-a4a8-a73a79c71255/policies"  \
+                        -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255' \
+                        -H 'content-type: application/json' \
+                        -u $POLICY_LOGIN \
+                        -d @/tmp/runbook_policy.json)
+                    else 
+                      echo "Already exists - Recreate Policy"
+
+
+                      export result=$(curl -XDELETE -k -s "https://$POLICY_ROUTE/policyregistry.ibm-netcool-prod.aiops.io/v1alpha/system/cfd95b7e-3bc7-4006-a4a8-a73a79c71255/policies/$policyID"  \
+                        -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255' \
+                        -H 'content-type: application/json' \
+                        -u $POLICY_LOGIN )
+                      echo $result
+
+
+                        export result=$(curl -XPOST -k -s "https://$POLICY_ROUTE/policyregistry.ibm-netcool-prod.aiops.io/v1alpha/system/cfd95b7e-3bc7-4006-a4a8-a73a79c71255/policies"  \
+                        -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255' \
+                        -H 'content-type: application/json' \
+                        -u $POLICY_LOGIN \
+                        -d @/tmp/runbook_policy.json)
+
+                    fi 
+                    echo $result
+
+
+
+
+
+                # -----------------------------------------------------------------------------------------------------------------------------
+                # 🛠️  POLICIES - Create Runbooks Trigger Policy ROBOTSHOP MySQL Reset Network Interface
+                    export ROUTE=$(oc get route -n $AIOPS_NAMESPACE cpd -o jsonpath={.spec.host})
+                    echo "ROUTE: "$ROUTE
+                    export result=$(curl -X "GET" -k "https://$ROUTE/aiops/api/story-manager/rba/v1/runbooks" \
+                          -H "Authorization: bearer $ZEN_TOKEN" \
+                          -H 'Content-Type: application/json; charset=utf-8' )
+
+                    echo "RESULT:"$result
+
+                    export RUNBOOK_ID=$(echo $result| sed 's/\\\\"/\"/g'|jq -r '.[]| select(.name|contains("Reset Network Interface"))|._runbookId'| head -n 1)
+                    echo "RUNBOOK_ID: $RUNBOOK_ID"
+
+
+                    # Create Runbook Trigger Policy
+                    export POLICY_FILE="/ibm-aiops-deployer/ansible/roles/ibm-aiops-demo-content/templates/policies/runbook-trigger-policy-robot-network.json"
+                    cp $POLICY_FILE /tmp/runbook_policy.json
+                    cat /tmp/runbook_policy.json
+                    echo "RUNBOOK_ID: $RUNBOOK_ID"
+
+                    sed -i -e "s/MY_RUNBOOK_ID/$RUNBOOK_ID/g" /tmp/runbook_policy.json
+                    cat /tmp/runbook_policy.json
+
+
+                    export POLICY_USERNAME=$(oc get secret -n $AIOPS_NAMESPACE aiops-ir-lifecycle-policy-registry-svc -o jsonpath='{.data.username}' | base64 --decode)
+                    export POLICY_PASSWORD=$(oc get secret -n $AIOPS_NAMESPACE aiops-ir-lifecycle-policy-registry-svc -o jsonpath='{.data.password}' | base64 --decode)
+                    export POLICY_LOGIN="$POLICY_USERNAME:$POLICY_PASSWORD"
+                    echo $POLICY_LOGIN
+
+                    oc create route passthrough --insecure-policy="Redirect" policy-api -n $AIOPS_NAMESPACE --service aiops-ir-lifecycle-policy-registry-svc --port ssl-port
+
+                    export POLICY_ROUTE=$(oc get routes -n $AIOPS_NAMESPACE policy-api -o jsonpath="{['spec']['host']}")
+                    echo $POLICY_ROUTE
+
+
+                    export policyID=$(curl -XGET -k -s "https://$POLICY_ROUTE/policyregistry.ibm-netcool-prod.aiops.io/v1alpha/system/cfd95b7e-3bc7-4006-a4a8-a73a79c71255/"  \
+                      -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255' \
+                      -H 'content-type: application/json' \
+                      -u $POLICY_LOGIN|jq -r '.[] | select(.metadata |  contains("DEMO RobotShop Reset Network Interface" ) )| .policyid')
+                      
+                    if [[ -z $policyID  ]]; then
+                      echo "Create Policy"
+
+                      export result=$(curl -XPOST -k -s "https://$POLICY_ROUTE/policyregistry.ibm-netcool-prod.aiops.io/v1alpha/system/cfd95b7e-3bc7-4006-a4a8-a73a79c71255/policies"  \
+                        -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255' \
+                        -H 'content-type: application/json' \
+                        -u $POLICY_LOGIN \
+                        -d @/tmp/runbook_policy.json)
+                    else 
+                      echo "Already exists - Recreate Policy"
+
+
+                      export result=$(curl -XDELETE -k -s "https://$POLICY_ROUTE/policyregistry.ibm-netcool-prod.aiops.io/v1alpha/system/cfd95b7e-3bc7-4006-a4a8-a73a79c71255/policies/$policyID"  \
+                        -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255' \
+                        -H 'content-type: application/json' \
+                        -u $POLICY_LOGIN )
+                      echo $result
+
+
+                        export result=$(curl -XPOST -k -s "https://$POLICY_ROUTE/policyregistry.ibm-netcool-prod.aiops.io/v1alpha/system/cfd95b7e-3bc7-4006-a4a8-a73a79c71255/policies"  \
+                        -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255' \
+                        -H 'content-type: application/json' \
+                        -u $POLICY_LOGIN \
+                        -d @/tmp/runbook_policy.json)
+
+                    fi 
+                    echo $result
+
+
+
+
+
+
+                # -----------------------------------------------------------------------------------------------------------------------------
+                # 🛠️  POLICIES - Create Runbooks Trigger Policy ROBOTSHOP Restart Ratings
+
+                    export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
+
+                    export CONSOLE_ROUTE=$(oc get route -n $AIOPS_NAMESPACE cp-console  -o jsonpath={.spec.host})          
+                    export CPD_ROUTE=$(oc get route -n $AIOPS_NAMESPACE cpd  -o jsonpath={.spec.host})          
+                    export CPADMIN_PWD=$(oc -n $AIOPS_NAMESPACE get secret platform-auth-idp-credentials -o jsonpath='{.data.admin_password}' | base64 -d && echo)
+                    export CPADMIN_USER=$(oc -n $AIOPS_NAMESPACE get secret platform-auth-idp-credentials -o jsonpath='{.data.admin_username}' | base64 -d && echo)
+                    export ACCESS_TOKEN=$(curl -s -k -H "Content-Type: application/x-www-form-urlencoded;charset=UTF-8" -d "grant_type=password&username=$CPADMIN_USER&password=$CPADMIN_PWD&scope=openid" https://$CONSOLE_ROUTE/idprovider/v1/auth/identitytoken|jq -r '.access_token')
+                    export ZEN_API_HOST=$(oc get route -n $AIOPS_NAMESPACE cpd -o jsonpath='{.spec.host}')
+                    export ZEN_TOKEN=$(curl -k -XGET https://$ZEN_API_HOST/v1/preauth/validateAuth \
+                    -H "username: $CPADMIN_USER" \
+                    -H "iam-token: $ACCESS_TOKEN"|jq -r '.accessToken')
+                    echo $ZEN_TOKEN
+
+
+                    export ROUTE=$(oc get route -n $AIOPS_NAMESPACE cpd -o jsonpath={.spec.host})
+                    echo "ROUTE: "$ROUTE
+                    export result=$(curl -X "GET" -k "https://$ROUTE/aiops/api/story-manager/rba/v1/runbooks" \
+                          -H "Authorization: bearer $ZEN_TOKEN" \
+                          -H 'Content-Type: application/json; charset=utf-8' )
+
+                    echo "RESULT:"$result
+
+                    export RUNBOOK_ID=$(echo $result| sed 's/\\\\"/\"/g'|jq -r '.[]| select(.name|contains("Restart Ratings Service"))|._runbookId'| head -n 1)
+                    echo "RUNBOOK_ID: $RUNBOOK_ID"
+
+
+                    # Create Runbook Trigger Policy
+                    export POLICY_FILE="/ibm-aiops-deployer/ansible/roles/ibm-aiops-demo-content/templates/policies/runbook-trigger-policy-robot-restart.json"
+                    cp $POLICY_FILE /tmp/runbook_policy.json
+                    cat /tmp/runbook_policy.json
+                    echo "RUNBOOK_ID: $RUNBOOK_ID"
+
+                    sed -i -e "s/MY_RUNBOOK_ID/$RUNBOOK_ID/g" /tmp/runbook_policy.json
+                    cat /tmp/runbook_policy.json
+
+
+                    export POLICY_USERNAME=$(oc get secret -n $AIOPS_NAMESPACE aiops-ir-lifecycle-policy-registry-svc -o jsonpath='{.data.username}' | base64 --decode)
+                    export POLICY_PASSWORD=$(oc get secret -n $AIOPS_NAMESPACE aiops-ir-lifecycle-policy-registry-svc -o jsonpath='{.data.password}' | base64 --decode)
+                    export POLICY_LOGIN="$POLICY_USERNAME:$POLICY_PASSWORD"
+                    echo $POLICY_LOGIN
+
+                    oc create route passthrough --insecure-policy="Redirect" policy-api -n $AIOPS_NAMESPACE --service aiops-ir-lifecycle-policy-registry-svc --port ssl-port
+
+                    export POLICY_ROUTE=$(oc get routes -n $AIOPS_NAMESPACE policy-api -o jsonpath="{['spec']['host']}")
+                    echo $POLICY_ROUTE
+
+                    export policyID=$(curl -XGET -k -s "https://$POLICY_ROUTE/policyregistry.ibm-netcool-prod.aiops.io/v1alpha/system/cfd95b7e-3bc7-4006-a4a8-a73a79c71255/"  \
+                      -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255' \
+                      -H 'content-type: application/json' \
+                      -u $POLICY_LOGIN|jq -r '.[] | select(.metadata |  contains("DEMO RobotShop Ratings Restart" ) )| .policyid')
+                      
+                    if [[ -z $policyID  ]]; then
+                      echo "Create Policy"
+
+                      export result=$(curl -XPOST -k -s "https://$POLICY_ROUTE/policyregistry.ibm-netcool-prod.aiops.io/v1alpha/system/cfd95b7e-3bc7-4006-a4a8-a73a79c71255/policies"  \
+                        -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255' \
+                        -H 'content-type: application/json' \
+                        -u $POLICY_LOGIN \
+                        -d @/tmp/runbook_policy.json)
+                    else 
+                      echo "Already exists - Recreate Policy"
+
+
+                      export result=$(curl -XDELETE -k -s "https://$POLICY_ROUTE/policyregistry.ibm-netcool-prod.aiops.io/v1alpha/system/cfd95b7e-3bc7-4006-a4a8-a73a79c71255/policies/$policyID"  \
+                        -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255' \
+                        -H 'content-type: application/json' \
+                        -u $POLICY_LOGIN )
+                      echo $result
+
+
+                        export result=$(curl -XPOST -k -s "https://$POLICY_ROUTE/policyregistry.ibm-netcool-prod.aiops.io/v1alpha/system/cfd95b7e-3bc7-4006-a4a8-a73a79c71255/policies"  \
+                        -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255' \
+                        -H 'content-type: application/json' \
+                        -u $POLICY_LOGIN \
+                        -d @/tmp/runbook_policy.json)
+
+                    fi 
+                    echo $result
+
+
+
+
+
+
+                # -----------------------------------------------------------------------------------------------------------------------------
+                # 🛠️  POLICIES - Create Runbooks Trigger Policy SOCKSHOP
+
+                    export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
+
+                    export CONSOLE_ROUTE=$(oc get route -n $AIOPS_NAMESPACE cp-console  -o jsonpath={.spec.host})          
+                    export CPD_ROUTE=$(oc get route -n $AIOPS_NAMESPACE cpd  -o jsonpath={.spec.host})          
+                    export CPADMIN_PWD=$(oc -n $AIOPS_NAMESPACE get secret platform-auth-idp-credentials -o jsonpath='{.data.admin_password}' | base64 -d && echo)
+                    export CPADMIN_USER=$(oc -n $AIOPS_NAMESPACE get secret platform-auth-idp-credentials -o jsonpath='{.data.admin_username}' | base64 -d && echo)
+                    export ACCESS_TOKEN=$(curl -s -k -H "Content-Type: application/x-www-form-urlencoded;charset=UTF-8" -d "grant_type=password&username=$CPADMIN_USER&password=$CPADMIN_PWD&scope=openid" https://$CONSOLE_ROUTE/idprovider/v1/auth/identitytoken|jq -r '.access_token')
+                    export ZEN_API_HOST=$(oc get route -n $AIOPS_NAMESPACE cpd -o jsonpath='{.spec.host}')
+                    export ZEN_TOKEN=$(curl -k -XGET https://$ZEN_API_HOST/v1/preauth/validateAuth \
+                    -H "username: $CPADMIN_USER" \
+                    -H "iam-token: $ACCESS_TOKEN"|jq -r '.accessToken')
+                    echo $ZEN_TOKEN
+
+
+                    export ROUTE=$(oc get route -n $AIOPS_NAMESPACE cpd -o jsonpath={.spec.host})
+                    echo "ROUTE: "$ROUTE
+                    export result=$(curl -X "GET" -k "https://$ROUTE/aiops/api/story-manager/rba/v1/runbooks" \
+                          -H "Authorization: bearer $ZEN_TOKEN" \
+                          -H 'Content-Type: application/json; charset=utf-8' )
+
+                    echo "RESULT:"$result
+
+                    export RUNBOOK_ID=$(echo $result| sed 's/\\\\"/\"/g'|jq -r '.[]| select(.name|contains("Clear SockShop Switch Incident"))|._runbookId'| head -n 1)
+                    echo "RUNBOOK_ID: $RUNBOOK_ID"
+
+
+                    # Create Runbook Trigger Policy
+                    export POLICY_FILE="/ibm-aiops-deployer/ansible/roles/ibm-aiops-demo-content/templates/policies/runbook-trigger-policy-sock.json"
+                    cp $POLICY_FILE /tmp/runbook_policy.json
+                    cat /tmp/runbook_policy.json
+                    echo "RUNBOOK_ID: $RUNBOOK_ID"
+
+                    sed -i -e "s/MY_RUNBOOK_ID/$RUNBOOK_ID/g" /tmp/runbook_policy.json
+                    cat /tmp/runbook_policy.json
+
+
+                    export POLICY_USERNAME=$(oc get secret -n $AIOPS_NAMESPACE aiops-ir-lifecycle-policy-registry-svc -o jsonpath='{.data.username}' | base64 --decode)
+                    export POLICY_PASSWORD=$(oc get secret -n $AIOPS_NAMESPACE aiops-ir-lifecycle-policy-registry-svc -o jsonpath='{.data.password}' | base64 --decode)
+                    export POLICY_LOGIN="$POLICY_USERNAME:$POLICY_PASSWORD"
+                    echo $POLICY_LOGIN
+
+                    oc create route passthrough --insecure-policy="Redirect" policy-api -n $AIOPS_NAMESPACE --service aiops-ir-lifecycle-policy-registry-svc --port ssl-port
+
+                    export POLICY_ROUTE=$(oc get routes -n $AIOPS_NAMESPACE policy-api -o jsonpath="{['spec']['host']}")
+                    echo $POLICY_ROUTE
+
+                    export policyID=$(curl -XGET -k -s "https://$POLICY_ROUTE/policyregistry.ibm-netcool-prod.aiops.io/v1alpha/system/cfd95b7e-3bc7-4006-a4a8-a73a79c71255/"  \
+                      -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255' \
+                      -H 'content-type: application/json' \
+                      -u $POLICY_LOGIN|jq -r '.[] | select(.metadata |  contains("DEMO SockShop Mitigation" ) )| .policyid')
+                      
+                    if [[ -z $policyID  ]]; then
+                      echo "Create Policy"
+
+                      export result=$(curl -XPOST -k -s "https://$POLICY_ROUTE/policyregistry.ibm-netcool-prod.aiops.io/v1alpha/system/cfd95b7e-3bc7-4006-a4a8-a73a79c71255/policies"  \
+                        -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255' \
+                        -H 'content-type: application/json' \
+                        -u $POLICY_LOGIN \
+                        -d @/tmp/runbook_policy.json)
+                    else 
+                      echo "Already exists - Recreate Policy"
+
+
+                      export result=$(curl -XDELETE -k -s "https://$POLICY_ROUTE/policyregistry.ibm-netcool-prod.aiops.io/v1alpha/system/cfd95b7e-3bc7-4006-a4a8-a73a79c71255/policies/$policyID"  \
+                        -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255' \
+                        -H 'content-type: application/json' \
+                        -u $POLICY_LOGIN )
+                      echo $result
+
+
+                        export result=$(curl -XPOST -k -s "https://$POLICY_ROUTE/policyregistry.ibm-netcool-prod.aiops.io/v1alpha/system/cfd95b7e-3bc7-4006-a4a8-a73a79c71255/policies"  \
+                        -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255' \
+                        -H 'content-type: application/json' \
+                        -u $POLICY_LOGIN \
+                        -d @/tmp/runbook_policy.json)
+
+                    fi 
+                    echo $result
+
+
+
+
+
+
+
+                # -----------------------------------------------------------------------------------------------------------------------------
+                # 🛠️  POLICIES - Create Runbooks Trigger Policy TELCO
+
+                    export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
+
+                    export CONSOLE_ROUTE=$(oc get route -n $AIOPS_NAMESPACE cp-console  -o jsonpath={.spec.host})          
+                    export CPD_ROUTE=$(oc get route -n $AIOPS_NAMESPACE cpd  -o jsonpath={.spec.host})          
+                    export CPADMIN_PWD=$(oc -n $AIOPS_NAMESPACE get secret platform-auth-idp-credentials -o jsonpath='{.data.admin_password}' | base64 -d && echo)
+                    export CPADMIN_USER=$(oc -n $AIOPS_NAMESPACE get secret platform-auth-idp-credentials -o jsonpath='{.data.admin_username}' | base64 -d && echo)
+                    export ACCESS_TOKEN=$(curl -s -k -H "Content-Type: application/x-www-form-urlencoded;charset=UTF-8" -d "grant_type=password&username=$CPADMIN_USER&password=$CPADMIN_PWD&scope=openid" https://$CONSOLE_ROUTE/idprovider/v1/auth/identitytoken|jq -r '.access_token')
+                    export ZEN_API_HOST=$(oc get route -n $AIOPS_NAMESPACE cpd -o jsonpath='{.spec.host}')
+                    export ZEN_TOKEN=$(curl -k -XGET https://$ZEN_API_HOST/v1/preauth/validateAuth \
+                    -H "username: $CPADMIN_USER" \
+                    -H "iam-token: $ACCESS_TOKEN"|jq -r '.accessToken')
+                    echo $ZEN_TOKEN
+
+
+                    export ROUTE=$(oc get route -n $AIOPS_NAMESPACE cpd -o jsonpath={.spec.host})
+                    echo "ROUTE: "$ROUTE
+                    export result=$(curl -X "GET" -k "https://$ROUTE/aiops/api/story-manager/rba/v1/runbooks" \
+                          -H "Authorization: bearer $ZEN_TOKEN" \
+                          -H 'Content-Type: application/json; charset=utf-8' )
+
+                    echo "RESULT:"$result
+
+                    export RUNBOOK_ID=$(echo $result| sed 's/\\\\"/\"/g'|jq -r '.[]| select(.name|contains("Reset Uplink"))|._runbookId'| head -n 1)
+                    echo "RUNBOOK_ID: $RUNBOOK_ID"
+
+
+                    # Create Runbook Trigger Policy
+
+
+                    export POLICY_FILE="/ibm-aiops-deployer/ansible/roles/ibm-aiops-demo-content/templates/policies/runbook-trigger-policy-telco.json"
+                    cp $POLICY_FILE /tmp/runbook_policy.json
+                    cat /tmp/runbook_policy.json
+                    echo "RUNBOOK_ID: $RUNBOOK_ID"
+
+                    sed -i -e "s/MY_RUNBOOK_ID/$RUNBOOK_ID/g" /tmp/runbook_policy.json
+                    cat /tmp/runbook_policy.json
+
+
+                    export POLICY_USERNAME=$(oc get secret -n $AIOPS_NAMESPACE aiops-ir-lifecycle-policy-registry-svc -o jsonpath='{.data.username}' | base64 --decode)
+                    export POLICY_PASSWORD=$(oc get secret -n $AIOPS_NAMESPACE aiops-ir-lifecycle-policy-registry-svc -o jsonpath='{.data.password}' | base64 --decode)
+                    export POLICY_LOGIN="$POLICY_USERNAME:$POLICY_PASSWORD"
+                    echo $POLICY_LOGIN
+
+                    oc create route passthrough --insecure-policy="Redirect" policy-api -n $AIOPS_NAMESPACE --service aiops-ir-lifecycle-policy-registry-svc --port ssl-port
+
+                    export POLICY_ROUTE=$(oc get routes -n $AIOPS_NAMESPACE policy-api -o jsonpath="{['spec']['host']}")
+                    echo $POLICY_ROUTE
+
+                    export policyID=$(curl -XGET -k -s "https://$POLICY_ROUTE/policyregistry.ibm-netcool-prod.aiops.io/v1alpha/system/cfd95b7e-3bc7-4006-a4a8-a73a79c71255/"  \
+                      -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255' \
+                      -H 'content-type: application/json' \
+                      -u $POLICY_LOGIN|jq -r '.[] | select(.metadata |  contains("DEMO Reset Uplink" ) )| .policyid')
+                      
+                    if [[ -z $policyID  ]]; then
+                      echo "Create Policy"
+
+                      export result=$(curl -XPOST -k -s "https://$POLICY_ROUTE/policyregistry.ibm-netcool-prod.aiops.io/v1alpha/system/cfd95b7e-3bc7-4006-a4a8-a73a79c71255/policies"  \
+                        -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255' \
+                        -H 'content-type: application/json' \
+                        -u $POLICY_LOGIN \
+                        -d @/tmp/runbook_policy.json)
+                    else 
+                      echo "Already exists - Recreate Policy"
+
+
+                      export result=$(curl -XDELETE -k -s "https://$POLICY_ROUTE/policyregistry.ibm-netcool-prod.aiops.io/v1alpha/system/cfd95b7e-3bc7-4006-a4a8-a73a79c71255/policies/$policyID"  \
+                        -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255' \
+                        -H 'content-type: application/json' \
+                        -u $POLICY_LOGIN )
+                      echo $result
+
+
+                        export result=$(curl -XPOST -k -s "https://$POLICY_ROUTE/policyregistry.ibm-netcool-prod.aiops.io/v1alpha/system/cfd95b7e-3bc7-4006-a4a8-a73a79c71255/policies"  \
+                        -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255' \
+                        -H 'content-type: application/json' \
+                        -u $POLICY_LOGIN \
+                        -d @/tmp/runbook_policy.json)
+
+                    fi 
+                    echo $result
+
+
+
+
+
+
+              echo "*****************************************************************************************************************************"
+              echo " ✅ DONE"
+              echo "*****************************************************************************************************************************"
+
+
+
+
+
+
+              while true
+              do
+                sleep 1000
+              done
+
+
+          env:
+      restartPolicy: Never
+  backoffLimit: 500
+

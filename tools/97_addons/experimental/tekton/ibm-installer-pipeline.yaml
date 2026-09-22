@@ -1,0 +1,52 @@
+---
+apiVersion: v1                     
+kind: Namespace
+metadata:
+  name: ibm-installer
+---
+apiVersion: tekton.dev/v1
+kind: Pipeline
+metadata:
+  name: ibm-installer
+  namespace: ibm-installer
+  labels:
+   aiops-type: data-load-job
+spec:
+  params:
+    - name: OFFERING
+      type: string
+      default: "CONCERT"
+    - name: ENTITLED_REGISTRY_KEY
+      type: string
+      default: "NONE"
+    - name: global_password
+      type: string
+      default: "CHANGEME"
+    - name: environment_name
+      type: string
+      default: "Tyrion"
+  workspaces:
+    - name: ws
+  tasks:
+    - name: install
+      taskSpec:
+        steps:
+        - name: git-clone-step
+          image: quay.io/niklaushirt/ibm-aiops-tools:5.1.0
+          script: |
+            #!/usr/bin/env bash
+            git clone https://github.com/niklaushirt/ibm-aiops-deployer.git -b dev_latest $(workspaces.ws.path)/sources
+        - name: run-installer
+          image: quay.io/niklaushirt/ibm-aiops-tools:5.1.0
+          script: |
+            #!/usr/bin/env bash
+            cat $(workspaces.ws.path)/sources/tools/97_addons/experimental/tekton/INSTALL_IBM_$(params.OFFERING).yaml
+            oc apply -f $(workspaces.ws.path)/sources/tools/97_addons/experimental/tekton/INSTALL_IBM_$(params.OFFERING).yaml
+        workspaces:
+          - name: ws
+
+
+
+
+
+

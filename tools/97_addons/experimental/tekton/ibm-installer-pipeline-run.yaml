@@ -1,0 +1,31 @@
+apiVersion: tekton.dev/v1
+kind: PipelineRun
+metadata:
+  generateName: ibm-installer-run
+  namespace: default
+spec:
+  timeouts:
+    pipeline: "9h30m00s"
+    tasks: "8h59m59s"
+    finally: "0h30m00s"
+  pipelineRef:
+    name: ibm-installer-pipeline
+  params:
+    - name: OFFERING
+      # CONCERT, AIOPS, INSTANA, TURBONOMIC
+      value: "CONCERT"
+    - name: ENTITLED_REGISTRY_KEY
+      value: "NONE"
+    - name: global_password
+      value: "CHANGEME"
+    - name: environment_name
+      value: "Tyrion"  
+  workspaces:
+    - name: ws
+      volumeClaimTemplate:
+        spec:
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 1Gi

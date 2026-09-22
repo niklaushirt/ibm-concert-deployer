@@ -1,0 +1,11 @@
+https://github.com/aboutcode-org/github-import-issues-csv
+
+
+git clone https://github.com/aboutcode-org/github-import-issues-csv.git
+cd github-import-issues-csv
+
+python -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+
+python src/import_issues.py --help

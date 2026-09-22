@@ -1,0 +1,528 @@
+{% load static %}
+{% include "demouiapp/_header.html" %}
+<div role="main" class="container theme-showcase">
+    <div class="jumbotron container">
+
+        <div style="  background-color:#231426; padding: 40px; margin: 20px;">
+            <p style="font-size:35px; color:#ffeeee">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" width="32" height="32" viewBox="0 0 32 32"><path d="M22 28H12v-2h10V10H6v10H4V10a2.002 2.002 0 012-2h16a2.002 2.002 0 012 2v16a2.002 2.002 0 01-2 2z"></path><path d="M28 22h-2v-2h2V4H12v2h-2V4a2.002 2.002 0 012-2h16a2.002 2.002 0 012 2v16a2.002 2.002 0 01-2 2z"></path><path d="M10 14v2h4.586L3 27.586 4.414 29 16 17.414V22h2v-8h-8z"></path></svg>
+                Demo Applications</p>
+            <br />
+            <table style="width:90%;">
+                <tbody>
+                    <tr>
+                        <td style="width:90%; padding-left:50px;">
+                            <div style="max-height: 120px;   background-color:#d08ee3; padding: 20px; margin: 5px;">
+                                <table cellspacing="0" cellpadding="0" style="width:90%; table-layout: fixed; ">
+                                    <tbody>
+
+
+                                        <tr>
+                                            <td>
+                                                <div style="padding-bottom: 1rem;" class="sc-ftTHYK jxfOQM">
+                                                    <a target="_blank" tabindex="0"
+                                                        class="bx--btn bx--btn--pink bx--btn--expressive"
+                                                        href="https://{{ robotshop_url }}"
+                                                        style="width:200px;font-size: 18px;" onclick="toggle(this)"
+                                                        data-arg1='clearAllREST'>RobotShop
+                                                        <svg focusable="false" preserveAspectRatio="xMidYMid meet"
+                                                            xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                                            width="20" height="20" viewBox="0 0 32 32"
+                                                            aria-hidden="true" class="bx--btn__icon">
+                                                            <path
+                                                                d="M30.94,15.66A16.69,16.69,0,0,0,16,5,16.69,16.69,0,0,0,1.06,15.66a1,1,0,0,0,0,.68A16.69,16.69,0,0,0,16,27,16.69,16.69,0,0,0,30.94,16.34,1,1,0,0,0,30.94,15.66ZM16,25c-5.3,0-10.9-3.93-12.93-9C5.1,10.93,10.7,7,16,7s10.9,3.93,12.93,9C26.9,21.07,21.3,25,16,25Z">
+                                                            </path>
+                                                            <path
+                                                                d="M16,10a6,6,0,1,0,6,6A6,6,0,0,0,16,10Zm0,10a4,4,0,1,1,4-4A4,4,0,0,1,16,20Z">
+                                                            </path>
+                                                        </svg>
+
+                                                    </a>
+                                                </div>
+                                            </td>
+                                            <td style="vertical-align:top;">
+                                                👩‍💻&nbsp;&nbsp;user<BR><BR>🔐&nbsp;&nbsp;password</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3">
+                                                &nbsp;
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width:90%; padding-left:50px;">
+                            <div style="max-height: 120px;   background-color:#d08ee3; padding: 20px; margin: 5px;">
+                                <table cellspacing="0" cellpadding="0" style="width:90%; table-layout: fixed; ">
+                                    <tbody>
+                                        <tr>
+                                            <td width="10%">
+                                                &nbsp;
+                                            </td>
+                                            <td width="100px">
+                                                &nbsp;
+                                            </td>
+                                            <td width="10px">
+                                                &nbsp;
+                                            </td>
+                                            <td width="10px">
+                                                &nbsp;
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>
+                                                <div style="padding-bottom: 1rem;" class="sc-ftTHYK jxfOQM">
+                                                    <a target="_blank" tabindex="0"
+                                                        class="bx--btn bx--btn--pink bx--btn--expressive"
+                                                        href="https://{{ sockshop_url }}"
+                                                        style="width:200px;font-size: 18px;" onclick="toggle(this)"
+                                                        data-arg1='clearAllREST'>SockShop
+                                                        <svg focusable="false" preserveAspectRatio="xMidYMid meet"
+                                                            xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                                            width="20" height="20" viewBox="0 0 32 32"
+                                                            aria-hidden="true" class="bx--btn__icon">
+                                                            <path
+                                                                d="M30.94,15.66A16.69,16.69,0,0,0,16,5,16.69,16.69,0,0,0,1.06,15.66a1,1,0,0,0,0,.68A16.69,16.69,0,0,0,16,27,16.69,16.69,0,0,0,30.94,16.34,1,1,0,0,0,30.94,15.66ZM16,25c-5.3,0-10.9-3.93-12.93-9C5.1,10.93,10.7,7,16,7s10.9,3.93,12.93,9C26.9,21.07,21.3,25,16,25Z">
+                                                            </path>
+                                                            <path
+                                                                d="M16,10a6,6,0,1,0,6,6A6,6,0,0,0,16,10Zm0,10a4,4,0,1,1,4-4A4,4,0,0,1,16,20Z">
+                                                            </path>
+                                                        </svg>
+
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3">
+                                                &nbsp;
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                   
+
+                </tbody>
+            </table>
+        </div>
+        <div style="  background-color:#231426; padding: 40px; margin: 20px;">
+            <p style="font-size:35px; color:#ffeeee">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" width="32" height="32" viewBox="0 0 32 32"><path d="M28.447 16.105L23 13.383V7a1 1 0 00-.553-.894l-6-3a1 1 0 00-.894 0l-6 3A1 1 0 009 7v6.382l-5.447 2.723A1 1 0 003 17v7a1 1 0 00.553.894l6 3a1.001 1.001 0 00.894 0L16 25.119l5.553 2.777a1.001 1.001 0 00.894 0l6-3A1 1 0 0029 24v-7a1 1 0 00-.553-.895zM21 13.383l-4 2v-4.764l4-2zm-5-8.264L19.764 7 16 8.882 12.236 7zm-5 3.5l4 2v4.764l-4-2zM9 25.382l-4-2v-4.764l4 2zm1-6.5L6.236 17 10 15.118 13.764 17zm1 1.736l4-2v4.764l-4 2zm10 4.764l-4-2v-4.764l4 2zm1-6.5L18.236 17 22 15.118 25.764 17zm5 4.5l-4 2v-4.764l4-2z"></path></svg>
+                Supporting Tools</p>
+            <br />
+            <table style="width:90%;">
+                <tbody>
+                
+                    <tr>
+                        <td style="width:90%; padding-left:50px;">
+                            <div style="max-height: 100px;   background-color:#d08ee3; padding: 20px; margin: 5px;">
+                                <table cellspacing="0" cellpadding="0" style="width:90%; table-layout: fixed; ">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <div style="padding-bottom: 1rem;" class="sc-ftTHYK jxfOQM">
+                                                    <a target="_blank" tabindex="0"
+                                                        class="bx--btn bx--btn--pink bx--btn--expressive"
+                                                        href="https://{{ awx_url }}"
+                                                        style="width:200px;font-size: 18px;" onclick="toggle(this)"
+                                                        data-arg1='clearAllREST'>AWX
+                                                        <svg focusable="false" preserveAspectRatio="xMidYMid meet"
+                                                            xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                                            aria-label="Grid" aria-hidden="true" width="20" height="20"
+                                                            viewBox="0 0 32 32" role="img" class="bx--btn__icon">
+                                                            <path
+                                                                d="M12 4H6A2 2 0 004 6v6a2 2 0 002 2h6a2 2 0 002-2V6A2 2 0 0012 4zm0 8H6V6h6zM26 4H20a2 2 0 00-2 2v6a2 2 0 002 2h6a2 2 0 002-2V6A2 2 0 0026 4zm0 8H20V6h6zM12 18H6a2 2 0 00-2 2v6a2 2 0 002 2h6a2 2 0 002-2V20A2 2 0 0012 18zm0 8H6V20h6zM26 18H20a2 2 0 00-2 2v6a2 2 0 002 2h6a2 2 0 002-2V20A2 2 0 0026 18zm0 8H20V20h6z">
+                                                            </path>
+                                                        </svg>
+
+                                                    </a>
+                                                </div>
+
+                                            </td>
+                                            <td style="vertical-align:top;">
+                                                👩‍💻&nbsp;&nbsp;{{awx_user}}<BR><BR>🔐&nbsp;&nbsp;{{awx_pwd}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3">
+                                                &nbsp;
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                    {% if ADMIN_MODE == 'true' %}
+
+                    <tr>
+                        <td style="width:90%; padding-left:50px;">
+                            <div style="max-height: 100px;   background-color:#d08ee3; padding: 20px; margin: 5px;">
+                                <table cellspacing="0" cellpadding="0" style="width:90%; table-layout: fixed; ">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <div style="padding-bottom: 1rem;" class="sc-ftTHYK jxfOQM">
+                                                    <a target="_blank" tabindex="0"
+                                                        class="bx--btn bx--btn--pink bx--btn--expressive"
+                                                        href="https://{{ ladp_url }}"
+                                                        style="width:200px;font-size: 18px;" onclick="toggle(this)"
+                                                        data-arg1='clearAllREST'>OpenLdap
+                                                        <svg focusable="false" preserveAspectRatio="xMidYMid meet"
+                                                            xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                                            width="32" height="32" viewBox="0 0 32 32"
+                                                            aria-hidden="true" class="bx--btn__icon">
+                                                            <path
+                                                                d="M16,8a5,5,0,1,0,5,5A5,5,0,0,0,16,8Zm0,8a3,3,0,1,1,3-3A3.0034,3.0034,0,0,1,16,16Z">
+                                                            </path>
+                                                            <path
+                                                                d="M16,2A14,14,0,1,0,30,16,14.0158,14.0158,0,0,0,16,2ZM10,26.3765V25a3.0033,3.0033,0,0,1,3-3h6a3.0033,3.0033,0,0,1,3,3v1.3765a11.8989,11.8989,0,0,1-12,0Zm13.9925-1.4507A5.0016,5.0016,0,0,0,19,20H13a5.0016,5.0016,0,0,0-4.9925,4.9258,12,12,0,1,1,15.985,0Z">
+                                                            </path>
+                                                        </svg>
+
+                                                    </a>
+                                                </div>
+                                            </td>
+                                            <td style="vertical-align:top;">
+                                                👩‍💻&nbsp;&nbsp;{{ladp_user}}<BR><BR>🔐&nbsp;&nbsp;{{ladp_pwd}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3">
+                                                &nbsp;
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endif %}
+
+                    {% if elk_url != '' %}
+                    <tr>
+                        <td style="width:90%; padding-left:50px;">
+                            <div style="max-height: 100px;   background-color:#d08ee3; padding: 20px; margin: 5px;">
+                                <table cellspacing="0" cellpadding="0" style="width:90%; table-layout: fixed; ">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <div style="padding-bottom: 1rem;" class="sc-ftTHYK jxfOQM">
+                                                    <a target="_blank" tabindex="0"
+                                                        class="bx--btn bx--btn--pink bx--btn--expressive"
+                                                        href="https://{{ elk_url }}"
+                                                        style="width:200px;font-size: 18px;" onclick="toggle(this)"
+                                                        data-arg1='clearAllREST'>ELK
+                                                        <svg focusable="false" preserveAspectRatio="xMidYMid meet"
+                                                            xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                                            aria-hidden="true" width="16" height="16"
+                                                            viewBox="0 0 16 16" class="bx--btn__icon">
+                                                            <path
+                                                                d="M9.3 3.7L13.1 7.5 1 7.5 1 8.5 13.1 8.5 9.3 12.3 10 13 15 8 10 3z">
+                                                            </path>
+                                                        </svg>
+
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3">
+                                                &nbsp;
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endif %}
+
+                    <tr>
+                        <td style="width:90%; padding-left:50px;">
+                            <div style="max-height: 400px;   background-color:#d08ee3; padding: 20px; margin: 5px;">
+                                <table cellspacing="0" cellpadding="0" style="width:90%; table-layout: fixed; ">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <div style="padding-bottom: 1rem;" class="sc-ftTHYK jxfOQM">
+                                                    <a target="_blank" tabindex="0"
+                                                        class="bx--btn bx--btn--pink bx--btn--expressive"
+                                                        href="https://{{openshift_server}}"
+                                                        style="width:200px;font-size: 18px;" onclick="toggle(this)"
+                                                        data-arg1='clearAllREST'>OpenShift
+                                                        <svg focusable="false" preserveAspectRatio="xMidYMid meet"
+                                                            xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                                            aria-hidden="true" width="16" height="16"
+                                                            viewBox="0 0 16 16" class="bx--btn__icon">
+                                                            <path
+                                                                d="M9.3 3.7L13.1 7.5 1 7.5 1 8.5 13.1 8.5 9.3 12.3 10 13 15 8 10 3z">
+                                                            </path>
+                                                        </svg>
+
+                                                    </a>
+                                                </div>
+                                            </td>
+                                            <td style="vertical-align:top;" nowrap><code>
+                                                    👩‍💻&nbsp;&nbsp;kubeadmin<BR><BR>🔐&nbsp;&nbsp;"ask your
+                                                    administrator"<BR><BR>🚀&nbsp;&nbsp;oc login
+                                                    --server={{openshift_url}} --token={{openshift_token}}</td></code>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3">
+                                                &nbsp;
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+
+                 
+
+                </tbody>
+            </table>
+        </div>
+        <div style="  background-color:#231426; padding: 40px; margin: 20px;">
+            <p style="font-size:35px; color:#ffeeee">
+                <svg focusable="false" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" fill="currentColor" width="32" height="32" viewBox="0 0 16 16" aria-hidden="true"><path d="M13,14H3c-0.6,0-1-0.4-1-1V3c0-0.6,0.4-1,1-1h5v1H3v10h10V8h1v5C14,13.6,13.6,14,13,14z"></path><path d="M10 1L10 2 13.3 2 9 6.3 9.7 7 14 2.7 14 6 15 6 15 1z"></path></svg>
+                Demo Links</p>
+            <br />
+            <table style="width:90%;">
+                <tbody>
+                 
+
+
+                    <tr>
+                        <td style="width:90%; padding-left:50px;">
+                            <div style="max-height: 100px;   background-color:#d08ee3; padding: 20px; margin: 5px;">
+                                <table cellspacing="0" cellpadding="0" style="width:90%; table-layout: fixed; ">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <div style="padding-bottom: 1rem;" class="sc-ftTHYK jxfOQM">
+                                                    <a target="_blank" tabindex="0"
+                                                        class="bx--btn bx--btn--pink bx--btn--expressive"
+                                                        href="https://pirsoscom.github.io/Slack_ROBOT_DETAIL_DYN.html?url=https%3A%2F%2F{{ aimanager_url }}%2Faiops%2Fcfd95b7e-3bc7-4006-a4a8-a73a79c71255%2Fresolution-hub%2Fincidents"
+                                                        style="width:300px;font-size: 18px;" onclick="toggle(this)"
+                                                        data-arg1='clearAllREST'>Slack RobotShop
+                                                        <svg focusable="false" preserveAspectRatio="xMidYMid meet"
+                                                            xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                                            aria-hidden="true" width="16" height="16"
+                                                            viewBox="0 0 16 16" class="bx--btn__icon">
+                                                            <path
+                                                                d="M9.3 3.7L13.1 7.5 1 7.5 1 8.5 13.1 8.5 9.3 12.3 10 13 15 8 10 3z">
+                                                            </path>
+                                                        </svg>
+
+                                                    </a>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="padding-bottom: 1rem;" class="sc-ftTHYK jxfOQM">
+                                                    <a target="_blank" tabindex="0"
+                                                        class="bx--btn bx--btn--pink bx--btn--expressive"
+                                                        href="{{ SNOW_URL_ROSH }}"
+                                                        style="width:300px;font-size: 18px;" onclick="toggle(this)"
+                                                        data-arg1='clearAllREST'>ServiceNow RobotShop
+                                                        <svg focusable="false" preserveAspectRatio="xMidYMid meet"
+                                                            xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                                            aria-hidden="true" width="16" height="16"
+                                                            viewBox="0 0 16 16" class="bx--btn__icon">
+                                                            <path
+                                                                d="M9.3 3.7L13.1 7.5 1 7.5 1 8.5 13.1 8.5 9.3 12.3 10 13 15 8 10 3z">
+                                                            </path>
+                                                        </svg>
+
+                                                    </a>
+                                                </div>
+                                            </td>
+                                            <td style="vertical-align:top;">
+                                                👩‍💻Static Slack and ServiceNow Pages for RobotShop Demo</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3">
+                                                &nbsp;
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                        
+                 
+                   
+                    </tr>
+                    <tr>
+                        <td style="width:90%; padding-left:50px;">
+                            <div style="max-height: 100px;   background-color:#d08ee3; padding: 20px; margin: 5px;">
+                                <table cellspacing="0" cellpadding="0" style="width:90%; table-layout: fixed; ">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <div style="padding-bottom: 1rem;" class="sc-ftTHYK jxfOQM">
+                                                    <a target="_blank" tabindex="0"
+                                                        class="bx--btn bx--btn--pink bx--btn--expressive"
+                                                        href="{{ SLACK_URL_SOSH }}"
+                                                        style="width:300px;font-size: 18px;" onclick="toggle(this)"
+                                                        data-arg1='clearAllREST'>Slack SockShop
+                                                        <svg focusable="false" preserveAspectRatio="xMidYMid meet"
+                                                            xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                                            aria-hidden="true" width="16" height="16"
+                                                            viewBox="0 0 16 16" class="bx--btn__icon">
+                                                            <path
+                                                                d="M9.3 3.7L13.1 7.5 1 7.5 1 8.5 13.1 8.5 9.3 12.3 10 13 15 8 10 3z">
+                                                            </path>
+                                                        </svg>
+
+                                                    </a>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="padding-bottom: 1rem;" class="sc-ftTHYK jxfOQM">
+                                                    <a target="_blank" tabindex="0"
+                                                        class="bx--btn bx--btn--pink bx--btn--expressive"
+                                                        href="{{ SNOW_URL_SOSH }}"
+                                                        style="width:300px;font-size: 18px;" onclick="toggle(this)"
+                                                        data-arg1='clearAllREST'>ServiceNow SockShop
+                                                        <svg focusable="false" preserveAspectRatio="xMidYMid meet"
+                                                            xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                                            aria-hidden="true" width="16" height="16"
+                                                            viewBox="0 0 16 16" class="bx--btn__icon">
+                                                            <path
+                                                                d="M9.3 3.7L13.1 7.5 1 7.5 1 8.5 13.1 8.5 9.3 12.3 10 13 15 8 10 3z">
+                                                            </path>
+                                                        </svg>
+
+                                                    </a>
+                                                </div>
+                                            </td>
+                                            <td style="vertical-align:top;">
+                                                👩‍💻Static Slack and ServiceNow Pages for SockShop Demo</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3">
+                                                &nbsp;
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td style="width:90%; padding-left:50px;">
+                            <div style="max-height: 100px;   background-color:#d08ee3; padding: 20px; margin: 5px;">
+                                <table cellspacing="0" cellpadding="0" style="width:90%; table-layout: fixed; ">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <div style="padding-bottom: 1rem;" class="sc-ftTHYK jxfOQM">
+                                                    <a target="_blank" tabindex="0"
+                                                        class="bx--btn bx--btn--pink bx--btn--expressive"
+                                                        href="{{ SLACK_URL_ACME }}"
+                                                        style="width:300px;font-size: 18px;" onclick="toggle(this)"
+                                                        data-arg1='clearAllREST'>Slack ACME
+                                                        <svg focusable="false" preserveAspectRatio="xMidYMid meet"
+                                                            xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                                            aria-hidden="true" width="16" height="16"
+                                                            viewBox="0 0 16 16" class="bx--btn__icon">
+                                                            <path
+                                                                d="M9.3 3.7L13.1 7.5 1 7.5 1 8.5 13.1 8.5 9.3 12.3 10 13 15 8 10 3z">
+                                                            </path>
+                                                        </svg>
+
+                                                    </a>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="padding-bottom: 1rem;" class="sc-ftTHYK jxfOQM">
+                                                    <a target="_blank" tabindex="0"
+                                                        class="bx--btn bx--btn--pink bx--btn--expressive"
+                                                        href="{{ SNOW_URL_ACME }}"
+                                                        style="width:300px;font-size: 18px;" onclick="toggle(this)"
+                                                        data-arg1='clearAllREST'>ServiceNow ACME
+                                                        <svg focusable="false" preserveAspectRatio="xMidYMid meet"
+                                                            xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                                            aria-hidden="true" width="16" height="16"
+                                                            viewBox="0 0 16 16" class="bx--btn__icon">
+                                                            <path
+                                                                d="M9.3 3.7L13.1 7.5 1 7.5 1 8.5 13.1 8.5 9.3 12.3 10 13 15 8 10 3z">
+                                                            </path>
+                                                        </svg>
+
+                                                    </a>
+                                                </div>
+                                            </td>
+                                            <td style="vertical-align:top;">
+                                                👩‍💻Static Slack and ServiceNow Pages for ACME Demo</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3">
+                                                &nbsp;
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+
+
+                    <tr>
+                        <td style="width:90%; padding-left:50px;">
+                            <div style="max-height: 100px;   background-color:#d08ee3; padding: 20px; margin: 5px;">
+                                <table cellspacing="0" cellpadding="0" style="width:90%; table-layout: fixed; ">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <div style="padding-bottom: 1rem;" class="sc-ftTHYK jxfOQM">
+                                                    <a target="_blank" tabindex="0"
+                                                        class="bx--btn bx--btn--pink bx--btn--expressive"
+                                                        href="{{ INCIDENT_URL_TUBE }}"
+                                                        style="width:300px;font-size: 18px;" onclick="toggle(this)"
+                                                        data-arg1='clearAllREST'>Tube
+                                                        <svg focusable="false" preserveAspectRatio="xMidYMid meet"
+                                                            xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                                            aria-hidden="true" width="16" height="16"
+                                                            viewBox="0 0 16 16" class="bx--btn__icon">
+                                                            <path
+                                                                d="M9.3 3.7L13.1 7.5 1 7.5 1 8.5 13.1 8.5 9.3 12.3 10 13 15 8 10 3z">
+                                                            </path>
+                                                        </svg>
+
+                                                    </a>
+                                                </div>
+                                            </td>
+                                            <td style="vertical-align:top;">
+                                                👩‍💻 Static Control Center Page for London Tube Demo</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3">
+                                                &nbsp;
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+
+                  
+
+                    
+
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% include "demouiapp/_footer.html" %}

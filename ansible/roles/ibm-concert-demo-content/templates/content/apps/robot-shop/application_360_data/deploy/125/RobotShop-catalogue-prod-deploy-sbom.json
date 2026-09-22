@@ -1,0 +1,101 @@
+{
+    "bomFormat": "ConcertDef",
+    "specVersion": "1.0.2",
+    "serialNumber": "urn:ibm:appmgmt:RobotShop:catalogue:deploy:prod:125",
+    "version": 1,
+    "metadata": {
+        "timestamp": "2024-09-06T15:22:46Z",
+        "component": {
+            "type": "deploy",
+            "name": "RobotShop",
+            "version": "125"
+        },
+        "properties": [
+            {
+                "name": "environment-id",
+                "value": "prod"
+            }
+        ]
+    },
+    "components": [
+        {
+            "bom-ref": "deploy:catalogue",
+            "type": "deployment",
+            "name": "catalogue",
+            "components": [
+                {
+                    "bom-ref": "repository:coderepo:github:catalogue",
+                    "type": "code",
+                    "name": "catalogue",
+                    "purl": "catalogue",
+                    "properties": [
+                        {
+                            "name": "commit_sha",
+                            "value": "none"
+                        },
+                        {
+                            "name": "branch",
+                            "value": "main"
+                        }
+                    ]
+                }
+            ],
+            "properties": [
+                {
+                    "name": "bom-link-build",
+                    "value": "urn:ibm:appmgmt:RobotShop:catalogue:build:1254/1"
+                }
+            ]
+        }
+    ],
+    "services": [
+        {
+            "bom-ref": "appapi:catalogue",
+            "name": "catalogue",
+            "properties": [
+                {
+                    "name": "base_url",
+                    "value": "https://robot-shop.com/catalogue"
+                }
+            ]
+        },
+        {
+            "bom-ref": "service:kubernetes:ITZ:myk8",
+            "name": "myk8",
+            "properties": [
+                {
+                    "name": "platform",
+                    "value": "ITZ"
+                },
+                {
+                    "name": "cluster_platform",
+                    "value": "prod"
+                },
+                {
+                    "name": "cluster_id",
+                    "value": "cluster-666"
+                },
+                {
+                    "name": "cluster_region",
+                    "value": "us-east1"
+                },
+                {
+                    "name": "cluster_name",
+                    "value": "prod-cluster"
+                },
+                {
+                    "name": "cluster_namespace",
+                    "value": "default"
+                }
+            ]
+        }
+    ],
+    "dependencies": [
+        {
+            "ref": "deploy:catalogue",
+            "dependsOn": [
+                "appapi:catalogue"
+            ]
+        }
+    ]
+}

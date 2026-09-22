@@ -1,0 +1,132 @@
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#     ________  __  ___   __________    ___         __                        __  _
+#    /  _/ __ )/  |/  /  /  _/_  __/   /   | __  __/ /_____  ____ ___  ____ _/ /_(_)___  ____
+#    / // __  / /|_/ /   / /  / /     / /| |/ / / / __/ __ \/ __ `__ \/ __ `/ __/ / __ \/ __ \
+#  _/ // /_/ / /  / /  _/ /  / /     / ___ / /_/ / /_/ /_/ / / / / / / /_/ / /_/ / /_/ / / / /
+# /___/_____/_/  /_/  /___/ /_/     /_/  |_\__,_/\__/\____/_/ /_/ /_/\__,_/\__/_/\____/_/ /_/
+#
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------------------------------------------------------"
+#  CREATE_ROUTES
+#
+#  IBM AIOps
+#
+#  ©2026 nikh@ch.ibm.com
+# ---------------------------------------------------------------------------------------------------------------------------------------------------"
+# ---------------------------------------------------------------------------------------------------------------------------------------------------"
+# ---------------------------------------------------------------------------------------------------------------------------------------------------"
+# ---------------------------------------------------------------------------------------------------------------------------------------------------"
+
+
+apiVersion: v1                     
+kind: Namespace
+metadata:
+  name: ibm-installer
+---
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  name: ibm-installer-admin
+  namespace: ibm-installer
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: ibm-installer-admin
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+  - kind: ServiceAccount
+    name: ibm-installer-admin
+    namespace: ibm-installer
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: ibm-installer-default-admin
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+  - kind: ServiceAccount
+    name: default
+    namespace: ibm-installer
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: aiops-create-itz-certs-turbo
+  namespace: ibm-installer
+  labels:
+   aiops-type: data-load-job
+spec:
+  serviceAccount: ibm-installer-admin
+  template:
+    spec:
+      containers:
+        - name: install
+          image: quay.io/niklaushirt/ibm-aiops-tools:5.1.0
+          imagePullPolicy: IfNotPresent
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "150m"
+            limits:
+              memory: "2024Mi"
+              cpu: "1200m"
+          command:
+            - /bin/sh
+            - -c
+            - |
+              #!/bin/bash
+              #set -x
+
+              echo "*****************************************************************************************************************************"
+              echo " ✅ STARTING: Create ITZ Certs CP4AIOPS"
+              echo "*****************************************************************************************************************************"
+              echo ""
+              echo "  ⏳ INSTALLATION START TIMESTAMP: $(date)"
+              echo ""
+              echo "------------------------------------------------------------------------------------------------------------------------------"
+    
+              echo "------------------------------------------------------------------------------------------------------------------------------"
+              echo " 🚀 Create Certificates"
+              
+              echo "✅ Seems that you're on Techzone IPI/UPI"  
+              echo "✅ Let's patch the certificates"  
+
+              echo "Extracting signed cert"
+              oc get secret -n openshift-ingress -o 'go-template={{index .data "tls.crt"}}' letsencrypt-certs | base64 -d > cert.crt
+              oc get secret -n openshift-ingress -o 'go-template={{index .data "tls.key"}}' letsencrypt-certs | base64 -d > cert.key
+
+              oc create secret tls -n turbonomic nginx-ingressgateway-certs --cert=cert.crt --key=cert.key --dry-run=client -o yaml | oc apply -f -
+
+
+              REPLICAS=$(oc get pods -n turbonomic |grep nginx|wc -l |xargs)
+              oc scale Deployment/nginx --replicas=0 -n turbonomic
+              sleep 10
+              oc scale Deployment/nginx --replicas=${REPLICAS} -n turbonomic
+
+
+
+              echo ""
+              echo ""
+              echo "  ⏳ INSTALLATION END TIMESTAMP: $(date)"
+              echo ""
+              echo "*****************************************************************************************************************************"
+              echo " ✅ DONE"
+              echo "*****************************************************************************************************************************"
+
+
+              while true
+              do
+                sleep 1000
+              done
+
+      restartPolicy: Never
+  backoffLimit: 500

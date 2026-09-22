@@ -1,0 +1,38 @@
+apiVersion: orchestrator.aiops.ibm.com/v1alpha1
+kind: Installation
+metadata:
+  name: {{ current_feature.aiops_name }}
+  namespace: {{ current_ibm_feature.project }}
+spec:
+  imagePullSecret: ibm-entitlement-key
+  license:
+    accept: true
+  enableConnectionModule: true
+  groupProfiles:
+    enabled:  {{ current_feature.groupProfiles | default("false") }}
+  pakModules:
+  - name: aiopsFoundation
+    enabled: true
+  - name: applicationManager
+    enabled: true
+  - name: aiManager
+    enabled: true
+  - name: connection
+    enabled: false
+  - name: logAnomalyDetection
+    enabled: {{ current_feature.logAnomalyDetection | default(true)}}
+  storage:
+    aiops-ir-core-postgres:
+      storageClass: {{ STORAGE_CLASS_FILE }}
+    aiops-ir-core-postgres-wal:
+      storageClass: {{ STORAGE_CLASS_FILE }}
+    aiops-topology-postgres:
+      storageClass: {{ STORAGE_CLASS_FILE }}
+    aiops-topology-postgres-wal:
+      storageClass: {{ STORAGE_CLASS_FILE }}
+    data-iaf-system-kafka:
+      storageClass: {{ STORAGE_CLASS_FILE }}
+  size: {{ current_feature.aiops_size }}
+  storageClass: '{{ STORAGE_CLASS_FILE }}'
+  storageClassLargeBlock: '{{ STORAGE_CLASS_LARGE_BLOCK }}'
+  topologyModel: {{ current_feature.topologyModel | default("application") }}

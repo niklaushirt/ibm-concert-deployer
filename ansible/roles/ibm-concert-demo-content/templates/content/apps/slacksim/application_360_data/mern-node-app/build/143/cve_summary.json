@@ -1,0 +1,105 @@
+[
+  {
+    "version": "2",
+    "id": "1f0b17cfca1c889cda4d77193fddaaf34cfa7253b4871aaa554238ba3c572edd",
+    "date": "2024-04-23T03:07:44.064Z",
+    "evidence_type_id": "com.ibm.cloud.image_vulnerability_scan",
+    "evidence_type_version": "1.0.0",
+    "details": {
+      "result": "failure",
+      "tool": "sysdig"
+    },
+    "assets": [
+      {
+        "hash": "e9c654240d56276d6bde9ea12d47f495462f43480a86a12c2714e70f64bba2d3",
+        "uri": "docker://us.icr.io/icr4mcc/mern-node-app:184-main-2fdc2b0cb46756ba6d54bcf660aeb92748e40beb@sha256:e9c654240d56276d6bde9ea12d47f495462f43480a86a12c2714e70f64bba2d3",
+        "url": "https://s3.us-south.cloud-object-storage.appdomain.cloud/cos4scc3mcc/assets/e9c654240d56276d6bde9ea12d47f495462f43480a86a12c2714e70f64bba2d3/index.json"
+      }
+    ],
+    "findings": []
+  },
+  {
+    "version": "2",
+    "id": "3762fe34ba3c8c0e5d6afcc3d65db7f244deab429baec2bb79a006e889d5fd00",
+    "date": "2024-04-23T03:06:50.545Z",
+    "evidence_type_id": "com.ibm.cloud.image_vulnerability_scan",
+    "evidence_type_version": "1.0.0",
+    "details": {
+      "result": "success",
+      "tool": "va"
+    },
+    "assets": [
+      {
+        "hash": "e9c654240d56276d6bde9ea12d47f495462f43480a86a12c2714e70f64bba2d3",
+        "uri": "docker://us.icr.io/icr4mcc/mern-node-app:184-main-2fdc2b0cb46756ba6d54bcf660aeb92748e40beb@sha256:e9c654240d56276d6bde9ea12d47f495462f43480a86a12c2714e70f64bba2d3",
+        "url": "https://s3.us-south.cloud-object-storage.appdomain.cloud/cos4scc3mcc/assets/e9c654240d56276d6bde9ea12d47f495462f43480a86a12c2714e70f64bba2d3/index.json"
+      }
+    ],
+    "findings": []
+  },
+  {
+    "version": "2",
+    "id": "8f7e8b3cdb8087b71040b8d8513af52f0f61d6183b7970754e011b8517d96a58",
+    "date": "2024-04-23T02:56:57.532Z",
+    "evidence_type_id": "com.ibm.code_vulnerability_scan",
+    "evidence_type_version": "1.0.0",
+    "details": {
+      "result": "success",
+      "tool": "cra"
+    },
+    "assets": [
+      {
+        "hash": "b0b552a0b3dc74d3275b46afb61b1a7a62bab0cd6877330d6bb47ab77a92ec90",
+        "uri": "https://github.ibm.com/rong/mern-node-app.git#2fdc2b0cb46756ba6d54bcf660aeb92748e40beb",
+        "url": "https://s3.us-south.cloud-object-storage.appdomain.cloud/cos4scc3mcc/assets/b0b552a0b3dc74d3275b46afb61b1a7a62bab0cd6877330d6bb47ab77a92ec90/index.json"
+      }
+    ],
+    "findings": [
+      {
+        "id": "CVE-2024-29041",
+        "due_date": "2024-05-25",
+        "severity": "medium",
+        "first_found": "2024-04-11",
+        "url": "https://github.ibm.com/rong/mern-node-issues/issues/150",
+        "found_status": "existing",
+        "has_exempt": true
+      },
+      {
+        "id": "CVE-2023-26159",
+        "due_date": "2024-04-12",
+        "severity": "medium",
+        "first_found": "2024-02-27",
+        "url": "https://github.ibm.com/rong/mern-node-issues/issues/125",
+        "found_status": "existing",
+        "has_exempt": true
+      },
+      {
+        "id": "CVE-2024-28849",
+        "due_date": "2024-05-25",
+        "severity": "medium",
+        "first_found": "2024-04-11",
+        "url": "https://github.ibm.com/rong/mern-node-issues/issues/151",
+        "found_status": "existing",
+        "has_exempt": true
+      },
+      {
+        "id": "CVE-2023-42282",
+        "due_date": "2024-03-13",
+        "severity": "critical",
+        "first_found": "2024-02-27",
+        "url": "https://github.ibm.com/rong/mern-node-issues/issues/126",
+        "found_status": "existing",
+        "has_exempt": true
+      },
+      {
+        "id": "CVE-2024-28863",
+        "due_date": "2024-05-26",
+        "severity": "medium",
+        "first_found": "2024-04-11",
+        "url": "https://github.ibm.com/rong/mern-node-issues/issues/152",
+        "found_status": "existing",
+        "has_exempt": true
+      }
+    ]
+  }
+]

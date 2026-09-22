@@ -1,0 +1,69 @@
+V:{"_operation": "InsertReplace", "uniqueId": "KILA-R-01", "entityTypes": ["router"], "name": "KILA-R-01", "_references": [], "domain": "HI (Hawaii)", "model": "8804", "location": "Kilauea", "inGroup": ["SPoF", "HI (Hawaii)"], "geolocation": {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-155.286, 19.409]}}, "_status": [{"state": "open", "severity": "critical", "status": "KILA-R-01 state", "description": "Fire Alert"}]}
+V:{"_operation": "InsertReplace", "uniqueId": "MCFDN-R-01", "entityTypes": ["router"], "name": "MCFDN-R-01", "_references": [], "domain": "TX (Texas)", "model": "8804", "location": "McFaddin", "inGroup": ["SPoF", "TX (Texas)"], "geolocation": {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-93.875, 29.765]}}, "_status": [{"state": "open", "severity": "warning", "status": "MCFDN-R-01 state", "description": "Fire Alert"}]}
+V:{"_operation": "InsertReplace", "uniqueId": "LVING-R-01", "entityTypes": ["router"], "name": "LVING-R-01", "_references": [], "domain": "TX (Texas)", "model": "8804", "location": "Loving County", "inGroup": ["SPoF", "TX (Texas)"], "geolocation": {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-104.138, 32.316]}}, "_status": [{"state": "open", "severity": "major", "status": "LVING-R-01 state", "description": "Fire Alert"}]}
+V:{"_operation": "InsertReplace", "uniqueId": "PNVY-R-01", "entityTypes": ["router"], "name": "PNVY-R-01", "_references": [], "domain": "UT (Utah)", "model": "8804", "location": "Pine Valley", "inGroup": ["SPoF", "UT (Utah)"], "geolocation": {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-113.46, 37.36]}}, "_status": [{"state": "open", "severity": "major", "status": "PNVY-R-01 state", "description": "Fire Alert"}]}
+V:{"_operation": "InsertReplace", "uniqueId": "CHI-R-01", "entityTypes": ["router"], "name": "CHI-R-01", "_references": [], "domain": "IL (Chicago)", "model": "8812", "location": "Chicago", "inGroup": ["SPoF", "IL (Chicago)"], "geolocation": {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-87.6298, 41.8781]}}, "_status": [{"state": "open", "severity": "warning", "status": "CHI-R-01 state", "description": "Fire Alert"}]}
+V:{"_operation": "InsertReplace", "uniqueId": "CHI-R-02", "entityTypes": ["router"], "name": "CHI-R-02", "_references": [], "domain": "IL (Chicago)", "model": "8812", "location": "Chicago", "inGroup": ["SPoF", "IL (Chicago)"], "geolocation": {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-87.6298, 41.8781]}}, "_status": []}
+
+V:{"_operation": "InsertReplace", "uniqueId": "CHI-R-03", "entityTypes": ["router"], "name": "CHI-R-03", "_references": [], "domain": "IL (Chicago)", "model": "8804", "location": "Chicago", "inGroup": ["SPoF", "IL (Chicago)"], "geolocation": {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-87.6298, 41.8781]}}, "_status": []}
+
+
+
+# Ashburn, VA
+
+V:{"_operation": "InsertReplace", "uniqueId": "ASH-R-01", "entityTypes": ["router"], "name": "ASH-R-01", "_references": [], "domain": "VA (Ashburn)", "model": "8804", "location": "Ashburn", "inGroup": ["SPoF", "VA (Ashburn)"], "geolocation": {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-77.4874, 39.0438]}}, "_status": []}
+V:{"_operation": "InsertReplace", "uniqueId": "ASH-R-02", "entityTypes": ["router"], "name": "ASH-R-02", "_references": [], "domain": "VA (Ashburn)", "model": "8804", "location": "Ashburn", "inGroup": ["SPoF", "VA (Ashburn)"], "geolocation": {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-77.4874, 39.0438]}}, "_status": [{"state": "open", "severity": "minor", "status": "ASH-R-02 state", "description": "Heat Advisory"}]}
+V:{"_operation": "InsertReplace", "uniqueId": "ASH-R-03", "entityTypes": ["router"], "name": "ASH-R-03", "_references": [], "domain": "VA (Ashburn)", "model": "8812", "location": "Ashburn", "inGroup": ["SPoF", "VA (Ashburn)"], "geolocation": {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-77.4874, 39.0438]}}, "_status": [{"state": "open", "severity": "minor", "status": "ASH-R-03 state", "description": "Heat Advisory"}]}
+V:{"_operation": "InsertReplace", "uniqueId": "ASH-R-04", "entityTypes": ["router"], "name": "ASH-R-04", "_references": [], "domain": "VA (Ashburn)", "model": "8804", "location": "Ashburn", "inGroup": ["SPoF", "VA (Ashburn)"], "geolocation": {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-77.4874, 39.0438]}}, "_status": []}
+V:{"_operation": "InsertReplace", "uniqueId": "ASH-R-05", "entityTypes": ["router"], "name": "ASH-R-05", "_references": [], "domain": "VA (Ashburn)", "model": "8812", "location": "Ashburn", "inGroup": ["SPoF", "VA (Ashburn)"], "geolocation": {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-77.4874, 39.0438]}}, "_status": [{"state": "open", "severity": "minor", "status": "ASH-R-05 state", "description": "Heat Advisory"}]}
+
+
+
+
+# New York, NY
+
+V:{"_operation": "InsertReplace", "uniqueId": "LDN-R-01", "entityTypes": ["router"], "name": "LDN-R-01", "_references": [], "domain": "NY (New York)", "model": "8812", "location": "New York", "inGroup": ["SPoF", "NY (New York)"], "geolocation": {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-74.0060, 40.7128]}}, "_status": [{"state": "open", "severity": "major", "status": "LDN-R-01 state", "description": "Flood Alert"}]}
+V:{"_operation": "InsertReplace", "uniqueId": "LDN-R-02", "entityTypes": ["router"], "name": "LDN-R-02", "_references": [], "domain": "NY (New York)", "model": "8804", "location": "New York", "inGroup": ["SPoF", "NY (New York)"], "geolocation": {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-74.0060, 40.7128]}}, "_status": [{"state": "open", "severity": "warning", "status": "LDN-R-02 state", "description": "Flood Alert"}]}
+V:{"_operation": "InsertReplace", "uniqueId": "LDN-R-03", "entityTypes": ["router"], "name": "LDN-R-03", "_references": [], "domain": "NY (New York)", "model": "8812", "location": "New York", "inGroup": ["SPoF", "NY (New York)"], "geolocation": {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-74.0060, 40.7128]}}, "_status": []}
+V:{"_operation": "InsertReplace", "uniqueId": "LDN-R-04", "entityTypes": ["router"], "name": "LDN-R-04", "_references": [], "domain": "NY (New York)", "model": "8812", "location": "New York", "inGroup": ["SPoF", "NY (New York)"], "geolocation": {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-74.0060, 40.7128]}}, "_status": [{"state": "open", "severity": "major", "status": "LDN-R-04 state", "description": "Flood Alert"}]}
+V:{"_operation": "InsertReplace", "uniqueId": "LDN-R-05", "entityTypes": ["router"], "name": "LDN-R-05", "_references": [], "domain": "NY (New York)", "model": "8812", "location": "New York", "inGroup": ["SPoF", "NY (New York)"], "geolocation": {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-74.0060, 40.7128]}}, "_status": []}
+V:{"_operation": "InsertReplace", "uniqueId": "LDN-R-06", "entityTypes": ["router"], "name": "LDN-R-06", "_references": [], "domain": "NY (New York)", "model": "8812", "location": "New York", "inGroup": ["SPoF", "NY (New York)"], "geolocation": {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-74.0060, 40.7128]}}, "_status": [{"state": "open", "severity": "information", "status": "LDN-R-06 state", "description": "Flood Alert"}]}
+
+
+
+
+
+# Dallas, TX
+
+V:{"_operation": "InsertReplace", "uniqueId": "DAL-R-01", "entityTypes": ["router"], "name": "DAL-R-01", "_references": [], "domain": "TX (Dallas)", "model": "8812", "location": "Dallas", "inGroup": ["SPoF", "TX (Dallas)"], "geolocation": {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-96.7970, 32.7767]}}, "_status": [{"state": "open", "severity": "warning", "status": "DAL-R-01 state", "description": "Power Outage"}]}
+V:{"_operation": "InsertReplace", "uniqueId": "DAL-R-02", "entityTypes": ["router"], "name": "DAL-R-02", "_references": [], "domain": "TX (Dallas)", "model": "8812", "location": "Dallas", "inGroup": ["SPoF", "TX (Dallas)"], "geolocation": {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-96.7970, 32.7767]}}, "_status": [{"state": "open", "severity": "information", "status": "DAL-R-02 state", "description": "Power Outage"}]}
+V:{"_operation": "InsertReplace", "uniqueId": "DAL-R-03", "entityTypes": ["router"], "name": "DAL-R-03", "_references": [], "domain": "TX (Dallas)", "model": "8812", "location": "Dallas", "inGroup": ["SPoF", "TX (Dallas)"], "geolocation": {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-96.7970, 32.7767]}}, "_status": [{"state": "open", "severity": "minor", "status": "DAL-R-03 state", "description": "Power Outage"}]}
+
+
+
+# San Jose, CA
+
+V:{"_operation": "InsertReplace", "uniqueId": "SJC-R-01", "entityTypes": ["router"], "name": "SJC-R-01", "_references": [], "domain": "CA (San Jose)", "model": "8804", "location": "San Jose", "inGroup": ["SPoF", "CA (San Jose)"], "geolocation": {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-121.8863, 37.3382]}}, "_status": [{"state": "open", "severity": "information", "status": "SJC-R-01 state", "description": "Flood Alert"}]}
+
+
+V:{"_operation": "InsertReplace", "uniqueId": "SJC-R-02", "entityTypes": ["router"], "name": "SJC-R-02", "_references": [], "domain": "CA (San Jose)", "model": "8804", "location": "San Jose", "inGroup": ["SPoF", "CA (San Jose)"], "geolocation": {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-121.8863, 37.3382]}}, "_status": []}
+
+V:{"_operation": "InsertReplace", "uniqueId": "SJC-R-03", "entityTypes": ["router"], "name": "SJC-R-03", "_references": [], "domain": "CA (San Jose)", "model": "8804", "location": "San Jose", "inGroup": ["SPoF", "CA (San Jose)"], "geolocation": {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-121.8863, 37.3382]}}, "_status": []}
+
+
+
+
+
+
+# New York, NY
+
+
+
+# Atlanta, GA
+
+V:{"_operation": "InsertReplace", "uniqueId": "ATL-R-01", "entityTypes": ["router"], "name": "ATL-R-01", "_references": [], "domain": "GA (Atlanta)", "model": "8804", "location": "Atlanta", "inGroup": ["SPoF", "GA (Atlanta)"], "geolocation": {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-84.3880, 33.7490]}}, "_status": []}
+
+
+
+
+V:{"_operation": "InsertReplace", "uniqueId": "ATL-R-02", "entityTypes": ["router"], "name": "ATL-R-02", "_references": [], "domain": "GA (Atlanta)", "model": "8804", "location": "Atlanta", "inGroup": ["SPoF", "GA (Atlanta)"], "geolocation": {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-84.3880, 33.7490]}}, "_status": []}

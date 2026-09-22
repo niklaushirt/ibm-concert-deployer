@@ -1,0 +1,791 @@
+{
+    "aiopsVersion": "4.13.0",
+    "aiopsPolicies": [{
+        "state": "enabled",
+        "executionPriority": 24,
+        "metadata": {
+            "labels": {
+                "ibm.com/aiops/uitemplate": "alert:metrics",
+                "ibm.com/is-default": "false"
+            },
+            "name": "Metrics Threshold - Latency",
+            "description": "",
+            "creationTimestamp": "2026-04-16T13:37:36.626Z",
+            "lastUpdatedTimestamp": "2026-04-16T13:44:44.921Z",
+            "createdBy": {
+                "id": "demo",
+                "type": "user"
+            },
+            "lastUpdatedBy": {
+                "id": "demo",
+                "type": "user",
+                "changeDetails": "Updated"
+            }
+        },
+        "spec": {
+            "constants": {
+                "metricGroup": "Latency"
+            },
+            "triggers": [{
+                "triggerId": "aiops.ibm.com/trigger/metric-received",
+                "entityId": "metric",
+                "arguments": {
+                    "condition": "({{metric.metric_name}} == \"Latency\") and (({{metric.resource_name}} == \"acme-booking-db\" or {{metric.resource_name}} == \"acme-booking-service\" or {{metric.resource_name}} == \"catalogue-db-predictive\" or {{metric.resource_name}} == \"mysql-predictive\" or {{metric.resource_name}} == \"ratings-predictive\" or {{metric.resource_name}} == \"catalogue-predictive\"))"
+                }
+            }],
+            "actions": [{
+                "actionId": "lang/if",
+                "arguments": {
+                    "conditions": {
+                        "actionId": "lang/scripting/runScript",
+                        "arguments": {
+                            "language": "jsonata",
+                            "script": "metric.value > 2"
+                        }
+                    },
+                    "then": [{
+                        "actionId": "aiops/metrics/setExceedsThreshold",
+                        "arguments": {
+                            "mrId": {
+                                "$variable": "metric.mr_id"
+                            },
+                            "policyId": {
+                                "$variable": "policy.id"
+                            },
+                            "value": true
+                        }
+                    }, {
+                        "actionId": "aiops/metrics/deriveBaselineAnomalyMessage",
+                        "arguments": {
+                            "metric": {
+                                "$variable": "metric"
+                            }
+                        },
+                        "output": "baselineMessage"
+                    }, {
+                        "actionId": "aiops/io/sendMessage",
+                        "arguments": {
+                            "channel": "metrics-baselines",
+                            "entityType": "com.ibm.aiops.metric.anomaly",
+                            "key": {
+                                "$variable": "metric.mr_id"
+                            },
+                            "entity": {
+                                "$variable": "baselineMessage"
+                            }
+                        }
+                    }, {
+                        "actionId": "aiops/metrics/deriveThresholdAnomalyEvent",
+                        "arguments": {
+                            "metric": {
+                                "$variable": "metric"
+                            },
+                            "summary": "Metric exceeds fixed threshold",
+                            "severity": 5
+                        },
+                        "output": "anomalyEvent"
+                    }, {
+                        "actionId": "aiops/io/sendMessage",
+                        "arguments": {
+                            "channel": "events-input",
+                            "entityType": "com.ibm.aiops.event.pre-insert",
+                            "key": {
+                                "$variable": "metric.mr_id"
+                            },
+                            "entity": {
+                                "$variable": "anomalyEvent"
+                            }
+                        }
+                    }],
+                    "else": [{
+                        "actionId": "lang/if",
+                        "arguments": {
+                            "conditions": {
+                                "actionId": "aiops/metrics/checkExceedsThreshold",
+                                "arguments": {
+                                    "mrId": {
+                                        "$variable": "metric.mr_id"
+                                    },
+                                    "policyId": {
+                                        "$variable": "policy.id"
+                                    }
+                                }
+                            },
+                            "then": [{
+                                "actionId": "aiops/metrics/setExceedsThreshold",
+                                "arguments": {
+                                    "mrId": {
+                                        "$variable": "metric.mr_id"
+                                    },
+                                    "policyId": {
+                                        "$variable": "policy.id"
+                                    },
+                                    "value": false
+                                }
+                            }, {
+                                "actionId": "aiops/metrics/deriveThresholdAnomalyEvent",
+                                "arguments": {
+                                    "metric": {
+                                        "$variable": "metric"
+                                    },
+                                    "summary": {
+                                        "$variable": "constants.thresholdExceededSummary"
+                                    },
+                                    "severity": {
+                                        "$variable": "constants.thresholdExceededSeverity"
+                                    },
+                                    "eventType": "resolution"
+                                },
+                                "output": "resolutionEvent"
+                            }, {
+                                "actionId": "aiops/io/sendMessage",
+                                "arguments": {
+                                    "channel": "events-input",
+                                    "entityType": "com.ibm.aiops.event.pre-insert",
+                                    "key": {
+                                        "$template": "metric.mr_id"
+                                    },
+                                    "entity": {
+                                        "$variable": "resolutionEvent"
+                                    }
+                                }
+                            }]
+                        }
+                    }]
+                }
+            }]
+        }
+    }, {
+        "id": "31c818e0-399a-11f1-83ca-af2a05f6589b",
+        "revision": "94f46d4681f5b5340e8858a189ed55f8a02b9377",
+        "hash": "3d1dae28afbf94e53ce446d4c9df2f9247a254af",
+        "state": "enabled",
+        "executionPriority": 25,
+        "metadata": {
+            "labels": {
+                "ibm.com/aiops/uitemplate": "alert:metrics",
+                "ibm.com/is-default": "false"
+            },
+            "name": "Metrics Threshold - TEMPERATURE",
+            "description": "",
+            "creationTimestamp": "2026-04-16T13:43:04.814Z",
+            "lastUpdatedTimestamp": "2026-04-16T13:43:04.814Z",
+            "createdBy": {
+                "id": "demo",
+                "type": "user"
+            },
+            "lastUpdatedBy": {
+                "id": "demo",
+                "type": "user",
+                "changeDetails": "Created"
+            }
+        },
+        "spec": {
+            "constants": {
+                "metricGroup": "System"
+            },
+            "triggers": [{
+                "triggerId": "aiops.ibm.com/trigger/metric-received",
+                "entityId": "metric",
+                "arguments": {
+                    "condition": "({{metric.metric_name}} == \"CPU1Temperature\") and (({{metric.resource_name}} == \"DCWest1-Rack046-DELL3765\"))"
+                }
+            }],
+            "actions": [{
+                "actionId": "lang/if",
+                "arguments": {
+                    "conditions": {
+                        "actionId": "lang/scripting/runScript",
+                        "arguments": {
+                            "language": "jsonata",
+                            "script": "metric.value > 85"
+                        }
+                    },
+                    "then": [{
+                        "actionId": "aiops/metrics/setExceedsThreshold",
+                        "arguments": {
+                            "mrId": {
+                                "$variable": "metric.mr_id"
+                            },
+                            "policyId": {
+                                "$variable": "policy.id"
+                            },
+                            "value": true
+                        }
+                    }, {
+                        "actionId": "aiops/metrics/deriveBaselineAnomalyMessage",
+                        "arguments": {
+                            "metric": {
+                                "$variable": "metric"
+                            }
+                        },
+                        "output": "baselineMessage"
+                    }, {
+                        "actionId": "aiops/io/sendMessage",
+                        "arguments": {
+                            "channel": "metrics-baselines",
+                            "entityType": "com.ibm.aiops.metric.anomaly",
+                            "key": {
+                                "$variable": "metric.mr_id"
+                            },
+                            "entity": {
+                                "$variable": "baselineMessage"
+                            }
+                        }
+                    }, {
+                        "actionId": "aiops/metrics/deriveThresholdAnomalyEvent",
+                        "arguments": {
+                            "metric": {
+                                "$variable": "metric"
+                            },
+                            "summary": "Metric exceeds fixed threshold",
+                            "severity": 5
+                        },
+                        "output": "anomalyEvent"
+                    }, {
+                        "actionId": "aiops/io/sendMessage",
+                        "arguments": {
+                            "channel": "events-input",
+                            "entityType": "com.ibm.aiops.event.pre-insert",
+                            "key": {
+                                "$variable": "metric.mr_id"
+                            },
+                            "entity": {
+                                "$variable": "anomalyEvent"
+                            }
+                        }
+                    }],
+                    "else": [{
+                        "actionId": "lang/if",
+                        "arguments": {
+                            "conditions": {
+                                "actionId": "aiops/metrics/checkExceedsThreshold",
+                                "arguments": {
+                                    "mrId": {
+                                        "$variable": "metric.mr_id"
+                                    },
+                                    "policyId": {
+                                        "$variable": "policy.id"
+                                    }
+                                }
+                            },
+                            "then": [{
+                                "actionId": "aiops/metrics/setExceedsThreshold",
+                                "arguments": {
+                                    "mrId": {
+                                        "$variable": "metric.mr_id"
+                                    },
+                                    "policyId": {
+                                        "$variable": "policy.id"
+                                    },
+                                    "value": false
+                                }
+                            }, {
+                                "actionId": "aiops/metrics/deriveThresholdAnomalyEvent",
+                                "arguments": {
+                                    "metric": {
+                                        "$variable": "metric"
+                                    },
+                                    "summary": {
+                                        "$variable": "constants.thresholdExceededSummary"
+                                    },
+                                    "severity": {
+                                        "$variable": "constants.thresholdExceededSeverity"
+                                    },
+                                    "eventType": "resolution"
+                                },
+                                "output": "resolutionEvent"
+                            }, {
+                                "actionId": "aiops/io/sendMessage",
+                                "arguments": {
+                                    "channel": "events-input",
+                                    "entityType": "com.ibm.aiops.event.pre-insert",
+                                    "key": {
+                                        "$template": "metric.mr_id"
+                                    },
+                                    "entity": {
+                                        "$variable": "resolutionEvent"
+                                    }
+                                }
+                            }]
+                        }
+                    }]
+                }
+            }]
+        }
+    }, {
+        "id": "f4b66650-3999-11f1-83ca-af2a05f6589b",
+        "revision": "5f944e4e7a121e42f32502bc741564d024baecda",
+        "hash": "26efa1f8eee52c8028c2c21a625c3eea80707c42",
+        "state": "enabled",
+        "executionPriority": 25,
+        "metadata": {
+            "labels": {
+                "ibm.com/aiops/uitemplate": "alert:metrics",
+                "ibm.com/is-default": "false"
+            },
+            "name": "Metrics Threshold - TPS",
+            "description": "",
+            "creationTimestamp": "2026-04-16T13:41:22.357Z",
+            "lastUpdatedTimestamp": "2026-04-16T13:41:32.094Z",
+            "createdBy": {
+                "id": "demo",
+                "type": "user"
+            },
+            "lastUpdatedBy": {
+                "id": "demo",
+                "type": "user",
+                "changeDetails": "aiops policy name changed to Metrics Threshold - TPS"
+            }
+        },
+        "spec": {
+            "constants": {
+                "metricGroup": "TransactionsPerSecond"
+            },
+            "triggers": [{
+                "triggerId": "aiops.ibm.com/trigger/metric-received",
+                "entityId": "metric",
+                "arguments": {
+                    "condition": "({{metric.metric_name}} == \"TransactionsPerSecond\") and (({{metric.resource_name}} == \"acme-booking-db\" or {{metric.resource_name}} == \"acme-booking-service\" or {{metric.resource_name}} == \"catalogue-db-predictive\" or {{metric.resource_name}} == \"catalogue-predictive\" or {{metric.resource_name}} == \"dcwest1-switch025\" or {{metric.resource_name}} == \"mysql-predictive\" or {{metric.resource_name}} == \"ratings-predictive\" or {{metric.resource_name}} == \"dSwitch-5-vm-network-port-1\"))"
+                }
+            }],
+            "actions": [{
+                "actionId": "lang/if",
+                "arguments": {
+                    "conditions": {
+                        "actionId": "lang/scripting/runScript",
+                        "arguments": {
+                            "language": "jsonata",
+                            "script": "metric.value < 10"
+                        }
+                    },
+                    "then": [{
+                        "actionId": "aiops/metrics/setExceedsThreshold",
+                        "arguments": {
+                            "mrId": {
+                                "$variable": "metric.mr_id"
+                            },
+                            "policyId": {
+                                "$variable": "policy.id"
+                            },
+                            "value": true
+                        }
+                    }, {
+                        "actionId": "aiops/metrics/deriveBaselineAnomalyMessage",
+                        "arguments": {
+                            "metric": {
+                                "$variable": "metric"
+                            }
+                        },
+                        "output": "baselineMessage"
+                    }, {
+                        "actionId": "aiops/io/sendMessage",
+                        "arguments": {
+                            "channel": "metrics-baselines",
+                            "entityType": "com.ibm.aiops.metric.anomaly",
+                            "key": {
+                                "$variable": "metric.mr_id"
+                            },
+                            "entity": {
+                                "$variable": "baselineMessage"
+                            }
+                        }
+                    }, {
+                        "actionId": "aiops/metrics/deriveThresholdAnomalyEvent",
+                        "arguments": {
+                            "metric": {
+                                "$variable": "metric"
+                            },
+                            "summary": "Metric exceeds fixed threshold",
+                            "severity": 5
+                        },
+                        "output": "anomalyEvent"
+                    }, {
+                        "actionId": "aiops/io/sendMessage",
+                        "arguments": {
+                            "channel": "events-input",
+                            "entityType": "com.ibm.aiops.event.pre-insert",
+                            "key": {
+                                "$variable": "metric.mr_id"
+                            },
+                            "entity": {
+                                "$variable": "anomalyEvent"
+                            }
+                        }
+                    }],
+                    "else": [{
+                        "actionId": "lang/if",
+                        "arguments": {
+                            "conditions": {
+                                "actionId": "aiops/metrics/checkExceedsThreshold",
+                                "arguments": {
+                                    "mrId": {
+                                        "$variable": "metric.mr_id"
+                                    },
+                                    "policyId": {
+                                        "$variable": "policy.id"
+                                    }
+                                }
+                            },
+                            "then": [{
+                                "actionId": "aiops/metrics/setExceedsThreshold",
+                                "arguments": {
+                                    "mrId": {
+                                        "$variable": "metric.mr_id"
+                                    },
+                                    "policyId": {
+                                        "$variable": "policy.id"
+                                    },
+                                    "value": false
+                                }
+                            }, {
+                                "actionId": "aiops/metrics/deriveThresholdAnomalyEvent",
+                                "arguments": {
+                                    "metric": {
+                                        "$variable": "metric"
+                                    },
+                                    "summary": {
+                                        "$variable": "constants.thresholdExceededSummary"
+                                    },
+                                    "severity": {
+                                        "$variable": "constants.thresholdExceededSeverity"
+                                    },
+                                    "eventType": "resolution"
+                                },
+                                "output": "resolutionEvent"
+                            }, {
+                                "actionId": "aiops/io/sendMessage",
+                                "arguments": {
+                                    "channel": "events-input",
+                                    "entityType": "com.ibm.aiops.event.pre-insert",
+                                    "key": {
+                                        "$template": "metric.mr_id"
+                                    },
+                                    "entity": {
+                                        "$variable": "resolutionEvent"
+                                    }
+                                }
+                            }]
+                        }
+                    }]
+                }
+            }]
+        }
+    }, {
+        "id": "14967eb0-399a-11f1-83ca-af2a05f6589b",
+        "revision": "4d27b1761a8d18d566ec27c0662cec2cb432ad0c",
+        "hash": "9e36c256444a1abce6c886676b89372b573c5944",
+        "state": "enabled",
+        "executionPriority": 26,
+        "metadata": {
+            "labels": {
+                "ibm.com/aiops/uitemplate": "alert:metrics",
+                "ibm.com/is-default": "false"
+            },
+            "name": "Metrics Threshold - RESTARTS",
+            "description": "",
+            "creationTimestamp": "2026-04-16T13:42:15.835Z",
+            "lastUpdatedTimestamp": "2026-04-16T13:42:15.835Z",
+            "createdBy": {
+                "id": "demo",
+                "type": "user"
+            },
+            "lastUpdatedBy": {
+                "id": "demo",
+                "type": "user",
+                "changeDetails": "Created"
+            }
+        },
+        "spec": {
+            "constants": {
+                "metricGroup": "PodRestarts"
+            },
+            "triggers": [{
+                "triggerId": "aiops.ibm.com/trigger/metric-received",
+                "entityId": "metric",
+                "arguments": {
+                    "condition": "({{metric.metric_name}} == \"PodRestarts\") and (({{metric.resource_name}} == \"acme-booking-service\" or {{metric.resource_name}} == \"mysql-predictive\" or {{metric.resource_name}} == \"ratings-predictive\"))"
+                }
+            }],
+            "actions": [{
+                "actionId": "lang/if",
+                "arguments": {
+                    "conditions": {
+                        "actionId": "lang/scripting/runScript",
+                        "arguments": {
+                            "language": "jsonata",
+                            "script": "metric.value > 5"
+                        }
+                    },
+                    "then": [{
+                        "actionId": "aiops/metrics/setExceedsThreshold",
+                        "arguments": {
+                            "mrId": {
+                                "$variable": "metric.mr_id"
+                            },
+                            "policyId": {
+                                "$variable": "policy.id"
+                            },
+                            "value": true
+                        }
+                    }, {
+                        "actionId": "aiops/metrics/deriveBaselineAnomalyMessage",
+                        "arguments": {
+                            "metric": {
+                                "$variable": "metric"
+                            }
+                        },
+                        "output": "baselineMessage"
+                    }, {
+                        "actionId": "aiops/io/sendMessage",
+                        "arguments": {
+                            "channel": "metrics-baselines",
+                            "entityType": "com.ibm.aiops.metric.anomaly",
+                            "key": {
+                                "$variable": "metric.mr_id"
+                            },
+                            "entity": {
+                                "$variable": "baselineMessage"
+                            }
+                        }
+                    }, {
+                        "actionId": "aiops/metrics/deriveThresholdAnomalyEvent",
+                        "arguments": {
+                            "metric": {
+                                "$variable": "metric"
+                            },
+                            "summary": "Metric exceeds fixed threshold",
+                            "severity": 5
+                        },
+                        "output": "anomalyEvent"
+                    }, {
+                        "actionId": "aiops/io/sendMessage",
+                        "arguments": {
+                            "channel": "events-input",
+                            "entityType": "com.ibm.aiops.event.pre-insert",
+                            "key": {
+                                "$variable": "metric.mr_id"
+                            },
+                            "entity": {
+                                "$variable": "anomalyEvent"
+                            }
+                        }
+                    }],
+                    "else": [{
+                        "actionId": "lang/if",
+                        "arguments": {
+                            "conditions": {
+                                "actionId": "aiops/metrics/checkExceedsThreshold",
+                                "arguments": {
+                                    "mrId": {
+                                        "$variable": "metric.mr_id"
+                                    },
+                                    "policyId": {
+                                        "$variable": "policy.id"
+                                    }
+                                }
+                            },
+                            "then": [{
+                                "actionId": "aiops/metrics/setExceedsThreshold",
+                                "arguments": {
+                                    "mrId": {
+                                        "$variable": "metric.mr_id"
+                                    },
+                                    "policyId": {
+                                        "$variable": "policy.id"
+                                    },
+                                    "value": false
+                                }
+                            }, {
+                                "actionId": "aiops/metrics/deriveThresholdAnomalyEvent",
+                                "arguments": {
+                                    "metric": {
+                                        "$variable": "metric"
+                                    },
+                                    "summary": {
+                                        "$variable": "constants.thresholdExceededSummary"
+                                    },
+                                    "severity": {
+                                        "$variable": "constants.thresholdExceededSeverity"
+                                    },
+                                    "eventType": "resolution"
+                                },
+                                "output": "resolutionEvent"
+                            }, {
+                                "actionId": "aiops/io/sendMessage",
+                                "arguments": {
+                                    "channel": "events-input",
+                                    "entityType": "com.ibm.aiops.event.pre-insert",
+                                    "key": {
+                                        "$template": "metric.mr_id"
+                                    },
+                                    "entity": {
+                                        "$variable": "resolutionEvent"
+                                    }
+                                }
+                            }]
+                        }
+                    }]
+                }
+            }]
+        }
+    }, {
+        "id": "be11c090-3999-11f1-83ca-af2a05f6589b",
+        "revision": "11d678ded4a5172b92648c0042bc0601767543f7",
+        "hash": "bdba674b1d3b3d350840ef5c122fe3458dd7f88a",
+        "state": "enabled",
+        "executionPriority": 27,
+        "metadata": {
+            "labels": {
+                "ibm.com/aiops/uitemplate": "alert:metrics",
+                "ibm.com/is-default": "false"
+            },
+            "name": "Metrics Threshold - Memory",
+            "description": "",
+            "creationTimestamp": "2026-04-16T13:39:50.681Z",
+            "lastUpdatedTimestamp": "2026-04-16T13:40:17.118Z",
+            "createdBy": {
+                "id": "demo",
+                "type": "user"
+            },
+            "lastUpdatedBy": {
+                "id": "demo",
+                "type": "user",
+                "changeDetails": "aiops policy name changed to Metrics Threshold - Memory"
+            }
+        },
+        "spec": {
+            "constants": {
+                "metricGroup": "MemoryUsage"
+            },
+            "triggers": [{
+                "triggerId": "aiops.ibm.com/trigger/metric-received",
+                "entityId": "metric",
+                "arguments": {
+                    "condition": "({{metric.metric_name}} == \"MemoryUsagePercent\") and (({{metric.resource_name}} == \"mysql-predictive\" or {{metric.resource_name}} == \"ratings-predictive\"))"
+                }
+            }],
+            "actions": [{
+                "actionId": "lang/if",
+                "arguments": {
+                    "conditions": {
+                        "actionId": "lang/scripting/runScript",
+                        "arguments": {
+                            "language": "jsonata",
+                            "script": "metric.value > 75"
+                        }
+                    },
+                    "then": [{
+                        "actionId": "aiops/metrics/setExceedsThreshold",
+                        "arguments": {
+                            "mrId": {
+                                "$variable": "metric.mr_id"
+                            },
+                            "policyId": {
+                                "$variable": "policy.id"
+                            },
+                            "value": true
+                        }
+                    }, {
+                        "actionId": "aiops/metrics/deriveBaselineAnomalyMessage",
+                        "arguments": {
+                            "metric": {
+                                "$variable": "metric"
+                            }
+                        },
+                        "output": "baselineMessage"
+                    }, {
+                        "actionId": "aiops/io/sendMessage",
+                        "arguments": {
+                            "channel": "metrics-baselines",
+                            "entityType": "com.ibm.aiops.metric.anomaly",
+                            "key": {
+                                "$variable": "metric.mr_id"
+                            },
+                            "entity": {
+                                "$variable": "baselineMessage"
+                            }
+                        }
+                    }, {
+                        "actionId": "aiops/metrics/deriveThresholdAnomalyEvent",
+                        "arguments": {
+                            "metric": {
+                                "$variable": "metric"
+                            },
+                            "summary": "Metric exceeds fixed threshold",
+                            "severity": 5
+                        },
+                        "output": "anomalyEvent"
+                    }, {
+                        "actionId": "aiops/io/sendMessage",
+                        "arguments": {
+                            "channel": "events-input",
+                            "entityType": "com.ibm.aiops.event.pre-insert",
+                            "key": {
+                                "$variable": "metric.mr_id"
+                            },
+                            "entity": {
+                                "$variable": "anomalyEvent"
+                            }
+                        }
+                    }],
+                    "else": [{
+                        "actionId": "lang/if",
+                        "arguments": {
+                            "conditions": {
+                                "actionId": "aiops/metrics/checkExceedsThreshold",
+                                "arguments": {
+                                    "mrId": {
+                                        "$variable": "metric.mr_id"
+                                    },
+                                    "policyId": {
+                                        "$variable": "policy.id"
+                                    }
+                                }
+                            },
+                            "then": [{
+                                "actionId": "aiops/metrics/setExceedsThreshold",
+                                "arguments": {
+                                    "mrId": {
+                                        "$variable": "metric.mr_id"
+                                    },
+                                    "policyId": {
+                                        "$variable": "policy.id"
+                                    },
+                                    "value": false
+                                }
+                            }, {
+                                "actionId": "aiops/metrics/deriveThresholdAnomalyEvent",
+                                "arguments": {
+                                    "metric": {
+                                        "$variable": "metric"
+                                    },
+                                    "summary": {
+                                        "$variable": "constants.thresholdExceededSummary"
+                                    },
+                                    "severity": {
+                                        "$variable": "constants.thresholdExceededSeverity"
+                                    },
+                                    "eventType": "resolution"
+                                },
+                                "output": "resolutionEvent"
+                            }, {
+                                "actionId": "aiops/io/sendMessage",
+                                "arguments": {
+                                    "channel": "events-input",
+                                    "entityType": "com.ibm.aiops.event.pre-insert",
+                                    "key": {
+                                        "$template": "metric.mr_id"
+                                    },
+                                    "entity": {
+                                        "$variable": "resolutionEvent"
+                                    }
+                                }
+                            }]
+                        }
+                    }]
+                }
+            }]
+        }
+    }]
+}

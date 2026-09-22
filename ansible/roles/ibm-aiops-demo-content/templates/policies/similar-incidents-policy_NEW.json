@@ -1,0 +1,77 @@
+{
+  "id": "7e3f9be0-57f4-11f0-bf55-fb04e6d69a75",
+  "revision": "dc9d19ac69d70545b56299b7629f2d346e3d5c7f",
+  "hash": "bcced5a6c835f66c4499dbcb0854cef0bdb5d2bd",
+  "state": "disabled",
+  "executionPriority": 50,
+  "metadata": {
+    "labels": {
+      "ibm.com/is-default": "true"
+    },
+    "name": "Default story query similar incidents service policy",
+    "description": "Queries the similar incidents service for ticket resolutions that match the incident title and enriches this information into the story",
+    "creationTimestamp": "2025-07-03T10:00:05.022Z",
+    "lastUpdatedTimestamp": "2025-07-03T10:00:05.022Z",
+    "createdBy": {
+      "id": "system",
+      "type": "system"
+    },
+    "lastUpdatedBy": {
+      "id": "system",
+      "type": "system",
+      "changeDetails": "Created"
+    }
+  },
+  "spec": {
+    "constants": {},
+    "trigger": {
+      "entityId": "story",
+      "triggerId": "aiops.ibm.com/trigger/story-pre-create",
+      "arguments": {}
+    },
+    "actions": [
+      {
+        "actionId": "aiops.ibm.com/action/internal/insights/query",
+        "arguments": {
+          "insightType": "aiops.ibm.com/insight-type/similar-incidents",
+          "serviceUrl": {
+            "$template": "{{ services.similarIncidents.url }}/v2/similar_incidents/search"
+          },
+          "insightId": {
+            "$variable": "story.id"
+          },
+          "parameters": {
+            "story_id": {
+              "$variable": "story.id"
+            },
+            "text": {
+              "$variable": "story.title"
+            },
+            "application_group_id": "1000",
+            "application_id": "1000"
+          }
+        },
+        "output": "proposedInsight"
+      },
+      {
+        "actionId": "lang/if",
+        "arguments": {
+          "name": "Only if we have a valid insight",
+          "condition": "{{ exists proposedInsight }}",
+          "then": [
+            {
+              "actionId": "lang/eval",
+              "arguments": {
+                "input": {
+                  "$variable": "proposedInsight"
+                }
+              },
+              "output": "story.insights.[]"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
+

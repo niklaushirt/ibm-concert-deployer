@@ -1,0 +1,209 @@
+{% load static %}
+{% include "_header.html" %}
+
+
+<div class=custom-table-wraper data-floating-menu-container=true>
+    <div class=cds--data-table-content>
+   
+
+
+
+
+    {% if AIOPS_URL != '' %}
+    <div style="  background-color:transparent; padding: 20px; margin: 5px">
+        <table cellspacing="0" cellpadding="0" style="width:90%; table-layout: fixed;">
+            <tbody>
+                <tr>
+                    <td colspan="1" style="width: 30%; vertical-align:top">
+                        <p style="font-size:35px;">🌏 IBM AIOps </p>
+                        <p> &nbsp;</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="1" style="width: 30%; vertical-align:top">
+                        <div tooltipposition=top type=menu items="[object Object],[object Object]"
+                            class=cds--menu-button__container><a target="_blank" tabindex="0"
+                            class="bx--btn bx--btn--primary bx--btn--expressive"
+                            href="https://{{ AIOPS_URL }}"><button aria-haspopup=true aria-expanded=false tabindex=0
+                                class="cds--menu-button__trigger cds--btn cds--layout--size-lg cds--btn--primary"
+                                type=button>Open IBM AIOps<svg focusable=false preserveAspectRatio="xMidYMid meet"
+                                    fill=currentColor aria-hidden=true width=16 height=16 viewBox="0 0 16 16"
+                                    class=cds--btn__icon xmlns=http://www.w3.org/2000/svg> <path
+                                    d="M9.3 3.7L13.1 7.5 1 7.5 1 8.5 13.1 8.5 9.3 12.3 10 13 15 8 10 3z">
+                                    </path></svg></button></a>
+                        </div>
+                    </td>
+  
+                    <td colspan="2" style="width: 30%; vertical-align:top">
+                        <div style="color:rgb(0, 0, 0);background-color: #bad0fc; padding:10px; margin-left: 20px;"
+                            colspan="3">
+                            <p style="font-size:18px;">👩‍💻&nbsp;&nbsp;demo
+                                &nbsp;&nbsp;&nbsp;&nbsp;</p>
+                            <p style="font-size:18px;">🔐&nbsp;&nbsp;{{ DEMO_PWD }}</p>
+                            <p></p>
+                            <p></p>
+                        </div>
+                    </td>
+  
+                    <td>
+                        &nbsp;
+                    </td>
+  
+                    <td colspan="5">
+                        &nbsp;
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+
+
+
+    {% if CONCERT_URL != '' %}
+    <div style="  background-color:transparent; padding: 20px; margin: 5px">
+        <table cellspacing="0" cellpadding="0" style="width:90%; table-layout: fixed;">
+            <tbody>
+                <tr>
+                    <td colspan="1" style="width: 30%; vertical-align:top">
+                        <p style="font-size:35px;">🌏 IBM Concert </p>
+                        <p> &nbsp;</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="1" style="width: 30%; vertical-align:top">
+                        <div tooltipposition=top type=menu items="[object Object],[object Object]"
+                            class=cds--menu-button__container><a target="_blank" tabindex="0"
+                            class="bx--btn bx--btn--primary bx--btn--expressive"
+                            href="https://{{ CONCERT_URL }}"><button aria-haspopup=true aria-expanded=false tabindex=0
+                                class="cds--menu-button__trigger cds--btn cds--layout--size-lg cds--btn--primary"
+                                type=button>Open IBM Concert<svg focusable=false preserveAspectRatio="xMidYMid meet"
+                                    fill=currentColor aria-hidden=true width=16 height=16 viewBox="0 0 16 16"
+                                    class=cds--btn__icon xmlns=http://www.w3.org/2000/svg> <path
+                                    d="M9.3 3.7L13.1 7.5 1 7.5 1 8.5 13.1 8.5 9.3 12.3 10 13 15 8 10 3z">
+                                    </path></svg></button></a>
+                        </div>
+                    </td>
+  
+                    <td colspan="2" style="width: 30%; vertical-align:top">
+                        <div style="color:rgb(0, 0, 0);background-color: #bad0fc; padding:10px; margin-left: 20px;"
+                            colspan="3">
+                            <p style="font-size:18px;">👩‍💻&nbsp;&nbsp;demo
+                                &nbsp;&nbsp;&nbsp;&nbsp;</p>
+                            <p style="font-size:18px;">🔐&nbsp;&nbsp;{{ DEMO_PWD }}</p>
+                            <p></p>
+                            <p></p>
+                        </div>
+                    </td>
+  
+                    <td colspan="5">
+                        &nbsp;
+                    </td>
+  
+                 
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+
+
+    
+    {% if INSTANA_URL != '' %}
+    <div style="  background-color:transparent; padding: 20px; margin: 5px">
+        <table cellspacing="0" cellpadding="0" style="width:90%; table-layout: fixed;">
+            <tbody>
+                <tr>
+                    <td colspan="1" style="width: 30%; vertical-align:top">
+                        <p style="font-size:35px;">🌏 IBM Instana </p>
+                        <p> &nbsp;</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="1" style="width: 30%; vertical-align:top">
+                        <div tooltipposition=top type=menu items="[object Object],[object Object]"
+                            class=cds--menu-button__container><a target="_blank" tabindex="0"
+                            class="bx--btn bx--btn--primary bx--btn--expressive"
+                            href="https://{{ INSTANA_URL }}"><button aria-haspopup=true aria-expanded=false tabindex=0
+                                class="cds--menu-button__trigger cds--btn cds--layout--size-lg cds--btn--primary"
+                                type=button>Open IBM Instana<svg focusable=false preserveAspectRatio="xMidYMid meet"
+                                    fill=currentColor aria-hidden=true width=16 height=16 viewBox="0 0 16 16"
+                                    class=cds--btn__icon xmlns=http://www.w3.org/2000/svg> <path
+                                    d="M9.3 3.7L13.1 7.5 1 7.5 1 8.5 13.1 8.5 9.3 12.3 10 13 15 8 10 3z">
+                                    </path></svg></button></a>
+                        </div>
+                    </td>
+  
+                    <td colspan="2" style="width: 30%; vertical-align:top">
+                        <div style="color:rgb(0, 0, 0);background-color: #bad0fc; padding:10px; margin-left: 20px;"
+                            colspan="3">
+                            <p style="font-size:18px;">👩‍💻&nbsp;&nbsp;admin@instana.local
+                                &nbsp;&nbsp;&nbsp;&nbsp;</p>
+                            <p style="font-size:18px;">🔐&nbsp;&nbsp;{{ DEMO_PWD }}</p>
+                            <p></p>
+                            <p></p>
+                        </div>
+                    </td>
+  
+                    <td colspan="5">
+                        &nbsp;
+                    </td>
+  
+                 
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+
+
+    
+    {% if TURBO_URL != '' %}
+    <div style="  background-color:transparent; padding: 20px; margin: 5px">
+        <table cellspacing="0" cellpadding="0" style="width:90%; table-layout: fixed;">
+            <tbody>
+                <tr>
+                    <td colspan="1" style="width: 30%; vertical-align:top">
+                        <p style="font-size:35px;">🌏 IBM Turbonomic </p>
+                        <p> &nbsp;</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="1" style="width: 30%; vertical-align:top">
+                        <div tooltipposition=top type=menu items="[object Object],[object Object]"
+                            class=cds--menu-button__container> <a target="_blank" tabindex="0"
+                            class="bx--btn bx--btn--primary bx--btn--expressive"
+                            href="https://{{ TURBO_URL }}"><button aria-haspopup=true aria-expanded=false tabindex=0
+                                class="cds--menu-button__trigger cds--btn cds--layout--size-lg cds--btn--primary"
+                                type=button>Open IBM Turbonomic<svg focusable=false preserveAspectRatio="xMidYMid meet"
+                                    fill=currentColor aria-hidden=true width=16 height=16 viewBox="0 0 16 16"
+                                    class=cds--btn__icon xmlns=http://www.w3.org/2000/svg> <path
+                                    d="M9.3 3.7L13.1 7.5 1 7.5 1 8.5 13.1 8.5 9.3 12.3 10 13 15 8 10 3z">
+                                    </path></svg></button></a>
+                        </div>
+                    </td>
+  
+                    <td colspan="2" style="width: 30%; vertical-align:top">
+                        <div style="color:rgb(0, 0, 0);background-color: #bad0fc; padding:10px; margin-left: 20px;"
+                            colspan="3">
+                            <p style="font-size:18px;">👩‍💻&nbsp;&nbsp;administrator
+                                &nbsp;&nbsp;&nbsp;&nbsp;</p>
+                            <p style="font-size:18px;">🔐&nbsp;&nbsp;{{ DEMO_PWD }}</p>
+                            <p></p>
+                            <p></p>
+                        </div>
+                    </td>
+  
+                    <td colspan="5">
+                        &nbsp;
+                    </td>
+  
+                 
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+
+
+{% include "_footer.html" %}

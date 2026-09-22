@@ -1,0 +1,20 @@
+{
+    "component_definition_id": "c89442f7-8a13-4d8a-aeec-406d5de999ba",
+    "application_id": "37043cd7-3ec1-4213-b42f-f1bb29db8bd4",
+    "profile_id": "7eca4579-7ed9-4552-5da6-738126660be3",
+    "title": "IAM User",
+    "description": "Streamlined solution for organizing, storing, and accessing user data with enhanced performance and user-friendly interface.",
+    "version": "2.0",
+    "environment_id": "e9866102-cc86-475a-b12a-136a5c576dc8",
+    "control_ids": [
+        "42749fb4-8f56-4832-8ee2-f11e3630d242",
+        "3db0affb-9543-4ae8-9bf5-380ee5a133af",
+        "1acb6883-d52f-4354-9a80-6c2a973dc732",
+        "d0e7dd35-cbee-4748-90d1-e7e5f1478755",
+        "ab4b29ae-1ac2-405f-987a-d3c759964790",
+        "12a2615f-5f37-4949-9166-05b4bd1f4184"
+    ]
+}
+
+
+

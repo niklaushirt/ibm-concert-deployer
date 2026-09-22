@@ -1,0 +1,470 @@
+{
+    "bomFormat": "ConcertDef",
+    "specVersion": "1.0.2",
+    "serialNumber": "urn:ibm:appmgmt:RobotShop",
+    "version": 1,
+    "metadata": {
+        "timestamp": "2024-09-06T15:21:48Z",
+        "component": {
+            "bom-ref": "RobotShop",
+            "type": "application",
+            "name": "RobotShop",
+            "version": "1.0"
+        },
+        "business": {
+            "name": "IBM",
+            "units": [
+                {
+                    "name": "IBM Software",
+                    "email": "concert@ibm.com",
+                    "phone": "+1-877-426-6006"
+                }
+            ]
+        }
+    },
+    "components": [
+        {
+            "bom-ref": "build:cart",
+            "type": "build",
+            "name": "cart",
+            "components": [
+                {
+                    "bom-ref": "img:quay.io/niklaushirt/rs-cart",
+                    "type": "container",
+                    "name": "quay.io/niklaushirt/rs-cart",
+                    "purl": "quay.io/niklaushirt/rs-cart"
+                },
+                {
+                    "bom-ref": "repository:coderepo:github:cart",
+                    "type": "code",
+                    "name": "cart",
+                    "purl": "cart"
+                }
+            ]
+        },
+        {
+            "bom-ref": "build:catalogue",
+            "type": "build",
+            "name": "catalogue",
+            "components": [
+                {
+                    "bom-ref": "img:quay.io/niklaushirt/rs-catalogue",
+                    "type": "container",
+                    "name": "quay.io/niklaushirt/rs-catalogue",
+                    "purl": "quay.io/niklaushirt/rs-catalogue"
+                },
+                {
+                    "bom-ref": "repository:coderepo:github:catalogue",
+                    "type": "code",
+                    "name": "catalogue",
+                    "purl": "catalogue"
+                }
+            ]
+        },
+        {
+            "bom-ref": "build:dispatch",
+            "type": "build",
+            "name": "dispatch",
+            "components": [
+                {
+                    "bom-ref": "img:quay.io/niklaushirt/rs-dispatch",
+                    "type": "container",
+                    "name": "quay.io/niklaushirt/rs-dispatch",
+                    "purl": "quay.io/niklaushirt/rs-dispatch"
+                },
+                {
+                    "bom-ref": "repository:coderepo:github:dispatch",
+                    "type": "code",
+                    "name": "dispatch",
+                    "purl": "dispatch"
+                }
+            ]
+        },
+        {
+            "bom-ref": "build:load-gen",
+            "type": "build",
+            "name": "load-gen",
+            "components": [
+                {
+                    "bom-ref": "img:quay.io/niklaushirt/rs-load-gen",
+                    "type": "container",
+                    "name": "quay.io/niklaushirt/rs-load-gen",
+                    "purl": "quay.io/niklaushirt/rs-load-gen"
+                },
+                {
+                    "bom-ref": "repository:coderepo:github:load-gen",
+                    "type": "code",
+                    "name": "load-gen",
+                    "purl": "load-gen"
+                }
+            ]
+        },
+        {
+            "bom-ref": "build:mongo",
+            "type": "build",
+            "name": "mongo",
+            "components": [
+                {
+                    "bom-ref": "img:quay.io/niklaushirt/rs-mongo",
+                    "type": "container",
+                    "name": "quay.io/niklaushirt/rs-mongo",
+                    "purl": "quay.io/niklaushirt/rs-mongo"
+                },
+                {
+                    "bom-ref": "repository:coderepo:github:mongo",
+                    "type": "code",
+                    "name": "mongo",
+                    "purl": "mongo"
+                }
+            ]
+        },
+        {
+            "bom-ref": "build:mysql",
+            "type": "build",
+            "name": "mysql",
+            "components": [
+                {
+                    "bom-ref": "img:quay.io/niklaushirt/rs-mysql",
+                    "type": "container",
+                    "name": "quay.io/niklaushirt/rs-mysql",
+                    "purl": "quay.io/niklaushirt/rs-mysql"
+                },
+                {
+                    "bom-ref": "repository:coderepo:github:mysql",
+                    "type": "code",
+                    "name": "mysql",
+                    "purl": "mysql"
+                }
+            ]
+        },
+        {
+            "bom-ref": "build:payment",
+            "type": "build",
+            "name": "payment",
+            "components": [
+                {
+                    "bom-ref": "img:quay.io/niklaushirt/rs-payment",
+                    "type": "container",
+                    "name": "quay.io/niklaushirt/rs-payment",
+                    "purl": "quay.io/niklaushirt/rs-payment"
+                },
+                {
+                    "bom-ref": "repository:coderepo:github:payment",
+                    "type": "code",
+                    "name": "payment",
+                    "purl": "payment"
+                }
+            ]
+        },
+        {
+            "bom-ref": "build:ratings",
+            "type": "build",
+            "name": "ratings",
+            "components": [
+                {
+                    "bom-ref": "img:quay.io/niklaushirt/rs-ratings",
+                    "type": "container",
+                    "name": "quay.io/niklaushirt/rs-ratings",
+                    "purl": "quay.io/niklaushirt/rs-ratings"
+                },
+                {
+                    "bom-ref": "repository:coderepo:github:ratings",
+                    "type": "code",
+                    "name": "ratings",
+                    "purl": "ratings"
+                }
+            ]
+        },
+        {
+            "bom-ref": "build:shipping",
+            "type": "build",
+            "name": "shipping",
+            "components": [
+                {
+                    "bom-ref": "img:quay.io/niklaushirt/rs-shipping",
+                    "type": "container",
+                    "name": "quay.io/niklaushirt/rs-shipping",
+                    "purl": "quay.io/niklaushirt/rs-shipping"
+                },
+                {
+                    "bom-ref": "repository:coderepo:github:shipping",
+                    "type": "code",
+                    "name": "shipping",
+                    "purl": "shipping"
+                }
+            ]
+        },
+        {
+            "bom-ref": "build:user",
+            "type": "build",
+            "name": "user",
+            "components": [
+                {
+                    "bom-ref": "img:quay.io/niklaushirt/rs-user",
+                    "type": "container",
+                    "name": "quay.io/niklaushirt/rs-user",
+                    "purl": "quay.io/niklaushirt/rs-user"
+                },
+                {
+                    "bom-ref": "repository:coderepo:github:user",
+                    "type": "code",
+                    "name": "user",
+                    "purl": "user"
+                }
+            ]
+        },
+        {
+            "bom-ref": "build:web",
+            "type": "build",
+            "name": "web",
+            "components": [
+                {
+                    "bom-ref": "img:quay.io/niklaushirt/rs-web",
+                    "type": "container",
+                    "name": "quay.io/niklaushirt/rs-web",
+                    "purl": "quay.io/niklaushirt/rs-web"
+                },
+                {
+                    "bom-ref": "repository:coderepo:github:web",
+                    "type": "code",
+                    "name": "web",
+                    "purl": "web"
+                }
+            ]
+        },
+        {
+            "bom-ref": "environment:qa",
+            "type": "environment",
+            "name": "qa"
+        },
+        {
+            "bom-ref": "environment:dev",
+            "type": "environment",
+            "name": "dev"
+        },
+        {
+            "bom-ref": "environment:prod",
+            "type": "environment",
+            "name": "prod"
+        }
+    ],
+    "services": [
+        {
+            "bom-ref": "appapi:cart",
+            "name": "cart",
+            "endpoints": [
+                "https://robot-shop.com/cart"
+            ],
+            "properties": [
+                {
+                    "name": "network_exposure",
+                    "value": "private"
+                }
+            ]
+        },
+        {
+            "bom-ref": "appapi:catalogue",
+            "name": "catalogue",
+            "endpoints": [
+                "https://robot-shop.com/catalogue"
+            ],
+            "properties": [
+                {
+                    "name": "network_exposure",
+                    "value": "private"
+                }
+            ]
+        },
+        {
+            "bom-ref": "appapi:dispatch",
+            "name": "dispatch",
+            "endpoints": [
+                "https://robot-shop.com/dispatch"
+            ],
+            "properties": [
+                {
+                    "name": "network_exposure",
+                    "value": "private"
+                }
+            ]
+        },
+        {
+            "bom-ref": "appapi:load-gen",
+            "name": "load-gen",
+            "endpoints": [
+                "https://robot-shop.com/load-gen"
+            ],
+            "properties": [
+                {
+                    "name": "network_exposure",
+                    "value": "public"
+                }
+            ]
+        },
+        {
+            "bom-ref": "appapi:mongo",
+            "name": "mongo",
+            "endpoints": [
+                "https://robot-shop.com/mongo"
+            ],
+            "properties": [
+                {
+                    "name": "network_exposure",
+                    "value": "private"
+                }
+            ]
+        },
+        {
+            "bom-ref": "appapi:mysql",
+            "name": "mysql",
+            "endpoints": [
+                "https://robot-shop.com/mysql"
+            ],
+            "properties": [
+                {
+                    "name": "network_exposure",
+                    "value": "private"
+                }
+            ]
+        },
+        {
+            "bom-ref": "appapi:payment",
+            "name": "payment",
+            "endpoints": [
+                "https://robot-shop.com/payment"
+            ],
+            "properties": [
+                {
+                    "name": "network_exposure",
+                    "value": "private"
+                }
+            ]
+        },
+        {
+            "bom-ref": "appapi:ratings",
+            "name": "ratings",
+            "endpoints": [
+                "https://robot-shop.com/ratings"
+            ],
+            "properties": [
+                {
+                    "name": "network_exposure",
+                    "value": "private"
+                }
+            ]
+        },
+        {
+            "bom-ref": "appapi:shipping",
+            "name": "shipping",
+            "endpoints": [
+                "https://robot-shop.com/shipping"
+            ],
+            "properties": [
+                {
+                    "name": "network_exposure",
+                    "value": "private"
+                }
+            ]
+        },
+        {
+            "bom-ref": "appapi:user",
+            "name": "user",
+            "endpoints": [
+                "https://robot-shop.com/user"
+            ],
+            "properties": [
+                {
+                    "name": "network_exposure",
+                    "value": "private"
+                }
+            ]
+        },
+        {
+            "bom-ref": "appapi:web",
+            "name": "web",
+            "endpoints": [
+                "https://robot-shop.com/web"
+            ],
+            "properties": [
+                {
+                    "name": "network_exposure",
+                    "value": "public"
+                }
+            ]
+        }
+    ],
+    "dependencies": [
+        {
+            "ref": "build:cart",
+            "dependsOn": [
+                "appapi:cart"
+            ]
+        },
+        {
+            "ref": "build:catalogue",
+            "dependsOn": [
+                "appapi:catalogue"
+            ]
+        },
+        {
+            "ref": "build:dispatch",
+            "dependsOn": [
+                "appapi:dispatch"
+            ]
+        },
+        {
+            "ref": "build:load-gen",
+            "dependsOn": [
+                "appapi:load-gen"
+            ]
+        },
+        {
+            "ref": "build:mongo",
+            "dependsOn": [
+                "appapi:mongo"
+            ]
+        },
+        {
+            "ref": "build:mysql",
+            "dependsOn": [
+                "appapi:mysql"
+            ]
+        },
+        {
+            "ref": "build:payment",
+            "dependsOn": [
+                "appapi:payment"
+            ]
+        },
+        {
+            "ref": "build:ratings",
+            "dependsOn": [
+                "appapi:cratings"
+            ]
+        },
+        {
+            "ref": "build:shipping",
+            "dependsOn": [
+                "appapi:shipping"
+            ]
+        },
+        {
+            "ref": "build:user",
+            "dependsOn": [
+                "appapi:user"
+            ]
+        },
+        {
+            "ref": "build:web",
+            "dependsOn": [
+                "appapi:web"
+            ]
+        }
+    ],
+    "properties": [
+        {
+            "name": "application_criticality",
+            "value": "4"
+        }
+    ]
+}

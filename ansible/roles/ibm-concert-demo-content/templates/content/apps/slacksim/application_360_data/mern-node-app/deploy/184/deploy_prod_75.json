@@ -1,0 +1,153 @@
+{
+  "bomFormat": "ConcertDef",
+  "specVersion": "1.0.2",
+  "serialNumber": "urn:ibm:appmgmt:slacksim:mern-node-app:deploy:prod:75",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2024-04-23T04:34:28Z",
+    "component": {
+      "bom-ref": "mern-node-app",
+      "type": "deploy",
+      "name": "mern-node-app",
+      "version": "75"
+    },
+    "properties": [
+      {
+        "name": "environment-id",
+        "value": "prod"
+      },
+      {
+        "name": "change-management-url",
+        "value": "https://us-south.git.cloud.ibm.com/rong/mern-node-change"
+      },
+      {
+        "name": "change-request-url",
+        "value": "https://us-south.git.cloud.ibm.com/rong/mern-node-change/issues/75"
+      },
+      {
+        "name": "change-request-number",
+        "value": "75"
+      }
+    ]
+  },
+  "components": [
+    {
+      "bom-ref": "deploy:mern-node-deployment",
+      "type": "deployment",
+      "name": "mern-node-deployment",
+      "components": [
+        {
+          "bom-ref": "repository:coderepo:github:mern-node-deployment",
+          "type": "code",
+          "name": "mern-node-deployment",
+          "purl": "https://github.ibm.com/rong/mern-node-deployment"
+        }
+      ],
+      "properties": [
+        {
+          "name": "commit_sha",
+          "value": "35b11956c67cf7cbc88fccb66d3becbcde948512"
+        },
+        {
+          "name": "branch",
+          "value": "master"
+        },
+        {
+          "name": "bom-link-build",
+          "value": "urn:ibm:appmgmt:slacksim:mern-node-app:build:143/1"
+        }
+      ]
+    }
+  ],
+  "services": [
+    {
+      "bom-ref": "k8:roks",
+      "name": "roks",
+      "properties": [
+        {
+          "name": "platform",
+          "value": "ibmcloud"
+        },
+        {
+          "name": "cluster_platform",
+          "value": "ROKS"
+        },
+        {
+          "name": "cluster_id",
+          "value": "ckri4n4w0upk39imvl30"
+        },
+        {
+          "name": "cluster_region",
+          "value": "us-east"
+        },
+        {
+          "name": "cluster_name",
+          "value": "roks2"
+        },
+        {
+          "name": "cluster_namespace",
+          "value": "roja3mern"
+        }
+      ]
+    },
+    {
+      "bom-ref": "appapi:mern-node-app_public_api",
+      "name": "mern-node-app_public_api",
+      "properties": [
+        {
+          "name": "base_url",
+          "value": "https://mern-node-app.roks2-b12d73cc7b0aedf0e30addbf16d8fc5a-0000.us-east.containers.appdomain.cloud"
+        }
+      ]
+    },
+    {
+      "bom-ref": "appapi:mern-node-app_private_api",
+      "name": "mern-node-app_private_api",
+      "properties": [
+        {
+          "name": "base_url",
+          "value": "https://private-mern-node-app-roja3mern.roks2-b12d73cc7b0aedf0e30addbf16d8fc5a-0000.us-east.containers.appdomain.cloud"
+        }
+      ]
+    },
+    {
+      "bom-ref": "appapi:mern-mongodb_api",
+      "name": "appapi:mern-mongodb_api",
+      "endpoints": [
+        "9936e425-3cbc-4f57-bc2a-762cafc3b575-0.d7deeff0d58745aba57fa5c84685d5b4.databases.appdomain.cloud:31491",
+    "9936e425-3cbc-4f57-bc2a-762cafc3b575-1.d7deeff0d58745aba57fa5c84685d5b4.databases.appdomain.cloud:31491",
+    "9936e425-3cbc-4f57-bc2a-762cafc3b575-2.d7deeff0d58745aba57fa5c84685d5b4.databases.appdomain.cloud:31491"
+      ]
+    },
+    {
+      "bom-ref": "appapi:mern-node-app-cos",
+      "name": "mern-node-app-cos",
+      "endpoints": [
+        "s3.us-south.cloud-object-storage.appdomain.cloud",
+        "https://control.cloud-object-storage.cloud.ibm.com/v2/endpoints"
+      ],
+      "properties": [
+        {
+          "name": "crn",
+          "value": "crn:v1:bluemix:public:cloud-object-storage:global:a/f46c40f47b6842e68835243ffeacb614:97ac0105-fe81-4ff6-b7ae-91802c23fae5::"
+        },
+        {
+          "name": "bucket-name",
+          "value": "cos4scc3mcc"
+        },
+        {
+          "name": "key-prefix",
+          "value": "concert/mern-node-app/2fdc2b0cb46756ba6d54bcf660aeb92748e40beb/prod"
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "ref": "repository:coderepo:github:mern-node-deployment",
+      "dependsOn": [
+        "appapi:mern-node-app-cos"
+      ]
+    }
+  ]
+}

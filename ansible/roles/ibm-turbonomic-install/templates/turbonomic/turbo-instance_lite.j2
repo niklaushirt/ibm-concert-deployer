@@ -1,0 +1,96 @@
+apiVersion: charts.helm.k8s.io/v1
+kind: Xl
+metadata:
+  name: xl-release
+  namespace: turbonomic
+spec:
+  concert-turbo:
+    enabled: true
+  global:
+    turboai:
+      config:
+        env.parameters:
+          env_name: on-prem
+          feedback.enabled.override: false
+          flags.a2a_enabled.override: true
+          mcp.api.host: mcp-turbo-api
+          mcp.api.max_connection_retries: '3'
+          mcp.api.port: '8000'
+          mcp.api.timeout: '30.0'
+          mcp.api.transport: streamable-http
+        watsonx.host: 'https://us-south.ml.cloud.ibm.com'
+        watsonx.project_id: 00000000-0000-0000-0000-000000000000
+    storageClassName: {{ STORAGE_CLASS_LARGE_BLOCK }}
+    repository: icr.io/cpopen/turbonomic
+    turboLite:
+      enabled: true
+    productList: turbonomic
+    securityContext:
+      fsGroup: {{ FS_GROUP }}
+    telemetry:
+      enabled: false
+    storageSelector: false
+    storageSelector: false
+    tag: {{ current_feature.turbo_version }}
+    customImageNames: false
+  turboai:
+    enabled: true
+  rsyslog:
+    persistence:
+      size: 30Gi
+  solisgateway:
+    enabled: false
+  instana:
+    enabled: true
+  kubeturbo:
+    enabled: true
+  properties:
+    api:
+      vendor_supported_parker_automator_role: Parking Automator
+      vendor_request_jwt_cookie: ibm-platform-session
+      vendor_skip_instance_id_check: true
+      vendor_service_user_role: User
+      vendor_supported_automator_role: Automator
+      basePrefixUrl: /turbonomic
+      vendor_supported_admin_role: Admin
+      vendor_public_key_skip_ssl_verification: true
+      vendor_public_key_url: 'https://concert-gateway.turbonomic.svc.cluster.local/gw/auth/jwtcert'
+      vendor_supported_siteadmin_role: 'ServiceAdmin,ServiceOwner,Site Administrator'
+      allowTargetManagementInIntegrationMode: true
+      vendor_supported_parker_role: Parking Administrator
+      vendor_supported_observer_role: Observer
+      vendor_latest_version: false
+      vendor_supported_deployer_role: Deployer
+      vendor_request_jwt_token: X-Auth-Token
+      headerAuthenticationEnabled: true
+      requestHeaderSize: '20000'
+      vendor_supported_advisor_role: Advisor
+    extractor:
+      grafanaAdminPassword: vmturbo
+    global:
+      concertEnabled: true
+      deploymentMode: SERVER
+      oauth2:
+        audience: CONCERT
+      solisEnabled: false
+  ui:
+    enabled: true
+  mcp-turbo-api:
+    enabled: true
+  nginx:
+    concertHubUrl: '{{ HUB_URL }}'
+    httpsRedirect: true
+    insecureHttpOnly: false
+    nginxIsPrimaryIngress: true
+  nginxingress:
+    enabled: true
+  concert-gateway:
+    enabled: true
+    hubURL: '{{ HUB_URL }}'
+  openshiftingress:
+    enabled: true
+  db:
+    persistence:
+      size: 30Gi
+
+

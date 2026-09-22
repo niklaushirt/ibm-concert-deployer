@@ -1,0 +1,322 @@
+
+# *************************************************************************************************************************************************
+# --------------------------------------------------------------------------------------------------------------------------------------
+# Install IBM Concert platform
+# --------------------------------------------------------------------------------------------------------------------------------------
+# *************************************************************************************************************************************************
+
+# --------------------------------------------------------------------------------------------------------------------------------------
+# Install IBM Concert platform
+# --------------------------------------------------------------------------------------------------------------------------------------
+
+- name: 🛰️  START - INSTALL IBM Concert platform
+  debug: 
+    msg="{{ lookup('pipe','date +%d.%m.%Y---%H:%M:%S') }}"
+
+
+- name: Log
+  shell: |
+    export MESSAGE="Installing IBM Concert platform"
+    export currentDate=$(date +%Y-%m-%d_%H:%M)
+    echo "---------------------------------------------------------------------------------------------------------------------------------------------------" >> ../install_{{current_feature.kind}}.log
+    echo $currentDate" - "$MESSAGE  >> ../install_{{current_feature.kind}}.log
+  ignore_errors: true
+
+
+
+
+
+- name: 🚀 IBM Concert platform - Set IBM Concert platform Password 
+  set_fact: current_admin_pass={{global_config.global_password}}
+
+
+- name: 🟣  IBM Concert platform -  IBM Concert platform Password {{current_admin_pass}}
+  debug:
+    var: current_admin_pass
+    verbosity: 1
+
+
+
+
+
+
+# --------------------------------------------------------------------------------------------------------------------------------------
+# Getting Installation source from GitHub
+# --------------------------------------------------------------------------------------------------------------------------------------
+- name: 📣 OCP CONSOLE - Create Openshift NOTIFICATION
+  shell: |
+    cat <<EOF | oc apply -f -
+    apiVersion: console.openshift.io/v1
+    kind: ConsoleNotification
+    metadata:
+      name: ibm-aiops-notification-status
+    spec:
+      backgroundColor: '#ffd500'
+      color: '#000'
+      location: {{global_config.position_ocp_notifications | default("BannerTop")}}
+      text: 'Installing {{current_feature.kind}} - IBM Concert platform Getting Installation source from GitHub'    
+    EOF
+  ignore_errors: true
+  args:
+    executable: /bin/bash
+  when: (global_config.create_ocp_notifications | default(true))|bool == true  
+
+
+
+
+
+- name:   🚀 IBM Concert platform - Getting Installation source from GitHub
+  shell: |
+    echo "------------------------------------------------------------------------------------------------------------------------------"
+    echo " 🚀 Getting Installation source from GitHub"
+    echo "------------------------------------------------------------------------------------------------------------------------------"
+    mkdir -p /tmp/
+    cd  /tmp/
+
+    wget https://github.com/IBM/Concert-Platform/releases/download/v3.0.0/ibm-itom-assembly-x86.tar.gz
+    tar xfz ibm-itom-assembly-x86.tar.gz
+    cd /tmp/ibm-itom-assembly
+
+  register: output_string
+  ignore_errors: true
+  args:
+    executable: /bin/bash
+
+- name: 🟣  OUTPUT
+  debug: 
+    var: output_string.stdout_lines
+    #verbosity: 1
+
+
+
+
+
+
+# --------------------------------------------------------------------------------------------------------------------------------------
+# Prepare Installation
+# --------------------------------------------------------------------------------------------------------------------------------------
+- name: 📣 OCP CONSOLE - Create Openshift NOTIFICATION
+  shell: |
+    cat <<EOF | oc apply -f -
+    apiVersion: console.openshift.io/v1
+    kind: ConsoleNotification
+    metadata:
+      name: ibm-aiops-notification-status
+    spec:
+      backgroundColor: '#ffd500'
+      color: '#000'
+      location: {{global_config.position_ocp_notifications | default("BannerTop")}}
+      text: 'Installing {{current_feature.kind}} - IBM Concert platform Prepare Installation'    
+    EOF
+  ignore_errors: true
+  args:
+    executable: /bin/bash
+  when: (global_config.create_ocp_notifications | default(true))|bool == true  
+
+
+
+- name:   🚀 IBM Concert platform - VARIABLES
+  shell: |
+    cd  /tmp/ibm-itom-assembly
+    echo ""
+    echo ""
+    echo ""
+    echo ""
+    echo "------------------------------------------------------------------------------------------------------------------------------"
+    echo " 🚀 Variables"
+    echo "------------------------------------------------------------------------------------------------------------------------------"
+    echo "USER                  : admin"
+    echo "PASSWORD:             : {{ global_config.global_password }}"
+    echo "ENTITLED_REGISTRY_KEY : $ENTITLED_REGISTRY_KEY"
+    echo ""
+    echo ""
+    echo ""
+    echo ""
+  register: output_string
+  ignore_errors: true
+  args:
+    executable: /bin/bash
+
+- name: 🟣  OUTPUT
+  debug: 
+    var: output_string.stdout_lines
+    #verbosity: 1
+
+
+
+- name:   🚀 IBM Concert platform - Prepare Installation
+  shell: |
+  
+
+    export INSTALL_DIR=/tmp/ibm-itom-assembly
+
+
+    export OCP_URL=$(oc get Infrastructure cluster -o jsonpath={.status.apiServerURL})
+    echo "OCP_URL: $OCP_URL"
+    mv /tmp/ibm-itom-assembly/etc/params.ini /tmp/ibm-itom-assembly/etc/params.ini.all
+
+    cat > /tmp/ibm-itom-assembly/etc/params.ini <<EOF
+    # Software to install
+    INSTALL_PLATFORM=true
+    ENABLE_CROSS_PRODUCT_INTEGRATION=true
+
+    # Registry Variables
+    REG_USER={{ current_feature.prod_user }}
+    IMAGE_REGISTRY_PREFIX={{ current_feature.prod_registry }}
+    IMAGE_REGISTRY_SUFFIX=/platform-hub
+    # OPTIONAL: Contact IBM Support if you plan to set it.
+    # TAG=v1
+
+    # Common Variables
+    # Namespace to deploy to
+    # all components must share a namespace by design. 
+    NAMESPACE={{ current_ibm_feature.project }}-hub
+
+    # Platform Variables
+    PLATFORM_SCALE_CONFIG=level_1
+    # Storage class specification is optional for k3s, mandatory for other k8s/OCP. 
+    PLATFORM_STORAGE_CLASS={{ STORAGE_CLASS_FILE }}
+
+    # ITOM Variables
+    ITOM_SCALE_CONFIG=level_1
+
+    EOF
+
+    echo "------------------------------------------------------------------------------------------------------------------------------"
+    echo "------------------------------------------------------------------------------------------------------------------------------"
+    echo "------------------------------------------------------------------------------------------------------------------------------"
+    echo " 🛠️ Your Config File"
+    echo "------------------------------------------------------------------------------------------------------------------------------"
+    cat /tmp/ibm-itom-assembly/etc/params.ini
+    echo "------------------------------------------------------------------------------------------------------------------------------"
+    echo "------------------------------------------------------------------------------------------------------------------------------"
+    echo "------------------------------------------------------------------------------------------------------------------------------"
+
+  register: output_string
+  ignore_errors: true
+  args:
+    executable: /bin/bash
+
+- name: 🟣  OUTPUT
+  debug: 
+    var: output_string.stdout_lines
+    #verbosity: 1
+
+
+
+- name: 📣 OCP CONSOLE - Create Openshift NOTIFICATION
+  shell: |
+    cat <<EOF | oc apply -f -
+    apiVersion: console.openshift.io/v1
+    kind: ConsoleNotification
+    metadata:
+      name: ibm-aiops-notification-status
+    spec:
+      backgroundColor: '#ff7700'
+      color: '#000'
+      location: {{global_config.position_ocp_notifications | default("BannerTop")}}
+      text: 'Installing {{current_feature.kind}} - 🕦 Wait for IBM Concert platform to become ready (about 30-40 minutes) - Started at $(date +%H:%M) UTC'    
+    EOF
+  ignore_errors: true
+  args:
+    executable: /bin/bash
+  when: (global_config.create_ocp_notifications | default(true))|bool == true  
+
+
+
+- name:   🚀 IBM Concert platform -  Installation
+  shell: |
+    cd  /tmp/
+    echo ""
+    echo ""
+    echo ""
+    echo ""
+    echo "------------------------------------------------------------------------------------------------------------------------------"
+    echo " 🚀 Start Concert Installation"
+    echo "------------------------------------------------------------------------------------------------------------------------------"
+    echo "/tmp/bin/setup --license_acceptance=y --username=admin --password={{ global_config.global_password }} --registry_password=$ENTITLED_REGISTRY_KEY"
+    /tmp/ibm-itom-assembly/bin/setup --license_acceptance=YES --username=admin --password={{ global_config.global_password }} --registry_password=$ENTITLED_REGISTRY_KEY
+
+
+
+  register: output_string
+  ignore_errors: true
+  args:
+    executable: /bin/bash
+
+- name: 🟣  OUTPUT
+  debug: 
+    var: output_string.stdout_lines
+    #verbosity: 1
+
+
+
+# - name: 🕦 CHECK -  Wait for all Pods in {{ current_ibm_feature.project }} to become ready (this might take some time)
+#   shell: oc get pods -n ibm-concert -l app.kubernetes.io/name=ibm-concert|grep "Running"|grep "1/1"|wc -l| tr -d ' '
+#   register: kubectl_get_pods
+#   until: kubectl_get_pods.stdout|int > 17
+#   retries: 500
+#   delay: 15
+
+
+
+- name: 📣 OCP CONSOLE - Create Openshift NOTIFICATION
+  shell: |
+    cat <<EOF | oc apply -f -
+    apiVersion: console.openshift.io/v1
+    kind: ConsoleNotification
+    metadata:
+      name: ibm-aiops-notification-status
+    spec:
+      backgroundColor: '#ff7700'
+      color: '#000'
+      location: {{global_config.position_ocp_notifications | default("BannerTop")}}
+      text: 'Finalizing {{current_feature.kind}}'    
+    EOF
+  ignore_errors: true
+  args:
+    executable: /bin/bash
+  when: (global_config.create_ocp_notifications | default(true))|bool == true  
+
+
+
+
+- name:   🚀 IBM Concert platform -  Finalize
+  shell: |
+    cd  /tmp/concert/ibm-concert
+    echo ""
+    echo ""
+    echo ""
+    echo ""
+    echo "------------------------------------------------------------------------------------------------------------------------------"
+    echo " 🚀 Create Routes"
+    echo "------------------------------------------------------------------------------------------------------------------------------"
+
+    export HUB_NS={{ current_ibm_feature.project }}-hub
+    /tmp/ibm-itom-assembly/ibm-platform-hub/bin/ocp-route.sh --namespace=$HUB_NS
+    oc get routes solis-hub -n $HUB_NS
+
+
+    echo ""
+    echo ""
+    echo ""
+    echo ""
+    echo "------------------------------------------------------------------------------------------------------------------------------"
+    echo " ✅ DONE"
+    echo "------------------------------------------------------------------------------------------------------------------------------"
+    
+
+
+
+  register: output_string
+  ignore_errors: true
+  args:
+    executable: /bin/bash
+
+- name: 🟣  OUTPUT
+  debug: 
+    var: output_string.stdout_lines
+    #verbosity: 1
+
+
+

@@ -1,0 +1,204 @@
+[
+  {
+    "version": "2",
+    "id": "0f7cbde1fddd8104fa6ab61ead1c4213812f7a5fae9080d2762dee34369ba760",
+    "date": "2024-04-23T06:16:32.566Z",
+    "evidence_type_id": "com.ibm.cloud.image_vulnerability_scan",
+    "evidence_type_version": "1.0.0",
+    "details": {
+      "result": "failure",
+      "tool": "sysdig"
+    },
+    "assets": [
+      {
+        "hash": "9373bcf1c12a4836f4c14b7d19ad405b45561c5340fd574c56332a6a1e1658fe",
+        "uri": "docker://us.icr.io/icr4mcc/mern-react-app:73-main-54c20a53c02c07a4a78acef611ab42e81f7fa609@sha256:9373bcf1c12a4836f4c14b7d19ad405b45561c5340fd574c56332a6a1e1658fe",
+        "url": "https://s3.us-south.cloud-object-storage.appdomain.cloud/cos4scc3mcc/assets/9373bcf1c12a4836f4c14b7d19ad405b45561c5340fd574c56332a6a1e1658fe/index.json"
+      }
+    ],
+    "findings": []
+  },
+  {
+    "version": "2",
+    "id": "20496d2c892d83bf0ecf3e4dcc002e22a91625a673c51440b3fa559be63f9cf0",
+    "date": "2024-04-23T06:15:15.875Z",
+    "evidence_type_id": "com.ibm.cloud.image_vulnerability_scan",
+    "evidence_type_version": "1.0.0",
+    "details": {
+      "result": "success",
+      "tool": "va"
+    },
+    "assets": [
+      {
+        "hash": "9373bcf1c12a4836f4c14b7d19ad405b45561c5340fd574c56332a6a1e1658fe",
+        "uri": "docker://us.icr.io/icr4mcc/mern-react-app:73-main-54c20a53c02c07a4a78acef611ab42e81f7fa609@sha256:9373bcf1c12a4836f4c14b7d19ad405b45561c5340fd574c56332a6a1e1658fe",
+        "url": "https://s3.us-south.cloud-object-storage.appdomain.cloud/cos4scc3mcc/assets/9373bcf1c12a4836f4c14b7d19ad405b45561c5340fd574c56332a6a1e1658fe/index.json"
+      }
+    ],
+    "findings": []
+  },
+  {
+    "version": "2",
+    "id": "ce6bd6ed4642ab21aaf9748bbe68b32782fc737286fdd9e1c6e4456607ef4c0f",
+    "date": "2024-04-23T05:55:00.765Z",
+    "evidence_type_id": "com.ibm.code_vulnerability_scan",
+    "evidence_type_version": "1.0.0",
+    "details": {
+      "result": "success",
+      "tool": "cra"
+    },
+    "assets": [
+      {
+        "hash": "6785d540c330438da573e0dca47d65462ffbb6cbe57567884d2d397dee586de1",
+        "uri": "https://github.ibm.com/rong/mern-react-app.git#54c20a53c02c07a4a78acef611ab42e81f7fa609",
+        "url": "https://s3.us-south.cloud-object-storage.appdomain.cloud/cos4scc3mcc/assets/6785d540c330438da573e0dca47d65462ffbb6cbe57567884d2d397dee586de1/index.json"
+      }
+    ],
+    "findings": [
+      {
+        "id": "CVE-2023-45857",
+        "due_date": "2024-05-02",
+        "severity": "medium",
+        "first_found": "2024-03-18",
+        "url": "https://github.ibm.com/rong/mern-react-issues/issues/230",
+        "found_status": "existing",
+        "has_exempt": true
+      },
+      {
+        "id": "CVE-2024-27088",
+        "due_date": "2024-05-02",
+        "severity": "low",
+        "first_found": "2024-03-18",
+        "url": "https://github.ibm.com/rong/mern-react-issues/issues/231",
+        "found_status": "existing",
+        "has_exempt": true
+      },
+      {
+        "id": "CVE-2024-29041",
+        "due_date": "2024-05-25",
+        "severity": "medium",
+        "first_found": "2024-04-14",
+        "url": "https://github.ibm.com/rong/mern-react-issues/issues/266",
+        "found_status": "existing",
+        "has_exempt": true
+      },
+      {
+        "id": "CVE-2023-26159",
+        "due_date": "2024-05-02",
+        "severity": "medium",
+        "first_found": "2024-03-18",
+        "url": "https://github.ibm.com/rong/mern-react-issues/issues/232",
+        "found_status": "existing",
+        "has_exempt": true
+      },
+      {
+        "id": "CVE-2024-28849",
+        "due_date": "2024-05-25",
+        "severity": "medium",
+        "first_found": "2024-04-14",
+        "url": "https://github.ibm.com/rong/mern-react-issues/issues/267",
+        "found_status": "existing",
+        "has_exempt": true
+      },
+      {
+        "id": "CVE-2023-42282",
+        "due_date": "2024-04-02",
+        "severity": "critical",
+        "first_found": "2024-03-18",
+        "url": "https://github.ibm.com/rong/mern-react-issues/issues/233",
+        "found_status": "existing",
+        "has_exempt": true
+      },
+      {
+        "id": "CVE-2020-8203",
+        "due_date": "2024-04-02",
+        "severity": "high",
+        "first_found": "2024-03-18",
+        "url": "https://github.ibm.com/rong/mern-react-issues/issues/234",
+        "found_status": "existing",
+        "has_exempt": true
+      },
+      {
+        "id": "CVE-2018-16487",
+        "due_date": "2024-05-02",
+        "severity": "medium",
+        "first_found": "2024-03-18",
+        "url": "https://github.ibm.com/rong/mern-react-issues/issues/237",
+        "found_status": "existing",
+        "has_exempt": true
+      },
+      {
+        "id": "CVE-2019-1010266",
+        "due_date": "2024-05-02",
+        "severity": "medium",
+        "first_found": "2024-03-18",
+        "url": "https://github.ibm.com/rong/mern-react-issues/issues/240",
+        "found_status": "existing",
+        "has_exempt": true
+      },
+      {
+        "id": "CVE-2020-28500",
+        "due_date": "2024-05-02",
+        "severity": "medium",
+        "first_found": "2024-03-18",
+        "url": "https://github.ibm.com/rong/mern-react-issues/issues/235",
+        "found_status": "existing",
+        "has_exempt": true
+      },
+      {
+        "id": "CVE-2021-23337",
+        "due_date": "2024-04-02",
+        "severity": "high",
+        "first_found": "2024-03-18",
+        "url": "https://github.ibm.com/rong/mern-react-issues/issues/236",
+        "found_status": "existing",
+        "has_exempt": true
+      },
+      {
+        "id": "CVE-2018-3721",
+        "due_date": "2024-05-02",
+        "severity": "medium",
+        "first_found": "2024-03-18",
+        "url": "https://github.ibm.com/rong/mern-react-issues/issues/239",
+        "found_status": "existing",
+        "has_exempt": true
+      },
+      {
+        "id": "CVE-2019-10744",
+        "due_date": "2024-04-02",
+        "severity": "critical",
+        "first_found": "2024-03-18",
+        "url": "https://github.ibm.com/rong/mern-react-issues/issues/238",
+        "found_status": "existing",
+        "has_exempt": true
+      },
+      {
+        "id": "CVE-2021-3803",
+        "due_date": "2024-04-02",
+        "severity": "high",
+        "first_found": "2024-03-18",
+        "url": "https://github.ibm.com/rong/mern-react-issues/issues/241",
+        "found_status": "existing",
+        "has_exempt": true
+      },
+      {
+        "id": "CVE-2023-44270",
+        "due_date": "2024-05-02",
+        "severity": "medium",
+        "first_found": "2024-03-18",
+        "url": "https://github.ibm.com/rong/mern-react-issues/issues/242",
+        "found_status": "existing",
+        "has_exempt": true
+      },
+      {
+        "id": "CVE-2024-29180",
+        "due_date": "2024-04-25",
+        "severity": "high",
+        "first_found": "2024-04-14",
+        "url": "https://github.ibm.com/rong/mern-react-issues/issues/268",
+        "found_status": "existing",
+        "has_exempt": true
+      }
+    ]
+  }
+]

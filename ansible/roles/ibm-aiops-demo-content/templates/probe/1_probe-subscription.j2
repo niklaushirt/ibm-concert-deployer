@@ -1,0 +1,11 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  name: netcool-integrations-operator
+  namespace: {{ current_ibm_feature.project }}
+spec:
+  channel: {{current_feature.subscription_channel}}
+  installPlanApproval: Automatic
+  name: netcool-integrations-operator
+  source: ibm-aiops-catalog
+  sourceNamespace: openshift-marketplace

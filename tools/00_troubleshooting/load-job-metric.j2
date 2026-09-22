@@ -1,0 +1,71 @@
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: load-metric-postgres
+  namespace: ibm-installer
+  labels:
+   aiops-type: data-load-job
+spec:
+  serviceAccount: demo-admin
+  template:
+    spec:
+      containers:
+        - name: load
+          image: quay.io/niklaushirt/ibm-aiops-tools:5.1.0
+          imagePullPolicy: IfNotPresent
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "150m"
+            limits:
+              memory: "2024Mi"
+              cpu: "1200m"
+          command:
+            - /bin/sh
+            - -c
+            - |
+              #!/bin/bash
+              #set -x
+              
+              echo "*****************************************************************************************************************************"
+              echo " ✅ STARTING: Load metric anomaly training files (>=5.1)"
+              echo "*****************************************************************************************************************************"
+
+              export TRAINING_REPO=https://github.com/niklaushirt/ibm-aiops-trainingdata.git
+              export TRAINING_DIR=ibm-aiops-trainingdata
+              echo "   ------------------------------------------------------------------------------------------------------------------------------"
+              echo "    📥 Downloading metric anomaly training files from $TRAINING_REPO"
+              echo "   ------------------------------------------------------------------------------------------------------------------------------"
+
+              while [ ! -d "$TRAINING_DIR/.git" ]; do
+                echo "    ⏳ Waiting for repository to be cloned..."
+                git clone $TRAINING_REPO
+                sleep 2
+              done
+
+              echo "   ------------------------------------------------------------------------------------------------------------------------------"
+              echo "    🚀 Starting Data Load"
+              echo "   ------------------------------------------------------------------------------------------------------------------------------"
+              cd $TRAINING_DIR
+              echo "------------------------------------------------------------------------------------------------------------------------------"
+              echo "This Repo includes those latestet Commits"
+              echo "------------------------------------------------------------------------------------------------------------------------------"
+              git log|head -n 17
+              echo ""
+              echo ""
+
+              ./training/load-metric-for-training510.sh
+
+              echo "*****************************************************************************************************************************"
+              echo " ✅ DONE"
+              echo "*****************************************************************************************************************************"
+
+          env:
+            - name: INDEX_OVERWRITE
+              value : "false"
+            - name: VERSION
+              value : "latest"
+      restartPolicy: Never
+
+  backoffLimit: 500

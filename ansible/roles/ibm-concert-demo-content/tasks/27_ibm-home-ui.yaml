@@ -1,0 +1,62 @@
+---
+
+# *************************************************************************************************************************************************
+# --------------------------------------------------------------------------------------------------------------------------------------
+# Generic Event Webhook 
+# --------------------------------------------------------------------------------------------------------------------------------------
+# *************************************************************************************************************************************************
+
+- name: 🛰️  START - AIOPS HOME UI
+  debug: 
+    msg="{{ lookup('pipe','date +%d.%m.%Y---%H:%M:%S') }}"
+
+
+
+- name: Log
+  shell: |
+    export MESSAGE="Create HOME UI"
+    export currentDate=$(date +%Y-%m-%d_%H:%M)
+    echo "---------------------------------------------------------------------------------------------------------------------------------------------------" >> ../install_{{current_feature.kind}}.log
+    echo $currentDate" - "$MESSAGE  >> ../install_{{current_feature.kind}}.log
+  ignore_errors: true
+
+- name: 📣 OCP CONSOLE - Create Openshift NOTIFICATION
+  shell: |
+    cat <<EOF | oc apply -f -
+    apiVersion: console.openshift.io/v1
+    kind: ConsoleNotification
+    metadata:
+      name: ibm-aiops-notification-status
+    spec:
+      backgroundColor: '#ffd500'
+      color: '#000'
+      location: {{global_config.position_ocp_notifications | default("BannerTop")}}
+      text: 'Installing {{current_feature.kind}} - Create HOME UI'    
+    EOF
+  ignore_errors: true
+  args:
+    executable: /bin/bash
+  when: (global_config.create_ocp_notifications | default(true))|bool == true  
+
+
+
+- name: 🚀 DEMO-UI - Create HOME UI
+  kubernetes.core.k8s:
+    state: present
+    template: ./templates/home-ui/create-home-ui-deploy.j2
+  ignore_errors: true
+
+
+
+- name: Log
+  shell: |
+    export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
+    export MESSAGE="Installing HOME UI"
+    export currentDate=$(date +%Y-%m-%d_%H:%M)
+    echo "              📥 DEMO UI Login:"  >> ../install_{{current_feature.kind}}.log
+    echo ""  >> ../install_{{current_feature.kind}}.log
+    echo "                🌏 URL:      http://$(oc get route -n $AIOPS_NAMESPACE-demo-ui ibm-aiops-demo-ui -o jsonpath={.spec.host})"  >> ../install_{{current_feature.kind}}.log
+    echo "                🔐 Token:    $(oc get cm -n $AIOPS_NAMESPACE-demo-ui ibm-aiops-demo-ui-config -o jsonpath='{.data.TOKEN}' && echo)"  >> ../install_{{current_feature.kind}}.log
+    echo "---------------------------------------------------------------------------------------------------------------------------------------------------" >> ../install_{{current_feature.kind}}.log
+  ignore_errors: true
+

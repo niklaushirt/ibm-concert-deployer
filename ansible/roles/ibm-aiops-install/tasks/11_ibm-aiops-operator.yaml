@@ -1,0 +1,281 @@
+
+# *************************************************************************************************************************************************
+# --------------------------------------------------------------------------------------------------------------------------------------
+# Install IBM AIOPS PREREQUISITES
+# --------------------------------------------------------------------------------------------------------------------------------------
+# *************************************************************************************************************************************************
+
+- name: 🛰️  START - IBM AIOPS OPERATORS
+  debug: 
+    msg="{{ lookup('pipe','date +%d.%m.%Y---%H:%M:%S') }}"
+
+
+- name: Log
+  shell: |
+    export MESSAGE="Installing IBM AIOPS Operator"
+    export currentDate=$(date +%Y-%m-%d_%H:%M)
+    echo "---------------------------------------------------------------------------------------------------------------------------------------------------" >> ../install_{{current_feature.kind}}.log
+    echo $currentDate" - "$MESSAGE  >> ../install_{{current_feature.kind}}.log
+  ignore_errors: true
+
+- name: 📣 OCP CONSOLE - Create Openshift NOTIFICATION
+  shell: |
+    cat <<EOF | oc apply -f -
+    apiVersion: console.openshift.io/v1
+    kind: ConsoleNotification
+    metadata:
+      name: ibm-aiops-notification-status
+    spec:
+      backgroundColor: '#ffd500'
+      color: '#000'
+      location: {{global_config.position_ocp_notifications | default("BannerTop")}}
+      text: 'Installing {{current_feature.kind}} - IBM AIOPS Operator'    
+    EOF
+  ignore_errors: true
+  args:
+    executable: /bin/bash
+  when: (global_config.create_ocp_notifications | default(true))|bool == true  
+
+
+
+
+
+
+# Create IBM AIOps Operator Group
+- name:   🚀 IBM AIOPS CATALOG - Install Operator Group
+  kubernetes.core.k8s:
+    state: present
+    template: ./templates/aiops/2_opgroup-ibm-aiops.j2
+
+
+
+# --------------------------------------------------------------------------------------------------------------------------------------
+# Wait for serviceaccount being ready
+# --------------------------------------------------------------------------------------------------------------------------------------
+- name:   🚀 IBM AIOPS CATALOG - 🕦 Wait for serviceaccount ibm-aiops-catalog to become ready
+  shell: oc get -n  {{ current_ibm_feature.project }} serviceaccount ibm-aiops-catalog --no-headers| grep -c ""
+  register: kubectl_get_sa
+  until: kubectl_get_sa.stdout == "1"
+  retries: 500
+  delay: 15
+  when: current_feature.case_install|bool == false
+
+
+
+
+# --------------------------------------------------------------------------------------------------------------------------------------
+# Wait for CSV being ready
+# --------------------------------------------------------------------------------------------------------------------------------------
+- name:   🚀 IBM AIOPS CATALOG - Patch service account for pull secret
+  shell: |
+    oc patch -n  {{ current_ibm_feature.project }} serviceaccount ibm-aiops-catalog -p '{"imagePullSecrets": [{"name": "ibm-entitlement-key"}]}'
+    oc patch -n  {{ current_ibm_feature.project }} serviceaccount default -p '{"imagePullSecrets": [{"name": "ibm-entitlement-key"}]}'
+    errorPods=$(oc get po -n  {{ current_ibm_feature.project }}|grep ImagePull|awk '{print$1}')
+    if [[ ! $errorPods == "" ]]; then
+      echo "Refreshing Pods"
+      oc delete pod $(oc get po -n  {{ current_ibm_feature.project }}|grep ImagePull|awk '{print$1}'):-notfound  --ignore-not-found -n  {{ current_ibm_feature.project }}
+    fi
+  register: kubectl_get_pods
+  ignore_errors: true
+
+
+
+
+
+
+# - name: IBM AIOPS OPERATOR -     🕦 Wait 120 seconds
+#   shell: |
+#     sleep 120
+#   ignore_errors: true
+
+
+
+# --------------------------------------------------------------------------------------------------------------------------------------
+# Delete lingering Pods before check for reinstall
+# --------------------------------------------------------------------------------------------------------------------------------------
+- name:   🚀 IBM AIOPS CATALOG - Delete lingering Pods before check for reinstall
+  shell: |
+    oc delete pod $(oc get po -n {{ current_ibm_feature.project }}|grep ContainerStatusUnknown|awk '{print$1}'):-notfound -n {{ current_ibm_feature.project }} --ignore-not-found
+  register: kubectl_get_pods
+  ignore_errors: true
+
+
+# --------------------------------------------------------------------------------------------------------------------------------------
+# Wait for Operator to settle
+# --------------------------------------------------------------------------------------------------------------------------------------
+- name:   🚀 IBM AIOPS CATALOG - Wait for Operator Catalog to settle
+  shell: |
+    # Wait for Operator to settle
+    sleep 20
+  register: kubectl_get_pods
+  ignore_errors: true
+
+
+
+# --------------------------------------------------------------------------------------------------------------------------------------
+# Delete lingering Pods before check for reinstall
+# --------------------------------------------------------------------------------------------------------------------------------------
+- name:   🚀 IBM AIOPS CATALOG - Delete operator for pull secret
+  shell: |
+    oc delete pod $(oc get po -n  {{ current_ibm_feature.project }}|grep ImagePullBackOff|awk '{print$1}'):-notfound  --ignore-not-found -n  {{ current_ibm_feature.project }}
+  register: kubectl_get_pods
+  ignore_errors: true
+
+
+
+# --------------------------------------------------------------------------------------------------------------------------------------
+# Wait for Marketplace being ready
+# --------------------------------------------------------------------------------------------------------------------------------------
+- name:   🕦 IBM AIOPS CATALOG - Wait for ibm-aiops-catalog to become ready
+  shell: oc get po -n  {{ current_ibm_feature.project }} |grep ibm-aiops-catalog| grep '1/1' | grep -c ""
+  register: kubectl_get_pods
+  until: kubectl_get_pods.stdout == "1"
+  retries: 500
+  delay: 15
+  when: current_feature.case_install|bool == false
+
+
+
+
+# Create IBM AIOps Subscription
+- name:   🚀 IBM AIOPS OPERATOR - Install Subscription - ONLINE
+  kubernetes.core.k8s:
+    state: present
+    template: ./templates/aiops/3_sub-ibm-aiops-subscription.j2
+  when: current_feature.case_install|bool == false
+
+# Create IBM AIOps Subscription
+- name:   🚀 IBM AIOPS OPERATOR - Install Subscription - CASE
+  kubernetes.core.k8s:
+    state: present
+    template: ./templates/aiops/3_sub-ibm-aiops-subscription-case.j2
+  when: current_feature.case_install|bool == true
+
+
+
+
+# --------------------------------------------------------------------------------------------------------------------------------------
+# Wait for Marketplace being ready
+# --------------------------------------------------------------------------------------------------------------------------------------
+# - name: CHECK -              🕦 Wait for openshift-marketplace to become ready
+#   shell: oc get po -n  {{ current_ibm_feature.project }} | grep -v Running |grep -v Completed | grep -c ""
+#   register: kubectl_get_pods
+#   until: kubectl_get_pods.stdout == "1"
+#   retries: 500
+#   delay: 15
+
+
+
+
+# --------------------------------------------------------------------------------------------------------------------------------------
+# Wait for Operators being ready
+# --------------------------------------------------------------------------------------------------------------------------------------
+# - name: CHECK -              🕦 Wait for operators to become ready in Namespace {{ current_ibm_feature.project }}
+#   shell: oc get po -n {{ current_ibm_feature.project }} | grep Running | grep -v "0/1" |grep -c ""
+#   register: kubectl_get_pods
+#   until: kubectl_get_pods.stdout|int > "6"
+#   retries: 500
+#   delay: 15
+
+
+
+
+
+- name: Log
+  shell: |
+    export MESSAGE=" 🕦 Wait for CSVs to become ready"
+    export currentDate=$(date +%Y-%m-%d_%H:%M)
+    echo "---------------------------------------------------------------------------------------------------------------------------------------------------" >> ../install_{{current_feature.kind}}.log
+    echo $currentDate" - "$MESSAGE  >> ../install_{{current_feature.kind}}.log
+  ignore_errors: true
+
+
+
+- name: 📣 OCP CONSOLE - Create Openshift NOTIFICATION
+  shell: |
+    cat <<EOF | oc apply -f -
+    apiVersion: console.openshift.io/v1
+    kind: ConsoleNotification
+    metadata:
+      name: ibm-aiops-notification-status
+    spec:
+      backgroundColor: '#ff7700'
+      color: '#000'
+      location: {{global_config.position_ocp_notifications | default("BannerTop")}}
+      text: 'Installing {{current_feature.kind}} - 🕦 Wait for ibm-aiops-catalog to become ready (about 5-10 minutes) - Started at $(date +%H:%M) UTC'    
+    EOF
+  ignore_errors: true
+  args:
+    executable: /bin/bash
+  when: (global_config.create_ocp_notifications | default(true))|bool == true  
+
+# --------------------------------------------------------------------------------------------------------------------------------------
+# Wait for CSV being ready
+# --------------------------------------------------------------------------------------------------------------------------------------
+
+- name:   🕦 IBM AIOPS OPERATOR - Wait for ibm-aiops-orchestrator Subscription to become ready
+  shell: oc get csv -n {{ current_ibm_feature.project }}|grep ibm-aiops-orchestrator|grep "Succeeded"| grep -v ibm-watson-aiops-ui-operator | grep -c ""
+  register: kubectl_get_pods
+  until: kubectl_get_pods.stdout == "1"
+  retries: 500
+  delay: 15
+  when: current_feature.case_install|bool == false
+
+
+
+- name: 📣 OCP CONSOLE - Create Openshift NOTIFICATION
+  shell: |
+    cat <<EOF | oc apply -f -
+    apiVersion: console.openshift.io/v1
+    kind: ConsoleNotification
+    metadata:
+      name: ibm-aiops-notification-status
+    spec:
+      backgroundColor: '#ff7700'
+      color: '#000'
+      location: {{global_config.position_ocp_notifications | default("BannerTop")}}
+      text: 'Installing {{current_feature.kind}} - 🕦 Wait for CSVs to become ready (up to 5 minutes) - Started at $(date +%H:%M) UTC'    
+    EOF
+  ignore_errors: true
+  args:
+    executable: /bin/bash
+  when: (global_config.create_ocp_notifications | default(true))|bool == true  
+
+
+# HACK for Elastic Operator - TODO Remove in GA
+- name:   🕦 IBM AIOPS OPERATOR - Wait for CSVs to become ready
+  shell: oc get csv -n {{ current_ibm_feature.project }}|grep -v "Succeeded"| grep -v ibm-watson-aiops-ui-operator| grep -v ibm-automation-elastic | grep -v ibm-secure-tunnel| grep -v itz-deployer| grep -c ""
+  register: kubectl_get_pods
+  until: kubectl_get_pods.stdout == "1"
+  retries: 500
+  delay: 15
+
+
+
+
+
+- name: Log
+  shell: |
+    export MESSAGE=" ✅ CSVs are ready"
+    export currentDate=$(date +%Y-%m-%d_%H:%M)
+    echo $currentDate" - "$MESSAGE  >> ../install_{{current_feature.kind}}.log
+  ignore_errors: true
+
+- name: 📣 OCP CONSOLE - Create Openshift NOTIFICATION
+  shell: |
+    cat <<EOF | oc apply -f -
+    apiVersion: console.openshift.io/v1
+    kind: ConsoleNotification
+    metadata:
+      name: ibm-aiops-notification-status
+    spec:
+      backgroundColor: '#009a00'
+      color: '#000'
+      location: {{global_config.position_ocp_notifications | default("BannerTop")}}
+      text: 'Installing {{current_feature.kind}} - CSVs are ready'    
+    EOF
+  ignore_errors: true
+  args:
+    executable: /bin/bash
+  when: (global_config.create_ocp_notifications | default(true))|bool == true  
+

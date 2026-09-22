@@ -1,0 +1,112 @@
+
+
+
+# - name: Checking {{current_feature.kind}}
+#   debug:
+#     var: current_feature
+
+
+
+
+- name: 🚀 LOOP OVER PRODUCT FEATURES
+  debug: 
+    msg: 
+    - "***************************************************************************************************************************************************"
+    - "***************************************************************************************************************************************************"
+    - "                                                                                                                                                   "
+    - "       🟣🟣🟣🟣🟣🟣🟣🟢🟢🟢 IBM IT Automation - INSTALLATION -  LOOP OVER PRODUCT FEATURES                                                                    "
+    - "                                                                                                                                                   "
+    - "***************************************************************************************************************************************************"
+
+
+- name: 🟣  Show Current Feature
+  debug:
+    var: current_feature
+    verbosity: 1
+
+
+
+
+- name: tools-install-modules-loop 🌡   CHECK for - IBM AIOps
+  include_role:
+    name: ibm-aiops-install
+  when: current_feature.kind=="IBMAIOps" and current_feature.install|bool == true
+
+
+- name: tools-install-modules-loop 🌡   CHECK for - IBM AIOps Demo Content
+  include_role:
+    name: ibm-aiops-demo-content
+  when: current_feature.kind=="IBMAIOpsDemoContent" and current_feature.install|bool == true
+
+
+
+- name: tools-install-modules-loop 🌡   CHECK for - IBM EventManager
+  include_role:
+    name: ibm-event-manager-install
+  when: current_feature.kind=="EventManager" and current_feature.install|bool == true
+
+
+- name: tools-install-modules-loop 🌡   CHECK for - IBM EventManager Demo Content
+  include_role:
+    name: ibm-event-manager-demo-content
+  when: current_feature.kind=="EventManagerDemoContent" and current_feature.install|bool == true
+
+
+
+
+- name: tools-install-modules-loop 🌡   CHECK for - IBM Concert
+  include_role:
+    name: ibm-concert-install
+  when: current_feature.kind=="IBMConcert" and current_feature.install|bool == true
+
+
+- name: tools-install-modules-loop 🌡   CHECK for - IBM Concert Demo Content
+  include_role:
+    name: ibm-concert-demo-content
+  when: current_feature.kind=="IBMConcertDemoContent" and current_feature.install|bool == true
+
+
+
+- name: tools-install-modules-loop 🌡   CHECK for - IBM Instana
+  include_role:
+    name: ibm-instana-install
+  when: current_feature.kind=="IBMInstana" and current_feature.install|bool == true
+
+- name: tools-install-modules-loop 🌡   CHECK for - IBM Instana Demo Content
+  include_role:
+    name: ibm-instana-demo-content
+  when: current_feature.kind=="IBMInstanaDemoContent" and current_feature.install|bool == true
+
+
+
+- name: tools-install-modules-loop 🌡   CHECK for - IBM Turbonomic
+  include_role:
+    name: ibm-turbonomic-install
+  when: current_feature.kind=="IBMTurbonomic" and current_feature.install|bool == true
+
+- name: tools-install-modules-loop 🌡   CHECK for - IBM Turbonomic Demo Content
+  include_role:
+    name: ibm-turbonomic-demo-content
+  when: current_feature.kind=="IBMTurbonomicDemoContent" and current_feature.install|bool == true
+
+
+
+- name: tools-install-modules-loop 🌡   CHECK for - IBM Infrastructure Management
+  include_role:
+    name: ibm-aiops-im-install
+  when: current_feature.kind=="InfrastructureManagement" and current_feature.install|bool == true
+
+
+
+
+- name: tools-install-modules-loop 🌡   CHECK for - ELK Stack
+  include_role:
+    name: elk-install
+  when: current_feature.kind=="ELK" and current_feature.install|bool == true
+
+
+
+- name: tools-install-modules-loop 🌡   CHECK for - MAS Stack
+  include_role:
+    name: ibm-mas
+  when: current_feature.kind=="IBMMAS" and current_feature.install|bool == true

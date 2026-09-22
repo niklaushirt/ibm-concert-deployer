@@ -1,0 +1,262 @@
+
+
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#     ________  __  ___   __________    ___         __                        __  _
+#    /  _/ __ )/  |/  /  /  _/_  __/   /   | __  __/ /_____  ____ ___  ____ _/ /_(_)___  ____
+#    / // __  / /|_/ /   / /  / /     / /| |/ / / / __/ __ \/ __ `__ \/ __ `/ __/ / __ \/ __ \
+#  _/ // /_/ / /  / /  _/ /  / /     / ___ / /_/ / /_/ /_/ / / / / / / /_/ / /_/ / /_/ / / / /
+# /___/_____/_/  /_/  /___/ /_/     /_/  |_\__,_/\__/\____/_/ /_/ /_/\__,_/\__/_/\____/_/ /_/
+#
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------------------------------------------------------"
+#  Installing IBM AIOps
+#
+#  IBM AIOps
+#
+#  ©2026 nikh@ch.ibm.com
+# ---------------------------------------------------------------------------------------------------------------------------------------------------"
+# ---------------------------------------------------------------------------------------------------------------------------------------------------"
+# ---------------------------------------------------------------------------------------------------------------------------------------------------"
+# ---------------------------------------------------------------------------------------------------------------------------------------------------"
+# Installs:
+#
+#  - AIOPS Operator
+#  - IBM AIOps
+# ---------------------------------------------------------------------------------------------------------------------------------------------------"
+# ---------------------------------------------------------------------------------------------------------------------------------------------------"
+ 
+
+
+- name: 🟣🟣🟣🟣🟣🟣  INSTALLATION MODULE START - {{current_feature.kind}}
+  debug: 
+    msg: 
+    - "***************************************************************************************************************************************************"
+    - "***************************************************************************************************************************************************"
+    - "***************************************************************************************************************************************************"
+    - "***************************************************************************************************************************************************"
+    - "                                                                                                                                                   "
+    - "      � IBM AIOps - INSTALLING {{current_feature.kind}} "
+    - "                                                                                                                                                   "
+    - "***************************************************************************************************************************************************"
+    - "***************************************************************************************************************************************************"
+    - "***************************************************************************************************************************************************"
+
+
+- name: Log
+  shell: |
+    export MESSAGE="Installing IBM AIOps"
+    export currentDate=$(date +%Y-%m-%d_%H:%M)
+    echo "---------------------------------------------------------------------------------------------------------------------------------------------------" >> ../install_{{current_feature.kind}}.log
+    echo $currentDate" - "$MESSAGE  >> ../install_{{current_feature.kind}}.log
+  ignore_errors: true
+
+
+
+- name: 📣 OCP CONSOLE - Create Openshift NOTIFICATION
+  shell: |
+    export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
+    appURL=$(oc get routes -n $AIOPS_NAMESPACE-demo-ui ibm-aiops-demo-ui  -o jsonpath="{['spec']['host']}")|| true
+    OPENSHIFT_ROUTE=$(oc get route -n openshift-console console -o jsonpath={.spec.host})
+    INSTALL_POD=$(oc get po -n ibm-installer -l app=ibm-installer --no-headers|grep "Running"|grep "1/1"|awk '{print$1}')
+
+    cat <<EOF | oc apply -f -
+    apiVersion: console.openshift.io/v1
+    kind: ConsoleNotification
+    metadata:
+      name: ibm-aiops-notification-main
+    spec:
+      backgroundColor: '#141a6b'
+      color: '#fff'
+      location: {{global_config.position_final_ocp_notification | default("BannerTop")}}
+      text: 'Installing  {{current_feature.kind}} - {{global_config.environment_name | default("Demo")}} - Version {{current_feature.subscription_channel}} - ' 
+      link:
+          href: "https://$OPENSHIFT_ROUTE/k8s/ns/ibm-installer/pods/$INSTALL_POD/logs"
+          text: Open Logs   
+    EOF
+  ignore_errors: true
+  args:
+    executable: /bin/bash
+
+
+
+- name:  🟡🟡🟡 INITIALIZATION - Installation Parameters 🟡🟡🟡"
+  debug:
+    msg:
+    - "***********************************************************************************************"
+    - " 🚀 Installing {{current_feature.kind}}"
+    - "***********************************************************************************************"
+    - "-----------------------------------------------------------------------------------------------"
+    - "  📥 STORAGE"
+    - "     💾 Installation Options for SPECIFIC MODULE {{ current_feature.kind}}"
+    - "        Storage Class File Override:             {{ current_feature.storage_class_file | default('no override') }}"
+    - "        Storage Class Block Override:            {{ current_feature.storage_class_block | default('no override') }}"
+    - "        Storage Class InfraManagement:           {{ current_feature.storage_class_file | default('no override') }}"
+    - ""
+    - "     💾 Installation Options from GLOBAL"
+    - "        Storage Class File Override:             {{ ocp_storage_class_file | default('not defined') }}"
+    - "        Storage Class Block Override:            {{ ocp_storage_class_block | default('not defined') }}"
+    - "        Storage Class InfraManagement:           {{ ocp_storage_class_file | default('not defined') }}"
+    - "-----------------------------------------------------------------------------------------------"
+    - "  📥 CONFIG"
+    - "     ✅ Installation Name:                        {{current_feature.aiops_name}}"
+    - "     🔎 IBM AIOps Size:                           {{current_feature.aiops_size}}"
+    - "     🔽 Custom Sizing File:                       {{current_feature.custom_size_file | default('none')}}"
+    - "     📣 Show Notifications:                       {{global_config.create_ocp_notifications | default('not defined')}}"
+    - "     📣 Primary Notifications Position:           {{global_config.position_final_ocp_notification | default('not defined')}}"
+    - "     📣 Secondary Notifications Position:         {{global_config.position_ocp_notification | default('not defined')}}"
+    - "-----------------------------------------------------------------------------------------------"
+    - "  📥 VERSION "
+    - "     🚀 Subscription Channel:                     {{current_feature.subscription_channel}}"
+    - "     ✅ Install with CASE:                        {{current_feature.case_install}}"
+    - "-----------------------------------------------------------------------------------------------"
+    - "***********************************************************************************************"
+
+- name: 🟣 Installing {{current_feature.kind}} with the following configuration
+  debug:
+    var: current_feature
+
+# ---------------------------------------------------------------------------------------------------------------------------------------------------"
+# INITIALIZATION
+# ---------------------------------------------------------------------------------------------------------------------------------------------------"
+# Placeholder for customization
+- name: (001/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 Initialize Custom Hook
+  include_tasks: 00_init-custom-hook.yaml
+
+# Initialize Logging
+- name: (002/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 Initialize Logging
+  include_tasks: "{{role_path}}/../ibm-install-global/tasks/01_init-logging.yaml"
+    
+- name: (003/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 Initialization Checks
+  include_tasks: 02_init_checks.yaml
+# Start block
+- name: (004/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 Start Logging
+  include_tasks: "{{role_path}}/../ibm-install-global/tasks/90-log-start.yaml"
+
+# Run Prerequisites
+- name: (005/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 Initialization of the Installation
+  include_tasks: 03_init-initialization.yaml
+
+
+
+- name: (006/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 Get Storage Classes
+  include_tasks: "{{role_path}}/../ibm-install-global/tasks/05_init-get-storage-class.yaml"
+
+
+- name: (007/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 Install IBM AIOps Prerequisites 
+  include_tasks: 06_ibm-aiops-prerequisites.yaml
+      
+
+# Install IBM AIOPS Operator
+- name: (008/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 IBM AIOps Custom Hook
+  include_tasks: 08_ibm-aiops-custom-hook.yaml
+
+
+
+# ---------------------------------------------------------------------------------------------------------------------------------------------------"
+# INSTALL CATALOG with YAML FILE
+# ---------------------------------------------------------------------------------------------------------------------------------------------------"
+- name: (009/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 Install IBM AIOps Catalog - Classic Way (skipped if CASE selected)
+  include_tasks: 10_ibm-operator-catalog.yaml
+  when: current_feature.case_install|bool == false
+
+
+# ---------------------------------------------------------------------------------------------------------------------------------------------------"
+# INSTALL CATALOG with CASE FILE
+# ---------------------------------------------------------------------------------------------------------------------------------------------------"
+- name: (010/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 Install IBM AIOps Catalog - Save Case File (this can take some time - skipped if not selected)
+  include_role:
+    name: tools-aiops-case-save
+  when: current_feature.case_install|bool == true
+
+
+- name: (011/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 Install IBM AIOps Catalog - Create CatalogSources from Case File (this can take some time - skipped if not selected)
+  include_role:
+    name: tools-aiops-case-catalog-source
+  when: current_feature.case_install|bool == true
+
+
+
+# ---------------------------------------------------------------------------------------------------------------------------------------------------"
+# INSTALL IBM AIOPS PREREQUISITES
+# ---------------------------------------------------------------------------------------------------------------------------------------------------"
+
+# Install IBM AIOPS Prerequisites
+- name: (012/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 Install the IBM AIOps Instance
+  include_tasks: 18_ibm-aiops-install-prerequisites.yaml
+
+
+# ---------------------------------------------------------------------------------------------------------------------------------------------------"
+# INSTALL IBM AIOPS OPERATOR
+# ---------------------------------------------------------------------------------------------------------------------------------------------------"
+- name: (013/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 Install the IBM AIOps Operator
+  include_tasks: 11_ibm-aiops-operator.yaml
+
+
+# ---------------------------------------------------------------------------------------------------------------------------------------------------"
+# INSTALL FEATURE FLAGS
+# ---------------------------------------------------------------------------------------------------------------------------------------------------"
+# Install  Feature Flags
+- name: (014/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Install IBM AIOPS Feature Flags
+  include_tasks: 12_ibm-aiops-featureflags.yaml
+  when: (current_feature.install_feature_flags | default('false'))|bool == true 
+
+
+
+# ---------------------------------------------------------------------------------------------------------------------------------------------------"
+# INSTALL IBM AIOPS
+# ---------------------------------------------------------------------------------------------------------------------------------------------------"
+
+# Install IBM AIOPS Instance
+- name: (015/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 Install the IBM AIOps Instance
+  include_tasks: 19_ibm-aiops-install.yaml
+      
+
+# # ---------------------------------------------------------------------------------------------------------------------------------------------------"
+# # WAIT FOR IBM AIOPS HACK
+# # ---------------------------------------------------------------------------------------------------------------------------------------------------"
+
+# # Wait for IBM AIOPS HACK
+# - name: (016/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 Wait for IBM AIOps to apply HACK
+#   include_tasks: 99_ibm-aiops-wait-ibm-HACK.yaml
+
+
+# ---------------------------------------------------------------------------------------------------------------------------------------------------"
+# WAIT FOR IBM AIOPS
+# ---------------------------------------------------------------------------------------------------------------------------------------------------"
+
+# Wait for IBM AIOPS being completely installed
+- name: (016/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 Wait for IBM AIOps to be ready
+  include_tasks: 99_ibm-aiops-wait-ibm-aiops.yaml
+
+# --------------------------------------------------------------------------------------------------------------------------------------
+# Create Openshift WebConsole Menu Item
+# --------------------------------------------------------------------------------------------------------------------------------------
+- name: (017/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Create IBM AIOps Openshift WebConsole Menu Item
+  include_tasks: 91_ibm-aiops-create-ocp-menu.yaml
+  when: (global_config.create_ocp_items | default(true))|bool == true  
+
+# Update IBM AIOps Cards
+- name: (018/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 Update IBM AIOps Cards
+  include_tasks: "{{role_path}}/../ibm-install-global/tasks/99_update_cards.yaml"
+
+
+- name: (019/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 End Logging
+  include_tasks: "{{role_path}}/../ibm-install-global/tasks/91-log-end.yaml"
+
+
+
+- name: 🟣🟣🟣🟣🟣🟣  ✅ INSTALLATION MODULE DONE - {{current_feature.kind}}
+  debug: 
+    msg: 
+    - "***************************************************************************************************************************************************"
+    - "***************************************************************************************************************************************************"
+    - "***************************************************************************************************************************************************"
+    - "***************************************************************************************************************************************************"
+    - "                                                                                                                                                   "
+    - "       ✅ IBM IT Automation - DONE INSTALLING {{current_feature.kind}}                                                                                 "
+    - "                                                                                                                                                   "
+    - "***************************************************************************************************************************************************"
+    - "***************************************************************************************************************************************************"
+    - "***************************************************************************************************************************************************"

@@ -1,0 +1,17 @@
+{
+    "component_definition_id": "c89442f7-8a13-4d8a-aeec-406d5de890ba",
+    "application_id": "37043cd7-3ec1-4213-b42f-f1bb29db8bd4",
+    "profile_id": "7eca4579-7ed9-4552-5da6-738126660be3",
+    "title": "clould object storage",
+    "description": "Streamlined solution for organizing, storing, and accessing user data with enhanced performance and user-friendly interface.",
+    "version": "2.0",
+    "environment_id": "e9866102-cc86-475a-b12a-136a5c576dc8",
+    "control_ids": [
+        "93078ed0-52bd-45d6-a324-d93d92bbe4c0",
+        "474b35fd-c941-4eaf-bbea-ebad0c98dbf0",
+        "fc164c75-6b58-49a8-9acc-6e65ff3a3eb6",
+        "28c68778-26a5-472f-bcfc-d4740a9d1a81",
+        "23cbd05a-3e2e-442d-a701-1e0cd9c14990",
+        "65850759-0937-4335-a55b-b356ec79e887"
+    ]
+}

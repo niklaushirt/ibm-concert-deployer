@@ -1,0 +1,73 @@
+{
+  "bomFormat": "ConcertDef",
+  "specVersion": "1.0.2",
+  "serialNumber": "urn:ibm:appmgmt:slacksim:mern-node-app:build:184",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2024-04-23T03:08:47Z",
+    "component": {
+      "type": "build",
+      "name": "mern-node-app",
+      "version": "184"
+    },
+    "properties": [
+      {
+        "name": "build-number",
+        "value": "184"
+      }
+    ]
+  },
+  "components": [
+    {
+      "bom-ref": "img:mern-node-app",
+      "type": "container",
+      "name": "us.icr.io/icr4mcc/mern-node-app",
+      "purl": "us.icr.io/icr4mcc/mern-node-app:184-main-2fdc2b0cb46756ba6d54bcf660aeb92748e40beb",
+      "properties": [
+        {
+          "name": "uri",
+          "value": "us.icr.io/icr4mcc/mern-node-app:184-main-2fdc2b0cb46756ba6d54bcf660aeb92748e40beb@sha256:e9c654240d56276d6bde9ea12d47f495462f43480a86a12c2714e70f64bba2d3"
+        },
+        {
+          "name": "tag",
+          "value": "184-main-2fdc2b0cb46756ba6d54bcf660aeb92748e40beb"
+        },
+        {
+          "name": "digest",
+          "value": "sha256:e9c654240d56276d6bde9ea12d47f495462f43480a86a12c2714e70f64bba2d3"
+        }
+      ]
+    },
+    {
+      "bom-ref": "repository:coderepo:github:mern-node-app",
+      "type": "code",
+      "name": "mern-node-app",
+      "purl": "https://github.ibm.com/rong/mern-node-app",
+      "properties": [
+        {
+          "name": "commit_sha",
+          "value": "2fdc2b0cb46756ba6d54bcf660aeb92748e40beb"
+        },
+        {
+          "name": "branch",
+          "value": "main"
+        }
+      ]
+    },
+    {
+      "bom-ref": "sbom:coderepo:mern-node-app",
+      "type": "cyclonedx_sbom",
+      "name": "mern-node-app",
+      "serialNumber": "urn:uuid:a582da87-b0d1-4c53-80d8-94c1824829d4",
+      "version": "1"
+    }
+  ],
+  "dependencies": [
+    {
+      "ref": "sbom:coderepo:mern-node-app",
+      "dependsOn": [
+        "repository:coderepo:github:mern-node-app"
+      ]
+    }
+  ]
+}

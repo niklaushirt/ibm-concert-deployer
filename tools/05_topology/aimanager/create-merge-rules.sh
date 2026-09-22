@@ -1,0 +1,102 @@
+echo "Create Rules - Starting..."
+export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
+
+
+
+
+
+export TOPOLOGY_REST_USR=$(oc get secret aiops-topology-asm-credentials -n $AIOPS_NAMESPACE -o jsonpath='{.data.username}' | base64 --decode)
+export TOPOLOGY_REST_PWD=$(oc get secret aiops-topology-asm-credentials -n $AIOPS_NAMESPACE -o jsonpath='{.data.password}' | base64 --decode)
+export LOGIN="$TOPOLOGY_REST_USR:$TOPOLOGY_REST_PWD"
+
+#oc delete route  topology-merge -n $AIOPS_NAMESPACE
+# oc create route passthrough topology-merge -n $AIOPS_NAMESPACE --insecure-policy="Redirect" --service=aiops-topology-merge --port=https-merge-api
+export MERGE_ROUTE="https://"$(oc get route -n $AIOPS_NAMESPACE aiops-topology-merge -o jsonpath={.spec.host})
+
+
+echo "URL: $MERGE_ROUTE/1.0/merge/"
+echo "LOGIN: $LOGIN"
+
+
+echo "Wait 5 seconds"
+sleep 5
+
+echo "Create Merge RULE..."
+
+## MERGE CREATE
+curl -X "POST" "$MERGE_ROUTE/1.0/merge/rules" --insecure \
+     -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255' \
+     -H 'content-type: application/json' \
+     -u $LOGIN \
+     -d $'{
+     "name": "MatchTokenDeployName",
+    "ruleType": "matchTokensRule",
+    "entityTypes": ["deployment"],
+    "tokens": ["name"],
+    "ruleStatus": "enabled",
+    "observers": ["*"],
+    "providers": ["*"]
+}'
+
+## MERGE CREATE
+curl -X "POST" "$MERGE_ROUTE/1.0/merge/rules" --insecure \
+     -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255' \
+     -H 'content-type: application/json' \
+     -u $LOGIN \
+     -d $'{
+     "name": "MergeTokenDeployNameRobotShop",
+    "ruleType": "mergeRule",
+    "entityTypes": ["deployment"],
+    "tokens": ["name"],
+    "ruleStatus": "enabled",
+    "observers": ["*"],
+    "providers": ["FILE.OBSERVER:robot-shop-file.txt"]
+}'
+
+
+curl -X "POST" "$MERGE_ROUTE/1.0/merge/rules" --insecure \
+    -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255' \
+    -H 'content-type: application/json' \
+    -u $LOGIN \
+    -d $'{
+    "name": "MergeTokenDeployNameSockShop",
+    "ruleType": "mergeRule",
+    "entityTypes": ["deployment","statefulset","container","router"],
+    "tokens": ["name"],
+    "ruleStatus": "enabled",
+    "observers": ["*"],
+    "providers": ["FILE.OBSERVER:sock-shop-file.txt", "KUBERNETES.OBSERVER:sock-shop"]
+}'
+
+
+echo "Disable RULE k8ServiceName..."
+
+export RULE_ID=$(curl "$MERGE_ROUTE/1.0/merge/rules?ruleType=matchTokensRule&_filter=name=k8ServiceName&_include_count=false&_field=*" -s --insecure \
+     -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255' \
+     -u $LOGIN| jq -r "._items[0]._id")
+
+
+
+curl -XPUT "$MERGE_ROUTE/1.0/merge/rules/$RULE_ID" -s --insecure \
+    --header 'Content-Type: application/json' \
+    --header 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255' \
+    -u $LOGIN \
+    -d '{
+      "name": "k8ServiceName",
+      "keyIndexName": "k8ServiceName",
+      "ruleType": "matchTokensRule",
+      "entityTypes": [
+        "service"
+      ],
+      "tokens": [
+        "name"
+      ],
+      "ruleStatus": "disabled",
+      
+      "observers": [
+        "kubernetes-observer"
+      ],
+      "providers": [
+        "*"
+      ]
+    }' 

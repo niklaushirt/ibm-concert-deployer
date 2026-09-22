@@ -1,0 +1,213 @@
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#     ________  __  ___   __________    ___         __                        __  _
+#    /  _/ __ )/  |/  /  /  _/_  __/   /   | __  __/ /_____  ____ ___  ____ _/ /_(_)___  ____
+#    / // __  / /|_/ /   / /  / /     / /| |/ / / / __/ __ \/ __ `__ \/ __ `/ __/ / __ \/ __ \
+#  _/ // /_/ / /  / /  _/ /  / /     / ___ / /_/ / /_/ /_/ / / / / / / /_/ / /_/ / /_/ / / / /
+# /___/_____/_/  /_/  /___/ /_/     /_/  |_\__,_/\__/\____/_/ /_/ /_/\__,_/\__/_/\____/_/ /_/
+#
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------------------------------------------------------"
+#  HAMMERDB POD
+#
+#  IBM AIOps
+#
+#  ©2026 nikh@ch.ibm.com
+# ---------------------------------------------------------------------------------------------------------------------------------------------------"
+# ---------------------------------------------------------------------------------------------------------------------------------------------------"
+# ---------------------------------------------------------------------------------------------------------------------------------------------------"
+# ---------------------------------------------------------------------------------------------------------------------------------------------------"
+
+
+apiVersion: v1                     
+kind: Namespace
+metadata:
+  name: ibm-installer
+---
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  name: ibm-installer-admin
+  namespace: ibm-installer
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: ibm-installer-admin
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+  - kind: ServiceAccount
+    name: ibm-installer-admin
+    namespace: ibm-installer
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: ibm-installer-default-admin
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+  - kind: ServiceAccount
+    name: default
+    namespace: ibm-installer
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: ibm-installer
+  name: ibm-aiops-hammerdb-pod
+  annotations: {}
+spec:
+  selector:
+    matchLabels:
+      app: hammerdb
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: hammerdb
+    spec:
+      containers:
+        - name: tools
+          image: tpcorg/hammerdb:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          env: []
+          command:
+            - /bin/bash
+            - -c
+            - |
+              #!/bin/bash
+              #set -x
+
+              echo "*****************************************************************************************************************************"
+              echo " ✅ STARTING: TOOL POD"
+              echo "*****************************************************************************************************************************"
+              echo ""
+              echo "  ⏳ START TIMESTAMP: $(date)"
+              echo ""
+              echo "------------------------------------------------------------------------------------------------------------------------------"
+              echo ""
+              echo "*****************************************************************************************************************************"
+              echo " ✅ INITIALIZATION - WAITING FOREVER"
+              echo "*****************************************************************************************************************************"
+
+
+              while true
+              do
+                sleep 1000
+              done
+          resources:
+            requests:
+              memory: "500M"
+              cpu: "500m"
+            limits:
+              memory: "500M"
+              cpu: "500m"
+
+      imagePullSecrets: []
+  paused: false
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: ibm-installer
+  name: ibm-aiops-hammerdbgui-pod
+  annotations: {}
+spec:
+  selector:
+    matchLabels:
+      app: hammerdbgui
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: hammerdbgui
+    spec:
+      containers:
+        - name: tools
+          image: tpcorg/hammerdb:latest-cloudtk
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          env: []
+          command:
+            - /bin/bash
+            - -c
+            - |
+              #!/bin/bash
+              #set -x
+
+              echo "*****************************************************************************************************************************"
+              echo " ✅ STARTING: TOOL POD"
+              echo "*****************************************************************************************************************************"
+              echo ""
+              echo "  ⏳ START TIMESTAMP: $(date)"
+              echo ""
+              echo "------------------------------------------------------------------------------------------------------------------------------"
+              echo ""
+              echo "*****************************************************************************************************************************"
+              echo " ✅ INITIALIZATION - WAITING FOREVER"
+              echo "*****************************************************************************************************************************"
+
+
+              while true
+              do
+                sleep 1000
+              done
+          resources:
+            requests:
+              memory: "500M"
+              cpu: "500m"
+            limits:
+              memory: "500M"
+              cpu: "500m"
+
+      imagePullSecrets: []
+  paused: false
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: ibm-installer
+  name: ibm-aiops-hammerdb-service
+spec:
+  ports:
+    - port: 8082
+      name: https
+    - port: 8081
+      name: http
+
+  selector:
+    app: hammerdbgui
+---
+
+
+
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: acmeair-auth-route
+  namespace: acme-air
+spec:
+  path: /auth
+  to:
+    kind: Service
+    name: acmeair-auth-service
+  port:
+    targetPort: 9080
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+  wildcardPolicy: None
+

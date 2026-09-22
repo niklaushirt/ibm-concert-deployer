@@ -1,0 +1,1880 @@
+
+# *************************************************************************************************************************************************
+# --------------------------------------------------------------------------------------------------------------------------------------
+# Connection Details
+# --------------------------------------------------------------------------------------------------------------------------------------
+# *************************************************************************************************************************************************
+
+- name: 🛰️  START - CREATE MERGE RULE
+  debug: 
+    msg="{{ lookup('pipe','date +%d.%m.%Y---%H:%M:%S') }}"
+
+
+- name: Log
+  shell: |
+    export MESSAGE="Create Topology Merge Rules"
+    export currentDate=$(date +%Y-%m-%d_%H:%M)
+    echo "---------------------------------------------------------------------------------------------------------------------------------------------------" >> ../install_{{current_feature.kind}}.log
+    echo $currentDate" - "$MESSAGE  >> ../install_{{current_feature.kind}}.log
+  ignore_errors: true
+
+- name: 📣 OCP CONSOLE - Create Openshift NOTIFICATION
+  shell: |
+    cat <<EOF | oc apply -f -
+    apiVersion: console.openshift.io/v1
+    kind: ConsoleNotification
+    metadata:
+      name: ibm-aiops-notification-status
+    spec:
+      backgroundColor: '#ffd500'
+      color: '#000'
+      location: {{global_config.position_ocp_notifications | default("BannerTop")}}
+      text: 'Installing {{current_feature.kind}} - Create Topology Merge Rules'    
+    EOF
+  ignore_errors: true
+  args:
+    executable: /bin/bash
+  when: (global_config.create_ocp_notifications | default(true))|bool == true  
+
+
+
+
+
+# --------------------------------------------------------------------------------------------------------------------------------------
+# AIOPS
+# --------------------------------------------------------------------------------------------------------------------------------------
+- name: 🚀 TOPOLOGY - CREATE BUSINESS CRITICALITIES
+  shell: |
+    set -x
+        
+    echo "Create CREATE BUSINESS CRITICALITIES"
+    export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
+
+    export TOPOLOGY_REST_USR=$(oc get secret aiops-topology-asm-credentials -n $AIOPS_NAMESPACE -o jsonpath='{.data.username}' | base64 --decode)
+    export TOPOLOGY_REST_PWD=$(oc get secret aiops-topology-asm-credentials -n $AIOPS_NAMESPACE -o jsonpath='{.data.password}' | base64 --decode)
+    # oc create route passthrough topology-manage -n $AIOPS_NAMESPACE --service=aiops-topology-topology --port=https-topology-api
+    export TOPO_MGT_ROUTE="https://"$(oc get route -n $AIOPS_NAMESPACE aiops-topology-topology -o jsonpath={.spec.host})
+
+ 
+    export LOGIN="$TOPOLOGY_REST_USR:$TOPOLOGY_REST_PWD"
+
+    echo "    URL: $TOPO_MGT_ROUTE/1.0/topology/metadata"
+    echo "    LOGIN: $LOGIN"
+
+        
+    curl -XPOST -k \
+    "$TOPO_MGT_ROUTE/1.0/topology/metadata" \
+    -H 'accept: application/json' \
+    -H 'content-type: application/json' \
+    -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255' \
+    -u $LOGIN \
+    -d '    {
+
+      "name": "Platinum",
+      "keyIndexName": "aiopsBusinessCriticalityMetadata::platinum",
+      "description": "Platinum priority",
+      "entityTypes": [
+        "AIOPS_BUSINESS_CRITICALITY"
+      ],
+      "businessCriticalityValue": 100,
+      "tags": [
+        "ASM_UI_CONFIG"
+      ]
+    }'
+
+
+    curl -XPOST -k \
+    "$TOPO_MGT_ROUTE/1.0/topology/metadata" \
+    -H 'accept: application/json' \
+    -H 'content-type: application/json' \
+    -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255' \
+    -u $LOGIN \
+    -d '    {
+
+      "name": "Gold",
+      "keyIndexName": "aiopsBusinessCriticalityMetadata::gold",
+      "description": "Gold priority",
+      "de   scription": "Gold priority",
+      "entityTypes": [
+        "AIOPS_BUSINESS_CRITICALITY"
+      ],
+      "businessCriticalityValue": 75,
+      "tags": [
+        "ASM_UI_CONFIG"
+      ]
+    }'
+
+      curl -XPOST -k \
+    "$TOPO_MGT_ROUTE/1.0/topology/metadata" \
+    -H 'accept: application/json' \
+    -H 'content-type: application/json' \
+    -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255' \
+    -u $LOGIN \
+    -d '    {
+
+      "name": "Silver",
+      "keyIndexName": "aiopsBusinessCriticalityMetadata::silver",
+      "description": "Silver priority",
+      "entityTypes": [
+        "AIOPS_BUSINESS_CRITICALITY"
+      ],
+      "businessCriticalityValue": 50,
+      "tags": [
+        "ASM_UI_CONFIG"
+      ]
+    }'
+
+
+    curl -XPOST -k \
+    "$TOPO_MGT_ROUTE/1.0/topology/metadata" \
+    -H 'accept: application/json' \
+    -H 'content-type: application/json' \
+    -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255' \
+    -u $LOGIN \
+    -d '    {
+
+      "name": "Bronze",
+      "keyIndexName": "aiopsBusinessCriticalityMetadata::bronze",
+      "description": "Bronze priority",
+      "entityTypes": [
+        "AIOPS_BUSINESS_CRITICALITY"
+      ],
+      "businessCriticalityValue": 25,
+      "tags": [
+        "ASM_UI_CONFIG"
+      ]
+    }'
+
+    curl -XPOST -k \
+    "$TOPO_MGT_ROUTE/1.0/topology/metadata" \
+    -H 'accept: application/json' \
+    -H 'content-type: application/json' \
+    -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255' \
+    -u $LOGIN \
+    -d '    {
+
+      "name": "Bronze",
+      "keyIndexName": "aiopsBusinessCriticalityMetadata::none",
+      "description": "Lowes priority",
+      "entityTypes": [
+        "AIOPS_BUSINESS_CRITICALITY"
+      ],
+      "businessCriticalityValue": 1,
+      "tags": [
+        "ASM_UI_CONFIG"
+      ]
+    }'
+  register: output_string
+  ignore_errors: true
+  args:
+    executable: /bin/bash
+
+
+
+
+
+
+
+# --------------------------------------------------------------------------------------------------------------------------------------
+# RISK PROXIMITY TOPOLOGY
+# --------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+- name: 🚀 TOPOLOGY - CREATE RISK TOPOLOGY OBSERVERS
+  shell: |
+    set -x
+
+
+
+      echo "----------------------------------------------------------------------------------------------------------"
+      echo "----------------------------------------------------------------------------------------------------------"
+      echo "🚀 TOPOLOGY - COPY RISK TOPOLOGY TO POD - $TOPOLOGY_NAME"
+      echo "----------------------------------------------------------------------------------------------------------"
+      echo "Create Custom Topology - Copy Topology to File Observer"
+
+      export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
+
+      export TOPOLOGY_NAME=risk-proximity
+      cd ibm-aiops-deployer/ansible
+
+      # Get FILE_OBSERVER_POD
+      FILE_OBSERVER_POD=$(oc get po -n $AIOPS_NAMESPACE -l app.kubernetes.io/instance=aiops-topology,app.kubernetes.io/name=file-observer -o jsonpath='{.items[0].metadata.name}')
+      echo $FILE_OBSERVER_POD
+      LOAD_FILE_NAME=$TOPOLOGY_NAME"-file.txt"
+
+      OS=$(uname -s | tr '[:upper:]' '[:lower:]')
+      if [[ "${OS}" == "darwin" ]]; then
+            echo "MAC"
+            FILE_OBSERVER_CAP=$(pwd)"/roles/ibm-aiops-demo-content/templates/topology/$LOAD_FILE_NAME"
+      else
+            FILE_OBSERVER_CAP="{{role_path}}/templates/topology/$LOAD_FILE_NAME"
+      fi    
+      echo $FILE_OBSERVER_POD
+      echo $FILE_OBSERVER_CAP
+      echo $TARGET_FILE_PATH
+      TARGET_FILE_PATH="/opt/ibm/netcool/asm/data/file-observer/${LOAD_FILE_NAME}"
+      echo "  Copying capture file [${FILE_OBSERVER_CAP}] to file observer pod"
+      echo "oc cp -n $AIOPS_NAMESPACE ${FILE_OBSERVER_CAP} ${FILE_OBSERVER_POD}:${TARGET_FILE_PATH}"
+      oc cp -n $AIOPS_NAMESPACE ${FILE_OBSERVER_CAP} ${FILE_OBSERVER_POD}:${TARGET_FILE_PATH}
+
+
+
+
+
+
+      echo "----------------------------------------------------------------------------------------------------------"
+      echo "----------------------------------------------------------------------------------------------------------"
+      echo "🚀 TOPOLOGY - CREATE OVERLAY TOPOLOGY - $TOPOLOGY_NAME"
+      echo "----------------------------------------------------------------------------------------------------------"
+      echo "Create Custom Topology - Create File Observer Job"
+
+
+      export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
+      LOAD_FILE_NAME=$TOPOLOGY_NAME"-file.txt"
+      TARGET_FILE_PATH="/opt/ibm/netcool/asm/data/file-observer/${LOAD_FILE_NAME}"
+
+
+      # Get Credentials
+      export TOPO_REST_USR=$(oc get secret aiops-topology-asm-credentials -n $AIOPS_NAMESPACE -o jsonpath='{.data.username}' | base64 --decode)
+      export TOPO_REST_PWD=$(oc get secret aiops-topology-asm-credentials -n $AIOPS_NAMESPACE -o jsonpath='{.data.password}' | base64 --decode)
+      export LOGIN="$TOPO_REST_USR:$TOPO_REST_PWD"
+
+      export TOPO_ROUTE="https://"$(oc get route -n $AIOPS_NAMESPACE aiops-topology-file-observer -o jsonpath={.spec.host})
+      export JOB_ID=$TOPOLOGY_NAME"-topology"
+
+      echo "  URL: $TOPO_ROUTE"
+      echo "  LOGIN: $LOGIN"
+      echo "  JOB_ID: $JOB_ID"
+
+
+      # Get FILE_OBSERVER JOB
+      curl -X "POST" "$TOPO_ROUTE/1.0/file-observer/jobs" --insecure \
+        -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255' \
+        -H "accept: application/json" \
+        -H "Content-Type: application/json" \
+        -u $LOGIN \
+        -d "{
+        \"unique_id\": \"${JOB_ID}\",
+        \"description\": \"Automatically created by Nicks scripts\",
+        \"parameters\": {
+            \"file\": \"${TARGET_FILE_PATH}\"
+            }
+        }"
+
+
+      sleep 10
+
+
+
+  register: output_string
+  ignore_errors: true
+  args:
+    executable: /bin/bash
+
+
+- name: 🟣  OUTPUT
+  debug: 
+    var: output_string.stdout_lines
+    verbosity: 1
+
+
+
+
+- name: 🚀 TOPOLOGY - CREATE US NETWORK RISK TOPOLOGY OBSERVERS
+  shell: |
+    set -x
+
+
+
+      echo "----------------------------------------------------------------------------------------------------------"
+      echo "----------------------------------------------------------------------------------------------------------"
+      echo "🚀 TOPOLOGY - COPY US NETWORK RISK TOPOLOGY TO POD - $TOPOLOGY_NAME"
+      echo "----------------------------------------------------------------------------------------------------------"
+      echo "Create Custom Topology - Copy Topology to File Observer"
+      
+      export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
+
+
+      export TOPOLOGY_NAME=us-network-risk
+      cd ibm-aiops-deployer/ansible
+
+      # Get FILE_OBSERVER_POD
+      FILE_OBSERVER_POD=$(oc get po -n $AIOPS_NAMESPACE -l app.kubernetes.io/instance=aiops-topology,app.kubernetes.io/name=file-observer -o jsonpath='{.items[0].metadata.name}')
+      echo $FILE_OBSERVER_POD
+      LOAD_FILE_NAME=$TOPOLOGY_NAME"-file.txt"
+
+      OS=$(uname -s | tr '[:upper:]' '[:lower:]')
+      if [[ "${OS}" == "darwin" ]]; then
+            echo "MAC"
+            FILE_OBSERVER_CAP=$(pwd)"/roles/ibm-aiops-demo-content/templates/topology/$LOAD_FILE_NAME"
+      else
+            FILE_OBSERVER_CAP="{{role_path}}/templates/topology/$LOAD_FILE_NAME"
+      fi    
+      echo $FILE_OBSERVER_POD
+      echo $FILE_OBSERVER_CAP
+      echo $TARGET_FILE_PATH
+      TARGET_FILE_PATH="/opt/ibm/netcool/asm/data/file-observer/${LOAD_FILE_NAME}"
+      echo "  Copying capture file [${FILE_OBSERVER_CAP}] to file observer pod"
+      echo "oc cp -n $AIOPS_NAMESPACE ${FILE_OBSERVER_CAP} ${FILE_OBSERVER_POD}:${TARGET_FILE_PATH}"
+      oc cp -n $AIOPS_NAMESPACE ${FILE_OBSERVER_CAP} ${FILE_OBSERVER_POD}:${TARGET_FILE_PATH}
+
+
+
+
+
+
+      echo "----------------------------------------------------------------------------------------------------------"
+      echo "----------------------------------------------------------------------------------------------------------"
+      echo "🚀 TOPOLOGY - CREATE OVERLAY TOPOLOGY - $TOPOLOGY_NAME"
+      echo "----------------------------------------------------------------------------------------------------------"
+      echo "Create Custom Topology - Create File Observer Job"
+
+
+      export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
+      LOAD_FILE_NAME=$TOPOLOGY_NAME"-file.txt"
+      TARGET_FILE_PATH="/opt/ibm/netcool/asm/data/file-observer/${LOAD_FILE_NAME}"
+
+
+      # Get Credentials
+      export TOPO_REST_USR=$(oc get secret aiops-topology-asm-credentials -n $AIOPS_NAMESPACE -o jsonpath='{.data.username}' | base64 --decode)
+      export TOPO_REST_PWD=$(oc get secret aiops-topology-asm-credentials -n $AIOPS_NAMESPACE -o jsonpath='{.data.password}' | base64 --decode)
+      export LOGIN="$TOPO_REST_USR:$TOPO_REST_PWD"
+
+      export TOPO_ROUTE="https://"$(oc get route -n $AIOPS_NAMESPACE aiops-topology-file-observer -o jsonpath={.spec.host})
+      export JOB_ID=$TOPOLOGY_NAME"-topology"
+
+      echo "  URL: $TOPO_ROUTE"
+      echo "  LOGIN: $LOGIN"
+      echo "  JOB_ID: $JOB_ID"
+
+
+      # Get FILE_OBSERVER JOB
+      curl -X "POST" "$TOPO_ROUTE/1.0/file-observer/jobs" --insecure \
+        -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255' \
+        -H "accept: application/json" \
+        -H "Content-Type: application/json" \
+        -u $LOGIN \
+        -d "{
+        \"unique_id\": \"${JOB_ID}\",
+        \"description\": \"Automatically created by Nicks scripts\",
+        \"parameters\": {
+            \"file\": \"${TARGET_FILE_PATH}\"
+            }
+        }"
+
+
+      sleep 10
+
+
+
+  register: output_string
+  ignore_errors: true
+  args:
+    executable: /bin/bash
+
+
+
+
+- name: 🟣  OUTPUT
+  debug: 
+    var: output_string.stdout_lines
+    verbosity: 1
+
+
+
+
+
+
+
+- name: 🚀 TOPOLOGY - CREATE EU RISK TOPOLOGY OBSERVERS
+  shell: |
+    set -x
+
+
+
+      echo "----------------------------------------------------------------------------------------------------------"
+      echo "----------------------------------------------------------------------------------------------------------"
+      echo "🚀 TOPOLOGY - COPY EU RISK TOPOLOGY TO POD - $TOPOLOGY_NAME"
+      echo "----------------------------------------------------------------------------------------------------------"
+      
+      export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
+
+      echo "Create Custom Topology - Copy Topology to File Observer"
+
+      export TOPOLOGY_NAME=risk-proximity-EU
+      cd ibm-aiops-deployer/ansible
+
+      # Get FILE_OBSERVER_POD
+      FILE_OBSERVER_POD=$(oc get po -n $AIOPS_NAMESPACE -l app.kubernetes.io/instance=aiops-topology,app.kubernetes.io/name=file-observer -o jsonpath='{.items[0].metadata.name}')
+      echo $FILE_OBSERVER_POD
+      LOAD_FILE_NAME=$TOPOLOGY_NAME"-file.txt"
+
+      OS=$(uname -s | tr '[:upper:]' '[:lower:]')
+      if [[ "${OS}" == "darwin" ]]; then
+            echo "MAC"
+            FILE_OBSERVER_CAP=$(pwd)"/roles/ibm-aiops-demo-content/templates/topology/$LOAD_FILE_NAME"
+      else
+            FILE_OBSERVER_CAP="{{role_path}}/templates/topology/$LOAD_FILE_NAME"
+      fi    
+      echo $FILE_OBSERVER_POD
+      echo $FILE_OBSERVER_CAP
+      echo $TARGET_FILE_PATH
+      TARGET_FILE_PATH="/opt/ibm/netcool/asm/data/file-observer/${LOAD_FILE_NAME}"
+      echo "  Copying capture file [${FILE_OBSERVER_CAP}] to file observer pod"
+      echo "oc cp -n $AIOPS_NAMESPACE ${FILE_OBSERVER_CAP} ${FILE_OBSERVER_POD}:${TARGET_FILE_PATH}"
+      oc cp -n $AIOPS_NAMESPACE ${FILE_OBSERVER_CAP} ${FILE_OBSERVER_POD}:${TARGET_FILE_PATH}
+
+
+
+
+
+
+      echo "----------------------------------------------------------------------------------------------------------"
+      echo "----------------------------------------------------------------------------------------------------------"
+      echo "🚀 TOPOLOGY - CREATE EU OVERLAY TOPOLOGY - $TOPOLOGY_NAME"
+      echo "----------------------------------------------------------------------------------------------------------"
+      echo "Create Custom Topology - Create File Observer Job"
+
+
+      export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
+      LOAD_FILE_NAME=$TOPOLOGY_NAME"-file.txt"
+      TARGET_FILE_PATH="/opt/ibm/netcool/asm/data/file-observer/${LOAD_FILE_NAME}"
+
+
+      # Get Credentials
+      export TOPO_REST_USR=$(oc get secret aiops-topology-asm-credentials -n $AIOPS_NAMESPACE -o jsonpath='{.data.username}' | base64 --decode)
+      export TOPO_REST_PWD=$(oc get secret aiops-topology-asm-credentials -n $AIOPS_NAMESPACE -o jsonpath='{.data.password}' | base64 --decode)
+      export LOGIN="$TOPO_REST_USR:$TOPO_REST_PWD"
+
+      export TOPO_ROUTE="https://"$(oc get route -n $AIOPS_NAMESPACE aiops-topology-file-observer -o jsonpath={.spec.host})
+      export JOB_ID=$TOPOLOGY_NAME"-topology"
+
+      echo "  URL: $TOPO_ROUTE"
+      echo "  LOGIN: $LOGIN"
+      echo "  JOB_ID: $JOB_ID"
+
+
+      # Get FILE_OBSERVER JOB
+      curl -X "POST" "$TOPO_ROUTE/1.0/file-observer/jobs" --insecure \
+        -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255' \
+        -H "accept: application/json" \
+        -H "Content-Type: application/json" \
+        -u $LOGIN \
+        -d "{
+        \"unique_id\": \"${JOB_ID}\",
+        \"description\": \"Automatically created by Nicks scripts\",
+        \"parameters\": {
+            \"file\": \"${TARGET_FILE_PATH}\"
+            }
+        }"
+
+
+      sleep 10
+
+
+
+  register: output_string
+  ignore_errors: true
+  args:
+    executable: /bin/bash
+
+
+- name: 🟣  OUTPUT
+  debug: 
+    var: output_string.stdout_lines
+    verbosity: 1
+
+
+
+
+- name: 🚀 TOPOLOGY - CREATE RISK TOPOLOGY FILTERS
+  shell: |
+    set -x
+        
+    export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
+    export CONSOLE_ROUTE=$(oc get route -n $AIOPS_NAMESPACE cp-console  -o jsonpath={.spec.host})          
+    export CPD_ROUTE=$(oc get route -n $AIOPS_NAMESPACE cpd  -o jsonpath={.spec.host})          
+    export CPADMIN_PWD=$(oc -n $AIOPS_NAMESPACE get secret platform-auth-idp-credentials -o jsonpath='{.data.admin_password}' | base64 -d && echo)
+    export CPADMIN_USER=$(oc -n $AIOPS_NAMESPACE get secret platform-auth-idp-credentials -o jsonpath='{.data.admin_username}' | base64 -d && echo)
+    export ACCESS_TOKEN=$(curl -s -k -H "Content-Type: application/x-www-form-urlencoded;charset=UTF-8" -d "grant_type=password&username=$CPADMIN_USER&password=$CPADMIN_PWD&scope=openid" https://$CONSOLE_ROUTE/idprovider/v1/auth/identitytoken|jq -r '.access_token')
+    export ZEN_API_HOST=$(oc get route -n $AIOPS_NAMESPACE cpd -o jsonpath='{.spec.host}')
+    export ZEN_TOKEN=$(curl -k -XGET https://$ZEN_API_HOST/v1/preauth/validateAuth \
+    -H "username: $CPADMIN_USER" \
+    -H "iam-token: $ACCESS_TOKEN"|jq -r '.accessToken')
+    echo $ZEN_TOKEN
+
+    export ROUTE=$(oc get route -n $AIOPS_NAMESPACE cpd -o jsonpath={.spec.host})
+
+
+    # curl "https://$ROUTE/api/p/hdm_asm_ui_api/1.0/ui-api/userconfig/filters" \
+    # -X 'GET' \
+    # -H 'content-type: application/json' \
+    # -H 'accept: */*' \
+    # -H 'content-type: application/json' \
+    # -H "Cookie: ___tk67142224=1655282500640; ibm-private-cloud-session=$ZEN_TOKEN" 
+
+
+
+    curl "https://$ROUTE/api/p/hdm_asm_ui_api/1.0/ui-api/userconfig/filters" \
+    -X 'POST' \
+    -H 'content-type: application/json' \
+    -H 'accept: */*' \
+    -H 'content-type: application/json' \
+    -H "Cookie: ___tk67142224=1655282500640; ibm-private-cloud-session=$ZEN_TOKEN" \
+    -d '{ 
+          "name": "Country: USA",
+          "description": "Automatically created by Nicks scripts",
+          "type": "inventory",
+          "mode": "basic",
+          "accessControlList": {
+              "read": {
+                  "teams": [],
+                  "users": [
+                      "*"
+                  ]
+              },
+              "admin": {
+                  "teams": [],
+                  "users": [
+                      "demo"
+                  ]
+              },
+              "write": {
+                  "teams": [],
+                  "users": []
+              }
+            },
+      "conditionSet": {
+        "conditions": [
+          {
+            "id": "geoLocationCondition",
+            "type": "condition",
+            "field": "geolocation",
+            "value": "POLYGON ((-124.980469 48.516604, -123.222656 48.370848, -123.046875 49.066668, -94.526367 49.037868, -89.516602 47.960502, -82.617188 45.367584, -82.529297 41.738528, -71.367188 45.305803, -69.169922 47.428087, -67.104492 44.527843, -80.683594 30.600094, -79.365234 25.045792, -82.397461 25.363882, -84.506836 29.496988, -89.516602 28.806174, -94.394531 29.075375, -97.646484 26.037042, -102.392578 29.840644, -117.597656 32.398516, -124.453125 40.111689, -124.980469 48.516604))",
+            "operator": "contains"
+          }
+        ]
+      }
+    }'
+
+
+
+    curl "https://$ROUTE/api/p/hdm_asm_ui_api/1.0/ui-api/userconfig/filters" \
+    -X 'POST' \
+    -H 'content-type: application/json' \
+    -H 'accept: */*' \
+    -H 'content-type: application/json' \
+    -H "Cookie: ___tk67142224=1655282500640; ibm-private-cloud-session=$ZEN_TOKEN" \
+    -d '{ 
+          "name": "Region: Western Europe",
+          "description": "Automatically created by Nicks scripts",
+          "type": "inventory",
+          "mode": "basic",
+          "accessControlList": {
+              "read": {
+                  "teams": [],
+                  "users": [
+                      "*"
+                  ]
+              },
+              "admin": {
+                  "teams": [],
+                  "users": [
+                      "demo"
+                  ]
+              },
+              "write": {
+                  "teams": [],
+                  "users": []
+              }
+            },
+      "conditionSet": {
+        "conditions": [
+          {
+            "id": "geoLocationCondition",
+            "type": "condition",
+            "field": "geolocation",
+            "value": "POLYGON ((-12.480469 43.261206, -6.855469 35.137879, 10.898438 37.857507, 18.632813 35.603719, 25.664063 35.56798, 28.476563 39.232253, 30.629883 44.308127, 30.498047 47.487513, 20.874023 55.9492, 15.380859 55.776573, 3.603516 55.128649, -2.724609 61.648162, -12.744141 59.623325, -12.480469 43.261206))",
+            "operator": "contains"
+          }
+        ]
+      }
+    }'
+
+
+
+
+    curl "https://$ROUTE/api/p/hdm_asm_ui_api/1.0/ui-api/userconfig/filters" \
+    -X 'POST' \
+    -H 'content-type: application/json' \
+    -H 'accept: */*' \
+    -H 'content-type: application/json' \
+    -H "Cookie: ___tk67142224=1655282500640; ibm-private-cloud-session=$ZEN_TOKEN" \
+    -d '{ 
+          "name": "Country: Switzerland",
+          "description": "Automatically created by Nicks scripts",
+          "type": "inventory",
+          "mode": "basic",
+          "accessControlList": {
+              "read": {
+                  "teams": [],
+                  "users": [
+                      "*"
+                  ]
+              },
+              "admin": {
+                  "teams": [],
+                  "users": [
+                      "demo"
+                  ]
+              },
+              "write": {
+                  "teams": [],
+                  "users": []
+              }
+            },
+      "conditionSet": {
+        "conditions": [
+          {
+            "id": "geoLocationCondition",
+            "type": "condition",
+            "field": "geolocation",
+            "value": "POLYGON ((9.008789 45.847934, 8.432007 46.452997, 8.00354 46.035109, 7.108154 45.867063, 6.729126 46.418926, 5.987549 46.103709, 6.053467 46.592844, 6.899414 47.282956, 6.866455 47.390912, 6.987305 47.513491, 7.190552 47.513491, 7.432251 47.483801, 7.613525 47.591346, 8.223267 47.609867, 8.448486 47.576526, 8.410034 47.713458, 8.55835 47.809465, 8.909912 47.646887, 9.18457 47.669087, 9.569092 47.528329, 9.651489 47.379754, 9.442749 47.058896, 9.865723 47.021461, 10.217285 46.863947, 10.387573 46.995241, 10.48645 46.871458, 10.409546 46.641894, 10.508423 46.607941, 10.447998 46.490829, 10.228271 46.607941, 10.063477 46.430285, 10.184326 46.29002, 10.079956 46.214051, 9.931641 46.362093, 9.536133 46.301406, 9.420776 46.475699, 9.30542 46.418926, 9.272461 46.221652, 9.102173 46.118942, 9.008789 45.847934))",
+            "operator": "contains"
+          }
+        ]
+      }
+    }'
+
+
+
+
+
+    curl "https://$ROUTE/api/p/hdm_asm_ui_api/1.0/ui-api/userconfig/filters" \
+    -X 'POST' \
+    -H 'content-type: application/json' \
+    -H 'accept: */*' \
+    -H 'content-type: application/json' \
+    -H "Cookie: ___tk67142224=1655282500640; ibm-private-cloud-session=$ZEN_TOKEN" \
+    -d '{ 
+          "name": "Area: Berne",
+          "description": "Automatically created by Nicks scripts",
+          "type": "inventory",
+          "mode": "basic",
+          "accessControlList": {
+              "read": {
+                  "teams": [],
+                  "users": [
+                      "*"
+                  ]
+              },
+              "admin": {
+                  "teams": [],
+                  "users": [
+                      "demo"
+                  ]
+              },
+              "write": {
+                  "teams": [],
+                  "users": []
+              }
+            },
+      "conditionSet": {
+        "conditions": [
+          {
+            "id": "geoLocationCondition",
+            "type": "condition",
+            "field": "geolocation",
+            "value": "POLYGON ((7.385216 46.957996, 7.400322 46.901258, 7.534904 46.889997, 7.57576 46.906653, 7.584 46.974396, 7.551727 47.018653, 7.436714 47.030823, 7.385216 46.957996))",
+            "operator": "contains"
+          }
+        ]
+      }
+    }'
+
+
+
+
+    curl "https://$ROUTE/api/p/hdm_asm_ui_api/1.0/ui-api/userconfig/filters" \
+    -X 'POST' \
+    -H 'content-type: application/json' \
+    -H 'accept: */*' \
+    -H 'content-type: application/json' \
+    -H "Cookie: ___tk67142224=1655282500640; ibm-private-cloud-session=$ZEN_TOKEN" \
+    -d '{ 
+          "name": "Area: London",
+          "description": "Automatically created by Nicks scripts",
+          "type": "inventory",
+          "mode": "basic",
+          "accessControlList": {
+              "read": {
+                  "teams": [],
+                  "users": [
+                      "*"
+                  ]
+              },
+              "admin": {
+                  "teams": [],
+                  "users": [
+                      "demo"
+                  ]
+              },
+              "write": {
+                  "teams": [],
+                  "users": []
+              }
+            },
+      "conditionSet": {
+        "conditions": [
+          {
+            "id": "geoLocationCondition",
+            "type": "condition",
+            "field": "geolocation",
+            "value": "POLYGON ((-0.181274 51.261915, -0.532837 51.409486, -0.494385 51.679368, 0.087891 51.68618, 0.291138 51.556582, 0.175781 51.28597, -0.181274 51.261915))",
+            "operator": "contains"
+          }
+        ]
+      }
+    }'
+
+
+
+    curl "https://$ROUTE/api/p/hdm_asm_ui_api/1.0/ui-api/userconfig/filters" \
+    -X 'POST' \
+    -H 'content-type: application/json' \
+    -H 'accept: */*' \
+    -H 'content-type: application/json' \
+    -H "Cookie: ___tk67142224=1655282500640; ibm-private-cloud-session=$ZEN_TOKEN" \
+    -d '{ 
+          "name": "Infra: Network Equipment",
+          "description": "Automatically created by Nicks scripts",
+          "type": "inventory",
+          "mode": "basic",
+          "accessControlList": {
+              "read": {
+                  "teams": [],
+                  "users": [
+                      "*"
+                  ]
+              },
+              "admin": {
+                  "teams": [],
+                  "users": [
+                      "demo"
+                  ]
+              },
+              "write": {
+                  "teams": [],
+                  "users": []
+              }
+            },
+            "conditionSet": {
+                "conditions": [{
+                    "id": "filterBuilderCondition-myrouter",
+                    "type": "condition",
+                    "field": "entityTypes",
+                    "operator": "includesAny",
+                    "value": ["router","switch","location","networkinterface","fiberPort","fiberConnection"]
+                }]
+            }
+    }'
+
+
+    curl "https://$ROUTE/api/p/hdm_asm_ui_api/1.0/ui-api/userconfig/filters" \
+    -X 'POST' \
+    -H 'content-type: application/json' \
+    -H 'accept: */*' \
+    -H 'content-type: application/json' \
+    -H "Cookie: ___tk67142224=1655282500640; ibm-private-cloud-session=$ZEN_TOKEN" \
+    -d '{ 
+          "name": "_Global Risks",
+          "description": "Automatically created by Nicks scripts",
+          "type": "inventory",
+          "mode": "basic",
+          "accessControlList": {
+              "read": {
+                  "teams": [],
+                  "users": [
+                      "*"
+                  ]
+              },
+              "admin": {
+                  "teams": [],
+                  "users": [
+                      "demo"
+                  ]
+              },
+              "write": {
+                  "teams": [],
+                  "users": []
+              }
+            },
+            "conditionSet": {
+                "conditions": [{
+                    "id": "filterBuilderCondition-myrisks",
+                    "type": "condition",
+                    "field": "entityTypes",
+                    "operator": "includesAny",
+                    "value": ["fire","alertHeadline","weatherAlert","wildfire","earthquake","storm","tsunami","volcano","avalanche","landslide","drought","heatwave","coldwave","wildfire","hazardousMaterialRelease","nuclearIncident"]
+                }]
+            }
+    }'
+
+
+
+
+
+    curl "https://$ROUTE/api/p/hdm_asm_ui_api/1.0/ui-api/userconfig/filters" \
+    -X 'POST' \
+    -H 'content-type: application/json' \
+    -H 'accept: */*' \
+    -H 'content-type: application/json' \
+    -H "Cookie: ___tk67142224=1655282500640; ibm-private-cloud-session=$ZEN_TOKEN" \
+    -d '{ 
+          "name": "App: RobotShop",
+          "description": "Automatically created by Nicks scripts",
+          "type": "inventory",
+          "mode": "basic",
+          "accessControlList": {
+              "read": {
+                  "teams": [],
+                  "users": [
+                      "*"
+                  ]
+              },
+              "admin": {
+                  "teams": [],
+                  "users": [
+                      "demo"
+                  ]
+              },
+              "write": {
+                  "teams": [],
+                  "users": []
+              }
+            },
+            "conditionSet": {
+            "conditions": [{
+                "id": "filterBuilderCondition-1754913872305",
+                "field": "tags",
+                "operator": "matches",
+                "value": ["namespace:robot-shop"],
+                "type": "condition"
+            }]
+            }
+    }'
+
+
+
+
+
+    curl "https://$ROUTE/api/p/hdm_asm_ui_api/1.0/ui-api/userconfig/filters" \
+    -X 'POST' \
+    -H 'content-type: application/json' \
+    -H 'accept: */*' \
+    -H 'content-type: application/json' \
+    -H "Cookie: ___tk67142224=1655282500640; ibm-private-cloud-session=$ZEN_TOKEN" \
+    -d '{ 
+          "name": "App: SockShop",
+          "description": "Automatically created by Nicks scripts",
+          "type": "inventory",
+          "mode": "basic",
+          "accessControlList": {
+              "read": {
+                  "teams": [],
+                  "users": [
+                      "*"
+                  ]
+              },
+              "admin": {
+                  "teams": [],
+                  "users": [
+                      "demo"
+                  ]
+              },
+              "write": {
+                  "teams": [],
+                  "users": []
+              }
+            },
+            "conditionSet": {
+            "conditions": [{
+                "id": "filterBuilderCondition-1754913872305",
+                "field": "tags",
+                "operator": "matches",
+                "value": ["namespace:sock-shop"],
+                "type": "condition"
+            }]
+            }
+    }'
+
+
+
+    
+    curl "https://$ROUTE/api/p/hdm_asm_ui_api/1.0/ui-api/userconfig/filters" \
+    -X 'POST' \
+    -H 'content-type: application/json' \
+    -H 'accept: */*' \
+    -H 'content-type: application/json' \
+    -H "Cookie: ___tk67142224=1655282500640; ibm-private-cloud-session=$ZEN_TOKEN" \
+    -d '{ 
+          "name": "App: ACME",
+          "description": "Automatically created by Nicks scripts",
+          "type": "inventory",
+          "mode": "basic",
+          "accessControlList": {
+              "read": {
+                  "teams": [],
+                  "users": [
+                      "*"
+                  ]
+              },
+              "admin": {
+                  "teams": [],
+                  "users": [
+                      "demo"
+                  ]
+              },
+              "write": {
+                  "teams": [],
+                  "users": []
+              }
+            },
+            "conditionSet": {
+            "conditions": [{
+                "id": "filterBuilderCondition-1754913872305",
+                "field": "tags",
+                "operator": "matches",
+                "value": ["namespace:acme"],
+                "type": "condition"
+            }]
+            }
+    }'
+
+
+    curl "https://$ROUTE/api/p/hdm_asm_ui_api/1.0/ui-api/userconfig/filters" \
+    -X 'POST' \
+    -H 'content-type: application/json' \
+    -H 'accept: */*' \
+    -H 'content-type: application/json' \
+    -H "Cookie: ___tk67142224=1655282500640; ibm-private-cloud-session=$ZEN_TOKEN" \
+    -d '{ 
+          "name": "Infra: Fiber Network",
+          "description": "Automatically created by Nicks scripts",
+          "type": "inventory",
+          "mode": "basic",
+          "accessControlList": {
+              "read": {
+                  "teams": [],
+                  "users": [
+                      "*"
+                  ]
+              },
+              "admin": {
+                  "teams": [],
+                  "users": [
+                      "demo"
+                  ]
+              },
+              "write": {
+                  "teams": [],
+                  "users": []
+              }
+            },
+            "conditionSet": {
+            "conditions": [{
+                "id": "filterBuilderCondition-1754913872305",
+                "field": "tags",
+                "operator": "matches",
+                "value": ["app:telco"],
+                "type": "condition"
+            }]
+            }
+    }'
+
+
+
+
+
+  register: output_string
+  ignore_errors: true
+  args:
+    executable: /bin/bash
+
+- name: 🟣  OUTPUT
+  debug: 
+    var: output_string.stdout_lines
+    verbosity: 1
+
+
+
+
+- name: 🚀 TOPOLOGY - CREATE RISK TOPOLOGY TEMPLATES
+  shell: |
+    set -x
+        
+
+    export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
+    export CONSOLE_ROUTE=$(oc get route -n $AIOPS_NAMESPACE cp-console  -o jsonpath={.spec.host})          
+    export CPD_ROUTE=$(oc get route -n $AIOPS_NAMESPACE cpd  -o jsonpath={.spec.host})          
+    export CPADMIN_PWD=$(oc -n $AIOPS_NAMESPACE get secret platform-auth-idp-credentials -o jsonpath='{.data.admin_password}' | base64 -d && echo)
+    export CPADMIN_USER=$(oc -n $AIOPS_NAMESPACE get secret platform-auth-idp-credentials -o jsonpath='{.data.admin_username}' | base64 -d && echo)
+    export ACCESS_TOKEN=$(curl -s -k -H "Content-Type: application/x-www-form-urlencoded;charset=UTF-8" -d "grant_type=password&username=$CPADMIN_USER&password=$CPADMIN_PWD&scope=openid" https://$CONSOLE_ROUTE/idprovider/v1/auth/identitytoken|jq -r '.access_token')
+    export ZEN_API_HOST=$(oc get route -n $AIOPS_NAMESPACE cpd -o jsonpath='{.spec.host}')
+    export ZEN_TOKEN=$(curl -k -XGET https://$ZEN_API_HOST/v1/preauth/validateAuth \
+    -H "username: $CPADMIN_USER" \
+    -H "iam-token: $ACCESS_TOKEN"|jq -r '.accessToken')
+    echo $ZEN_TOKEN
+
+    export ROUTE=$(oc get route -n $AIOPS_NAMESPACE cpd -o jsonpath={.spec.host})
+
+
+
+      # ---------------------------------
+      # inGroup
+      # ---------------------------------
+
+
+    export result=$(curl "https://$ROUTE/api/p/hdm_asm_ui_api/1.0/ui-api/templates?templateType=token" \
+    -X 'POST' \
+    -H 'content-type: application/json' \
+    -H 'accept: */*' \
+    -H 'content-type: application/json' \
+    -H "Cookie: ___tk67142224=1655282500640; ibm-private-cloud-session=$ZEN_TOKEN" \
+    -d ' {
+      "keyIndexName": "topologyTemplate:inGroupTemplate",
+      "templateType": "token",
+      "description": "Automatically created by Nicks scripts",
+      "extraProperties": {
+        "correlatable": "true",
+        "iconId": "network",
+        "window": {
+          "type": "rolling",
+          "durationMS": 900000
+        },
+        "defaultHopType": "e2e"
+      },
+      "userId": "demo",
+      "_groupCount": 0,
+      "name": "inGroupTemplate",
+      "entityTypes": ["network"]
+    }')
+
+
+
+
+
+    export result=$(curl "https://$ROUTE/api/p/hdm_asm_ui_api/1.0/ui-api/templates?templateType=token" \
+    -X 'POST' \
+    -H 'content-type: application/json' \
+    -H 'accept: */*' \
+    -H 'content-type: application/json' \
+    -H "Cookie: ___tk67142224=1655282500640; ibm-private-cloud-session=$ZEN_TOKEN" \
+    -d ' {
+      "keyIndexName": "topologyTemplate:inGroupTemplate",
+      "templateType": "token",
+      "description": "Automatically created by Nicks scripts",
+      "extraProperties": {
+        "correlatable": "true",
+        "iconId": "network",
+        "window": {
+          "type": "rolling",
+          "durationMS": 900000
+        },
+        "defaultHopType": "e2e"
+      },
+      "userId": "demo",
+      "_groupCount": 0,
+      "name": "inGroupTemplate",
+      "entityTypes": ["network"]
+    }')
+
+    export templateID=$(echo $result | jq -r '._id')
+    echo $templateID
+
+
+
+    export resultRule=$(curl "https://$ROUTE/api/p/hdm_asm_ui_api/1.0/ui-api/rules" \
+    -X 'POST' \
+    -H 'content-type: application/json' \
+    -H 'accept: */*' \
+    -H 'content-type: application/json' \
+    -H "Cookie: ___tk67142224=1655282500640; ibm-private-cloud-session=$ZEN_TOKEN" \
+    -d '{
+        "name": "inGroupTemplate--inGroupRule",
+        "ruleType": "groupPerTokenRule",
+        "ruleStatus": "enabled",
+        "tokens": ["Group ${inGroup}"],
+        "observers": [],
+        "providers": [],
+        "entityTypes": [],
+        "templateName": "inGroupTemplate",
+        "_references": [{
+            "_fromId": "'${templateID}'",
+            "_edgeType": "managesRule"
+        }]
+    }')
+
+
+    echo $resultRule
+
+
+      # ---------------------------------
+      # city
+      # ---------------------------------
+
+      export result=$(curl "https://$ROUTE/api/p/hdm_asm_ui_api/1.0/ui-api/templates?templateType=token" \
+      -X 'POST' \
+      -H 'content-type: application/json' \
+      -H 'accept: */*' \
+      -H 'content-type: application/json' \
+      -H "Cookie: ___tk67142224=1655282500640; ibm-private-cloud-session=$ZEN_TOKEN" \
+      -d '{
+          "name": "cityTemplate",
+          "description": "Automatically created by Nicks scripts",
+          "keyIndexName": "topologyTemplate:cityTemplate",
+          "templateType": "token",
+          "entityTypes": ["infrastructure"],
+          "extraProperties": {
+              "correlatable": true,
+              "iconId": "site",
+              "window": {
+                  "type": "rolling",
+                  "durationMS": 900000
+              },
+              "defaultHopType": "e2e"
+          },
+          "tags": []
+      }')
+
+
+
+
+
+      export result=$(curl "https://$ROUTE/api/p/hdm_asm_ui_api/1.0/ui-api/templates?templateType=token" \
+      -X 'POST' \
+      -H 'content-type: application/json' \
+      -H 'accept: */*' \
+      -H 'content-type: application/json' \
+      -H "Cookie: ___tk67142224=1655282500640; ibm-private-cloud-session=$ZEN_TOKEN" \
+      -d '{
+          "name": "cityTemplate",
+          "description": "Automatically created by Nicks scripts",
+          "keyIndexName": "topologyTemplate:cityTemplate",
+          "templateType": "token",
+          "entityTypes": ["infrastructure"],
+          "extraProperties": {
+              "correlatable": true,
+              "iconId": "site",
+              "window": {
+                  "type": "rolling",
+                  "durationMS": 900000
+              },
+              "defaultHopType": "e2e"
+          },
+          "tags": []
+      }')
+
+
+
+
+      export templateID=$(echo $result | jq -r '._id')
+      echo $templateID
+
+      curl "https://$ROUTE/api/p/hdm_asm_ui_api/1.0/ui-api/rules" \
+      -X 'POST' \
+      -H 'content-type: application/json' \
+      -H 'accept: */*' \
+      -H 'content-type: application/json' \
+      -H "Cookie: ___tk67142224=1655282500640; ibm-private-cloud-session=$ZEN_TOKEN" \
+      -d '{
+          "name": "cityTemplate--cityRule",
+          "ruleType": "groupPerTokenRule",
+          "ruleStatus": "enabled",
+          "tokens": ["Site ${city}"],
+          "observers": [],
+          "providers": [],
+          "entityTypes": [],
+          "templateName": "cityTemplate",
+          "_references": [{
+              "_fromId": "'${templateID}'",
+              "_edgeType": "managesRule"
+          }]
+      }'
+
+
+
+
+
+
+
+
+
+      # ---------------------------------
+      # app
+      # ---------------------------------
+
+      export result=$(curl "https://$ROUTE/api/p/hdm_asm_ui_api/1.0/ui-api/templates?templateType=token" \
+      -X 'POST' \
+      -H 'content-type: application/json' \
+      -H 'accept: */*' \
+      -H 'content-type: application/json' \
+      -H "Cookie: ___tk67142224=1655282500640; ibm-private-cloud-session=$ZEN_TOKEN" \
+      -d '{
+          "name": "appTemplate",
+          "description": "Automatically created by Nicks scripts",
+          "keyIndexName": "topologyTemplate:appTemplate",
+          "templateType": "token",
+          "entityTypes": ["namespace"],
+          "extraProperties": {
+              "correlatable": true,
+              "iconId": "application",
+              "window": {
+                  "type": "rolling",
+                  "durationMS": 900000
+              },
+              "defaultHopType": "e2e"
+          },
+          "tags": []
+      }')
+
+
+
+      export result=$(curl "https://$ROUTE/api/p/hdm_asm_ui_api/1.0/ui-api/templates?templateType=token" \
+      -X 'POST' \
+      -H 'content-type: application/json' \
+      -H 'accept: */*' \
+      -H 'content-type: application/json' \
+      -H "Cookie: ___tk67142224=1655282500640; ibm-private-cloud-session=$ZEN_TOKEN" \
+      -d '{
+          "name": "appTemplate",
+          "description": "Automatically created by Nicks scripts",
+          "keyIndexName": "topologyTemplate:appTemplate",
+          "templateType": "token",
+          "entityTypes": ["namespace"],
+          "extraProperties": {
+              "correlatable": true,
+              "iconId": "application",
+              "window": {
+                  "type": "rolling",
+                  "durationMS": 900000
+              },
+              "defaultHopType": "e2e"
+          },
+          "tags": []
+      }')
+
+
+
+
+      export templateID=$(echo $result | jq -r '._id')
+      echo $templateID
+
+      curl "https://$ROUTE/api/p/hdm_asm_ui_api/1.0/ui-api/rules" \
+      -X 'POST' \
+      -H 'content-type: application/json' \
+      -H 'accept: */*' \
+      -H 'content-type: application/json' \
+      -H "Cookie: ___tk67142224=1655282500640; ibm-private-cloud-session=$ZEN_TOKEN" \
+      -d '{
+          "name": "appTemplate--appRule",
+          "ruleType": "groupPerTokenRule",
+          "ruleStatus": "enabled",
+          "tokens": ["Application ${app}"],
+          "observers": [],
+          "providers": [],
+          "entityTypes": [],
+          "templateName": "appTemplate",
+          "_references": [{
+              "_fromId": "'${templateID}'",
+              "_edgeType": "managesRule"
+          }]
+      }'
+
+
+
+      # ---------------------------------
+      # location
+      # ---------------------------------
+
+      export result=$(curl "https://$ROUTE/api/p/hdm_asm_ui_api/1.0/ui-api/templates?templateType=token" \
+      -X 'POST' \
+      -H 'content-type: application/json' \
+      -H 'accept: */*' \
+      -H 'content-type: application/json' \
+      -H "Cookie: ___tk67142224=1655282500640; ibm-private-cloud-session=$ZEN_TOKEN" \
+      -d '{
+          "name": "locationTemplate",
+          "description": "Automatically created by Nicks scripts",
+          "keyIndexName": "topologyTemplate:locationTemplate",
+          "templateType": "token",
+          "entityTypes": ["infrastructure"],
+          "extraProperties": {
+              "correlatable": true,
+              "iconId": "site",
+              "window": {
+                  "type": "rolling",
+                  "durationMS": 900000
+              },
+              "defaultHopType": "e2e"
+          },
+          "tags": []
+      }')
+
+
+
+      export result=$(curl "https://$ROUTE/api/p/hdm_asm_ui_api/1.0/ui-api/templates?templateType=token" \
+      -X 'POST' \
+      -H 'content-type: application/json' \
+      -H 'accept: */*' \
+      -H 'content-type: application/json' \
+      -H "Cookie: ___tk67142224=1655282500640; ibm-private-cloud-session=$ZEN_TOKEN" \
+      -d '{
+          "name": "locationTemplate",
+          "description": "Automatically created by Nicks scripts",
+          "keyIndexName": "topologyTemplate:locationTemplate",
+          "templateType": "token",
+          "entityTypes": ["infrastructure"],
+          "extraProperties": {
+              "correlatable": true,
+              "iconId": "site",
+              "window": {
+                  "type": "rolling",
+                  "durationMS": 900000
+              },
+              "defaultHopType": "e2e"
+          },
+          "tags": []
+      }')
+
+
+
+
+      export templateID=$(echo $result | jq -r '._id')
+      echo $templateID
+
+      curl "https://$ROUTE/api/p/hdm_asm_ui_api/1.0/ui-api/rules" \
+      -X 'POST' \
+      -H 'content-type: application/json' \
+      -H 'accept: */*' \
+      -H 'content-type: application/json' \
+      -H "Cookie: ___tk67142224=1655282500640; ibm-private-cloud-session=$ZEN_TOKEN" \
+      -d '{
+          "name": "locationTemplate--locationRule",
+          "ruleType": "groupPerTokenRule",
+          "ruleStatus": "enabled",
+          "tokens": ["Site ${location}"],
+          "observers": [],
+          "providers": [],
+          "entityTypes": [],
+          "templateName": "locationTemplate",
+          "_references": [{
+              "_fromId": "'${templateID}'",
+              "_edgeType": "managesRule"
+          }]
+      }'
+
+
+
+
+  register: output_string
+  ignore_errors: true
+  args:
+    executable: /bin/bash
+
+
+
+
+- name: 🚀 TOPOLOGY - RUN RISK TOPOLOGY OBSERVERS
+  shell: |
+    set -x
+
+    export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
+    export AIO_PLATFORM_ROUTE=$(oc get route -n $AIOPS_NAMESPACE aimanager-aio-controller -o jsonpath={.spec.host})
+
+    echo "        Namespace:          $AIOPS_NAMESPACE"
+    echo "        AIO_PLATFORM_ROUTE: $AIO_PLATFORM_ROUTE"
+    echo ""
+
+    export CONSOLE_ROUTE=$(oc get route -n $AIOPS_NAMESPACE cp-console  -o jsonpath={.spec.host})          
+    export CPD_ROUTE=$(oc get route -n $AIOPS_NAMESPACE cpd  -o jsonpath={.spec.host})          
+    export CPADMIN_PWD=$(oc -n $AIOPS_NAMESPACE get secret platform-auth-idp-credentials -o jsonpath='{.data.admin_password}' | base64 -d && echo)
+    export CPADMIN_USER=$(oc -n $AIOPS_NAMESPACE get secret platform-auth-idp-credentials -o jsonpath='{.data.admin_username}' | base64 -d && echo)
+    export ACCESS_TOKEN=$(curl -s -k -H "Content-Type: application/x-www-form-urlencoded;charset=UTF-8" -d "grant_type=password&username=$CPADMIN_USER&password=$CPADMIN_PWD&scope=openid" https://$CONSOLE_ROUTE/idprovider/v1/auth/identitytoken|jq -r '.access_token')
+    export ZEN_API_HOST=$(oc get route -n $AIOPS_NAMESPACE cpd -o jsonpath='{.spec.host}')
+    export ZEN_TOKEN=$(curl -k -XGET https://$ZEN_API_HOST/v1/preauth/validateAuth \
+    -H "username: $CPADMIN_USER" \
+    -H "iam-token: $ACCESS_TOKEN"|jq -r '.accessToken')
+    echo $ZEN_TOKEN
+
+
+
+    echo "Sucessfully logged in" 
+    echo ""
+    echo "Running K8S OBSERVER"
+
+
+
+    curl -X 'POST' --insecure \
+      "https://$AIO_PLATFORM_ROUTE/v1/observer/runjob/robot-shop" \
+      -H 'accept: application/json' \
+      -H 'Content-Type: application/json' \
+      -H "authorization: Bearer $ZEN_TOKEN"  
+
+
+    curl -X 'POST' --insecure \
+      "https://$AIO_PLATFORM_ROUTE/v1/observer/runjob/sock-shop" \
+      -H 'accept: application/json' \
+      -H 'Content-Type: application/json' \
+      -H "authorization: Bearer $ZEN_TOKEN"  
+
+    curl -X 'POST' --insecure \
+      "https://$AIO_PLATFORM_ROUTE/v1/observer/runjob/us-network-risk-topology" \
+      -H 'accept: application/json' \
+      -H 'Content-Type: application/json' \
+      -H "authorization: Bearer $ZEN_TOKEN"  
+
+
+    curl -X 'POST' --insecure \
+      "https://$AIO_PLATFORM_ROUTE/v1/observer/runjob/risk-proximity-EU-topology" \
+      -H 'accept: application/json' \
+      -H 'Content-Type: application/json' \
+      -H "authorization: Bearer $ZEN_TOKEN"  
+
+    curl -X 'POST' --insecure \
+      "https://$AIO_PLATFORM_ROUTE/v1/observer/runjob/acme-topology" \
+      -H 'accept: application/json' \
+      -H 'Content-Type: application/json' \
+      -H "authorization: Bearer $ZEN_TOKEN"  
+
+
+    curl -X 'POST' --insecure \
+      "https://$AIO_PLATFORM_ROUTE/v1/observer/runjob/risk-proximity-topology" \
+      -H 'accept: application/json' \
+      -H 'Content-Type: application/json' \
+      -H "authorization: Bearer $ZEN_TOKEN"  
+
+
+
+
+
+
+  register: output_string
+  ignore_errors: true
+  args:
+    executable: /bin/bash
+
+
+
+
+
+
+# --------------------------------------------------------------------------------------------------------------------------------------
+# AIOPS
+# --------------------------------------------------------------------------------------------------------------------------------------
+- name: 🚀 TOPOLOGY - CREATE MERGE RULES
+  shell: |
+    set -x
+    
+    echo "Create Rules - Starting..."
+    
+    export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
+
+    export TOPOLOGY_REST_USR=$(oc get secret aiops-topology-asm-credentials -n $AIOPS_NAMESPACE -o jsonpath='{.data.username}' | base64 --decode)
+    export TOPOLOGY_REST_PWD=$(oc get secret aiops-topology-asm-credentials -n $AIOPS_NAMESPACE -o jsonpath='{.data.password}' | base64 --decode)
+    export LOGIN="$TOPOLOGY_REST_USR:$TOPOLOGY_REST_PWD"
+
+    #oc delete route  topology-merge -n $AIOPS_NAMESPACE
+    # oc create route passthrough topology-merge -n $AIOPS_NAMESPACE --insecure-policy="Redirect" --service=aiops-topology-merge --port=https-merge-api
+    export MERGE_ROUTE="https://"$(oc get route -n $AIOPS_NAMESPACE aiops-topology-merge -o jsonpath={.spec.host})
+
+
+    echo "    URL: $MERGE_ROUTE/1.0/merge/"
+    echo "    LOGIN: $LOGIN"
+
+
+    echo "  Wait 5 seconds"
+    sleep 5
+
+
+
+    echo "  Create Merge RULE... MergeTokenDeployNameRobotShop"
+    curl -X "POST" "$MERGE_ROUTE/1.0/merge/rules" --insecure \
+        -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255' \
+        -H 'content-type: application/json' \
+        -u $LOGIN \
+        -d $'{
+        "name": "MergeTokenDeployNameRobotShop",
+        "ruleType": "mergeRule",
+        "entityTypes": ["deployment","statefulset","container","router"],
+        "tokens": ["name"],
+        "ruleStatus": "enabled",
+        "observers": ["*"],
+        "providers": ["FILE.OBSERVER:robot-shop-file.txt"]
+    }'
+
+    echo "  Create Merge RULE... MergeTokenDeployNameSockShop"
+    curl -X "POST" "$MERGE_ROUTE/1.0/merge/rules" --insecure \
+        -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255' \
+        -H 'content-type: application/json' \
+        -u $LOGIN \
+        -d $'{
+        "name": "MergeTokenDeployNameSockShop",
+        "ruleType": "mergeRule",
+        "entityTypes": ["deployment","statefulset","container","router"],
+        "tokens": ["name"],
+        "ruleStatus": "enabled",
+        "observers": ["*"],
+        "providers": ["FILE.OBSERVER:sock-shop-file.txt", "KUBERNETES.OBSERVER:sock-shop"]
+    }'
+
+
+    echo "  Create Merge RULE... MergeTokenNetworkinterfacesIDRobotShop"
+    curl -X "POST" "$MERGE_ROUTE/1.0/merge/rules" --insecure \
+        -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255' \
+        -H 'content-type: application/json' \
+        -u $LOGIN \
+        -d $'{
+        "name": "MergeTokenNetworkinterfacesIDRobotShop",
+        "ruleType": "mergeRule",
+        "entityTypes": ["networkinterface"],
+        "tokens": ["uniqueId"],
+        "ruleStatus": "enabled",
+        "observers": ["*"],
+        "providers": ["FILE.OBSERVER:robot-shop-file.txt"]
+    }'
+
+
+    echo "  Create Merge RULE... MergeTokenNetworkinterfacesIDSockShop"
+    curl -X "POST" "$MERGE_ROUTE/1.0/merge/rules" --insecure \
+        -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255' \
+        -H 'content-type: application/json' \
+        -u $LOGIN \
+        -d $'{
+        "name": "MergeTokenNetworkinterfacesIDSockShop",
+        "ruleType": "mergeRule",
+        "entityTypes": ["networkinterface"],
+        "tokens": ["uniqueId"],
+        "ruleStatus": "enabled",
+        "observers": ["*"],
+        "providers": ["FILE.OBSERVER:sock-shop-file.txt"]
+    }'
+
+    echo "  Disable RULE k8ServiceName..."
+
+    export RULE_ID=$(curl "$MERGE_ROUTE/1.0/merge/rules?ruleType=matchTokensRule&_filter=name=k8ServiceName&_include_count=false&_field=*" -s --insecure \
+        -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255' \
+        -u $LOGIN| jq -r "._items[0]._id")
+
+
+
+    curl -XPUT "$MERGE_ROUTE/1.0/merge/rules/$RULE_ID" -s --insecure \
+        --header 'Content-Type: application/json' \
+        --header 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255' \
+        -u $LOGIN \
+        -d '{
+          "name": "k8ServiceName",
+          "keyIndexName": "k8ServiceName",
+          "ruleType": "matchTokensRule",
+          "entityTypes": [
+            "service"
+          ],
+          "tokens": [
+            "name"
+          ],
+          "ruleStatus": "disabled",
+          
+          "observers": [
+            "kubernetes-observer"
+          ],
+          "providers": [
+            "*"
+          ]
+        }' 
+
+
+    echo "  Disable RULE instana-observer-events-kubernetes-service..."
+
+    export RULE_ID=$(curl "$MERGE_ROUTE/1.0/merge/rules?ruleType=matchTokensRule&_filter=name=instana-observer-events-kubernetes-service&_include_count=false&_field=*" -s --insecure \
+        -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255' \
+        -u $LOGIN| jq -r "._items[0]._id")
+
+
+
+    curl -XPUT "$MERGE_ROUTE/1.0/merge/rules/$RULE_ID" -s --insecure \
+        --header 'Content-Type: application/json' \
+        --header 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255' \
+        -u $LOGIN \
+        -d '{
+          "name": "k8ServiceName",
+          "keyIndexName": "k8ServiceName",
+          "ruleType": "matchTokensRule",
+          "entityTypes": [
+            "service"
+          ],
+          "tokens": [
+            "name"
+          ],
+          "ruleStatus": "disabled",
+          
+          "observers": [
+            "kubernetes-observer"
+          ],
+          "providers": [
+            "*"
+          ]
+        }' 
+
+
+
+  register: output_string
+  ignore_errors: true
+  args:
+    executable: /bin/bash
+
+
+- name: 🟣  OUTPUT
+  debug: 
+    var: output_string.stdout_lines
+    verbosity: 1
+
+
+
+
+
+
+
+# --------------------------------------------------------------------------------------------------------------------------------------
+# AIOPS
+# --------------------------------------------------------------------------------------------------------------------------------------
+- name: 🚀 PROBABLE CAUSE - CUSTOM WORD LIST
+  shell: |
+    set -x
+
+      echo "----------------------------------------------------------------------------------------------------------"
+      echo "----------------------------------------------------------------------------------------------------------"
+      echo "🚀 PROBABLE CAUSE - CUSTOM WORD LIST"
+      echo "----------------------------------------------------------------------------------------------------------"
+
+
+    export AIOPS_NAMESPACE=$(oc get po -A|grep aimanager-operator |awk '{print$1}')
+    export ROUTE=$(oc get -n $AIOPS_NAMESPACE route | grep ibm-nginx-svc | awk '{print $2}')
+    echo $ROUTE
+    PASS=$(oc get secret -n $AIOPS_NAMESPACE admin-user-details -o jsonpath='{.data.initial_admin_password}' | base64 --decode)
+    echo $PASS
+    export TOKEN=$(curl -k -s -X POST https://$ROUTE/icp4d-api/v1/authorize -H 'Content-Type: application/json' -d "{\"username\": \"admin\",\"password\": \"$PASS\"}" | jq .token | sed 's/\"//g')
+    echo $TOKEN
+
+
+
+    echo ""
+    echo ""
+    echo "----------------------------------------------------------------------------------------------------------"
+    echo "   🚀 PROBABLE CAUSE - BACKUP WORD LIST"
+    curl -k -X GET  --header 'Accept: application/json' -H "Authorization: Bearer ${TOKEN}" https://$ROUTE/aiops/api/issue-resolution/mime/v1/customisation/words -H "accept: application/json" -H "Content-Type: application/json" -H "X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255" > backup_words.json
+
+
+
+    echo ""
+    echo ""
+    echo "----------------------------------------------------------------------------------------------------------"
+    echo "   🚀 PROBABLE CAUSE - EMPTY WORD LIST"
+    curl -k -X POST --header 'Accept: application/json' -H "Authorization: Bearer ${TOKEN}" -H "Content-Type: application/json" https://$ROUTE/aiops/api/issue-resolution/mime/v1/customisation/words -H "accept: application/json" -H "X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255" -d '
+    {"words": [
+        {
+                "word": "empty",
+                "caseSenstive": false,
+                "weight": 99.0
+            }]
+        }'
+
+    curl -k -X GET  --header 'Accept: application/json' -H "Authorization: Bearer ${TOKEN}" https://$ROUTE/aiops/api/issue-resolution/mime/v1/customisation/words -H "accept: application/json" -H "Content-Type: application/json" -H "X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255" 
+
+
+
+
+    echo ""
+    echo ""
+    echo "----------------------------------------------------------------------------------------------------------"
+    echo "   🚀 PROBABLE CAUSE - LOAD WORD LIST"
+    curl -k -X POST --header 'Accept: application/json' -H "Authorization: Bearer ${TOKEN}" -H "Content-Type: application/json" https://$ROUTE/aiops/api/issue-resolution/mime/v1/customisation/words -H "accept: application/json" -H "X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255" -d '{"words": [
+      {
+            "word": "Commit",
+            "caseSenstive": true,
+            "weight": 300.0
+        }, 
+        {
+            "word": "Loss of Signal",
+            "caseSenstive": true,
+            "weight": 300.0
+        },
+        {
+            "word": "Erroneus",
+            "caseSenstive": true,
+            "weight": 150.0
+        },
+        {
+            "word": "change detected",
+            "caseSenstive": true,
+            "weight": 200.0
+        },
+        {
+            "word": "not responding",
+            "caseSenstive": false,
+            "weight": 150.0
+        },
+        {
+            "word": "LOF",
+            "caseSenstive": true,
+            "weight": 50.0
+        }, {
+            "word": "unreachable",
+            "caseSenstive": false,
+            "weight": 20.0
+        }, {
+            "word": "cpu",
+            "caseSenstive": false,
+            "weight": 40.0
+        }, {
+            "word": "utilization",
+            "caseSenstive": false,
+            "weight": 20.0
+        }, {
+            "word": "LOS",
+            "caseSenstive": true,
+            "weight": 60.0
+        }, {
+            "word": "100",
+            "caseSenstive": false,
+            "weight": 60.0
+        }, {
+            "word": "fail",
+            "caseSenstive": false,
+            "weight": 70.0
+        }, {
+            "word": "disk",
+            "caseSenstive": false,
+            "weight": 40.0
+        }, {
+            "word": "80",
+            "caseSenstive": false,
+            "weight": 30.0
+        }, {
+            "word": "change",
+            "caseSenstive": false,
+            "weight": 40.0
+        }, {
+            "word": "60",
+            "caseSenstive": false,
+            "weight": 15.0
+        }, {
+            "word": "85",
+            "caseSenstive": false,
+            "weight": 35.0
+        }, {
+            "word": "shutdown",
+            "caseSenstive": false,
+            "weight": 50.0
+        }, {
+            "word": "closed",
+            "caseSenstive": false,
+            "weight": 40.0
+        }, {
+            "word": "full",
+            "caseSenstive": false,
+            "weight": 40.0
+        }, {
+            "word": "critical",
+            "caseSenstive": false,
+            "weight": 50.0
+        }, {
+            "word": "configuration",
+            "caseSenstive": false,
+            "weight": 20.0
+        }, {
+            "word": "update",
+            "caseSenstive": false,
+            "weight": 40.0
+        }, {
+            "word": "battery",
+            "caseSenstive": false,
+            "weight": 40.0
+        }, {
+            "word": "malfunction",
+            "caseSenstive": false,
+            "weight": 40.0
+        }, {
+            "word": "down",
+            "caseSenstive": false,
+            "weight": 40.0
+        }, {
+            "word": "loss",
+            "caseSenstive": false,
+            "weight": 30.0
+        }, {
+            "word": "high",
+            "caseSenstive": false,
+            "weight": 40.0
+        }, {
+            "word": "lost",
+            "caseSenstive": false,
+            "weight": 40.0
+        }, {
+            "word": "fan",
+            "caseSenstive": false,
+            "weight": 40.0
+        }, {
+            "word": "90",
+            "caseSenstive": false,
+            "weight": 40.0
+        }, {
+            "word": "70",
+            "caseSenstive": false,
+            "weight": 20.0
+        }, {
+            "word": "shut down",
+            "caseSenstive": false,
+            "weight": 50.0
+        }, {
+            "word": "50",
+            "caseSenstive": false,
+            "weight": 5.0
+        }, {
+            "word": "95",
+            "caseSenstive": false,
+            "weight": 50.0
+        }, {
+            "word": "75",
+            "caseSenstive": false,
+            "weight": 25.0
+        }, {
+            "word": "utilisation",
+            "caseSenstive": false,
+            "weight": 20.0
+        }, {
+            "word": "55",
+            "caseSenstive": false,
+            "weight": 10.0
+        }, {
+            "word": "temperature",
+            "caseSenstive": false,
+            "weight": 40.0
+        }
+    ]
+    }'
+
+    curl -k -X GET  --header 'Accept: application/json' -H "Authorization: Bearer ${TOKEN}" https://$ROUTE/aiops/api/issue-resolution/mime/v1/customisation/words -H "accept: application/json" -H "Content-Type: application/json" -H "X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255" | jq
+
+
+  register: output_string
+  ignore_errors: true
+  args:
+    executable: /bin/bash
+
+
+- name: 🟣  OUTPUT
+  debug: 
+    var: output_string.stdout_lines
+
+

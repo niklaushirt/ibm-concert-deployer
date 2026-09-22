@@ -1,0 +1,164 @@
+{
+
+    "components": [
+        {
+            "type": "certificate",
+            "ref": "certificate:116730047297653093060437355272553080019035",
+            "serial_number": "116730047297653093060437355272553080019035",
+            "properties": [{
+                    "name": "subject",
+                    "value": "CN=qa.robotshop.com"
+                },
+                {
+                    "name": "issuer",
+                    "value": "CN=qa,O=robotshop,C=US"
+                },
+                {
+                    "name": "validity_start_date",
+                    "value": "2023-06-25 09:51:22 +0000 UTC"
+                },
+                {
+                    "name": "validity_end_date",
+                    "value": "2026-10-09 23:59:59 +0000 UTC"
+                },
+                {
+                    "name": "certificate_type",
+                    "value": "der"
+                },
+                {
+                    "name": "owner",
+                    "value": "nikh@ch.ibm.com"
+                },
+                {
+                    "name": "dns_names",
+                    "value": "*.qa.robotshop.com"
+                },
+                {
+                    "name": "metadata",
+                    "value": "{\"certificate_host\": \"\", \"service_info\": \"289****\", \"dn\": \"\\\\VED\\\\Policy\\\\Aperture\\\\1CMB-CESD-IT\\\\AI\\\\Non-******************************************\", \"senior_manager_contact\": \"concert@ibm.com\"}"
+                }
+            ],
+            "access_points": [{
+                    "name": "appapi:ratings",
+                    "is_public": "false",
+                    "url": "https://qa.robot-shop.com/ratings"
+                },
+                {
+                    "name": "appapi:web",
+                    "is_public": "true",
+                    "url": "https://qa.robot-shop.com/web"
+                }
+            ]
+        },{
+            "type": "certificate",
+            "ref": "certificate:416730047297653093060437355272553080019035",
+            "serial_number": "416730047297653093060437355272553080019035",
+            "properties": [{
+                    "name": "subject",
+                    "value": "CN=robotshop.com"
+                },
+                {
+                    "name": "issuer",
+                    "value": "CN=prod,O=robotshop,C=US"
+                },
+                {
+                    "name": "validity_start_date",
+                    "value": "2023-06-25 09:51:22 +0000 UTC"
+                },
+                {
+                    "name": "validity_end_date",
+                    "value": "2024-06-26 09:51:22 +0000 UTC"
+                },
+                {
+                    "name": "certificate_type",
+                    "value": "der"
+                },
+                {
+                    "name": "owner",
+                    "value": "nikh@ch.ibm.com"
+                },
+                {
+                    "name": "dns_names",
+                    "value": "*.robotshop.com"
+                },
+                {
+                    "name": "metadata",
+                    "value": "{\"certificate_host\": \"\", \"service_info\": \"289****\", \"dn\": \"\\\\VED\\\\Policy\\\\Aperture\\\\1CMB-CESD-IT\\\\AI\\\\Non-******************************************\", \"senior_manager_contact\": \"concert@ibm.com\"}"
+                }
+            ],
+            "access_points": [{
+                    "name": "appapi:ratings",
+                    "is_public": "false",
+                    "url": "https://robot-shop.com/ratings"
+                },
+                {
+                    "name": "appapi:web",
+                    "is_public": "true",
+                    "url": "https://robot-shop.com/web"
+                }
+            ]
+        },
+        {
+            "type": "certificate",
+            "ref": "certificate:202430047297653093060437355272553080011032",
+            "serial_number": "202430047297653093060437355272553080011032",
+            "properties": [{
+                    "name": "subject",
+                    "value": "CN=guest-ca-tor-1-ww.ca-tor.qq.appdomain.cloud"
+                },
+                {
+                    "name": "issuer",
+                    "value": "CN=A11,O=Test,C=AB"
+                },
+                {
+                    "name": "validity_start_date",
+                    "value": "2024-06-25 09:51:22 +0000 UTC"
+                },
+                {
+                    "name": "validity_end_date",
+                    "value": "2024-10-31 23:59:59 +0000 UTC"
+                },
+                {
+                    "name": "certificate_type",
+                    "value": "pfx"
+                },
+                {
+                    "name": "dns_names",
+                    "value": "*.guest-ca-tor-1-ww.ca-tor.qq.appdomain.cloud"
+                },
+                {
+                    "name": "owner",
+                    "value": "xyzgTp@domain.com"
+                },
+                {
+                    "name": "namespace",
+                    "value": "openshift-config"
+                },
+                {
+                    "name": "metadata",
+                    "value": "{\"certificate_host\": \"\", \"service_info\": \"289****\", \"dn\": \"\\\\VED\\\\Policy\\\\Aperture\\\\1CMB-CESD-IT\\\\AI\\\\Non-******************************************\", \"senior_manager_contact\": \"concert@ibm.com\"}"
+                }
+            ],
+            "access_points": [{
+                "name": "appapi:web",
+                "is_public": "true",
+                "url": "https://robot-shop.com/web"
+        }]
+        }
+    ],
+    "dependencies": [{
+            "ref": "environment:qa",
+            "depends_on": [
+                "certificate:116730047297653093060437355272553080019035"
+            ]
+        },
+        {
+            "ref": "environment:prod",
+            "depends_on": [
+                "certificate:202430047297653093060437355272553080011032",
+                "certificate:416730047297653093060437355272553080019035"
+
+            ]
+        }
+    ]
+}

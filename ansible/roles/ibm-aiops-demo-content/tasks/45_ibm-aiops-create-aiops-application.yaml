@@ -1,0 +1,572 @@
+
+# *************************************************************************************************************************************************
+# --------------------------------------------------------------------------------------------------------------------------------------
+# Connection Details
+# --------------------------------------------------------------------------------------------------------------------------------------
+# *************************************************************************************************************************************************
+
+- name: 🛰️  START - CREATE TEMPLATES AND APPS
+  debug: 
+    msg="{{ lookup('pipe','date +%d.%m.%Y---%H:%M:%S') }}"
+
+
+
+
+
+- name: Log
+  shell: |
+    export MESSAGE="Create IBM AIOps Application"
+    export currentDate=$(date +%Y-%m-%d_%H:%M)
+    echo "---------------------------------------------------------------------------------------------------------------------------------------------------" >> ../install_{{current_feature.kind}}.log
+    echo $currentDate" - "$MESSAGE  >> ../install_{{current_feature.kind}}.log
+  ignore_errors: true
+
+- name: 📣 OCP CONSOLE - Create Openshift NOTIFICATION
+  shell: |
+    cat <<EOF | oc apply -f -
+    apiVersion: console.openshift.io/v1
+    kind: ConsoleNotification
+    metadata:
+      name: ibm-aiops-notification-status
+    spec:
+      backgroundColor: '#ffd500'
+      color: '#000'
+      location: {{global_config.position_ocp_notifications | default("BannerTop")}}
+      text: 'Installing {{current_feature.kind}} - Create IBM AIOps Application'    
+    EOF
+  ignore_errors: true
+  args:
+    executable: /bin/bash
+  when: (global_config.create_ocp_notifications | default(true))|bool == true  
+
+
+
+# --------------------------------------------------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------------------------------------------
+# APPLICATION ROBOT SHOP
+# --------------------------------------------------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------------------------------------------
+- name: 🚀 TOPOLOGY - 🚀 CREATE APPLICATION ROBOT SHOP
+  shell: |
+    set -x
+
+    echo "Create Custom Topology - Add Members to App"
+
+
+    export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
+    export TOPOLOGY_REST_USR=$(oc get secret aiops-topology-asm-credentials -n $AIOPS_NAMESPACE -o jsonpath='{.data.username}' | base64 --decode)
+    export TOPOLOGY_REST_PWD=$(oc get secret aiops-topology-asm-credentials -n $AIOPS_NAMESPACE -o jsonpath='{.data.password}' | base64 --decode)
+
+    export TOPO_MGT_ROUTE="https://"$(oc get route -n $AIOPS_NAMESPACE aiops-topology-topology -o jsonpath={.spec.host})
+
+    export LOGIN="$TOPOLOGY_REST_USR:$TOPOLOGY_REST_PWD"
+
+    echo "    URL: $TOPO_MGT_ROUTE/1.0/rest-observer/rest/resources"
+    echo "    LOGIN: $LOGIN"
+
+    export APP_ID=$(curl -X "GET" "$TOPO_MGT_ROUTE/1.0/topology/groups?_field=*&_filter=keyIndexName%3Drobot-shop-app" --insecure -u $LOGIN -H 'Content-Type: application/json' -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255'|jq -r -c '._items[]|._id'| tail -1)
+    export TEMPLATE_ID=$(curl -X "GET" "$TOPO_MGT_ROUTE/1.0/topology/groups?_field=*&_filter=keyIndexName%3Drobot-shop-template" --insecure -u $LOGIN -H 'Content-Type: application/json' -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255'|jq -r -c '._items[]|._id'| tail -1)
+    export TEMPLATE_NET_ID=$(curl -X "GET" "$TOPO_MGT_ROUTE/1.0/topology/groups?_field=*&_filter=name%3Dnetwork-template" --insecure -u $LOGIN -H 'Content-Type: application/json' -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255'|jq -r -c '._items[]|._id'| tail -1)
+
+    echo "    APP_ID:     "$APP_ID
+    echo "    TEMPLATE_ID:"$TEMPLATE_ID
+    echo "    TEMPLATE_NET_ID:"$TEMPLATE_NET_ID
+ 
+    echo "Create Custom Topology - Create App"
+
+    if [[ $APP_ID == "" ]];
+    then    
+      echo "  Creating Application"
+      curl -X "POST" "$TOPO_MGT_ROUTE/1.0/topology/groups" --insecure \
+      -u $LOGIN \
+      -H 'Content-Type: application/json' \
+      -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255' \
+      -d '  {
+          "keyIndexName": "robot-shop-app",
+          "_correlationEnabled": "true",
+          "iconId": "application",
+          "businessCriticality": "Platinum",
+          "vertexType": "group",
+          "correlatable": "true",
+          "disruptionCostPerMin": "100",
+          "name": "RobotShop",
+          "entityTypes": [
+              "waiopsApplication"
+          ],
+          "tags": [
+            "app:robotshop",
+            "app:robot-shop"
+          ]
+      }'
+    else
+      echo "  Application already exists"
+      echo "  Re-Creating Application"
+      curl -X "DELETE" "$TOPO_MGT_ROUTE/1.0/topology/groups/$APP_ID" --insecure \
+      -u $LOGIN \
+      -H 'Content-Type: application/json' \
+      -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255'
+
+      echo "  Creating Application"
+      curl -X "POST" "$TOPO_MGT_ROUTE/1.0/topology/groups" --insecure \
+      -u $LOGIN \
+      -H 'Content-Type: application/json' \
+      -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255' \
+      -d '  {
+          "keyIndexName": "robot-shop-app",
+          "_correlationEnabled": "true",
+          "iconId": "application",
+          "businessCriticality": "Platinum",
+          "vertexType": "group",
+          "correlatable": "true",
+          "disruptionCostPerMin": "100",
+          "name": "RobotShop",
+          "entityTypes": [
+              "waiopsApplication"
+          ],
+          "tags": [
+            "app:robotshop",
+            "app:robot-shop"
+          ]
+      }'
+    fi
+
+    export APP_ID=$(curl -X "GET" "$TOPO_MGT_ROUTE/1.0/topology/groups?_field=*&_filter=keyIndexName%3Drobot-shop-app" --insecure -u $LOGIN -H 'Content-Type: application/json' -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255'|jq -r -c '._items[]|._id'| tail -1)
+    echo "    APP_ID:     "$APP_ID
+
+    # # -------------------------------------------------------------------------------------------------------------------------------------------------
+    # # CREATE EDGES
+    # # -------------------------------------------------------------------------------------------------------------------------------------------------
+    echo "  Add Template (File Observer) Resources"
+    curl -X "POST" "$TOPO_MGT_ROUTE/1.0/topology/groups/$APP_ID/members" --insecure \
+    -u $LOGIN \
+    -H 'Content-Type: application/json' \
+    -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255' \
+    -d "{
+      \"_id\": \"$TEMPLATE_ID\"
+    }"
+
+  
+
+  register: output_string
+  ignore_errors: true
+  args:
+    executable: /bin/bash
+
+- name: 🟣  OUTPUT
+  debug: 
+    var: output_string.stdout_lines
+    verbosity: 1
+
+
+
+
+
+
+
+# --------------------------------------------------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------------------------------------------
+# APPLICATION SOCK SHOP
+# --------------------------------------------------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------------------------------------------
+- name: 🚀 TOPOLOGY - 🚀 CREATE APPLICATION SOCK SHOP
+  shell: |
+    set -x
+
+    echo "Create Custom Topology - Add Members to App"
+
+
+    export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
+    export TOPOLOGY_REST_USR=$(oc get secret aiops-topology-asm-credentials -n $AIOPS_NAMESPACE -o jsonpath='{.data.username}' | base64 --decode)
+    export TOPOLOGY_REST_PWD=$(oc get secret aiops-topology-asm-credentials -n $AIOPS_NAMESPACE -o jsonpath='{.data.password}' | base64 --decode)
+
+    export TOPO_MGT_ROUTE="https://"$(oc get route -n $AIOPS_NAMESPACE aiops-topology-topology -o jsonpath={.spec.host})
+
+    export LOGIN="$TOPOLOGY_REST_USR:$TOPOLOGY_REST_PWD"
+
+    echo "    URL: $TOPO_MGT_ROUTE/1.0/rest-observer/rest/resources"
+    echo "    LOGIN: $LOGIN"
+
+    export APP_ID=$(curl -X "GET" "$TOPO_MGT_ROUTE/1.0/topology/groups?_field=*&_filter=keyIndexName%3Dsock-shop-app" --insecure -u $LOGIN -H 'Content-Type: application/json' -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255'|jq -r -c '._items[]|._id'| tail -1)
+    export TEMPLATE_ID=$(curl -X "GET" "$TOPO_MGT_ROUTE/1.0/topology/groups?_field=*&_filter=keyIndexName%3Dsock-shop-template" --insecure -u $LOGIN -H 'Content-Type: application/json' -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255'|jq -r -c '._items[]|._id'| tail -1)
+    export TEMPLATE_NET_ID=$(curl -X "GET" "$TOPO_MGT_ROUTE/1.0/topology/groups?_field=*&_filter=name%3Dnetwork-template" --insecure -u $LOGIN -H 'Content-Type: application/json' -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255'|jq -r -c '._items[]|._id'| tail -1)
+
+    echo "    APP_ID:     "$APP_ID
+    echo "    TEMPLATE_ID:"$TEMPLATE_ID
+    echo "    TEMPLATE_NET_ID:"$TEMPLATE_NET_ID
+ 
+    echo "Create Custom Topology - Create App"
+
+    if [[ $APP_ID == "" ]];
+    then    
+      echo "  Creating Application"
+      curl -X "POST" "$TOPO_MGT_ROUTE/1.0/topology/groups" --insecure \
+      -u $LOGIN \
+      -H 'Content-Type: application/json' \
+      -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255' \
+      -d '  {
+          "keyIndexName": "sock-shop-app",
+          "_correlationEnabled": "true",
+          "iconId": "swarm",
+          "businessCriticality": "Gold",
+          "vertexType": "group",
+          "correlatable": "true",
+          "disruptionCostPerMin": "50",
+          "name": "SockShop",
+          "entityTypes": [
+              "waiopsApplication"
+          ],
+          "tags": [
+            "app:sockshop",
+            "app:sock-shop"
+          ]
+      }'
+    else
+      echo "  Application already exists"
+      echo "  Re-Creating Application"
+      curl -X "DELETE" "$TOPO_MGT_ROUTE/1.0/topology/groups/$APP_ID" --insecure \
+      -u $LOGIN \
+      -H 'Content-Type: application/json' \
+      -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255'
+
+      echo "  Creating Application"
+      curl -X "POST" "$TOPO_MGT_ROUTE/1.0/topology/groups" --insecure \
+      -u $LOGIN \
+      -H 'Content-Type: application/json' \
+      -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255' \
+      -d '  {
+          "keyIndexName": "sock-shop-app",
+          "_correlationEnabled": "true",
+          "iconId": "swarm",
+          "businessCriticality": "Gold",
+          "vertexType": "group",
+          "correlatable": "true",
+          "disruptionCostPerMin": "50",
+          "name": "SockShop",
+          "entityTypes": [
+              "waiopsApplication"
+          ],
+          "tags": [
+            "app:sockshop",
+            "app:sock-shop"
+          ]
+      }'
+    fi
+
+    export APP_ID=$(curl -X "GET" "$TOPO_MGT_ROUTE/1.0/topology/groups?_field=*&_filter=keyIndexName%3Dsock-shop-app" --insecure -u $LOGIN -H 'Content-Type: application/json' -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255'|jq -r -c '._items[]|._id'| tail -1)
+    echo "    APP_ID:     "$APP_ID
+
+    # # -------------------------------------------------------------------------------------------------------------------------------------------------
+    # # CREATE EDGES
+    # # -------------------------------------------------------------------------------------------------------------------------------------------------
+    echo "  Add Template (File Observer) Resources"
+    curl -X "POST" "$TOPO_MGT_ROUTE/1.0/topology/groups/$APP_ID/members" --insecure \
+    -u $LOGIN \
+    -H 'Content-Type: application/json' \
+    -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255' \
+    -d "{
+      \"_id\": \"$TEMPLATE_ID\"
+    }"
+
+
+
+
+  register: output_string
+  ignore_errors: true
+  args:
+    executable: /bin/bash
+
+- name: 🟣  OUTPUT
+  debug: 
+    var: output_string.stdout_lines
+    verbosity: 1
+
+
+
+
+
+# --------------------------------------------------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------------------------------------------
+# APPLICATION ACME AIR
+# --------------------------------------------------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------------------------------------------
+- name: 🚀 TOPOLOGY - 🚀 CREATE APPLICATION ACME
+  shell: |
+    set -x
+
+    echo "Create Custom Topology - Add Members to App"
+
+
+    export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
+    export TOPOLOGY_REST_USR=$(oc get secret aiops-topology-asm-credentials -n $AIOPS_NAMESPACE -o jsonpath='{.data.username}' | base64 --decode)
+    export TOPOLOGY_REST_PWD=$(oc get secret aiops-topology-asm-credentials -n $AIOPS_NAMESPACE -o jsonpath='{.data.password}' | base64 --decode)
+
+    export TOPO_MGT_ROUTE="https://"$(oc get route -n $AIOPS_NAMESPACE aiops-topology-topology -o jsonpath={.spec.host})
+
+    export LOGIN="$TOPOLOGY_REST_USR:$TOPOLOGY_REST_PWD"
+
+    echo "    URL: $TOPO_MGT_ROUTE/1.0/rest-observer/rest/resources"
+    echo "    LOGIN: $LOGIN"
+
+    export APP_ID=$(curl -X "GET" "$TOPO_MGT_ROUTE/1.0/topology/groups?_field=*&_filter=keyIndexName%3Dacme-app" --insecure -u $LOGIN -H 'Content-Type: application/json' -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255'|jq -r -c '._items[]|._id'| tail -1)
+    export TEMPLATE_ID=$(curl -X "GET" "$TOPO_MGT_ROUTE/1.0/topology/groups?_field=*&_filter=keyIndexName%3Dacme-template" --insecure -u $LOGIN -H 'Content-Type: application/json' -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255'|jq -r -c '._items[]|._id'| tail -1)
+    export TEMPLATE_NET_ID=$(curl -X "GET" "$TOPO_MGT_ROUTE/1.0/topology/groups?_field=*&_filter=name%3Dnetwork-template" --insecure -u $LOGIN -H 'Content-Type: application/json' -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255'|jq -r -c '._items[]|._id'| tail -1)
+    export K8S_OBS_ID=$(curl -X "GET" "$TOPO_MGT_ROUTE/1.0/topology/groups?_field=*" --insecure -u $LOGIN -H 'Content-Type: application/json' -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255'|jq -r -c '._items[]| select( .keyIndexName == "acme::kubernetes::namespace::acme")|._id'| tail -1)
+    #export K8S_OBS_ID=$(curl -X "GET" "$TOPO_MGT_ROUTE/1.0/topology/groups?_field=*" --insecure -u $LOGIN -H 'Content-Type: application/json' -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255'|jq -r -c '._items[]| select( .keyIndexName == "acme")|._id'| tail -1)
+
+    echo "    APP_ID:     "$APP_ID
+    echo "    TEMPLATE_ID:"$TEMPLATE_ID
+    echo "    TEMPLATE_NET_ID:"$TEMPLATE_NET_ID
+    echo "    K8S_OBS_ID: "$K8S_OBS_ID
+ 
+    echo "Create Custom Topology - Create App"
+
+    if [[ $APP_ID == "" ]];
+    then    
+      echo "  Creating Application"
+      curl -X "POST" "$TOPO_MGT_ROUTE/1.0/topology/groups" --insecure \
+      -u $LOGIN \
+      -H 'Content-Type: application/json' \
+      -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255' \
+      -d '  {
+          "keyIndexName": "acme-app",
+          "_correlationEnabled": "true",
+          "iconId": "cluster",
+          "businessCriticality": "Silver",
+          "vertexType": "group",
+          "correlatable": "true",
+          "disruptionCostPerMin": "25",
+          "name": "ACME Air",
+          "entityTypes": [
+              "waiopsApplication"
+          ],
+          "tags": [
+            "app:acmeair",
+            "app:acme-air"
+          ]
+      }'
+    else
+      echo "  Application already exists"
+      echo "  Re-Creating Application"
+      curl -X "DELETE" "$TOPO_MGT_ROUTE/1.0/topology/groups/$APP_ID" --insecure \
+      -u $LOGIN \
+      -H 'Content-Type: application/json' \
+      -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255'
+
+
+      curl -X "POST" "$TOPO_MGT_ROUTE/1.0/topology/groups" --insecure \
+      -u $LOGIN \
+      -H 'Content-Type: application/json' \
+      -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255' \
+      -d '  {
+          "keyIndexName": "acme-app",
+          "_correlationEnabled": "true",
+          "iconId": "cluster",
+          "businessCriticality": "Silver",
+          "vertexType": "group",
+          "correlatable": "true",
+          "disruptionCostPerMin": "25",
+          "name": "ACME Air",
+          "entityTypes": [
+              "waiopsApplication"
+          ],
+          "tags": [
+            "app:acmeair",
+            "app:acme-air"
+          ]
+      }'
+
+    fi
+
+    export APP_ID=$(curl -X "GET" "$TOPO_MGT_ROUTE/1.0/topology/groups?_field=*&_filter=keyIndexName%3Dacme-app" --insecure -u $LOGIN -H 'Content-Type: application/json' -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255'|jq -r -c '._items[]|._id'| tail -1)
+    echo "    APP_ID:     "$APP_ID
+
+    # # -------------------------------------------------------------------------------------------------------------------------------------------------
+    # # CREATE EDGES
+    # # -------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+    echo "  Add Template Resources"
+    curl -X "POST" "$TOPO_MGT_ROUTE/1.0/topology/groups/$APP_ID/members" --insecure \
+    -u $LOGIN \
+    -H 'Content-Type: application/json' \
+    -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255' \
+    -d "{
+      \"_id\": \"$TEMPLATE_ID\"
+    }"
+
+
+
+
+  register: output_string
+  ignore_errors: true
+  args:
+    executable: /bin/bash
+
+- name: 🟣  OUTPUT
+  debug: 
+    var: output_string.stdout_lines
+    verbosity: 1
+
+
+
+# --------------------------------------------------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------------------------------------------
+# APPLICATION TELCO
+# --------------------------------------------------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------------------------------------------
+- name: 🚀 TOPOLOGY - 🚀 CREATE APPLICATION TELCO
+  shell: |
+    set -x
+
+    echo "Create Custom Topology - Add Members to App"
+
+
+    export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
+    export TOPOLOGY_REST_USR=$(oc get secret aiops-topology-asm-credentials -n $AIOPS_NAMESPACE -o jsonpath='{.data.username}' | base64 --decode)
+    export TOPOLOGY_REST_PWD=$(oc get secret aiops-topology-asm-credentials -n $AIOPS_NAMESPACE -o jsonpath='{.data.password}' | base64 --decode)
+
+    export TOPO_MGT_ROUTE="https://"$(oc get route -n $AIOPS_NAMESPACE aiops-topology-topology -o jsonpath={.spec.host})
+
+    export LOGIN="$TOPOLOGY_REST_USR:$TOPOLOGY_REST_PWD"
+
+    echo "    URL: $TOPO_MGT_ROUTE/1.0/rest-observer/rest/resources"
+    echo "    LOGIN: $LOGIN"
+
+    export APP_ID=$(curl -X "GET" "$TOPO_MGT_ROUTE/1.0/topology/groups?_field=*&_filter=keyIndexName%3Doptical-networks" --insecure -u $LOGIN -H 'Content-Type: application/json' -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255'|jq -r -c '._items[]|._id'| tail -1)
+    export TEMPLATE_ID=$(curl -X "GET" "$TOPO_MGT_ROUTE/1.0/topology/groups?_field=*&_filter=keyIndexName%3Doptical-networks-template" --insecure -u $LOGIN -H 'Content-Type: application/json' -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255'|jq -r -c '._items[]|._id'| tail -1)
+    echo "    APP_ID:     "$APP_ID
+    echo "    TEMPLATE_ID:"$TEMPLATE_ID
+    echo "Create Custom Topology - Create App"
+
+    if [[ $APP_ID == "" ]];
+    then    
+      echo "  Creating Application"
+      curl -X "POST" "$TOPO_MGT_ROUTE/1.0/topology/groups" --insecure \
+      -u $LOGIN \
+      -H 'Content-Type: application/json' \
+      -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255' \
+      -d '  {
+          "keyIndexName": "optical-networks",
+          "_correlationEnabled": "true",
+          "iconId": "cluster",
+          "businessCriticality": "Platinum",
+          "vertexType": "group",
+          "correlatable": "true",
+          "disruptionCostPerMin": "1000",
+          "name": "Optical Networks",
+          "entityTypes": [
+              "waiopsApplication"
+          ],
+          "tags": [
+            "app:optical-networks",
+            "app:telco"
+          ]
+      }'
+    else
+      echo "  Application already exists"
+      echo "  Re-Creating Application"
+      curl -X "DELETE" "$TOPO_MGT_ROUTE/1.0/topology/groups/$APP_ID" --insecure \
+      -u $LOGIN \
+      -H 'Content-Type: application/json' \
+      -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255'
+
+
+      curl -X "POST" "$TOPO_MGT_ROUTE/1.0/topology/groups" --insecure \
+      -u $LOGIN \
+      -H 'Content-Type: application/json' \
+      -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255' \
+      -d '  {
+          "keyIndexName": "optical-networks",
+          "_correlationEnabled": "true",
+          "iconId": "cluster",
+          "businessCriticality": "Platinum",
+          "vertexType": "group",
+          "correlatable": "true",
+          "disruptionCostPerMin": "1000",
+          "name": "Optical Networks",
+          "entityTypes": [
+              "waiopsApplication"
+          ],
+          "tags": [
+            "app:optical-networks",
+            "app:telco"
+          ]
+      }'
+
+    fi
+
+    export APP_ID=$(curl -X "GET" "$TOPO_MGT_ROUTE/1.0/topology/groups?_field=*&_filter=keyIndexName%3Doptical-networks" --insecure -u $LOGIN -H 'Content-Type: application/json' -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255'|jq -r -c '._items[]|._id'| tail -1)
+    echo "    APP_ID:     "$APP_ID
+
+    # # -------------------------------------------------------------------------------------------------------------------------------------------------
+    # # CREATE EDGES
+    # # -------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+    echo "  Add Template (File Observer) Resources"
+    curl -X "POST" "$TOPO_MGT_ROUTE/1.0/topology/groups/$APP_ID/members" --insecure \
+    -u $LOGIN \
+    -H 'Content-Type: application/json' \
+    -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255' \
+    -d "{
+      \"_id\": \"$TEMPLATE_ID\"
+    }"
+
+
+
+
+  register: output_string
+  ignore_errors: true
+  args:
+    executable: /bin/bash
+
+- name: 🟣  OUTPUT
+  debug: 
+    var: output_string.stdout_lines
+    verbosity: 1
+
+
+
+
+
+# --------------------------------------------------------------------------------------------------------------------------------------
+# AIOPS
+# --------------------------------------------------------------------------------------------------------------------------------------
+- name: 🚀 TOPOLOGY - REBROADCAST
+  shell: |
+    set -x
+        
+    echo "REBROADCAST"
+    export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
+
+    export TOPOLOGY_REST_USR=$(oc get secret aiops-topology-asm-credentials -n $AIOPS_NAMESPACE -o jsonpath='{.data.username}' | base64 --decode)
+    export TOPOLOGY_REST_PWD=$(oc get secret aiops-topology-asm-credentials -n $AIOPS_NAMESPACE -o jsonpath='{.data.password}' | base64 --decode)
+    # oc create route passthrough topology-manage -n $AIOPS_NAMESPACE --service=aiops-topology-topology --port=https-topology-api
+    export TOPO_MGT_ROUTE="https://"$(oc get route -n $AIOPS_NAMESPACE aiops-topology-topology -o jsonpath={.spec.host})
+
+ 
+    export LOGIN="$TOPOLOGY_REST_USR:$TOPOLOGY_REST_PWD"
+
+    echo "    URL: $TOPO_MGT_ROUTE/1.0/topology/metadata"
+    echo "    LOGIN: $LOGIN"
+
+    curl -XPOST -k \
+    "$TOPO_MGT_ROUTE/1.0/topology/crawlers/rebroadcast" \
+    -H 'accept: application/json' \
+    -H 'content-type: application/json' \
+    -H 'X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255' \
+    -u $LOGIN \
+      -d '{
+      "transactionLength": 1000,
+      "includeHistory": true,
+      "includeStatus": true,
+      "includeEdges": true
+    }'
+       
+       
+  register: output_string
+  ignore_errors: true
+  args:
+    executable: /bin/bash
+
+

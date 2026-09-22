@@ -1,0 +1,133 @@
+{
+  "bomFormat": "ConcertDef",
+  "specVersion": "1.0.2",
+  "serialNumber": "urn:ibm:appmgmt:slacksim:mern-node-app:deploy:prod:79",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2024-05-05T05:18:46Z",
+    "component": {
+      "bom-ref": "mern-node-app",
+      "type": "deploy",
+      "name": "mern-node-app",
+      "version": "79"
+    },
+    "properties": [
+      {
+        "name": "environment-id",
+        "value": "prod"
+      },
+      {
+        "name": "change-management-url",
+        "value": "https://us-south.git.cloud.ibm.com/rong/mern-node-change"
+      },
+      {
+        "name": "change-request-url",
+        "value": "https://us-south.git.cloud.ibm.com/rong/mern-node-change/issues/79"
+      },
+      {
+        "name": "change-request-number",
+        "value": "79"
+      }
+    ]
+  },
+  "components": [
+    {
+      "bom-ref": "deploy:mern-node-deployment",
+      "type": "deployment",
+      "name": "mern-node-deployment",
+      "components": [
+        {
+          "bom-ref": "repository:coderepo:github:mern-node-deployment",
+          "type": "code",
+          "name": "mern-node-deployment",
+          "purl": "https://github.ibm.com/rong/mern-node-deployment",
+          "properties": [
+            {
+              "name": "commit_sha",
+              "value": "ec5f3ea535a97bb822a3cad48c2c56c3102d9511"
+            },
+            {
+              "name": "branch",
+              "value": "master"
+            }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "name": "bom-link-build",
+          "value": "urn:ibm:appmgmt:slacksim:mern-node-app:build:190/1"
+        }
+      ]
+    }
+  ],
+  "services": [
+    {
+      "bom-ref": "service:kubernetes:roks:myroks",
+      "name": "myroks",
+      "properties": [
+        {
+          "name": "platform",
+          "value": "ibmcloud"
+        },
+        {
+          "name": "cluster_platform",
+          "value": "ROKS"
+        },
+        {
+          "name": "cluster_id",
+          "value": "ckri4n4w0upk39imvl30"
+        },
+        {
+          "name": "cluster_region",
+          "value": "us-east"
+        },
+        {
+          "name": "cluster_name",
+          "value": "roks2"
+        },
+        {
+          "name": "cluster_namespace",
+          "value": "roja3mern"
+        }
+      ]
+    },
+    {
+      "bom-ref": "appapi:mern-node-app_public_api",
+      "name": "mern-node-app_public_api",
+      "properties": [
+        {
+          "name": "base_url",
+          "value": "https://mern-node-app.roks2-b12d73cc7b0aedf0e30addbf16d8fc5a-0000.us-east.containers.appdomain.cloud"
+        }
+      ]
+    },
+    {
+      "bom-ref": "appapi:mern-node-app_private_api",
+      "name": "mern-node-app_private_api",
+      "properties": [
+        {
+          "name": "base_url",
+          "value": "https://private-mern-node-app-roja3mern.roks2-b12d73cc7b0aedf0e30addbf16d8fc5a-0000.us-east.containers.appdomain.cloud"
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "ref": "service:kubernetes:roks:myroks",
+      "dependsOn": [
+        "deploy:mern-node-deployment",
+        "appapi:mern-node-app_public_api",
+        "appapi:mern-node-app_private_api"
+      ]
+    },
+    {
+      "ref": "deploy:mern-node-deployment",
+      "dependsOn": [
+        "appapi:mern-node-app_public_api",
+        "appapi:mern-node-app_private_api"
+      ]
+    }
+  ]
+}

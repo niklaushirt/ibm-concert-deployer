@@ -1,0 +1,94 @@
+
+
+# *************************************************************************************************************************************************
+# --------------------------------------------------------------------------------------------------------------------------------------
+# Patching some stuff
+# --------------------------------------------------------------------------------------------------------------------------------------
+# *************************************************************************************************************************************************
+    
+
+- name: 🛰️  START - OCP MENU
+  debug: 
+    msg="{{ lookup('pipe','date +%d.%m.%Y---%H:%M:%S') }}"
+
+
+- name: Log
+  shell: |
+    export MESSAGE="Create Openshift WebConsole Menu Item"
+    export currentDate=$(date +%Y-%m-%d_%H:%M)
+    echo "---------------------------------------------------------------------------------------------------------------------------------------------------" >> ../install_{{current_feature.kind}}.log
+    echo $currentDate" - "$MESSAGE  >> ../install_{{current_feature.kind}}.log
+  ignore_errors: true
+
+- name: 📣 OCP CONSOLE - Create Openshift NOTIFICATION
+  shell: |
+    cat <<EOF | oc apply -f -
+    apiVersion: console.openshift.io/v1
+    kind: ConsoleNotification
+    metadata:
+      name: ibm-aiops-notification-status
+    spec:
+      backgroundColor: '#ffd500'
+      color: '#000'
+      location: {{global_config.position_ocp_notifications | default("BannerTop")}}
+      text: 'Installing {{current_feature.kind}} - Create Openshift WebConsole Menu Item'    
+    EOF
+  ignore_errors: true
+  args:
+    executable: /bin/bash
+  when: (global_config.create_ocp_notifications | default(true))|bool == true  
+   
+
+
+
+
+- name: 🌏 OCP MENU - Create Openshift WebConsole Menu Item - Concert
+  shell: |
+    appURL=$(oc get routes -n ibm-concert concert  -o jsonpath="{['spec']['host']}")|| true
+
+    cat <<EOF | oc apply -f -
+      apiVersion: console.openshift.io/v1
+      kind: ConsoleLink
+      metadata:
+        name: ibm-concert
+      spec:
+        applicationMenu:
+          imageURL: >-
+            https://raw.githubusercontent.com/niklaushirt/ibm-aiops-deployer/main/doc/pics/icons/ibm-cloud-pak--business-automation-white.svg
+          section: IBM IT Automation
+        href: >-
+          https://$appURL
+        location: ApplicationMenu
+        text: IBM Concert
+    EOF
+  ignore_errors: true
+  args:
+    executable: /bin/bash
+
+
+
+
+- name: 🌏 OCP MENU - Create Openshift WebConsole Menu Item - Home UI
+  shell: |
+    appURL=$(oc get routes -n home-ui home-ui  -o jsonpath="{['spec']['host']}")|| true
+
+    cat <<EOF | oc apply -f -
+      apiVersion: console.openshift.io/v1
+      kind: ConsoleLink
+      metadata:
+        name: ibm-home
+      spec:
+        applicationMenu:
+          imageURL: >-
+            https://raw.githubusercontent.com/niklaushirt/ibm-aiops-deployer/main/doc/pics/icons/ibm-cloud-pak--business-automation-white.svg
+          section: IBM IT Automation
+        href: >-
+          https://$appURL
+        location: ApplicationMenu
+        text: Home UI
+    EOF
+  ignore_errors: true
+  args:
+    executable: /bin/bash
+ 
+
