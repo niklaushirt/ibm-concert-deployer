@@ -76,7 +76,7 @@ spec:
     spec:
       containers:
         - name: tools
-          image: quay.io/niklaushirt/ibm-aiops-tools:5.1.0
+          image: quay.io/niklaushirt/ibm-concert-tools:1.0.0
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
@@ -108,9 +108,9 @@ spec:
               echo "------------------------------------------------------------------------------------------------------------------------------"
               echo " 🚀 Getting Installation source from GitHub"
               echo "------------------------------------------------------------------------------------------------------------------------------"
-              echo "   📥 Clone Repo https://github.com/niklaushirt/ibm-aiops-deployer.git -b dev_latest"
-              git clone https://github.com/niklaushirt/ibm-aiops-deployer.git -b dev_latest
-              cd ibm-aiops-deployer/
+              echo "   📥 Clone Repo https://github.com/niklaushirt/ibm-concert-deployer.git -b dev_latest"
+              git clone https://github.com/niklaushirt/ibm-concert-deployer.git -b dev_latest
+              cd ibm-concert-deployer/
 
               echo ""
               echo ""
@@ -139,8 +139,8 @@ spec:
               echo " 🧻 Delete awx.ansible.com CustomResourceDefinition"
               oc delete CustomResourceDefinition $(oc get CustomResourceDefinition| grep awx.ansible.com|awk '{print$1}') --ignore-not-found
               echo "------------------------------------------------------------------------------------------------------------------------------"
-              echo " 🧻 Delete Namespace ibm-aiops-demo-ui"
-              oc delete ns ibm-aiops-demo-ui &
+              echo " 🧻 Delete Namespace ibm-concert-demo-ui"
+              oc delete ns ibm-concert-demo-ui &
               echo "------------------------------------------------------------------------------------------------------------------------------"
               echo " 🧻 Delete Namespace ibm-aiops-tools"
               oc delete ns ibm-aiops-tools &
@@ -173,7 +173,7 @@ spec:
               oc delete ClusterRoleBinding default-robotinfo2-admin          
               oc delete ClusterRoleBinding default-sockinfo1-admin           
               oc delete ClusterRoleBinding default-sockinfo2-admin           
-              oc delete ClusterRoleBinding ibm-aiops-demo-ui-admin-crb       
+              oc delete ClusterRoleBinding ibm-concert-demo-ui-admin-crb       
               oc delete ClusterRoleBinding ibm-installer-admin         
               oc delete ClusterRoleBinding robot-shop                        
               oc delete ClusterRoleBinding test-admin    

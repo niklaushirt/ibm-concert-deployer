@@ -15,13 +15,13 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: default
-    namespace: ibm-aiops-incident-pusher
+    namespace: ibm-concert-operate-incident-pusher
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: ibm-aiops-incident-pusher-pvc
-  namespace: ibm-aiops-incident-pusher
+  namespace: ibm-concert-operate-incident-pusher
 spec:
   accessModes:
     - ReadWriteOnce
@@ -34,7 +34,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ibm-aiops-incident-pusher
-  namespace: ibm-aiops-incident-pusher
+  namespace: ibm-concert-operate-incident-pusher
   labels:
       app:  ibm-aiops-incident-pusher
 spec:

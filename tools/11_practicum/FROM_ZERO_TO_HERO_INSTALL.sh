@@ -49,7 +49,7 @@ spec:
     spec:
       containers:
         - name: install
-          image: quay.io/niklaushirt/ibm-aiops-tools:5.1.0
+          image: quay.io/niklaushirt/ibm-concert-tools:1.0.0
           imagePullPolicy: IfNotPresent
           resources:
             requests:
@@ -71,11 +71,11 @@ spec:
               echo ""
               echo ""
               echo "------------------------------------------------------------------------------------------------------------------------------"
-              echo " 📥 Clone Repo https://github.com/niklaushirt/ibm-aiops-deployer.git"
-              git clone https://github.com/niklaushirt/ibm-aiops-deployer.git -b main
+              echo " 📥 Clone Repo https://github.com/niklaushirt/ibm-concert-deployer.git"
+              git clone https://github.com/niklaushirt/ibm-concert-deployer.git -b main
 
               
-              cd ibm-aiops-deployer
+              cd ibm-concert-deployer
               echo ""
               echo ""
 

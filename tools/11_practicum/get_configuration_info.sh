@@ -81,8 +81,8 @@ then
     echo "    -----------------------------------------------------------------------------------------------------------------------------------------------"
     echo "    -----------------------------------------------------------------------------------------------------------------------------------------------"
     echo "    "
-    appURL=$(oc get routes -n $AIOPS_NAMESPACE-demo-ui ibm-aiops-demo-ui  -o jsonpath="{['spec']['host']}")|| true
-    appToken=$(oc get cm -n $AIOPS_NAMESPACE-demo-ui ibm-aiops-demo-ui-config -o jsonpath='{.data.TOKEN}')
+    appURL=$(oc get routes -n $AIOPS_NAMESPACE-demo-ui ibm-concert-demo-ui  -o jsonpath="{['spec']['host']}")|| true
+    appToken=$(oc get cm -n $AIOPS_NAMESPACE-demo-ui ibm-concert-demo-ui-config -o jsonpath='{.data.TOKEN}')
     echo "            🐣 Demo UI:"   
     echo "    " 
     echo "                🌏 URL:           https://$appURL/"

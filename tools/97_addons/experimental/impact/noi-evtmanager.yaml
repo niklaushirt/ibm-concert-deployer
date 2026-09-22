@@ -142,7 +142,7 @@ metadata:
       subresource: status
       time: '2023-05-10T08:19:03Z'
   name: evtmanager
-  namespace: ibm-aiops-evtmgr
+  namespace: ibm-concert-operate-evtmgr
   resourceVersion: '4035975'
   uid: 72db7f6f-8941-48b7-9336-5eb670c16f7f
 spec:

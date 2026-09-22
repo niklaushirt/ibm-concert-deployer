@@ -7,7 +7,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: memory-grabber
-  namespace: ibm-aiops-tools
+  namespace: ibm-concert-operate-tools
 spec:
   selector:
     matchLabels:

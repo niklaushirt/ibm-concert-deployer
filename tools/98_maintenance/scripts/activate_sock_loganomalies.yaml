@@ -1,8 +1,8 @@
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  name: ibm-aiops-demo-ui-config-logs-sock
-  namespace: ibm-aiops-demo-ui
+  name: ibm-concert-demo-ui-config-logs-sock
+  namespace: ibm-concert-demo-ui
 data:
   DEMO_LOGS_SOCK: |-
     {"timestamp": MY_EPOCH,"utc_timestamp": "MY_TIMESTAMP", "features": [], "meta_features": [],"instance_id": "dSwitch-5-vm-network-port-1","application_group_id": "1000","application_id": "1000","level": 1,"message": "[1693549823] dSwitch 5 - vm-network - port-1 is up.","entities": {"pod": "dSwitch-5-vm-network-port-1","cluster": null,"container": "dSwitch-5-vm-network-port-1","node": "dcwest1-switch025"},"type": "StandardLog"}

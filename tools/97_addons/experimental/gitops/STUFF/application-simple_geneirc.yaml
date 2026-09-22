@@ -10,5 +10,5 @@ spec:
   project: default
   source:
     path: tools/97_addons/experimental/gitops/content/cp4aiops-demo-content
-    repoURL: 'https://github.com/niklaushirt/ibm-aiops-deployer'
+    repoURL: 'https://github.com/niklaushirt/ibm-concert-deployer'
     targetRevision: dev_latest

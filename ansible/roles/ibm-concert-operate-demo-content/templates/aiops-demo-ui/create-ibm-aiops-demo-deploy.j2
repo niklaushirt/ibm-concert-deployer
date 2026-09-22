@@ -1,0 +1,94 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ibm-concert-demo-ui
+  namespace: {{current_ibm_feature.project}}-demo-ui
+  labels:
+      app: ibm-concert-demo-ui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ibm-concert-demo-ui
+  template:
+    metadata:
+      labels:
+        app: ibm-concert-demo-ui
+    spec:
+      containers:
+      - image: quay.io/niklaushirt/ibm-concert-demo-ui:5.1.2
+        imagePullPolicy: Always
+        name: ibm-concert-demo-ui
+        command:
+        ports:
+        - containerPort: 8000
+          resources:
+            limits:
+              cpu: 1500m
+              memory: 1512Mi
+            requests:
+              cpu: 500m
+              memory: 512Mi
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+            scheme: HTTP
+          initialDelaySeconds: 20
+          timeoutSeconds: 15
+          periodSeconds: 600
+          successThreshold: 1
+          failureThreshold: 300
+        envFrom:
+        - configMapRef:
+            name:  ibm-concert-demo-ui-config
+        - configMapRef:
+            name:  ibm-concert-demo-ui-config-events
+        - configMapRef:
+            name:  ibm-concert-demo-ui-config-logs
+        - configMapRef:
+            name:  ibm-concert-demo-ui-config-logs-sock
+        - configMapRef:
+            name:  ibm-concert-demo-ui-config-metrics
+        - configMapRef:
+            name:  ibm-concert-demo-ui-config-custom
+        env:
+          - name: INSTANA_SERVICE_NAME
+            value: ibm-concert-demo-ui
+          - name: AUTOWRAPT_BOOTSTRAP
+            value: instana
+          - name: INSTANA_DEBUG
+            value: 'false'
+      serviceAccount: ibm-concert-demo-ui-admin
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ibm-concert-demo-ui-service
+  namespace: {{current_ibm_feature.project}}-demo-ui
+spec:
+  selector:
+    app: ibm-concert-demo-ui
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
+---
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name:  ibm-concert-demo-ui
+  namespace: {{current_ibm_feature.project}}-demo-ui
+spec:
+  to:
+    kind: Service
+    name: ibm-concert-demo-ui-service
+    weight: 100
+  port:
+    targetPort: 8000
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Allow
+  wildcardPolicy: None

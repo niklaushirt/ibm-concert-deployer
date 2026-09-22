@@ -70,7 +70,7 @@ metadata:
               'f:storage': {}
           'f:storageClassName': {}
           'f:volumeMode': {}
-  namespace: ibm-aiops-evtmgr
+  namespace: ibm-concert-operate-evtmgr
   ownerReferences:
     - apiVersion: noi.ibm.com/v1beta1
       kind: NOIFormation

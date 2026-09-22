@@ -3,7 +3,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name:  ibm-aiops-simulation-config
-  namespace: ibm-aiops-experimental
+  namespace: ibm-concert-operate-experimental
 data:
   DISCORD_BOT_TOKEN: "CHANGEME"
   DISCORD_WEBHOOK: "CHANGEME"

@@ -35,7 +35,7 @@ metadata:
           'f:ownerReferences':
             .: {}
             'k:{"uid":"c3e19346-f37f-46e6-8b2d-9183d11b2fae"}': {}
-  namespace: ibm-aiops-evtmgr
+  namespace: ibm-concert-operate-evtmgr
   ownerReferences:
     - apiVersion: noi.ibm.com/v1beta1
       kind: NOIFormation

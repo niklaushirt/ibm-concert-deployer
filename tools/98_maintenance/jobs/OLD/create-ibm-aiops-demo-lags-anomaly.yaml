@@ -2,16 +2,16 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: ibm-aiops-create-lags-anomaly
-  namespace: ibm-aiops-demo-ui
+  namespace: ibm-concert-demo-ui
 spec:
   template:
     spec:
-      serviceAccount: ibm-aiops-demo-ui-admin
-      serviceAccount: ibm-aiops-demo-ui-admin
+      serviceAccount: ibm-concert-demo-ui-admin
+      serviceAccount: ibm-concert-demo-ui-admin
 
       containers:
         - name: lags-anomaly
-          image: quay.io/niklaushirt/ibm-aiops-tools:5.1.0
+          image: quay.io/niklaushirt/ibm-concert-tools:1.0.0
           imagePullPolicy: IfNotPresent
           resources:
             requests:
@@ -56,7 +56,7 @@ spec:
                 echo " ✅ DONE - JOB WILL BE DELETED IN 15 SECONDS"
                 echo "*****************************************************************************************************************************"
                 sleep 15
-                oc delete job -n ibm-aiops-demo-ui ibm-aiops-create-lags-anomaly --ignore-not-found 
+                oc delete job -n ibm-concert-demo-ui ibm-aiops-create-lags-anomaly --ignore-not-found 
               else
                 echo "*****************************************************************************************************************************"
                 echo " ✅ DONE - JOB PERSISTENT"

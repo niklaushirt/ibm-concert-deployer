@@ -90,7 +90,7 @@ spec:
     spec:
       containers:
         - name: install
-          image: quay.io/niklaushirt/ibm-aiops-tools:5.1.0
+          image: quay.io/niklaushirt/ibm-concert-tools:1.0.0
           imagePullPolicy: IfNotPresent
           resources:
             requests:
@@ -119,7 +119,7 @@ spec:
               apiVersion: console.openshift.io/v1
               kind: ConsoleNotification
               metadata:
-                name: ibm-aiops-notification-ria
+                name: ibm-concert-operate-notification-ria
               spec:
                 backgroundColor: '#141a6b'
                 color: '#fff'
@@ -285,7 +285,7 @@ spec:
               apiVersion: console.openshift.io/v1
               kind: ConsoleNotification
               metadata:
-                  name: ibm-aiops-notification-ria
+                  name: ibm-concert-operate-notification-ria
               spec:
                   backgroundColor: '#009a00'
                   color: '#fff'

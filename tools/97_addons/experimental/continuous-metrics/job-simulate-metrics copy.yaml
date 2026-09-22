@@ -41,7 +41,7 @@ roleRef:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: ibm-aiops-demo-ui
+  namespace: ibm-concert-demo-ui
   name: ibm-aiops-simulate-metrics
   annotations: {}
 spec:
@@ -54,10 +54,10 @@ spec:
       labels:
         app: ibm-aiops-logs-streaming
     spec:
-      serviceAccount: ibm-aiops-demo-ui-admin
+      serviceAccount: ibm-concert-demo-ui-admin
       containers:
         - name: tools
-          image: quay.io/niklaushirt/ibm-aiops-tools:5.1.0
+          image: quay.io/niklaushirt/ibm-concert-tools:1.0.0
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080

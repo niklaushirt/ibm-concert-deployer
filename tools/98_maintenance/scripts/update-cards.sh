@@ -32,7 +32,7 @@ echo "${ZEN_TOKEN}"
 
 
 
-export demoURL=$(oc get route -n $AIOPS_NAMESPACE-demo-ui ibm-aiops-demo-ui  -o jsonpath={.spec.host})          
+export demoURL=$(oc get route -n $AIOPS_NAMESPACE-demo-ui ibm-concert-demo-ui  -o jsonpath={.spec.host})          
 export ROWS=""
 
 ROWS=$ROWS'{"drilldown_url":  "", "label": "❗ Caution ❗", "sub_text": "Just clicking below will create the incident"},'

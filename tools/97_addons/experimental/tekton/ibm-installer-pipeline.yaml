@@ -32,12 +32,12 @@ spec:
       taskSpec:
         steps:
         - name: git-clone-step
-          image: quay.io/niklaushirt/ibm-aiops-tools:5.1.0
+          image: quay.io/niklaushirt/ibm-concert-tools:1.0.0
           script: |
             #!/usr/bin/env bash
-            git clone https://github.com/niklaushirt/ibm-aiops-deployer.git -b dev_latest $(workspaces.ws.path)/sources
+            git clone https://github.com/niklaushirt/ibm-concert-deployer.git -b dev_latest $(workspaces.ws.path)/sources
         - name: run-installer
-          image: quay.io/niklaushirt/ibm-aiops-tools:5.1.0
+          image: quay.io/niklaushirt/ibm-concert-tools:1.0.0
           script: |
             #!/usr/bin/env bash
             cat $(workspaces.ws.path)/sources/tools/97_addons/experimental/tekton/INSTALL_IBM_$(params.OFFERING).yaml

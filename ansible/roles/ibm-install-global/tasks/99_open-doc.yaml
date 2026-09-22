@@ -9,7 +9,7 @@
 
 - name: Log
   shell: |
-    export MESSAGE=" 🌏 Open doc at https://github.com/niklaushirt/ibm-aiops-deployer#2-quick-install"
+    export MESSAGE=" 🌏 Open doc at https://github.com/niklaushirt/ibm-concert-deployer#2-quick-install"
     export currentDate=$(date +%Y-%m-%d_%H:%M)
     echo "---------------------------------------------------------------------------------------------------------------------------------------------------" >> ../install_{{current_feature.kind}}.log
     echo $currentDate" - "$MESSAGE  >> ../install_{{current_feature.kind}}.log
@@ -21,7 +21,7 @@
     apiVersion: console.openshift.io/v1
     kind: ConsoleNotification
     metadata:
-      name: ibm-aiops-notification-status
+      name: ibm-concert-operate-notification-status
     spec:
       backgroundColor: '#ffd500'
       color: '#000'

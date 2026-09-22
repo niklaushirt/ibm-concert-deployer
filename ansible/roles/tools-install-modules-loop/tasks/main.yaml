@@ -27,16 +27,16 @@
 
 
 
-- name: tools-install-modules-loop 🌡   CHECK for - IBM AIOps
+- name: tools-install-modules-loop 🌡   CHECK for - IBM Concert Operate
   include_role:
-    name: ibm-aiops-install
-  when: current_feature.kind=="IBMAIOps" and current_feature.install|bool == true
+    name: ibm-concert-operate-install
+  when: current_feature.kind=="IBMConcertOperate" and current_feature.install|bool == true
 
 
-- name: tools-install-modules-loop 🌡   CHECK for - IBM AIOps Demo Content
+- name: tools-install-modules-loop 🌡   CHECK for - IBM Concert Operate Demo Content
   include_role:
-    name: ibm-aiops-demo-content
-  when: current_feature.kind=="IBMAIOpsDemoContent" and current_feature.install|bool == true
+    name: ibm-concert-operate-demo-content
+  when: current_feature.kind=="ConcertOperateDemoContent" and current_feature.install|bool == true
 
 
 
@@ -54,16 +54,16 @@
 
 
 
-- name: tools-install-modules-loop 🌡   CHECK for - IBM Concert
+- name: tools-install-modules-loop 🌡   CHECK for - IBM Concert Platform
   include_role:
-    name: ibm-concert-install
-  when: current_feature.kind=="IBMConcert" and current_feature.install|bool == true
+    name: ibm-concert-platform-install
+  when: current_feature.kind=="IBMConcertPlatform" and current_feature.install|bool == true
 
 
-- name: tools-install-modules-loop 🌡   CHECK for - IBM Concert Demo Content
+- name: tools-install-modules-loop 🌡   CHECK for - IBM Concert Platform Demo Content
   include_role:
-    name: ibm-concert-demo-content
-  when: current_feature.kind=="IBMConcertDemoContent" and current_feature.install|bool == true
+    name: ibm-concert-platform-demo-content
+  when: current_feature.kind=="IBMConcertPlatformDemoContent" and current_feature.install|bool == true
 
 
 
@@ -79,34 +79,15 @@
 
 
 
-- name: tools-install-modules-loop 🌡   CHECK for - IBM Turbonomic
+- name: tools-install-modules-loop 🌡   CHECK for - IBM Concert Optimise
   include_role:
-    name: ibm-turbonomic-install
-  when: current_feature.kind=="IBMTurbonomic" and current_feature.install|bool == true
+    name: ibm-concert-optimise-install
+  when: current_feature.kind=="IBMConcertOptimise" and current_feature.install|bool == true
 
-- name: tools-install-modules-loop 🌡   CHECK for - IBM Turbonomic Demo Content
+- name: tools-install-modules-loop 🌡   CHECK for - IBM Concert Optimise Demo Content
   include_role:
-    name: ibm-turbonomic-demo-content
-  when: current_feature.kind=="IBMTurbonomicDemoContent" and current_feature.install|bool == true
+    name: ibm-concert-optimise-demo-content
+  when: current_feature.kind=="IBMConcertOptimiseDemoContent" and current_feature.install|bool == true
 
 
 
-- name: tools-install-modules-loop 🌡   CHECK for - IBM Infrastructure Management
-  include_role:
-    name: ibm-aiops-im-install
-  when: current_feature.kind=="InfrastructureManagement" and current_feature.install|bool == true
-
-
-
-
-- name: tools-install-modules-loop 🌡   CHECK for - ELK Stack
-  include_role:
-    name: elk-install
-  when: current_feature.kind=="ELK" and current_feature.install|bool == true
-
-
-
-- name: tools-install-modules-loop 🌡   CHECK for - MAS Stack
-  include_role:
-    name: ibm-mas
-  when: current_feature.kind=="IBMMAS" and current_feature.install|bool == true

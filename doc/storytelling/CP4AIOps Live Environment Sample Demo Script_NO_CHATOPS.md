@@ -1,50 +1,40 @@
-
-
 <center> <h1>IBM AIOps </h1> </center>
 <center> <h2>Sample Demo Script for the Live Environment</h2> </center>
-
-
-
 
 ![K8s CNI](./pics/aiops/00_aimanager_insights.png)
 
 <center> ©2026 Włodzimierz Dymaczewski/Niklaus Hirt / IBM </center>
 
-
-
-
 # 1. Introduction
 
-This script is intended as a guide to demonstrate IBM AIOps using the live demo environment, running the Cloud Pak itself and the demo application. The script is presented in a few sections. You can utilize some or all sections depending upon your client’s needs. 
+This script is intended as a guide to demonstrate IBM AIOps using the live demo environment, running the Cloud Pak itself and the demo application. The script is presented in a few sections. You can utilize some or all sections depending upon your client’s needs.
 
-The script is intended to be used with live IBM AIOps 3.x demo environment that you can reserve via [TechZone](https://techzone.ibm.com/collection/ibm-aiopsdemo#tab-1) or [install yourself](https://github.com/niklaushirt/ibm-aiops-deployer#-1-quick-install).
+The script is intended to be used with live IBM AIOps 3.x demo environment that you can reserve via [TechZone](https://techzone.ibm.com/collection/ibm-aiopsdemo#tab-1) or [install yourself](https://github.com/niklaushirt/ibm-concert-deployer#-1-quick-install).
 
+You can watch the [Demo Walkthrough video](https://ibm.seismic.com/Link/Content/DCW3jb8Rf9VFf8mMT9BDB29MX6cB) to get an idea on how to do the demo (based on 4.10).
 
-You can watch the [Demo Walkthrough video](https://ibm.seismic.com/Link/Content/DCW3jb8Rf9VFf8mMT9BDB29MX6cB) to get an idea on how to do the demo (based on 4.10). 
-
-In the demo script, 
+In the demo script,
 
 - “**🚀 <u>Action</u>**” denotes a setup step for the presenter.
-- “**📣 <u>Narration</u>**” denotes what the presenter will say. 
+- “**📣 <u>Narration</u>**” denotes what the presenter will say.
 - “**ℹ️ <u>Note</u>**” denotes where the presenter may need to deviate from this demo script or add supplemental comments.
 
 <div style="page-break-after: always;"></div>
 
 ## 1.1 Key Terminology
+
 You should be familiar with the following terminology when discussing IBM AIOps:
 
 - **Application**: IBM IBM AIOps brings together the capability to group resources from different data types into applications. Clients can flexibly define an application to meet their business needs. With applications, you can obtain an integrated view of resources to understand inter-dependencies.
-- **Event**: A point-in-time statement in IBM AIOps that tells us that something happened somewhere in a client’s environment. It tells us what happened, where it happened, and when it happened.  An event does not have to be exceptional or actionable, it can simply tell us something has happened.  
-- **Alert**: An alert in IBM AIOps represents an abnormal condition somewhere in an environment that requires resolution. It tells us what is happening, where it is happening, and when it started to happen.  It may be informed by one or more events. It has a start time and end time. 
-- **Incident**: A incident in IBM AIOps represents an outage or reduction in service which is currently impacting customers and requires rapid remediation.  It is created based on one or more trigger alerts that indicate the outage or reduction in service.  Any alert of severity Major or Critical will act as a trigger alert. Other alerts that share the same cause may add context to the incident. 
+- **Event**: A point-in-time statement in IBM AIOps that tells us that something happened somewhere in a client’s environment. It tells us what happened, where it happened, and when it happened. An event does not have to be exceptional or actionable, it can simply tell us something has happened.
+- **Alert**: An alert in IBM AIOps represents an abnormal condition somewhere in an environment that requires resolution. It tells us what is happening, where it is happening, and when it started to happen. It may be informed by one or more events. It has a start time and end time.
+- **Incident**: A incident in IBM AIOps represents an outage or reduction in service which is currently impacting customers and requires rapid remediation. It is created based on one or more trigger alerts that indicate the outage or reduction in service. Any alert of severity Major or Critical will act as a trigger alert. Other alerts that share the same cause may add context to the incident.
 - **Incident**: An incident in ServiceNow is an event of interruption disruption or degradation in normal service operation. An open incident in ServiceNow implies that the customer is impacted, or it represents the business risk.
 - **Topology**: A topology is a representation of how constituent parts are interrelated. In IBM AIOps, an algorithm analyzes how the event nodes are proximate to each other and groups them into a topology-based correlation.
 
 <div style="page-break-after: always;"></div>
 
 ## 1.2 Navigating The Demo UI
-
-
 
 ![image](./pics/aiops/image.054.png)
 
@@ -54,10 +44,7 @@ The most important functionalities are:
 2. **Clear all existing Stories and Alerts**
 3. **Create an Incident**
 
-
 > ℹ️ If you are asked to login to the Demo UI, please use the toekn/password that you have defined in the configuration file
-
-
 
 > ⚠️ Before start, you should open the IBMAIOps and check that there are no open stories and alerts pending. If there are some created few hours before (leftovers from somebody else not completing the demo) you can clean them up using IBMAIOps Demo UI as shown below.
 
@@ -69,10 +56,9 @@ The most important functionalities are:
 
 This use case shows clients how IBM IBM AIOps proactively helps avoid application downtimes and incidents impacting end-users. You play the role of an SRE/Operations person who has received a Slack message indicating that the RobotShop application is not displaying customer ratings. This is an important feature of the RobotShop application since RobotShop is the main platform from which the fictional company sells its robots.
 
-
 ### 1.2.2 Use Case
 
-The use case demonstrates how IBM AIOps can assist the SRE/Operations team as they identify, verify, and ultimately correct the issue. The demonstration shows integration with Instana, Turbonomic, ServiceNow, and Slack. Slack is the ChatOps environment used for working on this incident. 
+The use case demonstrates how IBM AIOps can assist the SRE/Operations team as they identify, verify, and ultimately correct the issue. The demonstration shows integration with Instana, Turbonomic, ServiceNow, and Slack. Slack is the ChatOps environment used for working on this incident.
 
 You will demonstrate the following major selling points around IBM AIOps:
 
@@ -84,8 +70,9 @@ You will demonstrate the following major selling points around IBM AIOps:
 <div style="page-break-after: always;"></div>
 
 ## 1.3 Demonstration flow
+
 1. Scenario introduction
-1. Trigger problem situation [In the background] 
+1. Trigger problem situation [In the background]
 1. Verify the status of the Robot Shop application.
 1. Understanding and resolving the incident
    1. Login to IBMAIOps
@@ -101,17 +88,15 @@ You will demonstrate the following major selling points around IBM AIOps:
    1. Resolve the Incident
 1. Summary
 
-
 ## 1.4 Demonstration Video Walkthrough
 
-You can watch the [Demo Walkthrough video](https://ibm.box.com/s/icgkxzlt2ja6dth16dpdin055uyysej1l) to get an idea on how to do the demo (based on 3.2). 
-
+You can watch the [Demo Walkthrough video](https://ibm.box.com/s/icgkxzlt2ja6dth16dpdin055uyysej1l) to get an idea on how to do the demo (based on 3.2).
 
 # 2. Deliver the demo
 
 ## 2.1 Introduce the demo context
 
-**📣 <u>Narration</u>** 
+**📣 <u>Narration</u>**
 
 Welcome to this demonstration of the IBM AIOps platform. In this demo, I am going to show you how IBM AIOps can help your operations team proactively identify, diagnose, and resolve incidents across mission-critical workloads.
 
@@ -123,13 +108,13 @@ You’ll see how:
 
 During the demonstration, we will be using the sample application called RobotShop, which serves as a proxy for any type of app. The application is built on a microservices architecture, and the services are running on Kubernetes cluster.
 
->**🚀 <u>Action</u>**
+> **🚀 <u>Action</u>**
 >
->Use demo [introductory PowerPoint presentation](https://github.com/niklaushirt/ibm-aiops-deployer/blob/main/doc/CP4AIOPS_DEMO_2023_V1.pptx?raw=true), to illustrate the narration. Adapt your details on Slide 1 and 13
+> Use demo [introductory PowerPoint presentation](https://github.com/niklaushirt/ibm-concert-deployer/blob/main/doc/CP4AIOPS_DEMO_2023_V1.pptx?raw=true), to illustrate the narration. Adapt your details on Slide 1 and 13
 
 **📣 <u>Narration</u>**
 
-**Slide 2**: Let’ look at the environment that we have set up. Our sample application: “RobotShop” is running as a set of microservices in a Kubernetes cluster. Typically, the Operations team maintaining such application has a collection of tools through which they collect various data types. 
+**Slide 2**: Let’ look at the environment that we have set up. Our sample application: “RobotShop” is running as a set of microservices in a Kubernetes cluster. Typically, the Operations team maintaining such application has a collection of tools through which they collect various data types.
 
 **Slide 3**: Here we have several systems that are sending Events into AIOPS (slide 3), like:
 
@@ -147,7 +132,7 @@ Those Events are being grouped into Alerts to massively reduce the number of sig
 
 **Slide 6**: Alerts that are relevant for the same Incident are packaged into a so called Incident. The Incident will be enriched and updated with information as it gets available.
 
- **Slide 7**: One example is the Topology information. Not only will AIOPS tell me that I have a problem and present all relevant Events but it will also tell me where in the system topology the problem is situated. 
+**Slide 7**: One example is the Topology information. Not only will AIOPS tell me that I have a problem and present all relevant Events but it will also tell me where in the system topology the problem is situated.
 
 **Slide 8**: Furthermore the Incident is enriched with past resolution information coming from ServiceNow tickets. I'll explain this more in detail during the demo.
 
@@ -155,11 +140,7 @@ Those Events are being grouped into Alerts to massively reduce the number of sig
 
 **Slide 10**: If Operations or SREs have created Runbooks, AIOPS can automatically trigger a Runbook to mitigate the problem.
 
-
-
 **ℹ️ <u>Note</u>**: We are NOT using Slack in this demo.
-
-
 
 **📣 <u>Narration</u>**
 
@@ -173,23 +154,14 @@ Now let's start the demo.
 
 ![image](./pics/aiops/image.054.png)
 
-
-
->**🚀 <u>Action</u>**
->Open IBMAIOps **Demo** UI, and trigger the incident
+> **🚀 <u>Action</u>**
+> Open IBMAIOps **Demo** UI, and trigger the incident
 >
->- Point your browser to the IBMAIOps Demo UI, 
+> - Point your browser to the IBMAIOps Demo UI,
+> - Login with the token that you have defined in the configuration file and
+> - Trigger the incident `(3)` you would like to use in your demo.
 >
->- Login with the token that you have defined in the configuration file and 
->
->- Trigger the incident `(3)` you would like to use in your demo. 
->
->  
->
->  This action injects the stream of simulated events into the system, which replicates what could happen in a real life situation.
-
-
-
+> This action injects the stream of simulated events into the system, which replicates what could happen in a real life situation.
 
 <div style="page-break-after: always;"></div>
 
@@ -197,17 +169,13 @@ Now let's start the demo.
 
 ### 2.3.1 Show the Application
 
-
-
 ![image](./pics/aiops/image.089.png)
 
-
-
->**🚀 <u>Action</u>**
+> **🚀 <u>Action</u>**
 >
->- Open the RobotShop application
+> - Open the RobotShop application
 >
->The Link can be found in the **Demo UI** under **Third-Party**. Play with the application UI.
+> The Link can be found in the **Demo UI** under **Third-Party**. Play with the application UI.
 
 **📣 <u>Narration</u>**
 
@@ -215,26 +183,19 @@ In this demo I am the application SRE (Site Reliability Engineer) responsible fo
 
 Let’s verify what’s going on with the RobotShop site. The application is up but displays an error that it cannot get any ratings.
 
-
-
 <div style="page-break-after: always;"></div>
 
 ### 2.3.2 Show ratings not working
 
-
-
 ![image](./pics/aiops/image.088.png)
 
-
-
->**🚀 <u>Action</u>**
+> **🚀 <u>Action</u>**
 >
->- Open any robot details to show that there are no ratings displayed.
+> - Open any robot details to show that there are no ratings displayed.
 
 **📣 <u>Narration</u>**
 
 I know that there are many ratings for each of the products that we sell, so when none are displayed, it means that there is a likely problem with `Ratings` service withing application that may heavily impact client’s purchasing decisions, as well as may be a sign of a wider outage.
-
 
 <div style="page-break-after: always;"></div>
 
@@ -244,11 +205,9 @@ I know that there are many ratings for each of the products that we sell, so whe
 
 ![image](./pics/aiops/image.054.png)
 
->**🚀 <u>Action</u>**
+> **🚀 <u>Action</u>**
 >
->- In the Demo UI, click **IBMAIOps `(1)`**
-
-
+> - In the Demo UI, click **IBMAIOps `(1)`**
 
 ![image](./pics/aiops/image.055.png)
 
@@ -256,49 +215,38 @@ I know that there are many ratings for each of the products that we sell, so whe
 
 Let’s take a closer look at the incident that has been created in IBM AIOps.
 
-
-
 <div style="page-break-after: always;"></div>
-
 
 ### 2.4.2 Open the Incident
 
-![image](./pics/aiops/image.056.png)  
+![image](./pics/aiops/image.056.png)
 
->**🚀 <u>Action</u>**
+> **🚀 <u>Action</u>**
 >
->- Click the "hamburger menu" on the upper left. Click **Stories and alerts**
-
-
-
+> - Click the "hamburger menu" on the upper left. Click **Stories and alerts**
 
 ![image](./pics/aiops/image.057.png)
 
 **📣 <u>Narration</u>**
 
-We can see that the simulation has created a **Incident**. The **Incident** includes grouped information related to the incident at hand. It equates to a classic War Room that are usually put in place in case of an outage. 
+We can see that the simulation has created a **Incident**. The **Incident** includes grouped information related to the incident at hand. It equates to a classic War Room that are usually put in place in case of an outage.
 The **Incident** contains related log anomalies, topology, similar incidents, recommended actions based on past trouble tickets, relevant events, runbooks, and more.
-
 
 <div style="page-break-after: always;"></div>
 
 ### 2.4.3 Examining the Incident
 
-![image](./pics/aiops/image.056.png)  
+![image](./pics/aiops/image.056.png)
 
->**🚀 <u>Action</u>**
+> **🚀 <u>Action</u>**
 >
->- Click the "hamburger menu" on the upper left. Click **Stories and alerts** 
-
-
-
+> - Click the "hamburger menu" on the upper left. Click **Stories and alerts**
 
 ![image](./pics/aiops/image.057.png)
 
 **📣 <u>Narration</u>**
 
 Now let's have a look at the **Incident**.
-
 
 ![image](./pics/aiops/image.059.png)
 
@@ -314,17 +262,13 @@ As I said before, the Incident regroups all relevant information concerning the 
 
 ### 2.4.4 Acknowledge the Incident
 
->**🚀 <u>Action</u>**
->- Click on **Change Incident Settings.**
+> **🚀 <u>Action</u>**
 >
->- Select **Change Status.**
->
->- Click on  **In progress**
+> - Click on **Change Incident Settings.**
+> - Select **Change Status.**
+> - Click on **In progress**
 
-
-![image](./pics/aiops/image.079.png)  
-
-
+![image](./pics/aiops/image.079.png)
 
 **📣 <u>Narration</u>**
 
@@ -334,20 +278,17 @@ First and before I continue examining the Incident I want to let my colleagues k
 
 ### 2.4.5 Similar Incidents
 
->**🚀 <u>Action</u>**
+> **🚀 <u>Action</u>**
 >
->- Click the first similar resolution ticket  
+> - Click the first similar resolution ticket
 
-
-![image](./pics/aiops/image.060.png)  
-
-
+![image](./pics/aiops/image.060.png)
 
 **📣 <u>Narration</u>**
 
 Most large organizations use IT Service Management tools to govern processes around IT. Our organization is using ServiceNow for that purpose. Past incidents with resolution information are ingested and analysed by IBM AIOps.
 
-The IBM IBM AIOps trains on exisitng tickets and it extracts the steps used to fix previous incidents (if documented) and recommend resolutions using natural language processing. This AI model helps you discover historical incidents to aid in the remediation of current problems. 
+The IBM IBM AIOps trains on exisitng tickets and it extracts the steps used to fix previous incidents (if documented) and recommend resolutions using natural language processing. This AI model helps you discover historical incidents to aid in the remediation of current problems.
 
 So for the **Incident**, your team is presented with the top-ranked similar incidents from the past. These relevant similar incidents help speed up incident resolution even if the I don't have access to ServiceNow. Without these features, your team must manually search for past incidents and resolutions, which is time-consuming.
 
@@ -355,22 +296,17 @@ In this particular example I can see that the problem was related to a GIT Commi
 
 Let me check how the problem was resolved for this incident.
 
-**❗ <u>Note</u>**:  In the Robot Shop demo scenario, the integration with ServiceNow is simulated with the static content. 
+**❗ <u>Note</u>**: In the Robot Shop demo scenario, the integration with ServiceNow is simulated with the static content.
 
 <div style="page-break-after: always;"></div>
 
 #### Resolution Information
 
-
-
->**🚀 <u>Action</u>**
+> **🚀 <u>Action</u>**
 >
->- Click on the **Resolution Information** Tab
+> - Click on the **Resolution Information** Tab
 
-
-![image](./pics/aiops/image.076.png)  
-
-
+![image](./pics/aiops/image.076.png)
 
 **📣 <u>Narration</u>**
 
@@ -378,25 +314,18 @@ It seems that it was resolved by changing the mysql deployment and a Runbook had
 
 To finish up, I will check if the incident was related to an official change.
 
-
-
 <div style="page-break-after: always;"></div>
 
 #### Examine the Change
 
-
-
 ![image](./pics/aiops/image.077.png)
 
->**🚀 <u>Action</u>**
+> **🚀 <u>Action</u>**
 >
->- Click on the **Related Records** Tab
->
->- Click on the **i** Button next to **Caused by Change**
+> - Click on the **Related Records** Tab
+> - Click on the **i** Button next to **Caused by Change**
 
-![image](./pics/aiops/image.078.png)  
-
-
+![image](./pics/aiops/image.078.png)
 
 <div style="page-break-after: always;"></div>
 
@@ -409,25 +338,23 @@ As it's still ongoing, chances are high, that the development team recreated a s
 Obviously, in real life I would now start the Runbook to see if it resolves the problem.
 But for the sake of the demo, let's dig a little deeper first.
 
-
-
 <div style="page-break-after: always;"></div>
 
 ### 2.4.6 Examine the Alerts
 
->**🚀 <u>Action</u>**
+> **🚀 <u>Action</u>**
 >
->- Close the ServiceNow page and click the **Alerts** Tab. 
+> - Close the ServiceNow page and click the **Alerts** Tab.
 
-![image](./pics/aiops/image.061.png)  
+![image](./pics/aiops/image.061.png)
 
 **📣 <u>Narration</u>**
 
-Notice, that alerts are not sorted by severity, but the AI engine ranked them by relevance. The ones that are likely related to the root cause are at the top. Let’s look at the first row for some more details. 
+Notice, that alerts are not sorted by severity, but the AI engine ranked them by relevance. The ones that are likely related to the root cause are at the top. Let’s look at the first row for some more details.
 
->**🚀 <u>Action</u>**
+> **🚀 <u>Action</u>**
 >
->- Click on the first Alert in the list. 
+> - Click on the first Alert in the list.
 
 **📣 <u>Narration</u>**
 
@@ -437,10 +364,9 @@ In the **Alert details,** you can see different types of groupings explaining wh
 
 #### Scope based grouping
 
->**🚀 <u>Action</u>**
+> **🚀 <u>Action</u>**
 >
->- Click **Scope-based grouping**. 
-
+> - Click **Scope-based grouping**.
 
 ![image](./pics/aiops/image.027.png)
 
@@ -450,10 +376,9 @@ Some alerts were added to the incident because they occurred on the same resourc
 
 #### Topological grouping
 
->**🚀 <u>Action</u>**
+> **🚀 <u>Action</u>**
 >
->- Click **Topological grouping**. 
-
+> - Click **Topological grouping**.
 
 ![image](./pics/aiops/image.028.png)
 
@@ -465,73 +390,67 @@ Other alerts were grouped because they occurred on the logically or physically r
 
 #### Temporal grouping
 
->**🚀 <u>Action</u>**
+> **🚀 <u>Action</u>**
 >
->- Click **Temporal correlation**. 
-
+> - Click **Temporal correlation**.
 
 ![image](./pics/aiops/image.029.png)
-
 
 **📣 <u>Narration</u>**
 
 Finally, the temporal correlation adds to the incident events that previously, in history, are known to occur close to each other in the short time window. What is most important here is the fact that all these correlations happen automatically – there is no need to define any rules or program anything. In highly dynamic and distributed cloud-native applications this is a huge advantage that saves a lot of time and effort.
 
-
->**🚀 <u>Action</u>**
+> **🚀 <u>Action</u>**
 >
->- **Close** the Alert details window. 
+> - **Close** the Alert details window.
 
 <div style="page-break-after: always;"></div>
 
 ### 2.4.7 Incident timeline
 
->**🚀 <u>Action</u>**
+> **🚀 <u>Action</u>**
 >
->- Click twice on the  **Last occurence** Header. 
+> - Click twice on the **Last occurence** Header.
 >
->***Result**: The "Commit in repository robot-shop by Niklaus Hirt on file robot-shop.yaml" should be at the bottom* 
+> **\*Result**: The "Commit in repository robot-shop by Niklaus Hirt on file robot-shop.yaml" should be at the bottom\*
 
-![image](./pics/aiops/image.063.png)  
+![image](./pics/aiops/image.063.png)
 
 **📣 <u>Narration</u>**
 
 When trying to understand what happened during the incident, I sort the Alerts by occurence. This allows you to understand the chain of events.
 
-* I can see that the first event was a code change that had been commited to **GitHub**. When I hover over the description I get the full text.
-So it seems that the Development Team has reduced the available memory for the mysql database.
+- I can see that the first event was a code change that had been commited to **GitHub**. When I hover over the description I get the full text.
+  So it seems that the Development Team has reduced the available memory for the mysql database.
 
-Other events are confirming the hypothesis. 
-* I can then see the CI/CD process kick in and deploys the code change to the system detected by the Security tool and 
-* **Instana** has has detected the memory size change. 
+Other events are confirming the hypothesis.
 
+- I can then see the CI/CD process kick in and deploys the code change to the system detected by the Security tool and
+- **Instana** has has detected the memory size change.
 
-* Then **Functional Selenium Tests** start failing and 
-* **Turbonomic** tries to scale-up the mysql database.
-* **Instana** tells me that the mysql Pod is not running anymore, the replicas are not matching the desired state.
+- Then **Functional Selenium Tests** start failing and
+- **Turbonomic** tries to scale-up the mysql database.
+- **Instana** tells me that the mysql Pod is not running anymore, the replicas are not matching the desired state.
 
 <div style="page-break-after: always;"></div>
 
-* IBM AIOps has learned the normal, good patterns for logs coming from the applications. The Incident contains a **Log Anomaly** that has been detected in the ratings service that cannot acces the mysql database.
+- IBM AIOps has learned the normal, good patterns for logs coming from the applications. The Incident contains a **Log Anomaly** that has been detected in the ratings service that cannot acces the mysql database.
 
 ![image](./pics/aiops/image.064.png)
 
->**🚀 <u>Action</u>**
+> **🚀 <u>Action</u>**
 >
->- Click on a Alert line that has **ANOMALY:** in the Type column. Then open the **Metric Anomaly Details** accordion. 
-
+> - Click on a Alert line that has **ANOMALY:** in the Type column. Then open the **Metric Anomaly Details** accordion.
 
 **📣 <u>Narration</u>**
 
-* IBM AIOps is also capable of collecting metrics from multiple sources and detecting **Metric Anomalies**. It was trained on hundreds or thousands of metrics from the environment and constructs a dynamic baseline (shown in green). The graphic suddenly turns red which relates to detected anomaly when the database is consuming a higher amount of memory than usual.
-
+- IBM AIOps is also capable of collecting metrics from multiple sources and detecting **Metric Anomalies**. It was trained on hundreds or thousands of metrics from the environment and constructs a dynamic baseline (shown in green). The graphic suddenly turns red which relates to detected anomaly when the database is consuming a higher amount of memory than usual.
 
 ![image](./pics/aiops/image.065.png)
 
->**🚀 <u>Action</u>**
+> **🚀 <u>Action</u>**
 >
->- (1) In **Related Alerts** select some additional alerts.
-
+> - (1) In **Related Alerts** select some additional alerts.
 
 **📣 <u>Narration</u>**
 
@@ -539,10 +458,9 @@ You can display several alerts at the same time to better understand the tempora
 
 <div style="page-break-after: always;"></div>
 
->**🚀 <u>Action</u>**
+> **🚀 <u>Action</u>**
 >
->- (2) Select a portion of the graph with your mouse to zoom in
-
+> - (2) Select a portion of the graph with your mouse to zoom in
 
 **📣 <u>Narration</u>**
 
@@ -550,33 +468,27 @@ Now let's zoom in to better see the anomalies
 
 ![image](./pics/aiops/image.066.png)
 
->**🚀 <u>Action</u>**
+> **🚀 <u>Action</u>**
 >
->- Hover over a datapoint to show the before/after values. 
-
+> - Hover over a datapoint to show the before/after values.
 
 **📣 <u>Narration</u>**
 
 I can clearly see that the incident caused the **Latencies** to skyrocket and the **Transactions per Seconds** are almost zero. This is yet another confirmation of the source of the problem.
 
->**🚀 <u>Action</u>**
+> **🚀 <u>Action</u>**
 >
->- Close the Metric anomaly details view. 
+> - Close the Metric anomaly details view.
 
 <div style="page-break-after: always;"></div>
 
 ## 2.5 Working with Topology
 
-
-
 ### 2.5.1 Examining the Topology
 
-
->**🚀 <u>Action</u>**
+> **🚀 <u>Action</u>**
 >
->- Click the **Topology** Tab. 
-
-
+> - Click the **Topology** Tab.
 
 ![image](./pics/aiops/image.067.png)
 
@@ -584,128 +496,95 @@ I can clearly see that the incident caused the **Latencies** to skyrocket and th
 
 The interface shows the **topology** of the application that is relevant to the incident. IBM IBM AIOps’ topology service delivers a working understanding of the resources that you have in your environment, how the resources relate to each other, and how the environment has changed over time.
 
-You can see that there are some statuses attached to the different resources, marked with colorful dots. Let’s view the details and status of the **mysql** resource with red status. 
+You can see that there are some statuses attached to the different resources, marked with colorful dots. Let’s view the details and status of the **mysql** resource with red status.
 
 <div style="page-break-after: always;"></div>
 
-![image](./pics/aiops/image.068.png)  
+![image](./pics/aiops/image.068.png)
 
->**🚀 <u>Action</u>**
+> **🚀 <u>Action</u>**
 >
->- Find the resource which displays resource name “**mysql**”. Then, right-click and select **Resource details.** 
->
->- Click on Tab **Alerts** 
-
+> - Find the resource which displays resource name “**mysql**”. Then, right-click and select **Resource details.**
+> - Click on Tab **Alerts**
 
 ![image](./pics/aiops/image.069.png)
 
-**📣 <u>Narration</u>** 
+**📣 <u>Narration</u>**
 
 The topology service provides operations teams with complete up-to-date visibility over dynamic infrastructure, resources, and services. The topology service lets you query a specific resource for details, and other relevant information. Here I can see all Alerts for the mysql database resource for example.
 
 <div style="page-break-after: always;"></div>
 
-
 ### 2.5.2 [Optional] Topology in-depth
 
 ![image](./pics/aiops/image.070.png)
 
->**🚀 <u>Action</u>**
+> **🚀 <u>Action</u>**
 >
->- Find the resource which displays resource name “mysql”. Then, right-click and select **Open in Topology Viewer.** 
-
-
+> - Find the resource which displays resource name “mysql”. Then, right-click and select **Open in Topology Viewer.**
 
 ![image](./pics/aiops/image.071.png)
 
-
-
 **📣 <u>Narration</u>**
 
-The interface shows the topology surrounding the mysql resource. I can see that the **mysql** deployment is being called by the **ratings** service and that it runs on a certain worker node. 
-
-
-
-
+The interface shows the topology surrounding the mysql resource. I can see that the **mysql** deployment is being called by the **ratings** service and that it runs on a certain worker node.
 
 ![image](./pics/aiops/image.072.png)
 
->**🚀 <u>Action</u>**
+> **🚀 <u>Action</u>**
 >
->- Change the number of hops to `4` and click **Render**.
-
-
+> - Change the number of hops to `4` and click **Render**.
 
 **📣 <u>Narration</u>**
 
- I can also increase the size of the graph, still based on the **mysql** deployment.
-
-
+I can also increase the size of the graph, still based on the **mysql** deployment.
 
 ![image](./pics/aiops/image.073.png)
 
->**🚀 <u>Action</u>**
+> **🚀 <u>Action</u>**
 >
->- Right-click om mysql and select **Show last change in timeline** and check **Delta**
-
-
+> - Right-click om mysql and select **Show last change in timeline** and check **Delta**
 
 ![image](./pics/aiops/image.074.png)
 
-
-
 **📣 <u>Narration</u>**
 
- Now I will examine the historical events for the **mysql** component. I can see the **Alerts** that have been raised on the **mysql** resource over time.
-
-
-
-
+Now I will examine the historical events for the **mysql** component. I can see the **Alerts** that have been raised on the **mysql** resource over time.
 
 <div style="page-break-after: always;"></div>
 
-
-
 ## 2.6 Resolving the incident
 
-
-
 ### 2.6.1 Fixing the problem with runbook automation
->**🚀 <u>Action</u>**
->
->- Click on the  **Overview**  Tab.
 
+> **🚀 <u>Action</u>**
+>
+> - Click on the **Overview** Tab.
 
 ![image](./pics/aiops/image.080.png)
 
-
-
 **📣 <u>Narration</u>**
 
-Now that we know what the problem is, let’s correct what has happened. A runbook has been automatically identified but have not been executed. Runbooks are guided steps that IT operations teams use to troubleshoot and resolve problems. Some organizations might call these standard operating procedures or playbooks. When an incident occurs, IBM IBM AIOps matches an appropriate runbook to the problem. The runbook can be set to run automatically when it is matched to an incident, or it can run with user approval and participation. 
+Now that we know what the problem is, let’s correct what has happened. A runbook has been automatically identified but have not been executed. Runbooks are guided steps that IT operations teams use to troubleshoot and resolve problems. Some organizations might call these standard operating procedures or playbooks. When an incident occurs, IBM IBM AIOps matches an appropriate runbook to the problem. The runbook can be set to run automatically when it is matched to an incident, or it can run with user approval and participation.
 
 <div style="page-break-after: always;"></div>
 
 Let’s execute the Runbook.
 
->**🚀 <u>Action</u>**
+> **🚀 <u>Action</u>**
 >
->- Click on the three dots and click **Run**
->
->- Click **Start Runbook**.
-
+> - Click on the three dots and click **Run**
+> - Click **Start Runbook**.
 
 ![image](./pics/aiops/image.082.png)
 
->**🚀 <u>Action</u>**
+> **🚀 <u>Action</u>**
 >
->- Click **Run** in Step 1.
+> - Click **Run** in Step 1.
 
 ![image](./pics/aiops/image.083.png)
 
-
-
-**❗ <u>Note</u>**: The execution of the runbook can take few minutes. 
+**❗ <u>Note</u>**: The execution of the runbook can take few minutes.
 
 <div style="page-break-after: always;"></div>
 
@@ -713,19 +592,12 @@ Let’s execute the Runbook.
 
 The Runbook that I just started kicks off a Playbook on Ansible Tower. I can follow the execution as it connects to the cluster and then scales up memory for the MySQL deployment.
 
-
-
 ![image](./pics/aiops/image.084.png)
 
-
-
->**🚀 <u>Action</u>**
+> **🚀 <u>Action</u>**
 >
->- When finished, click **Complete**.
->
->- Open the RobotShop application. Verify that ratings are correctly shown 
-
-
+> - When finished, click **Complete**.
+> - Open the RobotShop application. Verify that ratings are correctly shown
 
 ![image](./pics/aiops/image.087.png)
 
@@ -733,15 +605,12 @@ The Runbook that I just started kicks off a Playbook on Ansible Tower. I can fol
 
 Before confirming that the runbook worked as expected, I should check the RobotShop application to see if it is working as expected.
 
-
-
 ![image](./pics/aiops/image.085.png)
 
->**🚀 <u>Action</u>**
+> **🚀 <u>Action</u>**
 >
->- Rate the Runbook
->
->- Then click **Runbook Worked**.
+> - Rate the Runbook
+> - Then click **Runbook Worked**.
 
 **📣 <u>Narration</u>**
 
@@ -751,33 +620,20 @@ So the runbook has resolved the problem. When I tell IBM AIOps that the Runbook 
 
 ### 2.6.2 Resolve the Incident
 
->**🚀 <u>Action</u>**
+> **🚀 <u>Action</u>**
 >
->- Click on **Change Incident Settings.**
->
->- Select **Change Status.**
->
->- Click on  **Resolved**
+> - Click on **Change Incident Settings.**
+> - Select **Change Status.**
+> - Click on **Resolved**
 
-
-![image](./pics/aiops/image.079.png)  
-
-
+![image](./pics/aiops/image.079.png)
 
 **📣 <u>Narration</u>**
 
-So now as we have resolved the problem,  I will inform the development team of the problem by reopening the ServiceNow ticket and by closing the Incident. 
-
-
-
-
-
-
+So now as we have resolved the problem, I will inform the development team of the problem by reopening the ServiceNow ticket and by closing the Incident.
 
 # Demonstration summary
+
 **📣 <u>Narration</u>**
 
-Today, I have shown you how IBM AIOps can assist the SRE/Operations team to identify, verify, and ultimately correct an issue with a modern, distributed application running in a cloud-native environment. The presented solution provides automatic application topology discovery, anomaly detection both with metrics and logs, and sophisticated methods of correlation of events coming from different sources. 
-
-
-
+Today, I have shown you how IBM AIOps can assist the SRE/Operations team to identify, verify, and ultimately correct an issue with a modern, distributed application running in a cloud-native environment. The presented solution provides automatic application topology discovery, anomaly detection both with metrics and logs, and sophisticated methods of correlation of events coming from different sources.

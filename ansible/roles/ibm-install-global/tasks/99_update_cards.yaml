@@ -21,7 +21,7 @@
     apiVersion: console.openshift.io/v1
     kind: ConsoleNotification
     metadata:
-      name: ibm-aiops-notification-status
+      name: ibm-concert-operate-notification-status
     spec:
       backgroundColor: '#ffd500'
       color: '#000'
@@ -122,7 +122,7 @@
       if [ "${AIOPS_NAMESPACE}" != "" ]; then
 
         export ROUTE=$(oc get route -n $AIOPS_NAMESPACE cpd  -o jsonpath={.spec.host})          
-        demoURL=$(oc get routes -n $AIOPS_NAMESPACE-demo-ui ibm-aiops-demo-ui  -o jsonpath="{['spec']['host']}")
+        demoURL=$(oc get routes -n $AIOPS_NAMESPACE-demo-ui ibm-concert-demo-ui  -o jsonpath="{['spec']['host']}")
 
         export ROWS=""
 
@@ -132,7 +132,7 @@
         fi
         ROWS=$ROWS'{"drilldown_url":  " ", "label": " ", "sub_text": " "},'
 
-        ROWS=$ROWS'{"drilldown_url":  "https://github.com/niklaushirt/ibm-aiops-deployer#2-quick-install", "label": "Created with IBMAIOps-Deployer", "sub_text": "Built with 🤍 by Niklaus Hirt"},'
+        ROWS=$ROWS'{"drilldown_url":  "https://github.com/niklaushirt/ibm-concert-deployer#2-quick-install", "label": "Created with IBMAIOps-Deployer", "sub_text": "Built with 🤍 by Niklaus Hirt"},'
 
         PAYLOAD='{ "permissions": ["administrator"],  "window_open_target": "_blank",  "order": 1, "title": "🚀   Getting Started", "template_type": "text_list", "data": { "text_list_data": { "rows": [ { "drilldown_url": "", "label": "🐥 Welcome to the {{global_config.environment_name | default("Demo")}} Environment", "sub_text": "" }, '$ROWS' { "drilldown_url": "", "label": " ", "sub_text": " " } ] } } } '
         echo "PAYLOAD:"$PAYLOAD
@@ -206,7 +206,7 @@
       export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
       if [ "${AIOPS_NAMESPACE}" != "" ]; then
         export ROUTE=$(oc get route -n $AIOPS_NAMESPACE cpd  -o jsonpath={.spec.host})          
-        export demoURL=$(oc get route -n $AIOPS_NAMESPACE-demo-ui ibm-aiops-demo-ui  -o jsonpath={.spec.host})          
+        export demoURL=$(oc get route -n $AIOPS_NAMESPACE-demo-ui ibm-concert-demo-ui  -o jsonpath={.spec.host})          
 
         export ROWS=""
 
@@ -240,7 +240,7 @@
       export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
       if [ "${AIOPS_NAMESPACE}" != "" ]; then
         export ROUTE=$(oc get route -n $AIOPS_NAMESPACE cpd  -o jsonpath={.spec.host})          
-        export demoURL=$(oc get route -n $AIOPS_NAMESPACE-demo-ui ibm-aiops-demo-ui  -o jsonpath={.spec.host})          
+        export demoURL=$(oc get route -n $AIOPS_NAMESPACE-demo-ui ibm-concert-demo-ui  -o jsonpath={.spec.host})          
 
         export ROWS=""
 
@@ -275,7 +275,7 @@
       export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
       if [ "${AIOPS_NAMESPACE}" != "" ]; then
         export ROUTE=$(oc get route -n $AIOPS_NAMESPACE cpd  -o jsonpath={.spec.host})          
-        export demoURL=$(oc get route -n $AIOPS_NAMESPACE-demo-ui ibm-aiops-demo-ui  -o jsonpath={.spec.host})          
+        export demoURL=$(oc get route -n $AIOPS_NAMESPACE-demo-ui ibm-concert-demo-ui  -o jsonpath={.spec.host})          
 
         export ROWS=""
 

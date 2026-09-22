@@ -11,7 +11,7 @@ spec:
     spec:
       containers:
         - name: load
-          image: quay.io/niklaushirt/ibm-aiops-tools:5.1.0
+          image: quay.io/niklaushirt/ibm-concert-tools:1.0.0
           imagePullPolicy: IfNotPresent
           resources:
             requests:
@@ -38,8 +38,8 @@ spec:
               echo "  ***************************************************************************************************************************************************"
               echo "   🛠️   Run Analysis: MetricAnomaly"
               export FILE_NAME=run-analysis-METRIC.graphql
-              export FILE_PATH="/ibm-aiops-deployer/ansible/roles/ibm-aiops-demo-content/templates/training/training-definitions/"
-              /ibm-aiops-deployer/ansible/roles/ibm-aiops-demo-content/templates/training/scripts/execute-graphql.sh
+              export FILE_PATH="/ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/templates/training/training-definitions/"
+              /ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/templates/training/scripts/execute-graphql.sh
 
 
 

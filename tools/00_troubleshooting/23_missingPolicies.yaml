@@ -74,7 +74,7 @@ spec:
       serviceAccount: ibm-installer-admin
       containers:
         - name: install
-          image: quay.io/niklaushirt/ibm-aiops-tools:5.1.0
+          image: quay.io/niklaushirt/ibm-concert-tools:1.0.0
           imagePullPolicy: IfNotPresent
           resources:
             requests:
@@ -100,9 +100,9 @@ spec:
               echo "------------------------------------------------------------------------------------------------------------------------------"
               echo " 🚀 Getting Installation source from GitHub"
               echo "------------------------------------------------------------------------------------------------------------------------------"
-              echo "   📥 Clone Repo https://github.com/niklaushirt/ibm-aiops-deployer.git -b dev_latest"
-              git clone https://github.com/niklaushirt/ibm-aiops-deployer.git -b dev_latest
-              cd ibm-aiops-deployer
+              echo "   📥 Clone Repo https://github.com/niklaushirt/ibm-concert-deployer.git -b dev_latest"
+              git clone https://github.com/niklaushirt/ibm-concert-deployer.git -b dev_latest
+              cd ibm-concert-deployer
 
               echo ""
               echo ""
@@ -144,7 +144,7 @@ spec:
 
 
                     # Create Runbook Trigger Policy
-                    export POLICY_FILE="/ibm-aiops-deployer/ansible/roles/ibm-aiops-demo-content/templates/policies/runbook-trigger-policy-robot.json"
+                    export POLICY_FILE="/ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/templates/policies/runbook-trigger-policy-robot.json"
                     cp $POLICY_FILE /tmp/runbook_policy.json
                     cat /tmp/runbook_policy.json
                     echo "RUNBOOK_ID: $RUNBOOK_ID"
@@ -216,7 +216,7 @@ spec:
 
 
                     # Create Runbook Trigger Policy
-                    export POLICY_FILE="/ibm-aiops-deployer/ansible/roles/ibm-aiops-demo-content/templates/policies/runbook-trigger-policy-robot-network.json"
+                    export POLICY_FILE="/ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/templates/policies/runbook-trigger-policy-robot-network.json"
                     cp $POLICY_FILE /tmp/runbook_policy.json
                     cat /tmp/runbook_policy.json
                     echo "RUNBOOK_ID: $RUNBOOK_ID"
@@ -304,7 +304,7 @@ spec:
 
 
                     # Create Runbook Trigger Policy
-                    export POLICY_FILE="/ibm-aiops-deployer/ansible/roles/ibm-aiops-demo-content/templates/policies/runbook-trigger-policy-robot-restart.json"
+                    export POLICY_FILE="/ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/templates/policies/runbook-trigger-policy-robot-restart.json"
                     cp $POLICY_FILE /tmp/runbook_policy.json
                     cat /tmp/runbook_policy.json
                     echo "RUNBOOK_ID: $RUNBOOK_ID"
@@ -391,7 +391,7 @@ spec:
 
 
                     # Create Runbook Trigger Policy
-                    export POLICY_FILE="/ibm-aiops-deployer/ansible/roles/ibm-aiops-demo-content/templates/policies/runbook-trigger-policy-sock.json"
+                    export POLICY_FILE="/ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/templates/policies/runbook-trigger-policy-sock.json"
                     cp $POLICY_FILE /tmp/runbook_policy.json
                     cat /tmp/runbook_policy.json
                     echo "RUNBOOK_ID: $RUNBOOK_ID"
@@ -481,7 +481,7 @@ spec:
                     # Create Runbook Trigger Policy
 
 
-                    export POLICY_FILE="/ibm-aiops-deployer/ansible/roles/ibm-aiops-demo-content/templates/policies/runbook-trigger-policy-telco.json"
+                    export POLICY_FILE="/ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/templates/policies/runbook-trigger-policy-telco.json"
                     cp $POLICY_FILE /tmp/runbook_policy.json
                     cat /tmp/runbook_policy.json
                     echo "RUNBOOK_ID: $RUNBOOK_ID"

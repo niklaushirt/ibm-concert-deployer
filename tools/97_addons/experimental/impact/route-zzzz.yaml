@@ -2,7 +2,7 @@
 apiVersion: route.openshift.io/v1
 metadata:
   name: zzzz
-  namespace: ibm-aiops-evtmgr
+  namespace: ibm-concert-operate-evtmgr
   uid: 3b658f5a-eeb3-4348-bd4c-c2512857b2ac
   resourceVersion: '4137792'
   creationTimestamp: '2023-05-10T08:46:04Z'

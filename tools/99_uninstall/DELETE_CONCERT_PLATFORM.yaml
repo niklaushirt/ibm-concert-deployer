@@ -94,7 +94,7 @@ spec:
     spec:
       containers:
         - name: tools
-          image: quay.io/niklaushirt/ibm-aiops-tools:5.1.0
+          image: quay.io/niklaushirt/ibm-concert-tools:1.0.0
 
           securityContext:
             privileged: true

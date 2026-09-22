@@ -41,7 +41,7 @@ roleRef:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: ibm-aiops-demo-ui
+  namespace: ibm-concert-demo-ui
   name: ibm-aiops-simulate-change
   annotations: {}
 spec:
@@ -54,11 +54,11 @@ spec:
       labels:
         app: ibm-aiops-logs-streaming
     spec:
-      serviceAccount: ibm-aiops-demo-ui-admin
-      serviceAccount: ibm-aiops-demo-ui-admin
+      serviceAccount: ibm-concert-demo-ui-admin
+      serviceAccount: ibm-concert-demo-ui-admin
       containers:
         - name: tools
-          image: quay.io/niklaushirt/ibm-aiops-tools:5.1.0
+          image: quay.io/niklaushirt/ibm-concert-tools:1.0.0
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
@@ -90,9 +90,9 @@ spec:
               echo "------------------------------------------------------------------------------------------------------------------------------"
               echo " 🚀 Getting Installation source from GitHub"
               echo "------------------------------------------------------------------------------------------------------------------------------"
-              echo "   📥 Clone Repo https://github.com/niklaushirt/ibm-aiops-deployer.git -b dev_latest"
-              git clone https://github.com/niklaushirt/ibm-aiops-deployer.git -b dev_latest
-              cd ibm-aiops-deployer
+              echo "   📥 Clone Repo https://github.com/niklaushirt/ibm-concert-deployer.git -b dev_latest"
+              git clone https://github.com/niklaushirt/ibm-concert-deployer.git -b dev_latest
+              cd ibm-concert-deployer
 
               echo ""
               echo ""
@@ -110,7 +110,7 @@ spec:
               echo " ✅ INITIALIZATION - WAITING FOREVER"
               echo "*****************************************************************************************************************************"
 
-              cd /ibm-aiops-deployer/tools/97_addons/ibm-aiops-custom-scenarios/synthetic-change/
+              cd /ibm-concert-deployer/tools/97_addons/ibm-aiops-custom-scenarios/synthetic-change/
               ./1_simulate-change.sh
 
               while true

@@ -1,0 +1,233 @@
+
+# *************************************************************************************************************************************************
+# --------------------------------------------------------------------------------------------------------------------------------------
+# Enable AI Features
+# --------------------------------------------------------------------------------------------------------------------------------------
+# *************************************************************************************************************************************************
+
+# --------------------------------------------------------------------------------------------------------------------------------------
+# Enable AI Features
+# --------------------------------------------------------------------------------------------------------------------------------------
+
+- name: 🛰️  START - Enable AI Features
+  debug: 
+    msg="{{ lookup('pipe','date +%d.%m.%Y---%H:%M:%S') }}"
+
+
+- name: Log
+  shell: |
+    export MESSAGE="Enable AI Features"
+    export currentDate=$(date +%Y-%m-%d_%H:%M)
+    echo "---------------------------------------------------------------------------------------------------------------------------------------------------" >> ../install_{{current_feature.kind}}.log
+    echo $currentDate" - "$MESSAGE  >> ../install_{{current_feature.kind}}.log
+  ignore_errors: true
+
+- name: 📣 OCP CONSOLE - Create Openshift NOTIFICATION
+  shell: |
+    cat <<EOF | oc apply -f -
+    apiVersion: console.openshift.io/v1
+    kind: ConsoleNotification
+    metadata:
+      name: ibm-concert-operate-notification-status
+    spec:
+      backgroundColor: '#ffd500'
+      color: '#000'
+      location: {{global_config.position_ocp_notifications | default("BannerTop")}}
+      text: 'Installing {{current_feature.kind}} - Enable AI Features'    
+    EOF
+  ignore_errors: true
+  args:
+    executable: /bin/bash
+  when: (global_config.create_ocp_notifications | default(true))|bool == true  
+
+
+
+
+
+# - name: 🗯️ CHAT ASSISTANT - Create Entitlement Key
+#   shell: |
+#         export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
+#         oc create secret generic aiops-chat-assistant-entitlement-key -n $AIOPS_NAMESPACE --from-literal=entitlementkey={{ cp_entitlement_key }}
+#   ignore_errors: true
+
+
+
+# --------------------------------------------------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------------------------------------------
+# CHAT ASSISTANT - Create Enable Tile
+# --------------------------------------------------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------------------------------------------
+- name: 🗯️ CHAT ASSISTANT - Create Enable Tile
+  shell: |
+    set -x
+        
+
+    export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
+    ZEN_API_HOST=$(oc get route -n $AIOPS_NAMESPACE cpd -o jsonpath='{.spec.host}')
+    ZEN_LOGIN_URL="https://${ZEN_API_HOST}/v1/preauth/signin"
+    LOGIN_USER=admin
+    LOGIN_PASSWORD="$(oc get secret admin-user-details -n $AIOPS_NAMESPACE -o jsonpath='{ .data.initial_admin_password }' | base64 --decode)"
+
+    ZEN_LOGIN_RESPONSE=$(
+    curl -k \
+    -H 'Content-Type: application/json' \
+    -XPOST \
+    "${ZEN_LOGIN_URL}" \
+    -d '{
+          "username": "'"${LOGIN_USER}"'",
+          "password": "'"${LOGIN_PASSWORD}"'"
+    }' 2> /dev/null
+    )
+
+    ZEN_TOKEN=$(echo "${ZEN_LOGIN_RESPONSE}" | jq -r .token)
+    #echo $ZEN_TOKEN
+
+    export ROUTE=$(oc get route -n $AIOPS_NAMESPACE cpd -o jsonpath={.spec.host})
+    echo "ROUTE: "$ROUTE
+
+
+    curl "https://$ROUTE/aiops/aimodels/api/p/ai_platform_api" \
+    -X 'POST' \
+    -H "Authorization: bearer $ZEN_TOKEN" \
+    -H 'Content-Type: application/json' \
+    --data-raw '{"operationName":"createTrainingDefinition","variables":{"definitionName":"aiops_chat_assistant_configuration","description":"","algorithmName":"Knowledge_Agent","createdBy":" ","trainingSchedule":{"frequency":"manual","repeat":"daily","atTimeHour":0,"atTimeMinute":0,"timeRangeValidStart":null,"timeRangeValidEnd":null,"noEndDate":false},"promoteOption":"whenTrainingComplete","enableSelectiveTraining":false,"enableLADGoldenSignal":false,"integrationGenAI":"","enableGenAI":false,"dataSetIds":[]},"query":"mutation createTrainingDefinition($definitionName: String!, $description: String!, $algorithmName: String!, $createdBy: String, $trainingSchedule: TrainingScheduleInput!, $promoteOption: PromoteOption!, $enableSelectiveTraining: Boolean, $dataSetIds: [ID], $enableLADGoldenSignal: Boolean, $integrationGenAI: String, $enableGenAI: Boolean) {\n  createTrainingDefinition(\n    definitionName: $definitionName\n    description: $description\n    algorithmName: $algorithmName\n    createdBy: $createdBy\n    trainingSchedule: $trainingSchedule\n    promoteOption: $promoteOption\n    enableSelectiveTraining: $enableSelectiveTraining\n    dataSetIds: $dataSetIds\n    enableLADGoldenSignal: $enableLADGoldenSignal\n    integrationGenAI: $integrationGenAI\n    enableGenAI: $enableGenAI\n  ) {\n    status\n    message\n    __typename\n  }\n}"}'
+
+
+  
+  register: output_string
+  ignore_errors: true
+  args:
+    executable: /bin/bash
+  when: (current_feature.enable_chat_assistant | default(false))|bool == true  
+
+
+- name: 🟣  OUTPUT
+  debug: 
+    var: output_string.stdout_lines
+    verbosity: 0
+
+
+
+
+
+
+
+# --------------------------------------------------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------------------------------------------
+# WATSONX - Create Integration
+# --------------------------------------------------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------------------------------------------
+- name: 🗯️ WATSONX - Create Integration
+  shell: |
+    set -x
+        
+
+    export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
+    ZEN_API_HOST=$(oc get route -n $AIOPS_NAMESPACE cpd -o jsonpath='{.spec.host}')
+    ZEN_LOGIN_URL="https://${ZEN_API_HOST}/v1/preauth/signin"
+    LOGIN_USER=admin
+    LOGIN_PASSWORD="$(oc get secret admin-user-details -n $AIOPS_NAMESPACE -o jsonpath='{ .data.initial_admin_password }' | base64 --decode)"
+
+    ZEN_LOGIN_RESPONSE=$(
+    curl -k \
+    -H 'Content-Type: application/json' \
+    -XPOST \
+    "${ZEN_LOGIN_URL}" \
+    -d '{
+          "username": "'"${LOGIN_USER}"'",
+          "password": "'"${LOGIN_PASSWORD}"'"
+    }' 2> /dev/null
+    )
+
+    ZEN_TOKEN=$(echo "${ZEN_LOGIN_RESPONSE}" | jq -r .token)
+    #echo $ZEN_TOKEN
+
+    export ROUTE=$(oc get route -n $AIOPS_NAMESPACE cpd -o jsonpath={.spec.host})
+    echo "ROUTE: "$ROUTE
+
+
+
+
+    curl "https://$ROUTE/aiops/integrations/api/controller/grpc/connections" \
+    -X 'POST' \
+    -H "Authorization: bearer $ZEN_TOKEN" \
+    -H 'Content-Type: application/json' \
+    --data-raw '{"connection_config":{"project_type":"lite","iam_url":"https://iam.cloud.ibm.com","deploymentType":"microedge","using_proxy":false,"metering_enabled":true,"metering_token_limit":1000000,"display_name":"watsonx","project_id":"{{current_feature.watsonx_projectid  | default('f80a9ece-5156-440e-a9cc-03aab00d7ba1')}}","url":"{{current_feature.watsonx_url  | default('https://us-south.ml.cloud.ibm.com')}}","api_key":"{{current_feature.watsonx_token  | default('changeme')}}"},{% raw %}"connectorConfig":{"apiAdaptor":"grpc","categories":["{{connector.common.category.ai}}"],"deploymentType":["local"],"displayName":"{{connector.watsonx.name}}","form":[{"apiMapping":"connection_config.display_name","element":"input","excludeValues":[],"formStep":"addConnection","id":"name","isAlphanumeric":true,"isDisabledOnUpdate":true,"isRequired":true,"label":"{{connector.common.form.ops_integration_name.label}}","maxCharLength":50,"placeholder":"{{connector.common.form.ops_integration_name.placeholder}}","type":"text"},{"apiMapping":"connection_config.description","element":"input","formStep":"addConnection","id":"description","label":"{{connector.common.form.description.label}}","maxCharLength":600,"placeholder":"{{connector.common.form.description.placeholder}}","type":"textarea"},{"apiMapping":"connection_config.project_id","element":"input","formStep":"addConnection","helperText":"{{connector.watsonx.form.project_id.helperText}}","id":"project_id","isRequired":true,"label":"{{connector.watsonx.form.project_id.label}}","placeholder":"{{connector.watsonx.form.project_id.placeholder}}","type":"text"},{"apiMapping":"connection_config.project_type","element":"form","form":[{"id":"lite"},{"id":"standard"},{"id":"custom","rows":[{"apiMapping":"connection_config.project_type_limit","defaultValue":8,"element":"input","id":"custom_project_type","isRequired":true,"label":"{{connector.watsonx.form.custom_project_type.label}}","max":20,"min":1,"step":1,"type":"number"}]}],"formStep":"addConnection","helperText":"{{connector.watsonx.form.project_type.helperText}}","id":"project_type","itemKeys":["lite","standard","custom"],"items":["{{connector.watsonx.form.project_type.plan.lite}}","{{connector.watsonx.form.project_type.plan.standard}}","{{connector.watsonx.form.project_type.plan.custom}}"],"label":"{{connector.watsonx.form.project_type.label}}"},{"apiMapping":"connection_config.url","element":"input","formStep":"addConnection","helperText":"{{connector.watsonx.form.url.helperText}}","id":"url","isRequired":true,"isURL":true,"label":"{{connector.watsonx.form.url.label}}","placeholder":"{{connector.watsonx.form.url.placeholder}}","type":"text"},{"apiMapping":"connection_config.api_key","element":"input","formStep":"addConnection","helperText":"{{connector.watsonx.form.api_key.helperText}}","id":"api_key","isRequired":true,"label":"{{connector.watsonx.form.api_key.label}}","placeholder":"{{connector.watsonx.form.api_key.placeholder}}","type":"password"},{"apiMapping":"connection_config.iam_url","defaultValue":"https://iam.cloud.ibm.com","element":"input","formStep":"addConnection","id":"iam_url","isRequired":true,"isURL":true,"label":"{{connector.watsonx.form.iam_url.label}}","placeholder":"{{connector.watsonx.form.iam_url.placeholder}}","type":"text"},{"element":"input","formStep":"addConnection","id":"installationPreference","installationSelection":"local","type":"installPreference"},{"apiMapping":"connection_config.deploymentType","defaultValue":"microedge","element":"input","formStep":"addConnection","id":"orchestration","type":"hiddenText"},{"apiMapping":"connection_config.using_proxy","defaultToggled":false,"element":"toggleForm","form":[{"id":false},{"id":true,"rows":[{"apiMapping":"connection_config.proxy_url","element":"input","formStep":"configureProxy","id":"proxy_url","isHTTPProxyURL":true,"isRequired":true,"label":"{{connector.common.proxy.url.label}}","placeholder":"{{connector.common.proxy.url.placeholder}}","type":"text"},{"apiMapping":"connection_config.proxy_port","defaultValue":"8080","element":"input","formStep":"configureProxy","id":"proxy_port","isNumber":true,"isRequired":true,"label":"{{connector.common.proxy.port.label}}","placeholder":"{{connector.common.proxy.port.placeholder}}","type":"text"},{"apiMapping":"connection_config.proxy_secure","defaultToggled":false,"element":"toggleForm","form":[{"id":false},{"id":true,"rows":[{"apiMapping":"connection_config.proxy_username","element":"input","formStep":"configureProxy","id":"proxy_username","isRequired":true,"label":"{{connector.msteams.form.proxy_username.label}}","placeholder":"{{connector.msteams.form.proxy_username.placeholder}}","type":"text"},{"apiMapping":"connection_config.proxy_password","element":"input","formStep":"configureProxy","id":"proxy_password","isRequired":true,"label":"{{connector.msteams.form.proxy_password.label}}","placeholder":"{{connector.msteams.form.proxy_password.placeholder}}","type":"password"}]}],"formStep":"configureProxy","id":"watsonXAIProxySecure","itemKeys":[false,true],"items":["{{connector.splunk.proxy.auth.label}}","{{connector.splunk.proxy.auth.label}}"]}]}],"formStep":"configureProxy","id":"watsonxAIProxy","isRequired":true,"itemKeys":[false,true],"items":["{{connector.watsonx.proxy.toggle.label}}","{{connector.watsonx.proxy.toggle.label}}"]},{"apiMapping":"connection_config.metering_enabled","defaultToggled":true,"element":"input","formStep":"configureMetering","id":"tokenMetering","labelOff":"{{connector.watsonx.tokenMetering.label}}","labelOn":"{{connector.watsonx.tokenMetering.label}}","type":"toggle"},{"apiMapping":"connection_config.metering_token_limit","defaultValue":1000000,"element":"input","formStep":"configureMetering","helperText":"{{connector.watsonx.tokenLimit.helperText}}","id":"tokenMeteringLimit","isRequired":true,"label":"{{connector.watsonx.tokenLimit.label}}","min":10000,"placeholder":"{{connector.watsonx.tokenLimit.placeholder}}","step":10000,"type":"number"}],"formSteps":[{"step":{"id":"addConnection","name":"{{formSteps.addConnection}}"}},{"step":{"id":"configureProxy","isOptional":true,"name":"{{formSteps.configureProxy}}"}},{"step":{"id":"configureMetering","isOptional":true,"name":"{{formSteps.configureMetering}}"}}],"hasAIModelType":false,"hasOptionalConfig":false,"hasOptionalText":true,"iconFileName":"watsonx-ai","iconFileType":"svg","initialDatasourceType":"metrics","isIBM":true,"sidePanelDescription":"{{sidePanel.watsonx.description}}","sidePanelInfo":["{{connector.watsonx.form.project_id.label}}","{{connector.watsonx.form.url.label}}","{{connector.watsonx.form.api_key.label}}"],"sidePanelInfoHeader":"{{sidePanel.information.header}}","sidePanelOptionalText":"{{sidePanel.watsonx.optionalText}}","sidePanelTitle":"{{connector.watsonx.sidePanelTitle}}","type":"watsonx-ai-controller","url":"https://ibm.biz/int-aiops-watsonx-ai"}}{% endraw %}'
+    # --data-raw '{"connection_config":{"project_type":"lite","iam_url":"https://iam.cloud.ibm.com","deploymentType":"microedge","using_proxy":false,"metering_enabled":true,"metering_token_limit":1000000,"display_name":"watsonx","project_id":"{{current_feature.watsonx_projectid  | default('f80a9ece-5156-440e-a9cc-03aab00d7ba1')}}","url":"{{current_feature.watsonx_url  | default('https://us-south.ml.cloud.ibm.com')}}","api_key":"{{current_feature.watsonx_token  | default('changeme')}}"},"connectorConfig":{"apiAdaptor":"grpc","categories":["\{\{connector.common.category.ai\}\}"],"deploymentType":["local"],"displayName":"\{\{connector.watsonx.name\}\}","form":[{"apiMapping":"connection_config.display_name","element":"input","excludeValues":[],"formStep":"addConnection","id":"name","isAlphanumeric":true,"isDisabledOnUpdate":true,"isRequired":true,"label":"\{\{connector.common.form.ops_integration_name.label\}\}","maxCharLength":50,"placeholder":"\{\{connector.common.form.ops_integration_name.placeholder\}\}","type":"text"},{"apiMapping":"connection_config.description","element":"input","formStep":"addConnection","id":"description","label":"\{\{connector.common.form.description.label\}\}","maxCharLength":600,"placeholder":"\{\{connector.common.form.description.placeholder\}\}","type":"textarea"},{"apiMapping":"connection_config.project_id","element":"input","formStep":"addConnection","helperText":"\{\{connector.watsonx.form.project_id.helperText\}\}","id":"project_id","isRequired":true,"label":"\{\{connector.watsonx.form.project_id.label\}\}","placeholder":"\{\{connector.watsonx.form.project_id.placeholder\}\}","type":"text"},{"apiMapping":"connection_config.project_type","element":"form","form":[{"id":"lite"},{"id":"standard"},{"id":"custom","rows":[{"apiMapping":"connection_config.project_type_limit","defaultValue":8,"element":"input","id":"custom_project_type","isRequired":true,"label":"\{\{connector.watsonx.form.custom_project_type.label\}\}","max":20,"min":1,"step":1,"type":"number"}]}],"formStep":"addConnection","helperText":"\{\{connector.watsonx.form.project_type.helperText\}\}","id":"project_type","itemKeys":["lite","standard","custom"],"items":["\{\{connector.watsonx.form.project_type.plan.lite\}\}","\{\{connector.watsonx.form.project_type.plan.standard\}\}","\{\{connector.watsonx.form.project_type.plan.custom\}\}"],"label":"\{\{connector.watsonx.form.project_type.label\}\}"},{"apiMapping":"connection_config.url","element":"input","formStep":"addConnection","helperText":"\{\{connector.watsonx.form.url.helperText\}\}","id":"url","isRequired":true,"isURL":true,"label":"\{\{connector.watsonx.form.url.label\}\}","placeholder":"\{\{connector.watsonx.form.url.placeholder\}\}","type":"text"},{"apiMapping":"connection_config.api_key","element":"input","formStep":"addConnection","helperText":"\{\{connector.watsonx.form.api_key.helperText\}\}","id":"api_key","isRequired":true,"label":"\{\{connector.watsonx.form.api_key.label\}\}","placeholder":"\{\{connector.watsonx.form.api_key.placeholder\}\}","type":"password"},{"apiMapping":"connection_config.iam_url","defaultValue":"https://iam.cloud.ibm.com","element":"input","formStep":"addConnection","id":"iam_url","isRequired":true,"isURL":true,"label":"\{\{connector.watsonx.form.iam_url.label\}\}","placeholder":"\{\{connector.watsonx.form.iam_url.placeholder\}\}","type":"text"},{"element":"input","formStep":"addConnection","id":"installationPreference","installationSelection":"local","type":"installPreference"},{"apiMapping":"connection_config.deploymentType","defaultValue":"microedge","element":"input","formStep":"addConnection","id":"orchestration","type":"hiddenText"},{"apiMapping":"connection_config.using_proxy","defaultToggled":false,"element":"toggleForm","form":[{"id":false},{"id":true,"rows":[{"apiMapping":"connection_config.proxy_url","element":"input","formStep":"configureProxy","id":"proxy_url","isHTTPProxyURL":true,"isRequired":true,"label":"\{\{connector.common.proxy.url.label\}\}","placeholder":"\{\{connector.common.proxy.url.placeholder\}\}","type":"text"},{"apiMapping":"connection_config.proxy_port","defaultValue":"8080","element":"input","formStep":"configureProxy","id":"proxy_port","isNumber":true,"isRequired":true,"label":"\{\{connector.common.proxy.port.label\}\}","placeholder":"\{\{connector.common.proxy.port.placeholder\}\}","type":"text"},{"apiMapping":"connection_config.proxy_secure","defaultToggled":false,"element":"toggleForm","form":[{"id":false},{"id":true,"rows":[{"apiMapping":"connection_config.proxy_username","element":"input","formStep":"configureProxy","id":"proxy_username","isRequired":true,"label":"\{\{connector.msteams.form.proxy_username.label\}\}","placeholder":"\{\{connector.msteams.form.proxy_username.placeholder\}\}","type":"text"},{"apiMapping":"connection_config.proxy_password","element":"input","formStep":"configureProxy","id":"proxy_password","isRequired":true,"label":"\{\{connector.msteams.form.proxy_password.label\}\}","placeholder":"\{\{connector.msteams.form.proxy_password.placeholder\}\}","type":"password"}]}],"formStep":"configureProxy","id":"watsonXAIProxySecure","itemKeys":[false,true],"items":["\{\{connector.splunk.proxy.auth.label\}\}","\{\{connector.splunk.proxy.auth.label\}\}"]}]}],"formStep":"configureProxy","id":"watsonxAIProxy","isRequired":true,"itemKeys":[false,true],"items":["\{\{connector.watsonx.proxy.toggle.label\}\}","\{\{connector.watsonx.proxy.toggle.label\}\}"]},{"apiMapping":"connection_config.metering_enabled","defaultToggled":true,"element":"input","formStep":"configureMetering","id":"tokenMetering","labelOff":"\{\{connector.watsonx.tokenMetering.label\}\}","labelOn":"\{\{connector.watsonx.tokenMetering.label\}\}","type":"toggle"},{"apiMapping":"connection_config.metering_token_limit","defaultValue":1000000,"element":"input","formStep":"configureMetering","helperText":"\{\{connector.watsonx.tokenLimit.helperText\}\}","id":"tokenMeteringLimit","isRequired":true,"label":"\{\{connector.watsonx.tokenLimit.label\}\}","min":10000,"placeholder":"\{\{connector.watsonx.tokenLimit.placeholder\}\}","step":10000,"type":"number"}],"formSteps":[{"step":{"id":"addConnection","name":"\{\{formSteps.addConnection\}\}"\}\},{"step":{"id":"configureProxy","isOptional":true,"name":"\{\{formSteps.configureProxy\}\}"\}\},{"step":{"id":"configureMetering","isOptional":true,"name":"\{\{formSteps.configureMetering\}\}"\}\}],"hasAIModelType":false,"hasOptionalConfig":false,"hasOptionalText":true,"iconFileName":"watsonx-ai","iconFileType":"svg","initialDatasourceType":"metrics","isIBM":true,"sidePanelDescription":"\{\{sidePanel.watsonx.description\}\}","sidePanelInfo":["\{\{connector.watsonx.form.project_id.label\}\}","\{\{connector.watsonx.form.url.label\}\}","\{\{connector.watsonx.form.api_key.label\}\}"],"sidePanelInfoHeader":"\{\{sidePanel.information.header\}\}","sidePanelOptionalText":"\{\{sidePanel.watsonx.optionalText\}\}","sidePanelTitle":"\{\{connector.watsonx.sidePanelTitle\}\}","type":"watsonx-ai-controller","url":"https://ibm.biz/int-aiops-watsonx-ai"\}\}'
+
+    sleep 30
+
+  register: output_string
+  ignore_errors: true
+  args:
+    executable: /bin/bash
+  when: (current_feature.enable_watsonx | default(false))|bool == true  
+
+
+
+- name: 🟣  OUTPUT
+  debug: 
+    var: output_string.stdout_lines
+    verbosity: 0
+
+
+
+
+# --------------------------------------------------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------------------------------------------
+# WATSONX - Enable Tile
+# --------------------------------------------------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------------------------------------------
+- name: 🗯️ WATSONX - Enable Tile
+  shell: |
+    set -x
+        
+
+    export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
+    ZEN_API_HOST=$(oc get route -n $AIOPS_NAMESPACE cpd -o jsonpath='{.spec.host}')
+    ZEN_LOGIN_URL="https://${ZEN_API_HOST}/v1/preauth/signin"
+    LOGIN_USER=admin
+    LOGIN_PASSWORD="$(oc get secret admin-user-details -n $AIOPS_NAMESPACE -o jsonpath='{ .data.initial_admin_password }' | base64 --decode)"
+
+    ZEN_LOGIN_RESPONSE=$(
+    curl -k \
+    -H 'Content-Type: application/json' \
+    -XPOST \
+    "${ZEN_LOGIN_URL}" \
+    -d '{
+          "username": "'"${LOGIN_USER}"'",
+          "password": "'"${LOGIN_PASSWORD}"'"
+    }' 2> /dev/null
+    )
+
+    ZEN_TOKEN=$(echo "${ZEN_LOGIN_RESPONSE}" | jq -r .token)
+    #echo $ZEN_TOKEN
+
+    export ROUTE=$(oc get route -n $AIOPS_NAMESPACE cpd -o jsonpath={.spec.host})
+    echo "ROUTE: "$ROUTE
+
+
+
+
+
+    curl "https://$ROUTE/aiops/aimodels/api/p/ai_platform_api" \
+    -X 'POST' \
+    -H "Authorization: bearer $ZEN_TOKEN" \
+    -H 'Content-Type: application/json' \
+    --data-raw '{"operationName":"createTrainingDefinition","variables":{"definitionName":"incident_summarization_configuration","description":"","algorithmName":"Incident_Summarization","createdBy":" ","trainingSchedule":{"frequency":"manual","repeat":"daily","atTimeHour":0,"atTimeMinute":0,"timeRangeValidStart":null,"timeRangeValidEnd":null,"noEndDate":false},"promoteOption":"whenTrainingComplete","enableSelectiveTraining":false,"enableLADGoldenSignal":false,"integrationGenAI":"watsonx","enableGenAI":true,"dataSetIds":[]},"query":"mutation createTrainingDefinition($definitionName: String!, $description: String!, $algorithmName: String!, $createdBy: String, $trainingSchedule: TrainingScheduleInput!, $promoteOption: PromoteOption!, $enableSelectiveTraining: Boolean, $dataSetIds: [ID], $enableLADGoldenSignal: Boolean, $integrationGenAI: String, $enableGenAI: Boolean) {\n  createTrainingDefinition(\n    definitionName: $definitionName\n    description: $description\n    algorithmName: $algorithmName\n    createdBy: $createdBy\n    trainingSchedule: $trainingSchedule\n    promoteOption: $promoteOption\n    enableSelectiveTraining: $enableSelectiveTraining\n    dataSetIds: $dataSetIds\n    enableLADGoldenSignal: $enableLADGoldenSignal\n    integrationGenAI: $integrationGenAI\n    enableGenAI: $enableGenAI\n  ) {\n    status\n    message\n    __typename\n  }\n}"}'
+
+  register: output_string
+  ignore_errors: true
+  args:
+    executable: /bin/bash
+  when: (current_feature.enable_watsonx | default(false))|bool == true  
+
+
+
+- name: 🟣  OUTPUT
+  debug: 
+    var: output_string.stdout_lines
+    verbosity: 0
+
+
+

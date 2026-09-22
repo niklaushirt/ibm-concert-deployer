@@ -21,7 +21,7 @@
     apiVersion: console.openshift.io/v1
     kind: ConsoleNotification
     metadata:
-      name: ibm-aiops-notification-status
+      name: ibm-concert-operate-notification-status
     spec:
       backgroundColor: '#ff7700'
       color: '#000'
@@ -79,7 +79,7 @@
     apiVersion: console.openshift.io/v1
     kind: ConsoleNotification
     metadata:
-      name: ibm-aiops-notification-status
+      name: ibm-concert-operate-notification-status
     spec:
       backgroundColor: '#009a00'
       color: '#000'

@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: instana-create-anomaly
-          image: quay.io/niklaushirt/ibm-aiops-tools:5.1.0
+          image: quay.io/niklaushirt/ibm-concert-tools:1.0.0
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
@@ -76,7 +76,7 @@ spec:
     spec:
       containers:
         - name: instana-mitigate-anomaly
-          image: quay.io/niklaushirt/ibm-aiops-tools:5.1.0
+          image: quay.io/niklaushirt/ibm-concert-tools:1.0.0
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
@@ -266,7 +266,7 @@ spec:
     spec:
       containers:
         - name: install
-          image: quay.io/niklaushirt/ibm-aiops-tools:5.1.0
+          image: quay.io/niklaushirt/ibm-concert-tools:1.0.0
           imagePullPolicy: IfNotPresent
           resources:
             requests:
@@ -520,11 +520,11 @@ spec:
                   "tagFilterExpression": {
                     "type": "TAG_FILTER",
                     "name": "kubernetes.namespace",
-                    "stringValue": "ibm-aiops-demo-ui",
+                    "stringValue": "ibm-concert-demo-ui",
                     "numberValue": null,
                     "booleanValue": null,
                     "key": null,
-                    "value": "ibm-aiops-demo-ui",
+                    "value": "ibm-concert-demo-ui",
                     "operator": "EQUALS",
                     "entity": "DESTINATION"
                   },
@@ -712,11 +712,11 @@ spec:
                       {
                         "type": "TAG_FILTER",
                         "name": "kubernetes.namespace",
-                        "stringValue": "ibm-aiops-demo-ui",
+                        "stringValue": "ibm-concert-demo-ui",
                         "numberValue": null,
                         "booleanValue": null,
                         "key": null,
-                        "value": "ibm-aiops-demo-ui",
+                        "value": "ibm-concert-demo-ui",
                         "operator": "EQUALS",
                         "entity": "DESTINATION"
                       },

@@ -2,7 +2,7 @@ apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
   name: datalayer-api
-  namespace: ibm-aiops
+  namespace: ibm-concert-operate
 spec:
   to:
     kind: Service

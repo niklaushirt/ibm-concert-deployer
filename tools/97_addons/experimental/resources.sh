@@ -111,7 +111,7 @@ function namespace_resources(){
 }
 
 
-export NAMESPACE=ibm-aiops-demo-ui
+export NAMESPACE=ibm-concert-demo-ui
 namespace_resources
 
 export NAMESPACE=awx

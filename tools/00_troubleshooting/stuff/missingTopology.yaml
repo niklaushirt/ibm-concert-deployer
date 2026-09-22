@@ -267,7 +267,7 @@ data:
 
 
 
-  INSTALL_REPO: 'https://github.com/niklaushirt/ibm-aiops-deployer.git -b main'
+  INSTALL_REPO: 'https://github.com/niklaushirt/ibm-concert-deployer.git -b main'
 
 
 
@@ -339,7 +339,7 @@ spec:
       serviceAccount: ibm-installer-admin
       containers:
         - name: install
-          image: quay.io/niklaushirt/ibm-aiops-tools:5.1.0
+          image: quay.io/niklaushirt/ibm-concert-tools:1.0.0
           imagePullPolicy: IfNotPresent
           resources:
             requests:
@@ -378,7 +378,7 @@ spec:
               echo "------------------------------------------------------------------------------------------------------------------------------"
               echo "   📥 Clone Repo $INSTALL_REPO"
               git clone $INSTALL_REPO
-              cd ibm-aiops-deployer
+              cd ibm-concert-deployer
 
               echo ""
               echo ""

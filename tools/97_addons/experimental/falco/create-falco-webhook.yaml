@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: aiops-falco-gateway-admin
-  namespace: ibm-aiops
+  namespace: ibm-concert-operate
 ---
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
@@ -11,7 +11,7 @@ metadata:
 subjects:
   - kind: ServiceAccount
     name: aiops-falco-gateway-admin
-    namespace: ibm-aiops
+    namespace: ibm-concert-operate
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -22,7 +22,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name:  aiops-falco-gateway-config
-  namespace: ibm-aiops
+  namespace: ibm-concert-operate
 data:
   TOKEN: '46c1ddfd8e00'
   ITERATE_ELEMENT: 'events'
@@ -46,7 +46,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: aiops-falco-gateway
-  namespace: ibm-aiops
+  namespace: ibm-concert-operate
   labels:
       app:  aiops-falco-gateway
 spec:
@@ -82,7 +82,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name:  aiops-falco-gateway-service
-  namespace: ibm-aiops
+  namespace: ibm-concert-operate
 spec:
   selector:
     app:  aiops-falco-gateway
@@ -95,7 +95,7 @@ apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
   name:  ibm-aiops-falco-gateway
-  namespace: ibm-aiops
+  namespace: ibm-concert-operate
 spec:
   to:
     kind: Service

@@ -94,5 +94,5 @@ spec:
         - name: cp4aiops.instanceName
           value: Demo
     path: tools/97_addons/experimental/gitops/content/cp4aiops-demo-content-aio
-    repoURL: 'https://github.com/niklaushirt/ibm-aiops-deployer'
+    repoURL: 'https://github.com/niklaushirt/ibm-concert-deployer'
     targetRevision: dev_latest

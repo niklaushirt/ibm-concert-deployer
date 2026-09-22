@@ -5,7 +5,7 @@ metadata:
   name: ibm-aiops-aiops-install-demo-content
   namespace: ibm-installer
   labels:
-   aiops-type: data-load-job
+    aiops-type: data-load-job
 spec:
   serviceAccount: ibm-installer-admin
   template:
@@ -16,7 +16,7 @@ spec:
       serviceAccount: ibm-installer-admin
       containers:
         - name: install
-          image: quay.io/niklaushirt/ibm-aiops-tools:5.1.0
+          image: quay.io/niklaushirt/ibm-concert-tools:1.0.0
           imagePullPolicy: IfNotPresent
           resources:
             requests:
@@ -55,7 +55,7 @@ spec:
               echo "------------------------------------------------------------------------------------------------------------------------------"
               echo "   📥 Clone Repo $INSTALL_REPO"
               git clone $INSTALL_REPO
-              cd ibm-aiops-deployer
+              cd ibm-concert-deployer
 
               echo ""
               echo ""
@@ -98,14 +98,12 @@ spec:
               ./tools/90_finalizeInstallation.sh
               echo ""
 
-
-
           env:
-          - name: INSTALL_REPO
-            valueFrom:
-              configMapKeyRef:
-                name: ibm-aiops-install-configuration-aiops-demo-content
-                key: INSTALL_REPO
+            - name: INSTALL_REPO
+              valueFrom:
+                configMapKeyRef:
+                  name: ibm-aiops-install-configuration-aiops-demo-content
+                  key: INSTALL_REPO
           volumeMounts:
             - name: config-file
               mountPath: /tmp/config-file
@@ -114,7 +112,7 @@ spec:
           configMap:
             name: ibm-aiops-install-configuration-aiops-demo-content
             items:
-            - key: INSTALLATION_CONFIG.yaml
-              path: INSTALLATION_CONFIG.yaml
+              - key: INSTALLATION_CONFIG.yaml
+                path: INSTALLATION_CONFIG.yaml
       restartPolicy: Never
   backoffLimit: 500

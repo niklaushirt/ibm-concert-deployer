@@ -41,25 +41,25 @@ echo ""
 echo "--------------------------------------------------------------------------------------------"
 echo " 🧻  Deleting DemoUI Namespace..." 
 echo "      This will take several minutes...." 
-oc delete ns ibm-aiops-demo-ui
+oc delete ns ibm-concert-demo-ui
 
 
 echo ""
 echo "--------------------------------------------------------------------------------------------"
 echo " 🚀  Creating DemoUI Namespace..." 
-oc create ns ibm-aiops-demo-ui
+oc create ns ibm-concert-demo-ui
 
 
 
 echo ""
 echo "--------------------------------------------------------------------------------------------"
 echo " 🚀  Creating DemoUI Config Maps..." 
-cat <<EOF | oc apply -n ibm-aiops-demo-ui -f -
+cat <<EOF | oc apply -n ibm-concert-demo-ui -f -
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  name: ibm-aiops-demo-ui-config
-  namespace: ibm-aiops-demo-ui
+  name: ibm-concert-demo-ui-config
+  namespace: ibm-concert-demo-ui
 data:
   TOKEN: CHANGEME
   INSTANCE_NAME: Bear
@@ -91,12 +91,12 @@ EOF
 
 
 
-cat <<EOF | oc apply -n ibm-aiops-demo-ui -f -
+cat <<EOF | oc apply -n ibm-concert-demo-ui -f -
   apiVersion: v1
   kind: ConfigMap
   metadata:
-    name:  ibm-aiops-demo-ui-config-events
-    namespace: ibm-aiops-demo-ui
+    name:  ibm-concert-demo-ui-config-events
+    namespace: ibm-concert-demo-ui
   data:
     DEMO_EVENTS_BUSY: |-
       {"deduplicationKey": "helpdesk-nginx-1.helpdesk.hursley.ibm.com->ResponseTime is Higher than expected","severity": 4,"summary": "Helpdesk Nginx ResponseTime is Higher than expected. Actual: 3149.9000 Expected: 1156.2114","sender": {"component": "com.ibm.pi.analytics.robust_bounds_model","name": "metric-anomaly-detection"},"resource": {"node": "helpdesk-nginx-1.helpdesk.hursley.ibm.com","metric": "ResponseTime","resource": "helpdesk-nginx-1.helpdesk.hursley.ibm.com","name": "helpdesk-nginx-1.helpdesk.hursley.ibm.com"}, "occurrenceTime": "MY_TIMESTAMP","details": {"node": "helpdesk-nginx-1.helpdesk.hursley.ibm.com","metric": "ResponseTime","resource": "helpdesk-nginx-1.helpdesk.hursley.ibm.com","group": "APP"},"type": {"eventType": "problem","classification": "ANOMALY:APP:ResponseTime"}}
@@ -320,12 +320,12 @@ cat <<EOF | oc apply -n ibm-aiops-demo-ui -f -
 EOF
 
 
-cat <<EOF | oc apply -n ibm-aiops-demo-ui -f -
+cat <<EOF | oc apply -n ibm-concert-demo-ui -f -
   apiVersion: v1
   kind: ConfigMap
   metadata:
-    name:  ibm-aiops-demo-ui-config-metrics
-    namespace: ibm-aiops-demo-ui
+    name:  ibm-concert-demo-ui-config-metrics
+    namespace: ibm-concert-demo-ui
   data:
     METRICS_TO_SIMULATE_FAN_TEMP:  |-
       DCWest1-Rack045-DELL3762,CPU1Temperature,System,130,5
@@ -380,12 +380,12 @@ cat <<EOF | oc apply -n ibm-aiops-demo-ui -f -
       catalogue-predictive,Latency,Latency,1000,100
 EOF
 
-cat <<EOF | oc apply -n ibm-aiops-demo-ui -f -
+cat <<EOF | oc apply -n ibm-concert-demo-ui -f -
   apiVersion: v1
   kind: ConfigMap
   metadata:
-    name:  ibm-aiops-demo-ui-config-logs
-    namespace: ibm-aiops-demo-ui
+    name:  ibm-concert-demo-ui-config-logs
+    namespace: ibm-concert-demo-ui
   data:
 
     DEMO_LOGS:  |-
@@ -479,12 +479,12 @@ EOF
 
 
 
-cat <<EOF | oc apply -n ibm-aiops-demo-ui -f -
+cat <<EOF | oc apply -n ibm-concert-demo-ui -f -
   kind: ConfigMap
   apiVersion: v1
   metadata:
-    name: ibm-aiops-demo-ui-config-logs-sock
-    namespace: ibm-aiops-demo-ui
+    name: ibm-concert-demo-ui-config-logs-sock
+    namespace: ibm-concert-demo-ui
   data:
   data:
     DEMO_LOGS_SOCK: ''
@@ -495,12 +495,12 @@ EOF
 
 
 
-cat <<EOF | oc apply -n ibm-aiops-demo-ui -f -
+cat <<EOF | oc apply -n ibm-concert-demo-ui -f -
   kind: ConfigMap
   apiVersion: v1
   metadata:
-    name: ibm-aiops-demo-ui-config-custom
-    namespace: ibm-aiops-demo-ui
+    name: ibm-concert-demo-ui-config-custom
+    namespace: ibm-concert-demo-ui
   data:
     CUSTOM_NAME: 'Custom Demo'
     CUSTOM_EVENTS: |-
@@ -529,22 +529,22 @@ EOF
 echo ""
 echo "--------------------------------------------------------------------------------------------"
 echo " 🚀  Creating DemoUI Deployment..." 
-cat <<EOF | oc apply -n ibm-aiops-demo-ui -f -
+cat <<EOF | oc apply -n ibm-concert-demo-ui -f -
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: ibm-aiops-demo-ui-admin
-  namespace: ibm-aiops-demo-ui
+  name: ibm-concert-demo-ui-admin
+  namespace: ibm-concert-demo-ui
 ---
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: ibm-aiops-demo-ui-admin-crb
+  name: ibm-concert-demo-ui-admin-crb
 subjects:
   - kind: ServiceAccount
-    name: ibm-aiops-demo-ui-admin
-    namespace: ibm-aiops-demo-ui
+    name: ibm-concert-demo-ui-admin
+    namespace: ibm-concert-demo-ui
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -553,24 +553,24 @@ roleRef:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ibm-aiops-demo-ui
-  namespace: ibm-aiops-demo-ui
+  name: ibm-concert-demo-ui
+  namespace: ibm-concert-demo-ui
   labels:
-      app: ibm-aiops-demo-ui
+      app: ibm-concert-demo-ui
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: ibm-aiops-demo-ui
+      app: ibm-concert-demo-ui
   template:
     metadata:
       labels:
-        app: ibm-aiops-demo-ui
+        app: ibm-concert-demo-ui
     spec:
       containers:
-      - image: quay.io/niklaushirt/ibm-aiops-demo-ui:4.8.0
+      - image: quay.io/niklaushirt/ibm-concert-demo-ui:4.8.0
         imagePullPolicy: Always
-        name: ibm-aiops-demo-ui
+        name: ibm-concert-demo-ui
         command:
         ports:
         - containerPort: 8000
@@ -593,35 +593,35 @@ spec:
           failureThreshold: 3
         envFrom:
         - configMapRef:
-            name:  ibm-aiops-demo-ui-config
+            name:  ibm-concert-demo-ui-config
         - configMapRef:
-            name:  ibm-aiops-demo-ui-config-events
+            name:  ibm-concert-demo-ui-config-events
         - configMapRef:
-            name:  ibm-aiops-demo-ui-config-logs
+            name:  ibm-concert-demo-ui-config-logs
         - configMapRef:
-            name:  ibm-aiops-demo-ui-config-logs-sock
+            name:  ibm-concert-demo-ui-config-logs-sock
         - configMapRef:
-            name:  ibm-aiops-demo-ui-config-metrics
+            name:  ibm-concert-demo-ui-config-metrics
         - configMapRef:
-            name:  ibm-aiops-demo-ui-config-custom
+            name:  ibm-concert-demo-ui-config-custom
         env:
           - name: INSTANA_SERVICE_NAME
-            value: ibm-aiops-demo-ui
+            value: ibm-concert-demo-ui
           - name: AUTOWRAPT_BOOTSTRAP
             value: instana
           - name: INSTANA_DEBUG
             value: 'false'
-      serviceAccount: ibm-aiops-demo-ui-admin
+      serviceAccount: ibm-concert-demo-ui-admin
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: ibm-aiops-demo-ui-service
-  namespace: ibm-aiops-demo-ui
+  name: ibm-concert-demo-ui-service
+  namespace: ibm-concert-demo-ui
 spec:
   selector:
-    app: ibm-aiops-demo-ui
+    app: ibm-concert-demo-ui
   ports:
     - protocol: TCP
       port: 8000
@@ -630,12 +630,12 @@ spec:
 kind: Route
 apiVersion: route.openshift.io/v1
 metadata:
-  name:  ibm-aiops-demo-ui
-  namespace: ibm-aiops-demo-ui
+  name:  ibm-concert-demo-ui
+  namespace: ibm-concert-demo-ui
 spec:
   to:
     kind: Service
-    name: ibm-aiops-demo-ui-service
+    name: ibm-concert-demo-ui-service
     weight: 100
   port:
     targetPort: 8000
@@ -671,7 +671,7 @@ echo $POLICY_ROUTE
 
 # ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # ALL - DISABLED
-export POLICY_FILE="./ansible/roles/ibm-aiops-demo-content/templates/policies/incident-creation-policy.json"
+export POLICY_FILE="./ansible/roles/ibm-concert-deployer-demo-content/templates/policies/incident-creation-policy.json"
 echo $POLICY_FILE
 cp $POLICY_FILE /tmp/incident_policy.json
 
@@ -698,7 +698,7 @@ echo $result
 
 # ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # ROBOT SHOP
-export POLICY_FILE="./ansible/roles/ibm-aiops-demo-content/templates/policies/incident-creation-policy-robot.json"
+export POLICY_FILE="./ansible/roles/ibm-concert-deployer-demo-content/templates/policies/incident-creation-policy-robot.json"
 echo $POLICY_FILE
 cp $POLICY_FILE /tmp/incident_policy.json
 
@@ -723,7 +723,7 @@ echo $result
 
 # ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # SOCK SHOP
-export POLICY_FILE="./ansible/roles/ibm-aiops-demo-content/templates/policies/incident-creation-policy-sock.json"
+export POLICY_FILE="./ansible/roles/ibm-concert-deployer-demo-content/templates/policies/incident-creation-policy-sock.json"
 echo $POLICY_FILE
 cp $POLICY_FILE /tmp/incident_policy.json
 
@@ -748,7 +748,7 @@ echo $result
 
 # ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # ACME
-export POLICY_FILE="./ansible/roles/ibm-aiops-demo-content/templates/policies/incident-creation-policy-acme.json"
+export POLICY_FILE="./ansible/roles/ibm-concert-deployer-demo-content/templates/policies/incident-creation-policy-acme.json"
 echo $POLICY_FILE
 cp $POLICY_FILE /tmp/incident_policy.json
 
@@ -773,7 +773,7 @@ echo $result
 
 # ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # ROBOT TELCO
-export POLICY_FILE="./ansible/roles/ibm-aiops-demo-content/templates/policies/incident-creation-policy-telco.json"
+export POLICY_FILE="./ansible/roles/ibm-concert-deployer-demo-content/templates/policies/incident-creation-policy-telco.json"
 echo $POLICY_FILE
 cp $POLICY_FILE /tmp/incident_policy.json
 
@@ -798,7 +798,7 @@ echo $result
 
 # ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # ROBOT TUBE
-export POLICY_FILE="./ansible/roles/ibm-aiops-demo-content/templates/policies/incident-creation-policy-tube.json"
+export POLICY_FILE="./ansible/roles/ibm-concert-deployer-demo-content/templates/policies/incident-creation-policy-tube.json"
 echo $POLICY_FILE
 cp $POLICY_FILE /tmp/incident_policy.json
 
@@ -824,7 +824,7 @@ echo $result
 
 # ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # ROBOT CATCHALL
-export POLICY_FILE="./ansible/roles/ibm-aiops-demo-content/templates/policies/incident-creation-policy-catchall.json"
+export POLICY_FILE="./ansible/roles/ibm-concert-deployer-demo-content/templates/policies/incident-creation-policy-catchall.json"
 echo $POLICY_FILE
 cp $POLICY_FILE /tmp/incident_policy.json
 

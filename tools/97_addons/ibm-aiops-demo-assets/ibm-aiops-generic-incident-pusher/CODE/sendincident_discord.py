@@ -188,7 +188,7 @@ def sendIncidentToProvider(currentIncident, DATALAYER_USER, DATALAYER_PWD, DATAL
             "author": {
             "name": INSTANCE_NAME+" ChatBot",
             "url": "https://"+CPD_ROUTE+"/aiops/cfd95b7e-3bc7-4006-a4a8-a73a79c71255/resolution-hub/incidents/all/"+id+"/overview",
-            "icon_url": "https://github.com/niklaushirt/ibm-aiops-deployer/raw/main/doc/avatars/hero_stan_sm_avatar.png"
+            "icon_url": "https://github.com/niklaushirt/ibm-concert-deployer/raw/main/doc/avatars/hero_stan_sm_avatar.png"
             },
             "title": title,
             "url": "https://"+CPD_ROUTE+"/aiops/cfd95b7e-3bc7-4006-a4a8-a73a79c71255/resolution-hub/incidents/all/"+id+"/overview",
@@ -372,7 +372,7 @@ def updateIncidentToProvider(currentIncident, DATALAYER_USER, DATALAYER_PWD, DAT
             "author": {
             "name": INSTANCE_NAME+" ChatBot - Incident Updated",
             "url": "https://"+CPD_ROUTE+"/aiops/cfd95b7e-3bc7-4006-a4a8-a73a79c71255/resolution-hub/incidents/all/"+id+"/overview",
-            "icon_url": "https://github.com/niklaushirt/ibm-aiops-deployer/raw/main/doc/avatars/hero_stan_sm_avatar.png"
+            "icon_url": "https://github.com/niklaushirt/ibm-concert-deployer/raw/main/doc/avatars/hero_stan_sm_avatar.png"
             },
             "title": title,
             "url": "https://"+CPD_ROUTE+"/aiops/cfd95b7e-3bc7-4006-a4a8-a73a79c71255/resolution-hub/incidents/all/"+id+"/overview",

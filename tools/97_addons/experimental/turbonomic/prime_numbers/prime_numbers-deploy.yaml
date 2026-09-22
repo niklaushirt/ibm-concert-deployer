@@ -7,7 +7,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: primecalc-deployment
-  namespace: ibm-aiops-tools
+  namespace: ibm-concert-operate-tools
   labels:
     app: primecalc
 spec:

@@ -45,9 +45,9 @@
       OS=$(uname -s | tr '[:upper:]' '[:lower:]')
       if [[ "${OS}" == "darwin" ]]; then
             echo "MAC"
-            TOPOLOGY_CUSTOM_FILE=$(pwd)"/roles/ibm-aiops-demo-content/templates/topology/"$TOPOLOGY_NAME"-asm_config.json"
+            TOPOLOGY_CUSTOM_FILE=$(pwd)"/roles/ibm-concert-deployer-demo-content/templates/topology/"$TOPOLOGY_NAME"-asm_config.json"
       else
-            TOPOLOGY_CUSTOM_FILE="/ibm-aiops-deployer/ansible/roles/ibm-aiops-demo-content/templates/topology/"$TOPOLOGY_NAME"-asm_config.json"
+            TOPOLOGY_CUSTOM_FILE="/ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/templates/topology/"$TOPOLOGY_NAME"-asm_config.json"
       fi    
       kubectl cp $TOPOLOGY_CUSTOM_FILE -n $AIOPS_NAMESPACE $(oc get po -n $AIOPS_NAMESPACE|grep topology-topology|awk '{print$1}'|head -1):/opt/ibm/netcool/asm/data/tools/"$TOPOLOGY_NAME"-asm_config.json 
 
@@ -75,9 +75,9 @@
       OS=$(uname -s | tr '[:upper:]' '[:lower:]')
       if [[ "${OS}" == "darwin" ]]; then
             echo "MAC"
-            FILE_OBSERVER_CAP=$(pwd)"/roles/ibm-aiops-demo-content/templates/topology/$LOAD_FILE_NAME"
+            FILE_OBSERVER_CAP=$(pwd)"/roles/ibm-concert-deployer-demo-content/templates/topology/$LOAD_FILE_NAME"
       else
-            FILE_OBSERVER_CAP="/ibm-aiops-deployer/ansible/roles/ibm-aiops-demo-content/templates/topology/$LOAD_FILE_NAME"
+            FILE_OBSERVER_CAP="/ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/templates/topology/$LOAD_FILE_NAME"
       fi    
       echo $FILE_OBSERVER_POD
       echo $FILE_OBSERVER_CAP
@@ -407,9 +407,9 @@
       OS=$(uname -s | tr '[:upper:]' '[:lower:]')
       if [[ "${OS}" == "darwin" ]]; then
             echo "MAC"
-            POLICY_FILE=$(pwd)"/roles/ibm-aiops-demo-content/templates/policies/"$POLICY_ID"-incident-creation-policy.json"
+            POLICY_FILE=$(pwd)"/roles/ibm-concert-deployer-demo-content/templates/policies/"$POLICY_ID"-incident-creation-policy.json"
       else
-            POLICY_FILE="/ibm-aiops-deployer/ansible/roles/ibm-aiops-demo-content/templates/policies/"$POLICY_ID"-incident-creation-policy.json"
+            POLICY_FILE="/ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/templates/policies/"$POLICY_ID"-incident-creation-policy.json"
       fi    
 
       echo $POLICY_FILE
@@ -446,9 +446,9 @@
       OS=$(uname -s | tr '[:upper:]' '[:lower:]')
       if [[ "${OS}" == "darwin" ]]; then
             echo "MAC"
-            POLICY_FILE=$(pwd)"/roles/ibm-aiops-demo-content/templates/policies/"$POLICY_ID"-incident-creation-policy.json"
+            POLICY_FILE=$(pwd)"/roles/ibm-concert-deployer-demo-content/templates/policies/"$POLICY_ID"-incident-creation-policy.json"
       else
-            POLICY_FILE="/ibm-aiops-deployer/ansible/roles/ibm-aiops-demo-content/templates/policies/"$POLICY_ID"-incident-creation-policy.json"
+            POLICY_FILE="/ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/templates/policies/"$POLICY_ID"-incident-creation-policy.json"
       fi    
 
       echo $POLICY_FILE
@@ -486,9 +486,9 @@
       OS=$(uname -s | tr '[:upper:]' '[:lower:]')
       if [[ "${OS}" == "darwin" ]]; then
             echo "MAC"
-            POLICY_FILE=$(pwd)"/roles/ibm-aiops-demo-content/templates/policies/"$POLICY_ID"-incident-creation-policy.json"
+            POLICY_FILE=$(pwd)"/roles/ibm-concert-deployer-demo-content/templates/policies/"$POLICY_ID"-incident-creation-policy.json"
       else
-            POLICY_FILE="/ibm-aiops-deployer/ansible/roles/ibm-aiops-demo-content/templates/policies/"$POLICY_ID"-incident-creation-policy.json"
+            POLICY_FILE="/ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/templates/policies/"$POLICY_ID"-incident-creation-policy.json"
       fi    
 
       echo $POLICY_FILE
@@ -524,9 +524,9 @@
       OS=$(uname -s | tr '[:upper:]' '[:lower:]')
       if [[ "${OS}" == "darwin" ]]; then
             echo "MAC"
-            POLICY_FILE=$(pwd)"/roles/ibm-aiops-demo-content/templates/policies/"$POLICY_ID".json"
+            POLICY_FILE=$(pwd)"/roles/ibm-concert-deployer-demo-content/templates/policies/"$POLICY_ID".json"
       else
-            POLICY_FILE="/ibm-aiops-deployer/ansible/roles/ibm-aiops-demo-content/templates/policies/"$POLICY_ID".json"
+            POLICY_FILE="/ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/templates/policies/"$POLICY_ID".json"
       fi    
 
       echo $POLICY_FILE

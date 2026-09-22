@@ -18,8 +18,8 @@ echo "--------------------------------------------------------------------------
 echo " 🧻 Delete awx.ansible.com CustomResourceDefinition"
 oc delete CustomResourceDefinition $(oc get CustomResourceDefinition| grep awx.ansible.com|awk '{print$1}') --ignore-not-found
 echo "------------------------------------------------------------------------------------------------------------------------------"
-echo " 🧻 Delete Namespace ibm-aiops-demo-ui"
-oc delete ns ibm-aiops-demo-ui &
+echo " 🧻 Delete Namespace ibm-concert-demo-ui"
+oc delete ns ibm-concert-demo-ui &
 echo "------------------------------------------------------------------------------------------------------------------------------"
 echo " 🧻 Delete Namespace ibm-aiops-tools"
 oc delete ns ibm-aiops-tools &
@@ -39,7 +39,7 @@ oc delete ClusterRoleBinding default-robotinfo1-admin
 oc delete ClusterRoleBinding default-robotinfo2-admin          
 oc delete ClusterRoleBinding default-sockinfo1-admin           
 oc delete ClusterRoleBinding default-sockinfo2-admin           
-oc delete ClusterRoleBinding ibm-aiops-demo-ui-admin-crb       
+oc delete ClusterRoleBinding ibm-concert-demo-ui-admin-crb       
 oc delete ClusterRoleBinding ibm-installer-admin         
 oc delete ClusterRoleBinding ibm-installer-default-admin 
 oc delete ClusterRoleBinding robot-shop                        

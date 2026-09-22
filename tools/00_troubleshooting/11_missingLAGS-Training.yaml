@@ -74,7 +74,7 @@ spec:
       serviceAccount: ibm-installer-admin
       containers:
         - name: install
-          image: quay.io/niklaushirt/ibm-aiops-tools:5.1.0
+          image: quay.io/niklaushirt/ibm-concert-tools:1.0.0
           imagePullPolicy: IfNotPresent
           resources:
             requests:
@@ -103,9 +103,9 @@ spec:
               echo "------------------------------------------------------------------------------------------------------------------------------"
               echo " 🚀 Getting Installation source from GitHub"
               echo "------------------------------------------------------------------------------------------------------------------------------"
-              echo "   📥 Clone Repo https://github.com/niklaushirt/ibm-aiops-deployer.git -b dev_latest"
-              git clone https://github.com/niklaushirt/ibm-aiops-deployer.git -b main
-              cd /ibm-aiops-deployer
+              echo "   📥 Clone Repo https://github.com/niklaushirt/ibm-concert-deployer.git -b dev_latest"
+              git clone https://github.com/niklaushirt/ibm-concert-deployer.git -b main
+              cd /ibm-concert-deployer
               echo ""
               echo ""
               echo "------------------------------------------------------------------------------------------------------------------------------"
@@ -284,12 +284,12 @@ spec:
               echo "  ***************************************************************************************************************************************************"
               echo "   🛠️   Run Analysis: MetricAnomaly"
               export FILE_NAME=run-analysis-METRIC.graphql
-              export FILE_PATH="/ibm-aiops-deployer/ansible/roles/ibm-aiops-demo-content/templates/training/training-definitions/"
-              /ibm-aiops-deployer/ansible/roles/ibm-aiops-demo-content/templates/training/scripts/execute-graphql.sh
+              export FILE_PATH="/ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/templates/training/training-definitions/"
+              /ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/templates/training/scripts/execute-graphql.sh
 
 
 
-              cd /ibm-aiops-deployer
+              cd /ibm-concert-deployer
 
 
               echo "------------------------------------------------------------------------------------------------------------------------------"

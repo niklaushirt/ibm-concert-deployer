@@ -173,7 +173,7 @@ data:
 
 
 
-  INSTALL_REPO: 'https://github.com/niklaushirt/ibm-aiops-deployer.git -b main'
+  INSTALL_REPO: 'https://github.com/niklaushirt/ibm-concert-deployer.git -b main'
 
 
 
@@ -289,7 +289,7 @@ spec:
               echo "------------------------------------------------------------------------------------------------------------------------------"
               echo "   📥 Clone Repo $INSTALL_REPO"
               git clone $INSTALL_REPO
-              cd ibm-aiops-deployer
+              cd ibm-concert-deployer
 
               echo ""
               echo ""

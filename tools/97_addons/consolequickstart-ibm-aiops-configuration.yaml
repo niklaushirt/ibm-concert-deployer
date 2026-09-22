@@ -64,7 +64,7 @@ spec:
         [**here**](/k8s/ns/ibm-common-services/jobs/~new)
 
         - Copy and paste the YAML File from
-        [**here**](https://raw.githubusercontent.com/niklaushirt/ibm-aiops-deployer/main/Quick_Install/00_INSTALL_IBM_AIOPS.yaml)
+        [**here**](https://raw.githubusercontent.com/niklaushirt/ibm-concert-deployer/main/Quick_Install/00_INSTALL_IBM_AIOPS.yaml)
       review:
         failedTaskHelp: This task isn’t verified yet. Try the task again.
         instructions: '#### Do you have the Job YAML Code pasted in the ?'

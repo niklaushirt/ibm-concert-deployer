@@ -14,7 +14,7 @@ spec:
 
       containers:
         - name: load
-          image: quay.io/niklaushirt/ibm-aiops-tools:5.1.0
+          image: quay.io/niklaushirt/ibm-concert-tools:1.0.0
           imagePullPolicy: IfNotPresent
           resources:
             requests:
@@ -91,7 +91,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ibm-aiops-stream-lags-normal
-  namespace: ibm-aiops-demo-ui
+  namespace: ibm-concert-demo-ui
   labels:
       app: ibm-aiops-inject-lags-anomaly
 spec:
@@ -104,11 +104,11 @@ spec:
       labels:
         app: ibm-aiops-inject-lags-anomaly
     spec:
-      serviceAccount: ibm-aiops-demo-ui-admin
-      serviceAccount: ibm-aiops-demo-ui-admin 
+      serviceAccount: ibm-concert-demo-ui-admin
+      serviceAccount: ibm-concert-demo-ui-admin 
 
       containers:
-      - image: quay.io/niklaushirt/ibm-aiops-tools:5.1.0
+      - image: quay.io/niklaushirt/ibm-concert-tools:1.0.0
         imagePullPolicy: IfNotPresent
         name: ibm-aiops-inject-lags-anomaly
         resources:
@@ -180,7 +180,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ibm-aiops-inject-lags-anomaly
-  namespace: ibm-aiops-demo-ui
+  namespace: ibm-concert-demo-ui
   labels:
       app: ibm-aiops-inject-lags-anomaly
 spec:
@@ -193,11 +193,11 @@ spec:
       labels:
         app: ibm-aiops-inject-lags-anomaly
     spec:
-      serviceAccount: ibm-aiops-demo-ui-admin
-      serviceAccount: ibm-aiops-demo-ui-admin 
+      serviceAccount: ibm-concert-demo-ui-admin
+      serviceAccount: ibm-concert-demo-ui-admin 
 
       containers:
-      - image: quay.io/niklaushirt/ibm-aiops-tools:5.1.0
+      - image: quay.io/niklaushirt/ibm-concert-tools:1.0.0
         imagePullPolicy: IfNotPresent
         name: ibm-aiops-inject-lags-anomaly
         resources:

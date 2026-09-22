@@ -31,7 +31,7 @@ metadata:
   namespace: openshift-gitops
 spec:
   destination:
-    namespace: ibm-aiops
+    namespace: ibm-concert-operate
     server: 'https://kubernetes.default.svc'
   project: default
   source:

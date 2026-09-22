@@ -34,7 +34,7 @@ cat <<EOF | oc apply -f -
 apiVersion: console.openshift.io/v1
 kind: ConsoleNotification
 metadata:
-    name: ibm-aiops-notification-main
+    name: ibm-concert-operate-notification-main
 spec:
     backgroundColor: '#1122aa'
     color: '#fff'
@@ -225,7 +225,7 @@ cat <<EOF | oc apply -f -
 apiVersion: console.openshift.io/v1
 kind: ConsoleNotification
 metadata:
-    name: ibm-aiops-notification-fatal
+    name: ibm-concert-operate-notification-fatal
 spec:
     backgroundColor: '#ff0000'
     color: '#fff'
@@ -236,13 +236,13 @@ cat <<EOF | oc apply -f -
 apiVersion: console.openshift.io/v1
 kind: ConsoleNotification
 metadata:
-    name: ibm-aiops-notification-help
+    name: ibm-concert-operate-notification-help
 spec:
     backgroundColor: '#dd4500'
     color: '#fff'
     location: BannerTop
     link:
-        href: "https://github.com/niklaushirt/ibm-aiops-deployer?tab=readme-ov-file#7-troubleshooting"
+        href: "https://github.com/niklaushirt/ibm-concert-deployer?tab=readme-ov-file#7-troubleshooting"
         text: Troubleshooting
 
     text: " Nothing the script can do here. Check the Link or Slack to see if this is a known problem."
@@ -293,7 +293,7 @@ EOF
       export CURRENT_NAMESPACE=awx
       checkNamespace
 
-      export CURRENT_NAMESPACE=ibm-aiops-demo-ui
+      export CURRENT_NAMESPACE=ibm-concert-demo-ui
       checkNamespace
 
       export CURRENT_NAMESPACE=sock-shop
@@ -501,8 +501,8 @@ EOF
                   echo "      ***************************************************************************************************************************************************"
                   echo "      🛠️   RERUN - MetricAnomaly"
                   export FILE_NAME=run-analysis-METRIC.graphql
-                  export FILE_PATH="/ibm-aiops-deployer/ansible/roles/ibm-aiops-demo-content/templates/training/training-definitions/"
-                  /ibm-aiops-deployer/ansible/roles/ibm-aiops-demo-content/templates/training/scripts/execute-graphql.sh
+                  export FILE_PATH="/ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/templates/training/training-definitions/"
+                  /ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/templates/training/scripts/execute-graphql.sh
 
 
 
@@ -696,7 +696,7 @@ EOF
         echo ""
         echo "  🚀 Try to re-run the installer to see if this solves the problem"
         echo "  🛠️  To do this just delete the ibm-aiops-install-aiops pod in the ibm-aiop Namespace"
-        echo "  🛠️  Explained in detail here: https://github.com/niklaushirt/ibm-aiops-deployer/tree/main#re-run-the-installer"
+        echo "  🛠️  Explained in detail here: https://github.com/niklaushirt/ibm-concert-deployer/tree/main#re-run-the-installer"
         echo ""
         echo "***************************************************************************************************************************************************"
         echo "***************************************************************************************************************************************************"
@@ -712,7 +712,7 @@ cat <<EOF | oc apply -f -
 apiVersion: console.openshift.io/v1
 kind: ConsoleNotification
 metadata:
-    name: ibm-aiops-notification-warning
+    name: ibm-concert-operate-notification-warning
 spec:
     backgroundColor: '#dd4500'
     color: '#fff'
@@ -723,13 +723,13 @@ spec:
         text: Open Logs
 EOF
 export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
-export appURL=$(oc get routes -n $AIOPS_NAMESPACE-demo-ui ibm-aiops-demo-ui  -o jsonpath="{['spec']['host']}")|| true
-export DEMO_PWD=$(oc get cm -n $AIOPS_NAMESPACE-demo-ui ibm-aiops-demo-ui-config -o jsonpath='{.data.TOKEN}')
+export appURL=$(oc get routes -n $AIOPS_NAMESPACE-demo-ui ibm-concert-demo-ui  -o jsonpath="{['spec']['host']}")|| true
+export DEMO_PWD=$(oc get cm -n $AIOPS_NAMESPACE-demo-ui ibm-concert-demo-ui-config -o jsonpath='{.data.TOKEN}')
 cat <<EOF | oc apply -f -
 apiVersion: console.openshift.io/v1
 kind: ConsoleNotification
 metadata:
-    name: ibm-aiops-notification-main
+    name: ibm-concert-operate-notification-main
 spec:
     backgroundColor: '#009a00'
     color: '#fff'
@@ -764,14 +764,14 @@ EOF
         echo ""
 
 export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
-export appURL=$(oc get routes -n $AIOPS_NAMESPACE-demo-ui ibm-aiops-demo-ui  -o jsonpath="{['spec']['host']}")|| true
-export DEMO_PWD=$(oc get cm -n $AIOPS_NAMESPACE-demo-ui ibm-aiops-demo-ui-config -o jsonpath='{.data.TOKEN}')
+export appURL=$(oc get routes -n $AIOPS_NAMESPACE-demo-ui ibm-concert-demo-ui  -o jsonpath="{['spec']['host']}")|| true
+export DEMO_PWD=$(oc get cm -n $AIOPS_NAMESPACE-demo-ui ibm-concert-demo-ui-config -o jsonpath='{.data.TOKEN}')
 #oc delete ConsoleNotification --all>/dev/null 2>/dev/null
 cat <<EOF | oc apply -f -
 apiVersion: console.openshift.io/v1
 kind: ConsoleNotification
 metadata:
-    name: ibm-aiops-notification-main
+    name: ibm-concert-operate-notification-main
 spec:
     backgroundColor: '#009a00'
     color: '#fff'
@@ -796,14 +796,14 @@ EOF
         echo "***************************************************************************************************************************************************"
 
 export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
-export appURL=$(oc get routes -n $AIOPS_NAMESPACE-demo-ui ibm-aiops-demo-ui  -o jsonpath="{['spec']['host']}")|| true
-export DEMO_PWD=$(oc get cm -n $AIOPS_NAMESPACE-demo-ui ibm-aiops-demo-ui-config -o jsonpath='{.data.TOKEN}')
+export appURL=$(oc get routes -n $AIOPS_NAMESPACE-demo-ui ibm-concert-demo-ui  -o jsonpath="{['spec']['host']}")|| true
+export DEMO_PWD=$(oc get cm -n $AIOPS_NAMESPACE-demo-ui ibm-concert-demo-ui-config -o jsonpath='{.data.TOKEN}')
 #oc delete ConsoleNotification --all>/dev/null 2>/dev/null
 cat <<EOF | oc apply -f -
 apiVersion: console.openshift.io/v1
 kind: ConsoleNotification
 metadata:
-    name: ibm-aiops-notification-main
+    name: ibm-concert-operate-notification-main
 spec:
     backgroundColor: '#009a00'
     color: '#fff'

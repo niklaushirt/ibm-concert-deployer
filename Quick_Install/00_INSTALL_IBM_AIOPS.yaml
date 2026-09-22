@@ -31,7 +31,7 @@
 #  - IBM Operator
 #  - IBM CloudPak for AIOps
 #  - IBM CloudPak for AIOps Demo Content
-#     - OpenLDAP & Register with ibm-aiops
+#     - OpenLDAP & Register with ibm-concert-operate
 #     - RobotShop Demo App
 #     - Demo Service Account 
 #     - AWX (Open Source Ansible Tower) with preloaded Playbooks
@@ -43,7 +43,7 @@
 #       - Create K8s Observer
 #       - Create ASM merge rules
 #       - Load ASM merge Topology
-#       - Create ibm-aiops Application
+#       - Create ibm-concert-operate Application
 #     - Creates valid certificate for Ingress (Slack) 
 #     - External Routes (Flink, Topology, ...)
 #     - Disables ASM Service match rule 
@@ -109,7 +109,7 @@ data:
       # --------------------------------------------------------------------------------------------------------------------------------------
       # Notifications and Cards
       # --------------------------------------------------------------------------------------------------------------------------------------
-      # Create Welcome Cards in ibm-aiops
+      # Create Welcome Cards in ibm-concert-operate
       create_cards: true
       # Create App Menu Items in OCP
       create_ocp_items: true
@@ -161,24 +161,24 @@ data:
     #--------------------------------------------------------------------------------------------------------------------------------------
     # Changing the project name / namespace is at your own risk. some things might break, I do not test this!
 
-    - project: ibm-aiops
+    - project: ibm-concert-operate
       instances:
-      - name: ibm-aiops
-        kind: IBMAIOps
+      - name: ibm-concert-operate
+        kind: IBMConcertOperate
         install: true
 
         # --------------------------------------------------------------------------------------------------------------------------------------
         # Install Sizing
-        # current_ibm-aiops_feature
-        # ibm-aiops Size of the install (small: PoC/Demo, large: Production)
+        # current_ibm-concert-operate_feature
+        # ibm-concert-operate Size of the install (small: PoC/Demo, large: Production)
         aiops_size: small
         # Custom Sizing File (aiops_size must be set to "custom")
         #custom_size_file: none
 
         # --------------------------------------------------------------------------------------------------------------------------------------
         # Install Details
-        # Name of the ibm-aiops instance
-        aiops_name: ibm-aiops
+        # Name of the ibm-concert-operate instance
+        aiops_name: ibm-concert-operate
         # Version of the catalog subscription
         subscription_channel: v5.1
 
@@ -216,8 +216,8 @@ data:
     #--------------------------------------------------------------------------------------------------------------------------------------
     # CloudPak for AIOps Demo Content Install
     #--------------------------------------------------------------------------------------------------------------------------------------
-      - name: ibm-aiops-demo-content
-        kind: IBMAIOpsDemoContent
+      - name: ibm-concert-operate-demo-content
+        kind: IBMConcertOperateDemoContent
         install: true
 
 
@@ -341,20 +341,9 @@ data:
 
 
 
-    - project: ibm-aiops-addons
-      instances:
-      # --------------------------------------------------------------------------------------------------------------------------------------
-      # CP4WAIOPS ELK
-      # --------------------------------------------------------------------------------------------------------------------------------------
-
-      - name: ibm-aiops-elk
-        kind: ELK
-        install: false
 
 
-
-
-  INSTALL_REPO: 'https://github.com/niklaushirt/ibm-aiops-deployer.git -b main'
+  INSTALL_REPO: 'https://github.com/niklaushirt/ibm-concert-deployer.git -b main'
 
 
 
@@ -436,7 +425,7 @@ spec:
       serviceAccount: ibm-installer-admin
       containers:
         - name: install
-          image: quay.io/niklaushirt/ibm-aiops-tools:5.1.0
+          image: quay.io/niklaushirt/ibm-concert-tools:1.0.0
           imagePullPolicy: IfNotPresent
           resources:
             requests:
@@ -467,9 +456,9 @@ spec:
               #oc delete ConsoleNotification --all>/dev/null 2>/dev/null 
               oc delete job  -n ibm-installer --ignore-not-found $(oc get job -n ibm-installer|grep load-|awk '{print$1}'):-notfound  --ignore-not-found>/dev/null 2>/dev/null 
               oc delete pod  -n ibm-installer $(oc get po -n ibm-installer|grep load-|awk '{print$1}'):-notfound  --ignore-not-found>/dev/null 2>/dev/null 
-              oc delete ConsoleNotification ibm-aiops-notification-warning --ignore-not-found>/dev/null 2>/dev/null 
-              oc delete ConsoleNotification ibm-aiops-notification-status --ignore-not-found>/dev/null 2>/dev/null 
-              oc delete ConsoleNotification ibm-aiops-notification-fatal --ignore-not-found>/dev/null 2>/dev/null 
+              oc delete ConsoleNotification ibm-concert-operate-notification-warning --ignore-not-found>/dev/null 2>/dev/null 
+              oc delete ConsoleNotification ibm-concert-operate-notification-status --ignore-not-found>/dev/null 2>/dev/null 
+              oc delete ConsoleNotification ibm-concert-operate-notification-fatal --ignore-not-found>/dev/null 2>/dev/null 
               echo ""
               echo ""
 
@@ -478,7 +467,7 @@ spec:
               echo "------------------------------------------------------------------------------------------------------------------------------"
               echo "   📥 Clone Repo $INSTALL_REPO"
               git clone $INSTALL_REPO
-              cd ibm-aiops-deployer
+              cd ibm-concert-deployer
 
               echo ""
               echo ""

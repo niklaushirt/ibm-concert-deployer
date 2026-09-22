@@ -861,7 +861,7 @@ Incidents are being created by using the high level APIs in order to simulate a 
 
 This feature allows you to easily create custom scenarios for the IBM AIOps Demo UI.
 
-By default the custom scenario is disabled. In order to enable it you have to modify the `ibm-aiops-demo-ui-config-custom` ConfigMap in the `ibm-aiops-demo-ui` Namespace.
+By default the custom scenario is disabled. In order to enable it you have to modify the `ibm-concert-demo-ui-config-custom` ConfigMap in the `ibm-concert-demo-ui` Namespace.
 
 > ℹ️ The Topology will be loaded only the first time. Once the Application exists it will not update.
 >
@@ -1072,8 +1072,8 @@ This is a small example containing a Topology, Events, Metrics and Logs.
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  name: ibm-aiops-demo-ui-config-custom
-  namespace: ibm-aiops-demo-ui
+  name: ibm-concert-demo-ui-config-custom
+  namespace: ibm-concert-demo-ui
 data:
   CUSTOM_NAME: "Custom Demo"
   CUSTOM_EVENTS: |-
@@ -1125,7 +1125,7 @@ If not, please [re-run the installer Pod](#re-run-the-installer).
 
 If your CP4AIPS installtion gets stuck at 60-90 Pods in the `ibm-aiops` Namespace, there is not much I can do to help - this is not a problem with the scripts!
 
-✅ Please [try this YAML](https://github.com/niklaushirt/ibm-aiops-deployer/blob/main/tools/00_troubleshooting/CP4AIOPS_INSTALL_HACK.yaml)
+✅ Please [try this YAML](https://github.com/niklaushirt/ibm-concert-deployer/blob/main/tools/00_troubleshooting/CP4AIOPS_INSTALL_HACK.yaml)
 
 </details>
 

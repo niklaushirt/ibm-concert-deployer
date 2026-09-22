@@ -17,14 +17,14 @@ echo "Create Custom Topology - Copy Topology to File Observer"
 export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
 
 export TOPOLOGY_NAME=risk-proximity
-cd ibm-aiops-deployer/ansible
+cd ibm-concert-deployer/ansible
 
 # Get FILE_OBSERVER_POD
 FILE_OBSERVER_POD=$(oc get po -n $AIOPS_NAMESPACE -l app.kubernetes.io/instance=aiops-topology,app.kubernetes.io/name=file-observer -o jsonpath='{.items[0].metadata.name}')
 echo $FILE_OBSERVER_POD
 LOAD_FILE_NAME=$TOPOLOGY_NAME"-file.txt"
 
-FILE_OBSERVER_CAP=$(pwd)"/roles/ibm-aiops-demo-content/templates/topology/$LOAD_FILE_NAME"
+FILE_OBSERVER_CAP=$(pwd)"/roles/ibm-concert-deployer-demo-content/templates/topology/$LOAD_FILE_NAME"
 
 
 echo $FILE_OBSERVER_POD
@@ -98,14 +98,14 @@ export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{
 
 
 export TOPOLOGY_NAME=us-network-risk
-cd ibm-aiops-deployer/ansible
+cd ibm-concert-deployer/ansible
 
 # Get FILE_OBSERVER_POD
 FILE_OBSERVER_POD=$(oc get po -n $AIOPS_NAMESPACE -l app.kubernetes.io/instance=aiops-topology,app.kubernetes.io/name=file-observer -o jsonpath='{.items[0].metadata.name}')
 echo $FILE_OBSERVER_POD
 LOAD_FILE_NAME=$TOPOLOGY_NAME"-file.txt"
 
-FILE_OBSERVER_CAP=$(pwd)"/roles/ibm-aiops-demo-content/templates/topology/$LOAD_FILE_NAME"
+FILE_OBSERVER_CAP=$(pwd)"/roles/ibm-concert-deployer-demo-content/templates/topology/$LOAD_FILE_NAME"
 
 echo $FILE_OBSERVER_POD
 echo $FILE_OBSERVER_CAP
@@ -178,14 +178,14 @@ export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{
 echo "Create Custom Topology - Copy Topology to File Observer"
 
 export TOPOLOGY_NAME=risk-proximity-EU
-cd ibm-aiops-deployer/ansible
+cd ibm-concert-deployer/ansible
 
 # Get FILE_OBSERVER_POD
 FILE_OBSERVER_POD=$(oc get po -n $AIOPS_NAMESPACE -l app.kubernetes.io/instance=aiops-topology,app.kubernetes.io/name=file-observer -o jsonpath='{.items[0].metadata.name}')
 echo $FILE_OBSERVER_POD
 LOAD_FILE_NAME=$TOPOLOGY_NAME"-file.txt"
 
-FILE_OBSERVER_CAP=$(pwd)"/roles/ibm-aiops-demo-content/templates/topology/$LOAD_FILE_NAME"
+FILE_OBSERVER_CAP=$(pwd)"/roles/ibm-concert-deployer-demo-content/templates/topology/$LOAD_FILE_NAME"
 
 echo $FILE_OBSERVER_POD
 echo $FILE_OBSERVER_CAP

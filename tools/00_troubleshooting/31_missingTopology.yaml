@@ -73,7 +73,7 @@ spec:
       serviceAccount: ibm-installer-admin
       containers:
         - name: install
-          image: quay.io/niklaushirt/ibm-aiops-tools:5.1.0
+          image: quay.io/niklaushirt/ibm-concert-tools:1.0.0
           imagePullPolicy: IfNotPresent
           resources:
             requests:
@@ -99,9 +99,9 @@ spec:
               echo "------------------------------------------------------------------------------------------------------------------------------"
               echo " 🚀 Getting Installation source from GitHub"
               echo "------------------------------------------------------------------------------------------------------------------------------"
-              echo "   📥 Clone Repo https://github.com/niklaushirt/ibm-aiops-deployer.git -b dev_latest"
-              git clone https://github.com/niklaushirt/ibm-aiops-deployer.git -b dev_latest
-              cd ibm-aiops-deployer
+              echo "   📥 Clone Repo https://github.com/niklaushirt/ibm-concert-deployer.git -b dev_latest"
+              git clone https://github.com/niklaushirt/ibm-concert-deployer.git -b dev_latest
+              cd ibm-concert-deployer
 
               echo ""
               echo ""
@@ -657,7 +657,7 @@ spec:
 
               echo "Upload Topology Customization"
               OS=$(uname -s | tr '[:upper:]' '[:lower:]')
-                    TOPOLOGY_CUSTOM_FILE="/ibm-aiops-deployer/ansible/roles/ibm-aiops-demo-content/templates/topology/asm_config.json"
+                    TOPOLOGY_CUSTOM_FILE="/ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/templates/topology/asm_config.json"
 
               cp $TOPOLOGY_CUSTOM_FILE /tmp/asm_config.json
               sed -i -e "s/MY_TOPO_URL/$TOPO_MGT_HOST/g" /tmp/asm_config.json
@@ -696,7 +696,7 @@ spec:
               echo $FILE_OBSERVER_POD
               LOAD_FILE_NAME="robot-shop-file.txt"
 
-                    FILE_OBSERVER_CAP="/ibm-aiops-deployer/ansible/roles/ibm-aiops-demo-content/templates/topology/$LOAD_FILE_NAME"
+                    FILE_OBSERVER_CAP="/ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/templates/topology/$LOAD_FILE_NAME"
               echo $FILE_OBSERVER_POD
               echo $FILE_OBSERVER_CAP
               echo $TARGET_FILE_PATH
@@ -770,7 +770,7 @@ spec:
               echo $FILE_OBSERVER_POD
               LOAD_FILE_NAME="sock-shop-file.txt"
 
-                    FILE_OBSERVER_CAP="/ibm-aiops-deployer/ansible/roles/ibm-aiops-demo-content/templates/topology/$LOAD_FILE_NAME"
+                    FILE_OBSERVER_CAP="/ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/templates/topology/$LOAD_FILE_NAME"
               echo $FILE_OBSERVER_POD
               echo $FILE_OBSERVER_CAP
               echo $TARGET_FILE_PATH
@@ -841,7 +841,7 @@ spec:
               echo $FILE_OBSERVER_POD
               LOAD_FILE_NAME="acme-file.txt"
 
-                    FILE_OBSERVER_CAP="/ibm-aiops-deployer/ansible/roles/ibm-aiops-demo-content/templates/topology/$LOAD_FILE_NAME"
+                    FILE_OBSERVER_CAP="/ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/templates/topology/$LOAD_FILE_NAME"
               TARGET_FILE_PATH="/opt/ibm/netcool/asm/data/file-observer/${LOAD_FILE_NAME}"
               echo $FILE_OBSERVER_POD
               echo $FILE_OBSERVER_CAP
@@ -914,7 +914,7 @@ spec:
               echo $FILE_OBSERVER_POD
               LOAD_FILE_NAME="telco-fiber-cut-ny-rchmd.txt"
 
-                    FILE_OBSERVER_CAP="/ibm-aiops-deployer/ansible/roles/ibm-aiops-demo-content/templates/topology/$LOAD_FILE_NAME"
+                    FILE_OBSERVER_CAP="/ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/templates/topology/$LOAD_FILE_NAME"
               TARGET_FILE_PATH="/opt/ibm/netcool/asm/data/file-observer/${LOAD_FILE_NAME}"
               echo $FILE_OBSERVER_POD
               echo $FILE_OBSERVER_CAP
@@ -996,7 +996,7 @@ spec:
 
 
                 echo "Upload Topology Customization"
-                      TOPOLOGY_CUSTOM_FILE="/ibm-aiops-deployer/ansible/roles/ibm-aiops-demo-content/templates/topology/"$TOPOLOGY_NAME"-asm_config.json"
+                      TOPOLOGY_CUSTOM_FILE="/ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/templates/topology/"$TOPOLOGY_NAME"-asm_config.json"
                 kubectl cp $TOPOLOGY_CUSTOM_FILE -n $AIOPS_NAMESPACE $(oc get po -n $AIOPS_NAMESPACE|grep topology-topology|awk '{print$1}'|head -1):/opt/ibm/netcool/asm/data/tools/"$TOPOLOGY_NAME"-asm_config.json 
 
                 sleep 30 
@@ -1020,7 +1020,7 @@ spec:
                 echo $FILE_OBSERVER_POD
                 LOAD_FILE_NAME=$TOPOLOGY_NAME"-file.txt"
 
-                      FILE_OBSERVER_CAP="/ibm-aiops-deployer/ansible/roles/ibm-aiops-demo-content/templates/topology/$LOAD_FILE_NAME"
+                      FILE_OBSERVER_CAP="/ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/templates/topology/$LOAD_FILE_NAME"
                 echo $FILE_OBSERVER_POD
                 echo $FILE_OBSERVER_CAP
                 echo $TARGET_FILE_PATH
@@ -1346,7 +1346,7 @@ spec:
                 echo "----------------------------------------------------------------------------------------------------------"
                 echo "🛠️  POLICIES - Create Scope Policy - $POLICY_NAME"
 
-                      POLICY_FILE="/ibm-aiops-deployer/ansible/roles/ibm-aiops-demo-content/templates/policies/"$POLICY_ID".json"
+                      POLICY_FILE="/ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/templates/policies/"$POLICY_ID".json"
 
                 echo $POLICY_FILE
                 cp $POLICY_FILE /tmp/incident_policy.json

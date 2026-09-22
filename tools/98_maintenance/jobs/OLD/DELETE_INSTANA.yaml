@@ -70,7 +70,7 @@ spec:
     spec:
       containers:
         - name: install
-          image: quay.io/niklaushirt/ibm-aiops-tools:5.1.0
+          image: quay.io/niklaushirt/ibm-concert-tools:1.0.0
           imagePullPolicy: IfNotPresent
           resources:
             requests:
@@ -105,7 +105,7 @@ spec:
               echo "------------------------------------------------------------------------------------------------------------------------------"
               echo "   📥 Clone Repo $INSTALL_REPO"
               git clone $INSTALL_REPO
-              cd ibm-aiops-deployer
+              cd ibm-concert-deployer
 
               echo ""
               echo ""
@@ -205,7 +205,7 @@ spec:
 
           env:
           - name: INSTALL_REPO
-            value : "https://github.com/niklaushirt/ibm-aiops-deployer.git"
+            value : "https://github.com/niklaushirt/ibm-concert-deployer.git"
           - name: CONFIG
             #value : "./configs/ibm-aiops-roks-aimanager-all-34.yaml"
             value : "./configs/xxxx.yaml"

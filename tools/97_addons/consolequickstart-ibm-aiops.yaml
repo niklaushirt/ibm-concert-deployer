@@ -13,7 +13,7 @@ spec:
 
     You should have previously obtained an **OpenShift cluster** 
   prerequisites:
-    - You have obtained an OpenShift cluster - [Specifications](https://github.com/niklaushirt/ibm-aiops-deployer#11-prerequisites) - [Techzone](https://techzone.ibm.com/collection/tech-zone-certified-base-images/journey-vmware-on-ibm-cloud-environments)
+    - You have obtained an OpenShift cluster - [Specifications](https://github.com/niklaushirt/ibm-concert-deployer#11-prerequisites) - [Techzone](https://techzone.ibm.com/collection/tech-zone-certified-base-images/journey-vmware-on-ibm-cloud-environments)
   tasks:
 
     - description: >-
@@ -42,7 +42,7 @@ spec:
       title: Paste Installation YAML File
 
     - description: >-
-        Copy and paste the content from [this file](https://github.com/niklaushirt/ibm-aiops-deployer/blob/main/Quick_Install/00_INSTALL_IBM_AIOPS.yaml)
+        Copy and paste the content from [this file](https://github.com/niklaushirt/ibm-concert-deployer/blob/main/Quick_Install/00_INSTALL_IBM_AIOPS.yaml)
       review:
         failedTaskHelp: This task isn’t verified yet. Try the task again.
         instructions: >-
@@ -125,7 +125,7 @@ spec:
       review:
         failedTaskHelp: This task isn’t verified yet. Try the task again.
         instructions: >-
-          #### If you get an orange bar, please [restart the installation](https://github.com/niklaushirt/ibm-aiops-deployer#re-run-the-installer)
+          #### If you get an orange bar, please [restart the installation](https://github.com/niklaushirt/ibm-concert-deployer#re-run-the-installer)
       summary:
         failed: Restart the installation
         success: >-
@@ -144,7 +144,7 @@ spec:
 
         2. Log in with the Password you have defined before
 
-        2. [Start Demoing](https://github.com/niklaushirt/ibm-aiops-deployer#3-demo-the-solution)
+        2. [Start Demoing](https://github.com/niklaushirt/ibm-concert-deployer#3-demo-the-solution)
 
         3. Click on **Filesystem Usage** from the list to run the query.
 
