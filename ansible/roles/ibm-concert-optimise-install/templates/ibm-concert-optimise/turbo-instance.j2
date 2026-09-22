@@ -2,7 +2,7 @@ apiVersion: charts.helm.k8s.io/v1
 kind: Xl
 metadata:
   name: xl-release
-  namespace: turbonomic
+  namespace: ibm-concert-optimise
 spec:
   servicenow:
     enabled: true
@@ -118,7 +118,7 @@ spec:
       basePrefixUrl: /turbonomic
       vendor_supported_admin_role: Admin
       vendor_public_key_skip_ssl_verification: true
-      vendor_public_key_url: 'https://concert-gateway.turbonomic.svc.cluster.local/gw/auth/jwtcert'
+      vendor_public_key_url: 'https://concert-gateway.ibm-concert-optimise.svc.cluster.local/gw/auth/jwtcert'
       vendor_supported_siteadmin_role: 'ServiceAdmin,ServiceOwner,Site Administrator'
       allowTargetManagementInIntegrationMode: true
       vendor_supported_parker_role: Parking Administrator

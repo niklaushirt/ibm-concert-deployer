@@ -1,11 +1,11 @@
 apiVersion: operators.coreos.com/v1
 kind: OperatorGroup
 metadata:
-  name: turbonomic
-  namespace: turbonomic
+  name: ibm-concert-optimise
+  namespace: ibm-concert-optimise
 spec:
   targetNamespaces:
-    - turbonomic
+    - ibm-concert-optimise
 status:
   namespaces:
-    - turbonomic
+    - ibm-concert-optimise
