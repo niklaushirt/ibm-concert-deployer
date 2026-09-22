@@ -209,9 +209,9 @@ data:
     # IBM CONCERT platform
     # --------------------------------------------------------------------------------------------------------------------------------------
 
-    - project: ibm-concert
+    - project: ibm-concert-platform
       instances:
-      - name: ibm-concert
+      - name: ibm-concert-platform
         kind: IBMConcertPlatform
         install: true
 
@@ -285,7 +285,7 @@ data:
         #storage_class_block: automatic
 
 
-      - name: ibm-concert-demo-content
+      - name: ibm-concert-platform-demo-content
         kind: IBMConcertPlatformDemoContent
         install: true
 
