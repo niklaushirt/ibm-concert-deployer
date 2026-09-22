@@ -42,7 +42,7 @@
 
 
 
-- name: 🌏 OCP MENU - Create Openshift WebConsole Menu Item - Instana
+- name: 🌏 OCP MENU - Create Openshift WebConsole Menu Item - IBM Concert platform
   shell: |
     appURL=$(oc get routes -n {{ current_ibm_feature.project }} concert  -o jsonpath="{['spec']['host']}")|| true
 
