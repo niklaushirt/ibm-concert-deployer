@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ibm-aiops-inject-lags-anomaly
-  namespace: ibm-concert-demo-ui
+  namespace: ibm-demo-ui
   labels:
       app: ibm-aiops-inject-lags-anomaly
 spec:
@@ -15,8 +15,8 @@ spec:
       labels:
         app: ibm-aiops-inject-lags-anomaly
     spec:
-      serviceAccount: ibm-concert-demo-ui-admin
-      serviceAccount: ibm-concert-demo-ui-admin 
+      serviceAccount: ibm-demo-ui-admin
+      serviceAccount: ibm-demo-ui-admin 
 
       containers:
       - image: quay.io/niklaushirt/ibm-concert-tools:1.0.0
@@ -83,5 +83,5 @@ spec:
             echo "*****************************************************************************************************************************"
         
             sleep 15
-            oc scale deploy ibm-aiops-inject-lags-anomaly -n ibm-concert-demo-ui --replicas=0
+            oc scale deploy ibm-aiops-inject-lags-anomaly -n ibm-demo-ui --replicas=0
 

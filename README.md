@@ -862,7 +862,7 @@ Incidents are being created by using the high level APIs in order to simulate a 
 
 This feature allows you to easily create custom scenarios for the IBM Concert Operate Demo UI.
 
-By default the custom scenario is disabled. In order to enable it you have to modify the `ibm-concert-demo-ui-config-custom` ConfigMap in the `ibm-concert-demo-ui` Namespace.
+By default the custom scenario is disabled. In order to enable it you have to modify the `ibm-demo-ui-config-custom` ConfigMap in the `ibm-demo-ui` Namespace.
 
 > ℹ️ The Topology will be loaded only the first time. Once the Application exists it will not update.
 >
@@ -1073,8 +1073,8 @@ This is a small example containing a Topology, Events, Metrics and Logs.
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  name: ibm-concert-demo-ui-config-custom
-  namespace: ibm-concert-demo-ui
+  name: ibm-demo-ui-config-custom
+  namespace: ibm-demo-ui
 data:
   CUSTOM_NAME: "Custom Demo"
   CUSTOM_EVENTS: |-

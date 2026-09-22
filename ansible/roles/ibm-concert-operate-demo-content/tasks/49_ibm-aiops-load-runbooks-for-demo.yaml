@@ -408,7 +408,7 @@
     export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
     export ZEN_TOKEN={{ZEN_TOKEN}}
     export ROUTE=$(oc get route -n $AIOPS_NAMESPACE cpd -o jsonpath={.spec.host})
-    export DEMOUI_ROUTE=${ROUTE/cpd-ibm-aiops/ibm-concert-demo-ui-ibm-concert-demo-ui}
+    export DEMOUI_ROUTE=${ROUTE/cpd-ibm-aiops/ibm-demo-ui-ibm-demo-ui}
     
     export DEMO_TOKEN=$(oc create token -n default demo-admin --duration=999999999s)
 
@@ -503,7 +503,7 @@
     export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
     export ZEN_TOKEN={{ZEN_TOKEN}}
     export ROUTE=$(oc get route -n $AIOPS_NAMESPACE cpd -o jsonpath={.spec.host})
-    export DEMOUI_ROUTE=${ROUTE/cpd-ibm-aiops/ibm-concert-demo-ui-ibm-concert-demo-ui}
+    export DEMOUI_ROUTE=${ROUTE/cpd-ibm-aiops/ibm-demo-ui-ibm-demo-ui}
     
     export DEMO_TOKEN=$(oc create token -n default demo-admin --duration=999999999s)
 
@@ -600,7 +600,7 @@
     export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
     export ZEN_TOKEN={{ZEN_TOKEN}}
     export ROUTE=$(oc get route -n $AIOPS_NAMESPACE cpd -o jsonpath={.spec.host})
-    export DEMOUI_ROUTE=${ROUTE/cpd-ibm-aiops/ibm-concert-demo-ui-ibm-concert-demo-ui}
+    export DEMOUI_ROUTE=${ROUTE/cpd-ibm-aiops/ibm-demo-ui-ibm-demo-ui}
     
     export DEMO_TOKEN=$(oc create token -n default demo-admin --duration=999999999s)
 
@@ -694,7 +694,7 @@
     export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
     export ZEN_TOKEN={{ZEN_TOKEN}}
     export ROUTE=$(oc get route -n $AIOPS_NAMESPACE cpd -o jsonpath={.spec.host})
-    export DEMOUI_ROUTE=${ROUTE/cpd-ibm-aiops/ibm-concert-demo-ui-ibm-concert-demo-ui}
+    export DEMOUI_ROUTE=${ROUTE/cpd-ibm-aiops/ibm-demo-ui-ibm-demo-ui}
     
     export DEMO_TOKEN=$(oc create token -n default demo-admin --duration=999999999s)
 
@@ -787,7 +787,7 @@
     export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
     export ZEN_TOKEN={{ZEN_TOKEN}}
     export ROUTE=$(oc get route -n $AIOPS_NAMESPACE cpd -o jsonpath={.spec.host})
-    export DEMOUI_ROUTE=${ROUTE/cpd-ibm-aiops/ibm-concert-demo-ui-ibm-concert-demo-ui}
+    export DEMOUI_ROUTE=${ROUTE/cpd-ibm-aiops/ibm-demo-ui-ibm-demo-ui}
     
     export DEMO_TOKEN=$(oc create token -n default demo-admin --duration=999999999s)
 
@@ -879,7 +879,7 @@
     export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
     export ZEN_TOKEN={{ZEN_TOKEN}}
     export ROUTE=$(oc get route -n $AIOPS_NAMESPACE cpd -o jsonpath={.spec.host})
-    export DEMOUI_ROUTE=${ROUTE/cpd-ibm-aiops/ibm-concert-demo-ui-ibm-concert-demo-ui}
+    export DEMOUI_ROUTE=${ROUTE/cpd-ibm-aiops/ibm-demo-ui-ibm-demo-ui}
     
     export DEMO_TOKEN=$(oc create token -n default demo-admin --duration=999999999s)
 
@@ -979,7 +979,7 @@
     export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
     export ZEN_TOKEN={{ZEN_TOKEN}}
     export ROUTE=$(oc get route -n $AIOPS_NAMESPACE cpd -o jsonpath={.spec.host})
-    export DEMOUI_ROUTE=${ROUTE/cpd-ibm-aiops/ibm-concert-demo-ui-ibm-concert-demo-ui}
+    export DEMOUI_ROUTE=${ROUTE/cpd-ibm-aiops/ibm-demo-ui-ibm-demo-ui}
     
     export DEMO_TOKEN=$(oc create token -n default demo-admin --duration=999999999s)
 
@@ -1062,7 +1062,7 @@
     export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
     export ZEN_TOKEN={{ZEN_TOKEN}}
     export ROUTE=$(oc get route -n $AIOPS_NAMESPACE cpd -o jsonpath={.spec.host})
-    export DEMOUI_ROUTE=${ROUTE/cpd-ibm-aiops/ibm-concert-demo-ui-ibm-concert-demo-ui}
+    export DEMOUI_ROUTE=${ROUTE/cpd-ibm-aiops/ibm-demo-ui-ibm-demo-ui}
     
     export DEMO_TOKEN=$(oc create token -n default demo-admin --duration=999999999s)
 

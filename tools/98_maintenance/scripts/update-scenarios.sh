@@ -41,25 +41,25 @@ echo ""
 echo "--------------------------------------------------------------------------------------------"
 echo " 🧻  Deleting DemoUI Namespace..." 
 echo "      This will take several minutes...." 
-oc delete ns ibm-concert-demo-ui
+oc delete ns ibm-demo-ui
 
 
 echo ""
 echo "--------------------------------------------------------------------------------------------"
 echo " 🚀  Creating DemoUI Namespace..." 
-oc create ns ibm-concert-demo-ui
+oc create ns ibm-demo-ui
 
 
 
 echo ""
 echo "--------------------------------------------------------------------------------------------"
 echo " 🚀  Creating DemoUI Config Maps..." 
-cat <<EOF | oc apply -n ibm-concert-demo-ui -f -
+cat <<EOF | oc apply -n ibm-demo-ui -f -
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  name: ibm-concert-demo-ui-config
-  namespace: ibm-concert-demo-ui
+  name: ibm-demo-ui-config
+  namespace: ibm-demo-ui
 data:
   TOKEN: CHANGEME
   INSTANCE_NAME: Bear
@@ -91,12 +91,12 @@ EOF
 
 
 
-cat <<EOF | oc apply -n ibm-concert-demo-ui -f -
+cat <<EOF | oc apply -n ibm-demo-ui -f -
   apiVersion: v1
   kind: ConfigMap
   metadata:
-    name:  ibm-concert-demo-ui-config-events
-    namespace: ibm-concert-demo-ui
+    name:  ibm-demo-ui-config-events
+    namespace: ibm-demo-ui
   data:
     DEMO_EVENTS_BUSY: |-
       {"deduplicationKey": "helpdesk-nginx-1.helpdesk.hursley.ibm.com->ResponseTime is Higher than expected","severity": 4,"summary": "Helpdesk Nginx ResponseTime is Higher than expected. Actual: 3149.9000 Expected: 1156.2114","sender": {"component": "com.ibm.pi.analytics.robust_bounds_model","name": "metric-anomaly-detection"},"resource": {"node": "helpdesk-nginx-1.helpdesk.hursley.ibm.com","metric": "ResponseTime","resource": "helpdesk-nginx-1.helpdesk.hursley.ibm.com","name": "helpdesk-nginx-1.helpdesk.hursley.ibm.com"}, "occurrenceTime": "MY_TIMESTAMP","details": {"node": "helpdesk-nginx-1.helpdesk.hursley.ibm.com","metric": "ResponseTime","resource": "helpdesk-nginx-1.helpdesk.hursley.ibm.com","group": "APP"},"type": {"eventType": "problem","classification": "ANOMALY:APP:ResponseTime"}}
@@ -320,12 +320,12 @@ cat <<EOF | oc apply -n ibm-concert-demo-ui -f -
 EOF
 
 
-cat <<EOF | oc apply -n ibm-concert-demo-ui -f -
+cat <<EOF | oc apply -n ibm-demo-ui -f -
   apiVersion: v1
   kind: ConfigMap
   metadata:
-    name:  ibm-concert-demo-ui-config-metrics
-    namespace: ibm-concert-demo-ui
+    name:  ibm-demo-ui-config-metrics
+    namespace: ibm-demo-ui
   data:
     METRICS_TO_SIMULATE_FAN_TEMP:  |-
       DCWest1-Rack045-DELL3762,CPU1Temperature,System,130,5
@@ -380,12 +380,12 @@ cat <<EOF | oc apply -n ibm-concert-demo-ui -f -
       catalogue-predictive,Latency,Latency,1000,100
 EOF
 
-cat <<EOF | oc apply -n ibm-concert-demo-ui -f -
+cat <<EOF | oc apply -n ibm-demo-ui -f -
   apiVersion: v1
   kind: ConfigMap
   metadata:
-    name:  ibm-concert-demo-ui-config-logs
-    namespace: ibm-concert-demo-ui
+    name:  ibm-demo-ui-config-logs
+    namespace: ibm-demo-ui
   data:
 
     DEMO_LOGS:  |-
@@ -479,12 +479,12 @@ EOF
 
 
 
-cat <<EOF | oc apply -n ibm-concert-demo-ui -f -
+cat <<EOF | oc apply -n ibm-demo-ui -f -
   kind: ConfigMap
   apiVersion: v1
   metadata:
-    name: ibm-concert-demo-ui-config-logs-sock
-    namespace: ibm-concert-demo-ui
+    name: ibm-demo-ui-config-logs-sock
+    namespace: ibm-demo-ui
   data:
   data:
     DEMO_LOGS_SOCK: ''
@@ -495,12 +495,12 @@ EOF
 
 
 
-cat <<EOF | oc apply -n ibm-concert-demo-ui -f -
+cat <<EOF | oc apply -n ibm-demo-ui -f -
   kind: ConfigMap
   apiVersion: v1
   metadata:
-    name: ibm-concert-demo-ui-config-custom
-    namespace: ibm-concert-demo-ui
+    name: ibm-demo-ui-config-custom
+    namespace: ibm-demo-ui
   data:
     CUSTOM_NAME: 'Custom Demo'
     CUSTOM_EVENTS: |-
@@ -529,22 +529,22 @@ EOF
 echo ""
 echo "--------------------------------------------------------------------------------------------"
 echo " 🚀  Creating DemoUI Deployment..." 
-cat <<EOF | oc apply -n ibm-concert-demo-ui -f -
+cat <<EOF | oc apply -n ibm-demo-ui -f -
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: ibm-concert-demo-ui-admin
-  namespace: ibm-concert-demo-ui
+  name: ibm-demo-ui-admin
+  namespace: ibm-demo-ui
 ---
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: ibm-concert-demo-ui-admin-crb
+  name: ibm-demo-ui-admin-crb
 subjects:
   - kind: ServiceAccount
-    name: ibm-concert-demo-ui-admin
-    namespace: ibm-concert-demo-ui
+    name: ibm-demo-ui-admin
+    namespace: ibm-demo-ui
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -553,24 +553,24 @@ roleRef:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ibm-concert-demo-ui
-  namespace: ibm-concert-demo-ui
+  name: ibm-demo-ui
+  namespace: ibm-demo-ui
   labels:
-      app: ibm-concert-demo-ui
+      app: ibm-demo-ui
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: ibm-concert-demo-ui
+      app: ibm-demo-ui
   template:
     metadata:
       labels:
-        app: ibm-concert-demo-ui
+        app: ibm-demo-ui
     spec:
       containers:
-      - image: quay.io/niklaushirt/ibm-concert-demo-ui:4.8.0
+      - image: quay.io/niklaushirt/ibm-demo-ui:4.8.0
         imagePullPolicy: Always
-        name: ibm-concert-demo-ui
+        name: ibm-demo-ui
         command:
         ports:
         - containerPort: 8000
@@ -593,35 +593,35 @@ spec:
           failureThreshold: 3
         envFrom:
         - configMapRef:
-            name:  ibm-concert-demo-ui-config
+            name:  ibm-demo-ui-config
         - configMapRef:
-            name:  ibm-concert-demo-ui-config-events
+            name:  ibm-demo-ui-config-events
         - configMapRef:
-            name:  ibm-concert-demo-ui-config-logs
+            name:  ibm-demo-ui-config-logs
         - configMapRef:
-            name:  ibm-concert-demo-ui-config-logs-sock
+            name:  ibm-demo-ui-config-logs-sock
         - configMapRef:
-            name:  ibm-concert-demo-ui-config-metrics
+            name:  ibm-demo-ui-config-metrics
         - configMapRef:
-            name:  ibm-concert-demo-ui-config-custom
+            name:  ibm-demo-ui-config-custom
         env:
           - name: INSTANA_SERVICE_NAME
-            value: ibm-concert-demo-ui
+            value: ibm-demo-ui
           - name: AUTOWRAPT_BOOTSTRAP
             value: instana
           - name: INSTANA_DEBUG
             value: 'false'
-      serviceAccount: ibm-concert-demo-ui-admin
+      serviceAccount: ibm-demo-ui-admin
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: ibm-concert-demo-ui-service
-  namespace: ibm-concert-demo-ui
+  name: ibm-demo-ui-service
+  namespace: ibm-demo-ui
 spec:
   selector:
-    app: ibm-concert-demo-ui
+    app: ibm-demo-ui
   ports:
     - protocol: TCP
       port: 8000
@@ -630,12 +630,12 @@ spec:
 kind: Route
 apiVersion: route.openshift.io/v1
 metadata:
-  name:  ibm-concert-demo-ui
-  namespace: ibm-concert-demo-ui
+  name:  ibm-demo-ui
+  namespace: ibm-demo-ui
 spec:
   to:
     kind: Service
-    name: ibm-concert-demo-ui-service
+    name: ibm-demo-ui-service
     weight: 100
   port:
     targetPort: 8000

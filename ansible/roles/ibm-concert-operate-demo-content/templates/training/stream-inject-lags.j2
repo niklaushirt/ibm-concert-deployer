@@ -79,7 +79,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ibm-aiops-stream-lags-normal
-  namespace: ibm-concert-demo-ui
+  namespace: ibm-demo-ui
   labels:
       app: ibm-aiops-stream-lags-normal
 spec:
@@ -92,8 +92,8 @@ spec:
       labels:
         app: ibm-aiops-stream-lags-normal
     spec:
-      serviceAccount: ibm-concert-demo-ui-admin
-      serviceAccount: ibm-concert-demo-ui-admin 
+      serviceAccount: ibm-demo-ui-admin
+      serviceAccount: ibm-demo-ui-admin 
 
       containers:
       - image: quay.io/niklaushirt/ibm-concert-tools:1.0.0
@@ -168,7 +168,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ibm-aiops-inject-lags-anomaly
-  namespace: ibm-concert-demo-ui
+  namespace: ibm-demo-ui
   labels:
       app: ibm-aiops-inject-lags-anomaly
 spec:
@@ -181,8 +181,8 @@ spec:
       labels:
         app: ibm-aiops-inject-lags-anomaly
     spec:
-      serviceAccount: ibm-concert-demo-ui-admin
-      serviceAccount: ibm-concert-demo-ui-admin 
+      serviceAccount: ibm-demo-ui-admin
+      serviceAccount: ibm-demo-ui-admin 
 
       containers:
       - image: quay.io/niklaushirt/ibm-concert-tools:1.0.0

@@ -314,20 +314,21 @@
     state: absent
     namespace: turbonomic
     template: ./templates/training/stream-inject-lags.j2
-
+  ignore_errors: true
 
 - name: 📥 TRAINING LOAD LAD - CREATE CLUSTERROLE
   kubernetes.core.k8s:
     state: present
     namespace: default
     src: ./templates/training/default-clusterrole.yaml
-    
+  ignore_errors: true
 
 - name: 📥 TRAINING LOAD LAD - LOAD KAFKA LAGS DATA 
   kubernetes.core.k8s:
     state: present
     namespace: turbonomic
     template: ./templates/training/stream-inject-lags.j2
+  ignore_errors: true
 
 
 - name: 🚀 TRAINING CREATE LAGS - WAIT 5 MINUTES

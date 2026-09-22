@@ -2,24 +2,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ibm-concert-demo-ui
+  name: ibm-demo-ui
   namespace: {{current_ibm_feature.project}}-demo-ui
   labels:
-      app: ibm-concert-demo-ui
+      app: ibm-demo-ui
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: ibm-concert-demo-ui
+      app: ibm-demo-ui
   template:
     metadata:
       labels:
-        app: ibm-concert-demo-ui
+        app: ibm-demo-ui
     spec:
       containers:
-      - image: quay.io/niklaushirt/ibm-concert-demo-ui:5.1.2
+      - image: quay.io/niklaushirt/ibm-demo-ui:5.1.2
         imagePullPolicy: Always
-        name: ibm-concert-demo-ui
+        name: ibm-demo-ui
         command:
         ports:
         - containerPort: 8000
@@ -42,35 +42,35 @@ spec:
           failureThreshold: 300
         envFrom:
         - configMapRef:
-            name:  ibm-concert-demo-ui-config
+            name:  ibm-demo-ui-config
         - configMapRef:
-            name:  ibm-concert-demo-ui-config-events
+            name:  ibm-demo-ui-config-events
         - configMapRef:
-            name:  ibm-concert-demo-ui-config-logs
+            name:  ibm-demo-ui-config-logs
         - configMapRef:
-            name:  ibm-concert-demo-ui-config-logs-sock
+            name:  ibm-demo-ui-config-logs-sock
         - configMapRef:
-            name:  ibm-concert-demo-ui-config-metrics
+            name:  ibm-demo-ui-config-metrics
         - configMapRef:
-            name:  ibm-concert-demo-ui-config-custom
+            name:  ibm-demo-ui-config-custom
         env:
           - name: INSTANA_SERVICE_NAME
-            value: ibm-concert-demo-ui
+            value: ibm-demo-ui
           - name: AUTOWRAPT_BOOTSTRAP
             value: instana
           - name: INSTANA_DEBUG
             value: 'false'
-      serviceAccount: ibm-concert-demo-ui-admin
+      serviceAccount: ibm-demo-ui-admin
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: ibm-concert-demo-ui-service
+  name: ibm-demo-ui-service
   namespace: {{current_ibm_feature.project}}-demo-ui
 spec:
   selector:
-    app: ibm-concert-demo-ui
+    app: ibm-demo-ui
   ports:
     - protocol: TCP
       port: 8000
@@ -79,12 +79,12 @@ spec:
 kind: Route
 apiVersion: route.openshift.io/v1
 metadata:
-  name:  ibm-concert-demo-ui
+  name:  ibm-demo-ui
   namespace: {{current_ibm_feature.project}}-demo-ui
 spec:
   to:
     kind: Service
-    name: ibm-concert-demo-ui-service
+    name: ibm-demo-ui-service
     weight: 100
   port:
     targetPort: 8000

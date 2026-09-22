@@ -1795,7 +1795,7 @@ ok: [localhost] => {
         "deployment.apps/aimanager-aio-log-anomaly-golden-signals updated",
         "deployment.apps/aimanager-aio-log-anomaly-golden-signals updated",
         "deployment.apps/aimanager-aio-log-anomaly-golden-signals updated",
-        "namespace/ibm-concert-demo-ui created"
+        "namespace/ibm-demo-ui created"
     ]
 }
 
@@ -2907,7 +2907,7 @@ TASK [ibm-aiops-demo-content : 🟣  OUTPUT] ***********************************
 skipping: [localhost]
 
 TASK [ibm-aiops-demo-content : (046/051) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Install the Demo UI] ***
-included: /ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/tasks/26_ibm-concert-demo-ui.yaml for localhost
+included: /ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/tasks/26_ibm-demo-ui.yaml for localhost
 
 TASK [ibm-aiops-demo-content : 🛰️  START - AIOPS DEMO UI] ***********************
 ok: [localhost] => {

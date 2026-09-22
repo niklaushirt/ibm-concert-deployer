@@ -241,8 +241,8 @@ echo "<BR>"
 
     echo "    -----------------------------------------------------------------------------------------------------------------------------------------------<BR>"
     echo "<h3>    🐣 1.1 Demo UI</h3><BR>"
-    appURL=$(oc get routes -n $AIOPS_NAMESPACE-demo-ui ibm-concert-demo-ui  -o jsonpath="{['spec']['host']}")|| true
-    appToken=$(oc get cm -n $AIOPS_NAMESPACE-demo-ui ibm-concert-demo-ui-config -o jsonpath='{.data.TOKEN}')
+    appURL=$(oc get routes -n $AIOPS_NAMESPACE-demo-ui ibm-demo-ui  -o jsonpath="{['spec']['host']}")|| true
+    appToken=$(oc get cm -n $AIOPS_NAMESPACE-demo-ui ibm-demo-ui-config -o jsonpath='{.data.TOKEN}')
     echo "<table>"
     echo "<tr><td style=\"min-width:300px\">🌏 URL:</td><td><a target="_blank" href=\"https://$appURL/\">https://$appURL/</a></td></tr>"
     echo "<tr><td style=\"min-width:300px\">🔐 Token:</td><td>$appToken<BR>"
@@ -597,7 +597,7 @@ openshift_token = stream.read().strip()
 # stream = os.popen("oc config view --minify|grep 'server:'| sed 's/.*server: .*\///'| head -1")
 # #stream = os.popen("oc status|head -1|awk '{print$6}'")
 # openshift_server = stream.read().strip()
-stream = os.popen("oc get deployment -n ibm-concert-demo-ui ibm-concert-demo-ui -ojson|jq -r '.spec.template.spec.containers[0].image'")
+stream = os.popen("oc get deployment -n ibm-demo-ui ibm-demo-ui -ojson|jq -r '.spec.template.spec.containers[0].image'")
 demo_image = stream.read().strip()
 
 
