@@ -3,7 +3,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: ibm-aiops-create-lags-anomaly
-  namespace: {{current_ibm_feature.project}}-demo-ui
+  namespace: ibm-demo-ui
 spec:
   template:
     spec:
@@ -57,7 +57,7 @@ spec:
                 echo " ✅ DONE - JOB WILL BE DELETED IN 15 SECONDS"
                 echo "*****************************************************************************************************************************"
                 sleep 15
-                oc delete job -n {{current_ibm_feature.project}}-demo-ui ibm-aiops-create-lags-anomaly --ignore-not-found 
+                oc delete job -n ibm-demo-ui ibm-aiops-create-lags-anomaly --ignore-not-found 
               else
                 echo "*****************************************************************************************************************************"
                 echo " ✅ DONE - JOB PERSISTENT"

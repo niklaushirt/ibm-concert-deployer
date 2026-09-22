@@ -2,13 +2,13 @@
 apiVersion: v1                     
 kind: Namespace
 metadata:
-  name: {{current_ibm_feature.project}}-demo-ui
+  name: ibm-demo-ui
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: ibm-demo-ui-admin
-  namespace: {{current_ibm_feature.project}}-demo-ui
+  namespace: ibm-demo-ui
 ---
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
@@ -17,7 +17,7 @@ metadata:
 subjects:
   - kind: ServiceAccount
     name: ibm-demo-ui-admin
-    namespace: {{current_ibm_feature.project}}-demo-ui
+    namespace: ibm-demo-ui
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -27,7 +27,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: ibm-demo-ui-create-config
-  namespace: {{current_ibm_feature.project}}-demo-ui
+  namespace: ibm-demo-ui
 spec:
   template:
     spec:
@@ -48,7 +48,7 @@ spec:
             - |
               set -x
 
-              export AIOPS_NAMESPACE={{current_ibm_feature.project}}-demo-ui
+              export AIOPS_NAMESPACE=ibm-demo-ui
               export TOKEN="{{current_demoui_pwd}}"
 
               export LOG_ITERATIONS=20
@@ -71,12 +71,12 @@ spec:
               export DEMO_USER='{{current_feature.demoui_user}}'
               export DEMO_PWD='{{current_demoui_pwd}}'
 
-              cat <<EOF | oc apply -n {{current_ibm_feature.project}}-demo-ui -f -
+              cat <<EOF | oc apply -n ibm-demo-ui -f -
                 apiVersion: v1
                 kind: ConfigMap
                 metadata:
                   name:  ibm-demo-ui-config
-                  namespace: {{current_ibm_feature.project}}-demo-ui
+                  namespace: ibm-demo-ui
                 data:
                   GET_CONFIG: "$GET_CONFIG"
                   TOKEN: $TOKEN
@@ -126,7 +126,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name:  ibm-demo-ui-config-events
-  namespace: {{current_ibm_feature.project}}-demo-ui
+  namespace: ibm-demo-ui
 data:
   DEMO_EVENTS_BUSY: |-
     {"deduplicationKey": "helpdesk-nginx-1.helpdesk.hursley.ibm.com->ResponseTime is Higher than expected","severity": 4,"summary": "Helpdesk Nginx ResponseTime is Higher than expected. Actual: 3149.9000 Expected: 1156.2114","sender": {"component": "com.ibm.pi.analytics.robust_bounds_model","name": "metric-anomaly-detection"},"resource": {"node": "helpdesk-nginx-1.helpdesk.hursley.ibm.com","metric": "ResponseTime","resource": "helpdesk-nginx-1.helpdesk.hursley.ibm.com","name": "helpdesk-nginx-1.helpdesk.hursley.ibm.com"}, "occurrenceTime": "MY_TIMESTAMP","details": {"node": "helpdesk-nginx-1.helpdesk.hursley.ibm.com","metric": "ResponseTime","resource": "helpdesk-nginx-1.helpdesk.hursley.ibm.com","group": "APP"},"type": {"eventType": "problem","classification": "ANOMALY:APP:ResponseTime"}}
@@ -541,7 +541,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name:  ibm-demo-ui-config-metrics
-  namespace: {{current_ibm_feature.project}}-demo-ui
+  namespace: ibm-demo-ui
 data:
   METRICS_TO_SIMULATE_FAN_TEMP:  |-
     DCWest1-Rack045-DELL3762,CPU1Temperature,System,130,5
@@ -623,7 +623,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name:  ibm-demo-ui-config-logs
-  namespace: {{current_ibm_feature.project}}-demo-ui
+  namespace: ibm-demo-ui
 data:
 
   DEMO_LOGS:  |-
@@ -718,7 +718,7 @@ kind: ConfigMap
 apiVersion: v1
 metadata:
   name: ibm-demo-ui-config-logs-sock
-  namespace: {{current_ibm_feature.project}}-demo-ui
+  namespace: ibm-demo-ui
 data:
   DEMO_LOGS_SOCK: ''
 
@@ -728,7 +728,7 @@ kind: ConfigMap
 apiVersion: v1
 metadata:
   name: ibm-demo-ui-config-custom
-  namespace: {{current_ibm_feature.project}}-demo-ui
+  namespace: ibm-demo-ui
 data:
   CUSTOM_NAME: ''
   CUSTOM_EVENTS: ''
