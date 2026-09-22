@@ -1,8 +1,8 @@
 # Retrieve the openshift storage definitions from passed OpenShift cluster
 - set_fact:
-    _openshift_storage: "{{ all_config.openshift | json_query(query) | first }}"
+    _openshift_storage: "{{ all_config.openshift | json_query(_query) | first }}"
   vars:
-    query: >-
+    _query: >-
       [?name=='{{ _p_openshift_cluster_name }}'].openshift_storage
 
 - name: Show OpenShift storage objects
@@ -11,9 +11,9 @@
 
 # Obtain the OpenShift storage element from the openshift storage definitions
 - set_fact:
-    _selected_openshift_storage: "{{ _openshift_storage | json_query(query) | first | default({}) }}"
+    _selected_openshift_storage: "{{ _openshift_storage | json_query(_query) | first | default({}) }}"
   vars:
-    query: >-
+    _query: >-
       [?storage_name=='{{ _p_openshift_storage_name }}']
   when: (_p_openshift_storage_name | default('')) != ''
 
