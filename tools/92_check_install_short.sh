@@ -218,7 +218,7 @@ function check_array(){
       export PODS_COUNT=$(oc get pods -n $AIOPS_NAMESPACE | grep -v "Completed"| grep "Running" | grep -c "")
       if  ([[ $PODS_COUNT -lt 125 ]]); 
       then 
-            echo "       ❗ FATAL: CP4AIOPS could not be installed - only $PODS_COUNT Pods running (should be around 130)"; 
+            echo "       ❗ FATAL: OPERATE could not be installed - only $PODS_COUNT Pods running (should be around 130)"; 
 
 #oc delete ConsoleNotification --all>/dev/null 2>/dev/null
 cat <<EOF | oc apply -f -
@@ -230,7 +230,7 @@ spec:
     backgroundColor: '#ff0000'
     color: '#fff'
     location: BannerTop
-    text: " 💣 FATAL: CP4AIOPS could not be installed - only $PODS_COUNT Pods running (should be around 130)"
+    text: " 💣 FATAL: OPERATE could not be installed - only $PODS_COUNT Pods running (should be around 130)"
 EOF
 cat <<EOF | oc apply -f -
 apiVersion: console.openshift.io/v1
@@ -255,7 +255,7 @@ EOF
       echo ""
       echo ""
       echo "  ----------------------------------------------------------------------------------------------------------------------------------------------------------"
-      echo "   🚀  CHECK IBMAIOPS Demo Namespaces" 
+      echo "   🚀  CHECK IBMDemo Namespaces" 
       echo "  ----------------------------------------------------------------------------------------------------------------------------------------------------------"
       echo ""
 
@@ -465,7 +465,7 @@ EOF
       if  ([[ $result == "1" ]]); 
             then 
                   export CURRENT_WARNING_STATE=true
-                  export CURRENT_WARNING_STRING="LAGS training incomplete - Log into CP4AIOPS and re-run the Metrics Training"
+                  export CURRENT_WARNING_STRING="LAGS training incomplete - Log into OPERATE and re-run the Metrics Training"
                   handleWarning
 
                   export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
@@ -525,7 +525,7 @@ EOF
       if  ([[ $existingIndexes == "0" ]]); 
             then 
                   export CURRENT_WARNING_STATE=true
-                  export CURRENT_WARNING_STRING="LAGS training incomplete - Log into CP4AIOPS and re-run the Metrics Training"
+                  export CURRENT_WARNING_STRING="LAGS training incomplete - Log into OPERATE and re-run the Metrics Training"
                   handleWarning
             else  
                   echo "          ✅ OK: LAGS Golden Signals Index exists in ElasticSearch"; 

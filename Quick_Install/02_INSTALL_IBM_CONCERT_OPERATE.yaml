@@ -11,7 +11,7 @@
 #---------------------------------------------------------------------------------------------------------------------------------------------------"
 #  Installing IBM IT Automation Solutoions
 #
-#  CloudPak for AIOps
+#  IBM Concert Operate
 #
 #  ©2026 nikh@ch.ibm.com
 # ---------------------------------------------------------------------------------------------------------------------------------------------------"
@@ -29,8 +29,8 @@
 # Installs:
 #
 #  - IBM Operator
-#  - IBM CloudPak for AIOps
-#  - IBM CloudPak for AIOps Demo Content
+#  - IBM IBM Concert Operate
+#  - IBM IBM Concert Operate Demo Content
 #     - OpenLDAP & Register with ibm-concert-operate
 #     - RobotShop Demo App
 #     - Demo Service Account 
@@ -60,7 +60,7 @@ metadata:
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  name: ibm-install-configuration-aiops
+  name: ibm-install-configuration-operate
   namespace: ibm-installer
 immutable: false
 data:
@@ -89,9 +89,15 @@ data:
       environment_name: Bear
       cloud_platform: existing-ocp
       # Set this value to True to accept all licenses
-      accept_all_licenses: False
       # Key to decrypt Licenses
       #license_token: NONE
+
+
+      # --------------------------------------------------------------------------------------------------------------------------------------
+      # License
+      # --------------------------------------------------------------------------------------------------------------------------------------
+      # Set this value to True to accept all licenses
+      accept_all_licenses: False
 
 
       # --------------------------------------------------------------------------------------------------------------------------------------
@@ -100,7 +106,7 @@ data:
       entitled_registry: cp.icr.io
       entitled_registry_user: cp
       catalog_image: icr.io/cpopen/ibm-aiops-catalog@sha256:b62d055109cbb0231ad11422f8eff0b4f02e4bcaa8c9a3a3bfc5bff8318f7343
-      current_supported_aiops_version: v5.1
+      current_supported_operate_version: v5.1
 
 
 
@@ -156,7 +162,7 @@ data:
 
     #--------------------------------------------------------------------------------------------------------------------------------------
 
-    # CloudPak for AIOps Base Install
+    # IBM Concert Operate Base Install
 
     #--------------------------------------------------------------------------------------------------------------------------------------
     # Changing the project name / namespace is at your own risk. some things might break, I do not test this!
@@ -171,14 +177,14 @@ data:
         # Install Sizing
         # current_ibm-concert-operate_feature
         # ibm-concert-operate Size of the install (small: PoC/Demo, large: Production)
-        aiops_size: small
-        # Custom Sizing File (aiops_size must be set to "custom")
+        concert_operate_size: small
+        # Custom Sizing File (concert_operate_size must be set to "custom")
         #custom_size_file: none
 
         # --------------------------------------------------------------------------------------------------------------------------------------
         # Install Details
         # Name of the ibm-concert-operate instance
-        aiops_name: ibm-concert-operate
+        concert_operate_name: ibm-concert-operate
         # Version of the catalog subscription
         subscription_channel: v5.1
 
@@ -208,13 +214,13 @@ data:
         case_install: false
         case_github_url: "https://github.com/IBM/cloud-pak/raw/master/repo/case"
         case_name: ibm-cp-waiops
-        case_version: 1.15.0
+        case_version: 2.0.2
         case_inventory_setup: cpaiopsSetup
 
 
 
     #--------------------------------------------------------------------------------------------------------------------------------------
-    # CloudPak for AIOps Demo Content Install
+    # IBM Concert Operate Demo Content Install
     #--------------------------------------------------------------------------------------------------------------------------------------
       - name: ibm-concert-operate-demo-content
         kind: IBMConcertOperateDemoContent
@@ -306,7 +312,7 @@ data:
         #ldap_user_password: CHANGEME
         # ldap namespace
         ldap_namespace: openldap
-        # Integrate AIOps Login with OpenLDAP 
+        # Integrate Login with OpenLDAP 
         ldap_register: true
         # Integrate OpenShift Login with OpenLDAP
         integrate_ocp_openldap: true
@@ -411,10 +417,10 @@ subjects:
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: ibm-install-aiops
+  name: ibm-install-operate
   namespace: ibm-installer
   labels:
-   aiops-type: data-load-job
+   job-type: data-load-job
 spec:
 
   template:
@@ -443,7 +449,7 @@ spec:
               echo "***************************************************************************************************************************************************"
               echo "***************************************************************************************************************************************************"
               echo "                                                                                                                                                   "
-              echo " 🚀 Install IBM AIOps                                                                                                                                                  "
+              echo " 🚀 Install IBM Concert Operate                                                                                                                                                  "
               echo "                                                                                                                                                   "
               echo "***************************************************************************************************************************************************"
               echo "***************************************************************************************************************************************************"
@@ -534,12 +540,12 @@ spec:
           - name: INSTALL_REPO
             valueFrom:
               configMapKeyRef:
-                name: ibm-install-configuration-aiops
+                name: ibm-install-configuration-operate
                 key: INSTALL_REPO
           - name: ENTITLED_REGISTRY_KEY
             valueFrom:
               configMapKeyRef:
-                name: ibm-install-configuration-aiops
+                name: ibm-install-configuration-operate
                 key: ENTITLED_REGISTRY_KEY
                 optional: true
           volumeMounts:
@@ -548,7 +554,7 @@ spec:
       volumes:
         - name: config-file
           configMap:
-            name: ibm-install-configuration-aiops
+            name: ibm-install-configuration-operate
             items:
             - key: INSTALLATION_CONFIG.yaml
               path: INSTALLATION_CONFIG.yaml

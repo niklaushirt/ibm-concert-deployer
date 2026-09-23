@@ -44,7 +44,7 @@
     ls -al
     oc apply -n {{ current_ibm_feature.project }} -f {{current_feature.custom_size_file | default('none')}}
   register: kubectl_get_pods
-  when: current_feature.aiops_size | default('none') == "custom"
+  when: current_feature.concert_operate_size | default('none') == "custom"
 
 
 
@@ -52,11 +52,11 @@
   kubernetes.core.k8s:
     state: present
     template: './templates/aiops/4_aiops-install-template-custom.j2'
-  when: current_feature.aiops_size == "custom"
+  when: current_feature.concert_operate_size == "custom"
 
 
 - name:  🚀 IBM AIOPS INSTALL - Install Custom Resource - INSTALL IBM AIOPS
   kubernetes.core.k8s:
     state: present
     template: './templates/aiops/4_aiops-install-template.j2'
-  when: current_feature.aiops_size != "custom" 
+  when: current_feature.concert_operate_size != "custom" 

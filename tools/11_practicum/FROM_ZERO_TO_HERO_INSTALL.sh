@@ -42,7 +42,7 @@ metadata:
   name: aiops-easy-install-aimanager-practicum
   namespace: ibm-installer
   labels:
-   aiops-type: data-load-job
+   job-type: data-load-job
 spec:
   serviceAccount: ibm-installer-admin
   template:

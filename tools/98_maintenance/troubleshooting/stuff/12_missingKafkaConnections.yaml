@@ -82,7 +82,7 @@ metadata:
   name: troubleshoot-1-2-create-missing-kafka
   namespace: ibm-installer
   labels:
-   aiops-type: data-load-job
+   job-type: data-load-job
 spec:
   serviceAccount: ibm-installer-admin
   template:

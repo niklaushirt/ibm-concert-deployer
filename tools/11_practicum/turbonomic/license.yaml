@@ -4,7 +4,7 @@ metadata:
   name: ibm-turbonomic-license
   namespace: ibm-installer
   labels:
-   aiops-type: data-load-job
+   job-type: data-load-job
 spec:
   template:
     spec:

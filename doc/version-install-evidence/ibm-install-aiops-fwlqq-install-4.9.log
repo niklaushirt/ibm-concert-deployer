@@ -391,8 +391,8 @@ ok: [localhost] => {
 TASK [ibm-aiops-install : 🟣 Installing IBMAIOps with the following configuration] ***
 ok: [localhost] => {
     "current_feature": {
-        "aiops_name": "ibm-aiops",
-        "aiops_size": "small",
+        "concert_operate_name": "ibm-aiops",
+        "concert_operate_size": "small",
         "case_github_url": "https://github.com/IBM/cloud-pak/raw/master/repo/case",
         "case_install": false,
         "case_inventory_setup": "cpaiopsSetup",
@@ -2909,7 +2909,7 @@ skipping: [localhost]
 TASK [ibm-aiops-demo-content : (046/051) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Install the Demo UI] ***
 included: /ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/tasks/26_ibm-demo-ui.yaml for localhost
 
-TASK [ibm-aiops-demo-content : 🛰️  START - AIOPS DEMO UI] ***********************
+TASK [ibm-aiops-demo-content : 🛰️  START - DEMO UI] ***********************
 ok: [localhost] => {
     "msg": "27.03.2025---11:35:25"
 }
@@ -2929,17 +2929,17 @@ ok: [localhost]
 TASK [ibm-aiops-demo-content : 🟣  DEMO-UI -  Demo UI Password CHANGEME] ******
 skipping: [localhost]
 
-TASK [ibm-aiops-demo-content : 🚀 DEMO-UI - Create IBM AIOPS Demo UI Configuration - WITHOUT Slack and SNOW Simulation] ***
+TASK [ibm-aiops-demo-content : 🚀 DEMO-UI - Create IBM Demo UI Configuration - WITHOUT Slack and SNOW Simulation] ***
 skipping: [localhost]
 
-TASK [ibm-aiops-demo-content : 🚀 DEMO-UI - Create IBM AIOPS Demo UI Configuration - WITH Slack and SNOW Simulation] ***
+TASK [ibm-aiops-demo-content : 🚀 DEMO-UI - Create IBM Demo UI Configuration - WITH Slack and SNOW Simulation] ***
 changed: [localhost]
 
 TASK [ibm-aiops-demo-content : 🕦 DEMO-UI - Wait for Demo UI Configuration being ready] ***
 FAILED - RETRYING: [localhost]: 🕦 DEMO-UI - Wait for Demo UI Configuration being ready (500 retries left).
 changed: [localhost]
 
-TASK [ibm-aiops-demo-content : 🚀 DEMO-UI - Create IBM AIOPS Demo UI Deployment] ***
+TASK [ibm-aiops-demo-content : 🚀 DEMO-UI - Create IBM Demo UI Deployment] ***
 changed: [localhost]
 
 TASK [ibm-aiops-demo-content : 🕦 DEMO-UI - Wait for Demo UI being ready] ******

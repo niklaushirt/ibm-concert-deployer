@@ -6,7 +6,7 @@
 # --------------------------------------------------------------------------------------------------------------------------------------
 # *************************************************************************************************************************************************
 
-- name: 🛰️  START - AIOPS DEMO UI
+- name: 🛰️  START - DEMO UI
   debug: 
     msg="{{ lookup('pipe','date +%d.%m.%Y---%H:%M:%S') }}"
 
@@ -67,7 +67,7 @@
 
 
 
-- name: 🚀 DEMO-UI - Create IBM AIOPS Demo UI Configuration - WITHOUT Slack and SNOW Simulation
+- name: 🚀 DEMO-UI - Create IBM Demo UI Configuration - WITHOUT Slack and SNOW Simulation
   kubernetes.core.k8s:
     state: present
     template: ./templates/aiops-demo-ui/create-ibm-aiops-demo-cm.j2
@@ -75,7 +75,7 @@
   when: (current_feature.demoui_create_slack_snow | default('false'))|bool == false 
 
 
-- name: 🚀 DEMO-UI - Create IBM AIOPS Demo UI Configuration - WITH Slack and SNOW Simulation
+- name: 🚀 DEMO-UI - Create IBM Demo UI Configuration - WITH Slack and SNOW Simulation
   kubernetes.core.k8s:
     state: present
     template: ./templates/aiops-demo-ui/create-ibm-aiops-demo-cm-with-slack-snow.j2
@@ -96,7 +96,7 @@
   delay: 15
 
 
-- name: 🚀 DEMO-UI - Create IBM AIOPS Demo UI Deployment
+- name: 🚀 DEMO-UI - Create IBM Demo UI Deployment
   kubernetes.core.k8s:
     state: present
     template: ./templates/aiops-demo-ui/create-ibm-aiops-demo-deploy.j2

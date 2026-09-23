@@ -39,7 +39,7 @@ data:
       # --------------------------------------------------------------------------------------------------------------------------------------
       # Notifications and Cards
       # --------------------------------------------------------------------------------------------------------------------------------------
-      # Create Welcome Cards in ibm-aiops
+      # Create Welcome Cards
       create_cards: {{ .Values.cp4aiops.additional.create_cards }}
       # Create App Menu Items in OCP
       create_ocp_items: {{ .Values.cp4aiops.global.create_ocp_items }}

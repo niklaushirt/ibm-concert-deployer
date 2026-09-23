@@ -81,7 +81,7 @@ data:
       # --------------------------------------------------------------------------------------------------------------------------------------
       # Notifications and Cards
       # --------------------------------------------------------------------------------------------------------------------------------------
-      # Create Welcome Cards in ibm-aiops
+      # Create Welcome Cards
       create_cards: true
       # Create App Menu Items in OCP
       create_ocp_items: true
@@ -327,7 +327,7 @@ metadata:
   name: ibm-aiops-aiops-create-missing-kafka
   namespace: ibm-installer
   labels:
-   aiops-type: data-load-job
+   job-type: data-load-job
 spec:
   serviceAccount: ibm-installer-admin
   template:

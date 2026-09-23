@@ -62,7 +62,7 @@
 
 
 
-- name:   🚀 INITIALIZATION - Installing in Namespace "{{ current_ibm_feature.project }}" with size "{{ current_feature.aiops_size }}"
+- name:   🚀 INITIALIZATION - Installing in Namespace "{{ current_ibm_feature.project }}" with size "{{ current_feature.concert_operate_size }}"
   set_fact: AIOPS_NAMESPACE_GLOBAL={{ current_ibm_feature.project }} 
 
 
@@ -70,9 +70,9 @@
   debug:
     msg:
     - "** IBM AIOps Parameters ***********************************************************************"
-    - " IBM AIOps Installation Name:      {{current_feature.aiops_name}}"
+    - " IBM AIOps Installation Name:      {{current_feature.concert_operate_name}}"
     - " IBM AIOps Namespace:              {{ current_ibm_feature.project }}"
-    - " IBM AIOps Installation Size:      {{current_feature.aiops_size}}"
+    - " IBM AIOps Installation Size:      {{current_feature.concert_operate_size}}"
     - ""
     verbosity: 1
 
