@@ -145,7 +145,7 @@ spec:
                             ],
                             \"number\": 1,
                             \"title\": \"\",
-                            \"automationId\": \"AWX:job:IBM AIOPS Mitigate Robotshop Ratings Outage\",
+                            \"automationId\": \"AWX:job:IBM CONCERT OPERATE Mitigate Robotshop Ratings Outage\",
                             \"type\": \"automation\"
                           }
                         ],
@@ -212,7 +212,7 @@ spec:
                             ],
                             \"number\": 1,
                             \"title\": \"\",
-                            \"automationId\": \"AWX:job:IBM AIOPS Restart Network Interface\",
+                            \"automationId\": \"AWX:job:IBM CONCERT OPERATE Restart Network Interface\",
                             \"type\": \"automation\"
                           }
                         ],
@@ -278,7 +278,7 @@ spec:
                             ],
                             \"number\": 1,
                             \"title\": \"\",
-                            \"automationId\": \"AWX:job:IBM AIOPS Start Robotshop Ratings\",
+                            \"automationId\": \"AWX:job:IBM CONCERT OPERATE Start Robotshop Ratings\",
                             \"type\": \"automation\"
                           }
                         ],
@@ -331,7 +331,7 @@ spec:
 
               export result=$(curl -X "GET" -k "https://$ROUTE/aiops/api/story-manager/rba/v1/runbooks?publish=true" \
                   -H "Authorization: bearer $ZEN_TOKEN" \
-                  -H 'Content-Type: application/json; charset=utf-8'|grep "IBM AIOPS Mitigate SockShop Switch Outage"|wc -l|tr -d ' ')
+                  -H 'Content-Type: application/json; charset=utf-8'|grep "IBM CONCERT OPERATE Mitigate SockShop Switch Outage"|wc -l|tr -d ' ')
 
               if [[ $result == "0" ]]; then
 
@@ -348,7 +348,7 @@ spec:
                             ],
                             \"number\": 1,
                             \"title\": \"\",
-                            \"automationId\": \"AWX:job:IBM AIOPS Mitigate SockShop Switch Outage\",
+                            \"automationId\": \"AWX:job:IBM CONCERT OPERATE Mitigate SockShop Switch Outage\",
                             \"type\": \"automation\"
                           }
                         ],
@@ -894,7 +894,7 @@ spec:
                             ],
                             \"number\": 1,
                             \"title\": \"♻️ DEMO - Reset Uplink\",
-                            \"automationId\": \"AWX:job:IBM AIOPS Reset Fiber Uplink\",
+                            \"automationId\": \"AWX:job:IBM CONCERT OPERATE Reset Fiber Uplink\",
                             \"type\": \"automation\"
                           }
                         ],
@@ -964,7 +964,7 @@ spec:
                             ],
                             \"number\": 1,
                             \"title\": \"Cut DEMO - Cut Uplink\",
-                            \"automationId\": \"AWX:job:IBM AIOPS Cut Fiber Uplink\",
+                            \"automationId\": \"AWX:job:IBM CONCERT OPERATE Cut Fiber Uplink\",
                             \"type\": \"automation\"
                           }
                         ],

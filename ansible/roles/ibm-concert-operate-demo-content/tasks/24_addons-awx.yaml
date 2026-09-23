@@ -139,7 +139,7 @@
 
 
 
-- name: 🚀 AWX - Create AWX Instance (while waiting for IBM AIOPS Installation to progress)
+- name: 🚀 AWX - Create AWX Instance (while waiting for IBM CONCERT OPERATE Installation to progress)
   kubernetes.core.k8s:
     state: present
     namespace: awx

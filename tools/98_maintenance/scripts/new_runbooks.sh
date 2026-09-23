@@ -117,7 +117,7 @@ fi
                   ],
                   \"number\": 1,
                   \"title\": \"\",
-                  \"automationId\": \"AWX:job:IBM AIOPS Mitigate Robotshop Ratings Outage\",
+                  \"automationId\": \"AWX:job:IBM CONCERT OPERATE Mitigate Robotshop Ratings Outage\",
                   \"type\": \"automation\"
                 }
               ],
@@ -159,7 +159,7 @@ fi
 
     export result=$(curl -X "GET" -k "https://$ROUTE/aiops/api/story-manager/rba/v1/runbooks?publish=true" \
         -H "Authorization: bearer $ZEN_TOKEN" \
-        -H 'Content-Type: application/json; charset=utf-8'|grep "IBM AIOPS Mitigate SockShop Switch Outage"|wc -l|tr -d ' ')
+        -H 'Content-Type: application/json; charset=utf-8'|grep "IBM CONCERT OPERATE Mitigate SockShop Switch Outage"|wc -l|tr -d ' ')
 
     if [[ $result == "0" ]]; then
 
@@ -176,7 +176,7 @@ fi
                   ],
                   \"number\": 1,
                   \"title\": \"\",
-                  \"automationId\": \"AWX:job:IBM AIOPS Mitigate SockShop Switch Outage\",
+                  \"automationId\": \"AWX:job:IBM CONCERT OPERATE Mitigate SockShop Switch Outage\",
                   \"type\": \"automation\"
                 }
               ],

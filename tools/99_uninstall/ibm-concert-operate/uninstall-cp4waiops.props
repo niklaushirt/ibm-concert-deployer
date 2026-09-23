@@ -12,33 +12,26 @@
 ##################################################################################################
 
 # Set the name of OpenShift project where IBM Cloud Pak for Concert Operate is installed.
-# You may know it as a "namespace" - an OpenShift "project" is an alternative representation of a
-Kubernetes "namespace"
+# You may know it as a "namespace" - an OpenShift "project" is an alternative representation of a Kubernetes "namespace"
 CP4WAIOPS_PROJECT="ibm-concert-operate"
 
-# Set the name of installation custom resource (CR) to delete. You can leave this blank if you've
-already deleted the installation CR.
+# Set the name of installation custom resource (CR) to delete. You can leave this blank if you've already deleted the installation CR.
 INSTALLATION_NAME="ibm-concert-operate"
 
-# If true, this will delete all of the resources created by CP4Concert Operate (see
-uninstall-cp4waiops-resource-groups.props).
-# This includes CustomResourceDefinitions (CRDs) which will affect all instances of Concert Operate
-on the cluster and may affect other
+# If true, this will delete all of the resources created by CP4Concert Operate (see uninstall-cp4waiops-resource-groups.props).
+# This includes CustomResourceDefinitions (CRDs) which will affect all instances of Concert Operate on the cluster and may affect other
 # Cloud Paks running on the cluster (if any).
 DELETE_ALL="true"
 
 ######################### ADVANCED CUSTOM CONFIGURATIONS BELOW ##############################
 
-# You must set DELETE_ALL to false in order to specify uninstall of specific resources as configured
-below.
+# You must set DELETE_ALL to false in order to specify uninstall of specific resources as configured below.
 
 # Delete the PVCs created by IBM Cloud Pak for Concert Operate.
 # WARNING: CHOOSING TO DELETE PVCs CAN RESULT IN DATA LOSS.
 # SEE uninstall-cp4waiops-resource-groups.props FOR PVCs THAT WILL BE REMOVED
 DELETE_PVCS="false"
 
-# Setting this to true will delete all CRDs created by IBM Cloud Pak for Concert Operate and IBM
-Cloud Pak Foundational Services.
-# Deletion of CRDs will affect all instances of Concert Operate on the cluster and may affect other
-Cloud Paks running on the cluster.
+# Setting this to true will delete all CRDs created by IBM Cloud Pak for Concert Operate and IBM Cloud Pak Foundational Services.
+# Deletion of CRDs will affect all instances of Concert Operate on the cluster and may affect other Cloud Paks running on the cluster.
 DELETE_CRDS="false"

@@ -65,6 +65,7 @@ metadata:
   namespace: ibm-installer
   annotations: {}
 spec:
+  serviceAccount: ibm-installer-admin
   selector:
     matchLabels:
       app: ibm-operate-wipe-install

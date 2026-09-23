@@ -84,8 +84,8 @@
     export result=$(curl -X "POST" -s "{{ AWX_URL }}/api/v2/execution_environments/" -u "admin:{{ AWX_PWD }}" --insecure \
     -H 'content-type: application/json' \
     -d $'{
-      "name": "IBM AIOPS Execution Environment",
-      "description": "IBM AIOPS Execution Environment",
+      "name": "IBM CONCERT OPERATE Execution Environment",
+      "description": "IBM CONCERT OPERATE Execution Environment",
       "organization": null,
       "image": "'$RUNNER_IMAGE'",
       "credential": null,
@@ -94,7 +94,7 @@
 
     if [[ $result =~ " already exists" ]];
     then
-        export EXENV_ID=$(curl -X "GET" -s "{{ AWX_URL }}/api/v2/execution_environments/" -u "admin:{{ AWX_PWD }}" --insecure|jq -c '.results[]| select( .name == "IBM AIOPS Execution Environment")|.id')
+        export EXENV_ID=$(curl -X "GET" -s "{{ AWX_URL }}/api/v2/execution_environments/" -u "admin:{{ AWX_PWD }}" --insecure|jq -c '.results[]| select( .name == "IBM CONCERT OPERATE Execution Environment")|.id')
     else
         export EXENV_ID=$(echo $result|jq ".id")
         sleep 60
@@ -121,8 +121,8 @@
     export result=$(curl -X "POST" -s "{{ AWX_URL }}/api/v2/projects/" -u "admin:{{ AWX_PWD }}" --insecure \
     -H 'content-type: application/json' \
     -d $'{
-        "name": "IBM AIOPS Runbooks",
-        "description": "IBM AIOPS Runbooks",
+        "name": "IBM CONCERT OPERATE Runbooks",
+        "description": "IBM CONCERT OPERATE Runbooks",
         "local_path": "",
         "scm_type": "git",
         "scm_url": "'$AWX_REPO'",
@@ -142,7 +142,7 @@
 
     if [[ $result =~ " already exists" ]];
     then
-        export PROJECT_ID=$(curl -X "GET" -s "{{ AWX_URL }}/api/v2/projects/" -u "admin:{{ AWX_PWD }}" --insecure|jq -c '.results[]| select( .name == "IBM AIOPS Runbooks")|.id')
+        export PROJECT_ID=$(curl -X "GET" -s "{{ AWX_URL }}/api/v2/projects/" -u "admin:{{ AWX_PWD }}" --insecure|jq -c '.results[]| select( .name == "IBM CONCERT OPERATE Runbooks")|.id')
     else
         export PROJECT_ID=$(echo $result|jq ".id")
     fi
@@ -188,7 +188,7 @@
 
     if [[ $result =~ " already exists" ]];
     then
-        export PROJECT_ID=$(curl -X "GET" -s "{{ AWX_URL }}/api/v2/projects/" -u "admin:{{ AWX_PWD }}" --insecure|jq -c '.results[]| select( .name == "IBM AIOPS Runbooks")|.id')
+        export PROJECT_ID=$(curl -X "GET" -s "{{ AWX_URL }}/api/v2/projects/" -u "admin:{{ AWX_PWD }}" --insecure|jq -c '.results[]| select( .name == "IBM CONCERT OPERATE Runbooks")|.id')
     else
         export PROJECT_ID=$(echo $result|jq ".id")
     fi
@@ -203,7 +203,7 @@
 - name: 🚀 AWX - Wait for AWX Project
   shell: |
     sleep 60
-    export STATUS=$(curl -X "GET" -s "{{ AWX_URL }}/api/v2/projects/" -u "admin:{{ AWX_PWD }}" --insecure|jq -c -r '.results[]| select( .name == "IBM AIOPS Runbooks")|.status')
+    export STATUS=$(curl -X "GET" -s "{{ AWX_URL }}/api/v2/projects/" -u "admin:{{ AWX_PWD }}" --insecure|jq -c -r '.results[]| select( .name == "IBM CONCERT OPERATE Runbooks")|.status')
     echo "$STATUS"
   ignore_errors: false
   register: STATUS
@@ -224,8 +224,8 @@
     export result=$(curl -X "POST" -s "{{ AWX_URL }}/api/v2/inventories/" -u "admin:{{ AWX_PWD }}" --insecure \
     -H 'content-type: application/json' \
     -d $'{
-      "name": "IBM AIOPS Runbooks",
-      "description": "IBM AIOPS Runbooks",
+      "name": "IBM CONCERT OPERATE Runbooks",
+      "description": "IBM CONCERT OPERATE Runbooks",
       "organization": 1,
       "project": '{{AWX_PROJECT_ID}}',
       "kind": "",
@@ -235,7 +235,7 @@
 
     if [[ $result =~ " already exists" ]];
     then
-        export INVENTORY_ID=$(curl -X "GET" -s "{{ AWX_URL }}/api/v2/inventories/" -u "admin:{{ AWX_PWD }}" --insecure|jq -c '.results[]| select( .name == "IBM AIOPS Runbooks")|.id')
+        export INVENTORY_ID=$(curl -X "GET" -s "{{ AWX_URL }}/api/v2/inventories/" -u "admin:{{ AWX_PWD }}" --insecure|jq -c '.results[]| select( .name == "IBM CONCERT OPERATE Runbooks")|.id')
     else
         export INVENTORY_ID=$(echo $result|tr -d '\n'|jq ".id")
         sleep 15
@@ -264,7 +264,7 @@
     export result=$(curl -X "POST" -s "{{ AWX_URL }}/api/v2/job_templates/" -u "admin:{{ AWX_PWD }}" --insecure \
     -H 'content-type: application/json' \
     -d $'{
-      "name": "IBM AIOPS Mitigate Robotshop Ratings Outage",
+      "name": "IBM CONCERT OPERATE Mitigate Robotshop Ratings Outage",
       "description": "Mitigate Robotshop Ratings Outage",
       "job_type": "run",
       "inventory": {{AWX_INVENTORY_ID}},
@@ -294,7 +294,7 @@
     export result=$(curl -X "POST" -s "{{ AWX_URL }}/api/v2/job_templates/" -u "admin:{{ AWX_PWD }}" --insecure \
     -H 'content-type: application/json' \
     -d $'{
-      "name": "IBM AIOPS Create Robotshop Ratings Outage",
+      "name": "IBM CONCERT OPERATE Create Robotshop Ratings Outage",
       "description": "Create Robotshop Ratings Outage",
       "job_type": "run",
       "inventory": {{AWX_INVENTORY_ID}},
@@ -323,7 +323,7 @@
     export result=$(curl -X "POST" -s "{{ AWX_URL }}/api/v2/job_templates/" -u "admin:{{ AWX_PWD }}" --insecure \
     -H 'content-type: application/json' \
     -d $'{
-      "name": "IBM AIOPS Start Robotshop Ratings",
+      "name": "IBM CONCERT OPERATE Start Robotshop Ratings",
       "description": "Start Robotshop Ratings",
       "job_type": "run",
       "inventory": {{AWX_INVENTORY_ID}},
@@ -354,7 +354,7 @@
     export result=$(curl -X "POST" -s "{{ AWX_URL }}/api/v2/job_templates/" -u "admin:{{ AWX_PWD }}" --insecure \
     -H 'content-type: application/json' \
     -d $'{
-      "name": "IBM AIOPS Restart Network Interface",
+      "name": "IBM CONCERT OPERATE Restart Network Interface",
       "description": "Restart Network Interface",
       "job_type": "run",
       "inventory": {{AWX_INVENTORY_ID}},
@@ -384,7 +384,7 @@
     export result=$(curl -X "POST" -s "{{ AWX_URL }}/api/v2/job_templates/" -u "admin:{{ AWX_PWD }}" --insecure \
     -H 'content-type: application/json' \
     -d $'{
-      "name": "IBM AIOPS Stop Robotshop Ratings",
+      "name": "IBM CONCERT OPERATE Stop Robotshop Ratings",
       "description": "Stop Robotshop Ratings",
       "job_type": "run",
       "inventory": {{AWX_INVENTORY_ID}},
@@ -414,7 +414,7 @@
     export result=$(curl -X "POST" -s "{{ AWX_URL }}/api/v2/job_templates/" -u "admin:{{ AWX_PWD }}" --insecure \
     -H 'content-type: application/json' \
     -d $'{
-      "name": "IBM AIOPS Mitigate SockShop Switch Outage",
+      "name": "IBM CONCERT OPERATE Mitigate SockShop Switch Outage",
       "description": "Mitigate SockShop Switch Outage",
       "job_type": "run",
       "inventory": {{AWX_INVENTORY_ID}},
@@ -445,7 +445,7 @@
     export result=$(curl -X "POST" -s "{{ AWX_URL }}/api/v2/job_templates/" -u "admin:{{ AWX_PWD }}" --insecure \
     -H 'content-type: application/json' \
     -d $'{
-      "name": "IBM AIOPS Reset Fiber Uplink",
+      "name": "IBM CONCERT OPERATE Reset Fiber Uplink",
       "description": "Reset Fiber Uplink",
       "job_type": "run",
       "inventory": {{AWX_INVENTORY_ID}},
@@ -475,7 +475,7 @@
     export result=$(curl -X "POST" -s "{{ AWX_URL }}/api/v2/job_templates/" -u "admin:{{ AWX_PWD }}" --insecure \
     -H 'content-type: application/json' \
     -d $'{
-      "name": "IBM AIOPS Cut Fiber Uplink",
+      "name": "IBM CONCERT OPERATE Cut Fiber Uplink",
       "description": "Cut Fiber Uplink",
       "job_type": "run",
       "inventory": {{AWX_INVENTORY_ID}},

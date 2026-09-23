@@ -387,7 +387,7 @@ EOF
       fi
 
     echo "      🔎 Check AWX Inventory"
-    export AWX_INVENTORY_COUNT=$(curl -X "GET" -s "$AWX_URL/api/v2/inventories/" -u "admin:$AWX_PWD" --insecure -H 'content-type: application/json'|grep "IBM AIOPS Runbooks"|wc -l|tr -d ' ')
+    export AWX_INVENTORY_COUNT=$(curl -X "GET" -s "$AWX_URL/api/v2/inventories/" -u "admin:$AWX_PWD" --insecure -H 'content-type: application/json'|grep "IBM CONCERT OPERATE Runbooks"|wc -l|tr -d ' ')
     if  ([[ $AWX_INVENTORY_COUNT -lt 1 ]]); 
       then 
             export CURRENT_ERROR=true

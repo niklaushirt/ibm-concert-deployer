@@ -148,7 +148,7 @@
   include_tasks: 06_ibm-aiops-prerequisites.yaml
       
 
-# Install IBM AIOPS Operator
+# Install IBM CONCERT OPERATE Operator
 - name: (008/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 IBM Concert Operate Custom Hook
   include_tasks: 08_ibm-aiops-custom-hook.yaml
 
@@ -179,16 +179,16 @@
 
 
 # ---------------------------------------------------------------------------------------------------------------------------------------------------"
-# INSTALL IBM AIOPS PREREQUISITES
+# INSTALL IBM CONCERT OPERATE PREREQUISITES
 # ---------------------------------------------------------------------------------------------------------------------------------------------------"
 
-# Install IBM AIOPS Prerequisites
+# Install IBM CONCERT OPERATE Prerequisites
 - name: (012/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 Install the IBM Concert Operate Instance
   include_tasks: 18_ibm-aiops-install-prerequisites.yaml
 
 
 # ---------------------------------------------------------------------------------------------------------------------------------------------------"
-# INSTALL IBM AIOPS OPERATOR
+# INSTALL IBM CONCERT OPERATE OPERATOR
 # ---------------------------------------------------------------------------------------------------------------------------------------------------"
 - name: (013/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 Install the IBM Concert Operate Operator
   include_tasks: 11_ibm-aiops-operator.yaml
@@ -198,35 +198,35 @@
 # INSTALL FEATURE FLAGS
 # ---------------------------------------------------------------------------------------------------------------------------------------------------"
 # Install  Feature Flags
-- name: (014/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Install IBM AIOPS Feature Flags
+- name: (014/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Install IBM CONCERT OPERATE Feature Flags
   include_tasks: 12_ibm-aiops-featureflags.yaml
   when: (current_feature.install_feature_flags | default('false'))|bool == true 
 
 
 
 # ---------------------------------------------------------------------------------------------------------------------------------------------------"
-# INSTALL IBM AIOPS
+# INSTALL IBM CONCERT OPERATE
 # ---------------------------------------------------------------------------------------------------------------------------------------------------"
 
-# Install IBM AIOPS Instance
+# Install IBM CONCERT OPERATE Instance
 - name: (015/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 Install the IBM Concert Operate Instance
   include_tasks: 19_ibm-aiops-install.yaml
       
 
 # # ---------------------------------------------------------------------------------------------------------------------------------------------------"
-# # WAIT FOR IBM AIOPS HACK
+# # WAIT FOR IBM CONCERT OPERATE HACK
 # # ---------------------------------------------------------------------------------------------------------------------------------------------------"
 
-# # Wait for IBM AIOPS HACK
+# # Wait for IBM CONCERT OPERATE HACK
 # - name: (016/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 Wait for IBM Concert Operate to apply HACK
 #   include_tasks: 99_ibm-aiops-wait-ibm-HACK.yaml
 
 
 # ---------------------------------------------------------------------------------------------------------------------------------------------------"
-# WAIT FOR IBM AIOPS
+# WAIT FOR IBM CONCERT OPERATE
 # ---------------------------------------------------------------------------------------------------------------------------------------------------"
 
-# Wait for IBM AIOPS being completely installed
+# Wait for IBM CONCERT OPERATE being completely installed
 - name: (016/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 Wait for IBM Concert Operate to be ready
   include_tasks: 99_ibm-aiops-wait-ibm-aiops.yaml
 

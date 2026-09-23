@@ -60,7 +60,7 @@
 # --------------------------------------------------------------------------------------------------------------------------------------
 
 # Create Namespace 
-- name:   🚀 PREREQUISITES - Create IBM AIOPS namespace {{ current_ibm_feature.project }}
+- name:   🚀 PREREQUISITES - Create IBM CONCERT OPERATE namespace {{ current_ibm_feature.project }}
   kubernetes.core.k8s:
     api_version: v1
     kind: Namespace
@@ -128,7 +128,7 @@
 # Install PriorityClass for Training - NEEDED AS OF 4.13.0 - https://www.ibm.com/docs/en/cloud-paks/cloud-pak-aiops/4.13.0?topic=models-prerequisite-ai
 # ------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-- name:  🚀 IBM AIOPS PREREQUISITES - Install PriorityClass for Training
+- name:  🚀 IBM CONCERT OPERATE PREREQUISITES - Install PriorityClass for Training
   shell: |
     cat <<EOF | oc apply -f -
     apiVersion: scheduling.k8s.io/v1
