@@ -47,48 +47,7 @@
 
 ---
 
-The idea of this repo is to provide an optimised, complete, pre-trained `🐣 Demo-in-a-Box` environments for IBM IT Automation Solutions that are self-contained (e.g. can be deployed in only one cluster)
-
-<details>
-<summary>Details...</summary>
-
-> It contains the following components (which can be installed independently):
->
-> - **IBM Concert Operate**
-> - **IBM Concert Operate Demo Content** (optional)
->   - **OpenLDAP** & Register with IBM Concert Operate
->   - **Runbooks** AWX (Open Source Ansible Tower) with preloaded Playbooks and Concert Operate Runbooks
->   - **AI Models** - Load and Train
->     - Load Training Data (LAGS, SNOW, MET, TG)
->     - Create Training Definitions (TG, LAGS, CR, SI, MET. Turn off RSA)
->     - Train Models (TG, LAGS, CR, SI, MET)
->   - **Topology**
->     - Live Demo Apps (RobotShop. SockShop)
->     - Create IBM Concert Operate Topology and Applications (RobotShop. SockShop, ACME, London Underground, Telecom FiberCut)
->     - Dedicated DemoUI that allows you to trigger different scenarios
->     - Custom Icons (styling and dynamic)
->   - **Configs**
->     - Policies for Incident creation
->     - Custom Alert View
->
-> #### ⚠️ **This method creates an in-cluster installation**
->
-> - It's way faster
-> - You don't have to install all the tooling locally
-> - You don’t need a connection to the cluster during the installation (fire and forget)
->
-> 🤓 So this could basically be done from an iPhone or iPad
-
-> ❗DEPRECATED❗:
->
-> - **IBM Concert**
-> - **IBM Concert Demo Content**
-> - **IBM Turbonomic**
-> - **IBM Turbonomic Demo Content**
-> - **IBM Instana**
-> - **IBM Instana Demo Content**
-
-</details>
+The idea of this repo is to provide `🐣 Demo-in-a-Box` environments for IBM IT Automation Solutions that are self-contained (e.g. can be deployed in only one cluster)
 
 ## 🚀 Getting Started
 
@@ -97,7 +56,7 @@ Basically:
 - Get an OpenShift Cluster
 - Get your entitlement key/pull token
 - Paste the install file into the OpenShift web UI and insert your entitlement key
-- Grab a coffe and come back after 2-3 hours depending on the modules you're installing
+- Grab a coffe and come back after 1-3 hours depending on the modules you're installing
 
 ### 🐥 Quick Install
 
@@ -111,10 +70,6 @@ Basically:
 - 🤓 [Demo Setup - Explained](#32-demo-setup---explained)
 - 📦 [Create a custom Scenario](#33-custom-scenarios)
 
-### ❗EXPERIMENTAL❗
-
-- 🚀 [Quick Install - IBM Concert Platform ](#22--install-ibm-concert-platform-experimental)
-
 <div style="page-break-after: always;"></div>
 
 ---
@@ -126,9 +81,7 @@ Basically:
 <div style="page-break-after: always;"></div>
 
 <details>
-<summary>✅ Prerequisites</summary>
-
-## 1.1 Prerequisites
+<summary>✅ 1.1 Prerequisites</summary>
 
 ### 1.1.1 Get an OpenShift Cluster (IBMers and IBM Partners only)
 
@@ -187,7 +140,7 @@ You can get the credentials from [https://bob.ibm.com/admin/apikeys](https://bob
 
 </details>
 <details>
-<summary>⚠️ Important remarks before you start</summary>
+<summary>⚠️⚠️ 1.2 Important remarks before you start ⚠️⚠️</summary>
 
 ## ⚠️⚠️ 1.2 Important remarks before you start ⚠️⚠️
 
