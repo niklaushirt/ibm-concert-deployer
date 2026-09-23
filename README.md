@@ -80,8 +80,6 @@ Basically:
 
 You need to get your cluster first:
 
-<div style="page-break-after: always;"></div>
-
 <details>
 <summary>✅✅ Prerequisites</summary>
 
