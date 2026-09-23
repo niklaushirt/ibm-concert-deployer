@@ -108,9 +108,9 @@ spec:
               echo "------------------------------------------------------------------------------------------------------------------------------"
               echo " 🚀 Getting Installation source from GitHub"
               echo "------------------------------------------------------------------------------------------------------------------------------"
-              echo "   📥 Clone Repo https://github.com/niklaushirt/ibm-concert-operate-deployer.git -b dev_latest"
-              git clone https://github.com/niklaushirt/ibm-concert-operate-deployer.git -b dev_latest
-              cd ibm-concert-operate-deployer/
+              echo "   📥 Clone Repo https://github.com/niklaushirt/ibm-concert-deployer.git -b dev_latest"
+              git clone https://github.com/niklaushirt/ibm-concert-deployer.git -b dev_latest
+              cd ibm-concert-deployer/
 
               echo ""
               echo ""
