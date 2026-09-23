@@ -251,7 +251,7 @@
     pwd
 
     export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
-    echo "       ✅ OK - IBMAIOps:    $AIOPS_NAMESPACE"
+    echo "       ✅ OK - Concert Operate :    $AIOPS_NAMESPACE"
 
     echo "***************************************************************************************************************************************************"
     echo "   🛠️   Turn off RSA - Log Anomaly Statistical Baseline"

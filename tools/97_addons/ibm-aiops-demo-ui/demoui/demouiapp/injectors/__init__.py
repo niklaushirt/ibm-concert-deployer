@@ -1,5 +1,5 @@
 """
-Data injection modules for IBM AIOps DemoUI.
+Data injection modules for IBM Concert Operate DemoUI.
 
 Replaces the thin wrapper functions in functions.py with a data-driven approach.
 """

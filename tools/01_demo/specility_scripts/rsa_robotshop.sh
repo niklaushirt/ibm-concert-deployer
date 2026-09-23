@@ -38,7 +38,7 @@ echo ""
 echo "***************************************************************************************************************************************************"
 echo "***************************************************************************************************************************************************"
 echo ""
-echo " 🚀  IBMAIOPS Stream Good Logs for RAS for $APP_NAME"
+echo " 🚀  Concert Operate Stream Good Logs for RAS for $APP_NAME"
 echo ""
 echo "***************************************************************************************************************************************************"
 echo "***************************************************************************************************************************************************"
@@ -133,7 +133,7 @@ export KAFKA_TOPIC_LOGS=$(${KAFKACAT_EXE} -v -X security.protocol=SASL_SSL -X ss
 
 
 if [[ "${KAFKA_TOPIC_LOGS}" == "" ]]; then
-    echo "          ❗ Please define a Kafka connection in IBMAIOps of type $LOG_TYPE."
+    echo "          ❗ Please define a Kafka connection in Concert Operate of type $LOG_TYPE."
     echo "          ❗ Existing Log Topics are:"
     oc get kafkatopics -n $AIOPS_NAMESPACE | grep cp4waiops-cartridge-logs-| awk '{print $1;}'| sed 's/^/                /'
     echo ""
@@ -317,7 +317,7 @@ echo " "
 echo "***************************************************************************************************************************************************"
 echo "***************************************************************************************************************************************************"
 echo ""
-echo " 🚀  IBMAIOPS Stream Good Logs for RAS for $APP_NAME"
+echo " 🚀  Concert Operate Stream Good Logs for RAS for $APP_NAME"
 echo "  ✅  Done..... "
 echo ""
 echo "***************************************************************************************************************************************************"

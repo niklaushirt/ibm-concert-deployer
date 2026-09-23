@@ -15,7 +15,7 @@
 #
 #
 #
-#  CloudPak for AIOps
+#  CloudPak for Concert Operate
 #
 #  ©2026 nikh@ch.ibm.com
 # ---------------------------------------------------------------------------------------------------------------------------------------------------"
@@ -101,7 +101,7 @@ echo ""
     export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
     echo ""
     echo "   --------------------------------------------------------------------------------------------------"
-    echo "     🛠️ AIOps Namespace:        $AIOPS_NAMESPACE"
+    echo "     🛠️ Concert Operate Namespace:        $AIOPS_NAMESPACE"
     export TOPO_REST_USR=$(oc get secret aiops-topology-asm-credentials -n $AIOPS_NAMESPACE -o jsonpath='{.data.username}' | base64 --decode)
     export TOPO_REST_PWD=$(oc get secret aiops-topology-asm-credentials -n $AIOPS_NAMESPACE -o jsonpath='{.data.password}' | base64 --decode)
     export LOGIN="$TOPO_REST_USR:$TOPO_REST_PWD"

@@ -3,7 +3,7 @@ _metadata:
   minor_version: 1
 display_information:
   name: IBMAIOPSTEST
-  description: The friendly IBMAIOPS Bot
+  description: The friendly Concert Operate Bot
   background_color: "#001cab"
 features:
   app_home:
@@ -16,7 +16,7 @@ features:
   slash_commands:
     - command: /welcome
       url: https://cap-sg-prd-2.securegateway.appdomain.cloud:18947/aiops/aimanager/instances/xxxxxx/api/slack/events
-      description: Welcome to IBM AIOps
+      description: Welcome to IBM Concert Operate
       should_escape: false
 oauth_config:
   scopes:

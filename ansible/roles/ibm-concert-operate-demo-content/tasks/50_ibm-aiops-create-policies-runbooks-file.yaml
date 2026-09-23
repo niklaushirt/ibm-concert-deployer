@@ -7,7 +7,7 @@
 
 - name: Log
   shell: |
-    export MESSAGE="Load IBM AIOps Runbooks"
+    export MESSAGE="Load IBM Concert Operate Runbooks"
     export currentDate=$(date +%Y-%m-%d_%H:%M)
     echo "---------------------------------------------------------------------------------------------------------------------------------------------------" >> ../install_{{current_feature.kind}}.log
     echo $currentDate" - "$MESSAGE  >> ../install_{{current_feature.kind}}.log
@@ -24,7 +24,7 @@
       backgroundColor: '#ffd500'
       color: '#000'
       location: {{global_config.position_ocp_notifications | default("BannerTop")}}
-      text: 'Installing {{current_feature.kind}} - Load IBM AIOps Runbooks'    
+      text: 'Installing {{current_feature.kind}} - Load IBM Concert Operate Runbooks'    
     EOF
   ignore_errors: true
   args:

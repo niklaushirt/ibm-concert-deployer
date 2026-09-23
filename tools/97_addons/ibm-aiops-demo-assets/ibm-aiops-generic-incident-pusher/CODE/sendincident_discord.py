@@ -181,9 +181,9 @@ def sendIncidentToProvider(currentIncident, DATALAYER_USER, DATALAYER_PWD, DATAL
 
 
     MESSAGE_TEMPLATE={
-        "username": "IBMAIOPS Bot",
+        "username": "Concert Operate Bot",
         "avatar_url": "https://i.imgur.com/4M34hi2.png",
-        "content": "IBMAIOPS Incident",
+        "content": "Concert Operate Incident",
         "embeds": [{
             "author": {
             "name": INSTANCE_NAME+" ChatBot",
@@ -365,9 +365,9 @@ def updateIncidentToProvider(currentIncident, DATALAYER_USER, DATALAYER_PWD, DAT
 
 
     MESSAGE_TEMPLATE={
-        "username": "IBMAIOPS Bot",
+        "username": "Concert Operate Bot",
         "avatar_url": "https://i.imgur.com/4M34hi2.png",
-        "content": "IBMAIOPS Incident",
+        "content": "Concert Operate Incident",
         "embeds": [{
             "author": {
             "name": INSTANCE_NAME+" ChatBot - Incident Updated",
@@ -436,7 +436,7 @@ def resolveIncidentToProvider(currentIncidentID, DATALAYER_USER, DATALAYER_PWD, 
     currentMessage['embeds'][0]['author']['icon_url']=''
     currentMessage['embeds'][0]['author']['proxy_icon_url']=''
     currentMessage['embeds'][0]['author']['name']='🔴 '+INSTANCE_NAME+' ChatBot - Incident Closed'
-    currentMessage['content']='🔴 IBMAIOPS Incident - CLOSED'
+    currentMessage['content']='🔴 Concert Operate Incident - CLOSED'
 
     debug("CURRENT:"+str(currentMessage))
     debug("A:"+str(PROVIDER_URL))

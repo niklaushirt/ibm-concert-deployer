@@ -10,11 +10,11 @@ You pick the level which is most applicable for your situation.
 
 ---
 
-### 🚀 Storytelling for CloudPak for AIOps
+### 🚀 Storytelling for CloudPak for Concert Operate
 
 ![](https://raw.githubusercontent.com/niklaushirt/ibm-concert-deployer/dev_latest/doc/storytelling/pics/global/aiops_title.png)
 
-Showcase how CP4AIOps can help you understand and resolve incidents quickly. With integration of Instana, Turbonomic, ELK, Slack and much more. The story explains how a broken website will be fixed.
+Showcase how CP4Concert Operate can help you understand and resolve incidents quickly. With integration of Instana, Turbonomic, ELK, Slack and much more. The story explains how a broken website will be fixed.
 
 **Available**: Instantly
 
@@ -58,11 +58,11 @@ Showcase how Apptio Cloudability and Turbonomic can help manage and optimize pub
 
 ---
 
-### 🚀 Storytelling for CloudPak for AIOps with Live Environment
+### 🚀 Storytelling for CloudPak for Concert Operate with Live Environment
 
 ![](https://raw.githubusercontent.com/niklaushirt/ibm-concert-deployer/dev_latest/doc/storytelling/pics/global/aiops_title.png)
 
-Showcase how CP4AIOps can help you understand and resolve incidents quickly. With integration of Instana, Turbonomic, ELK, Slack and much more. The story explains how a broken website will be fixed.
+Showcase how CP4Concert Operate can help you understand and resolve incidents quickly. With integration of Instana, Turbonomic, ELK, Slack and much more. The story explains how a broken website will be fixed.
 
 **Available**: As soon as you get your Cluster
 

@@ -1,5 +1,5 @@
 """
-Utility modules for IBM AIOps DemoUI.
+Utility modules for IBM Concert Operate DemoUI.
 """
 
 from .constants import (

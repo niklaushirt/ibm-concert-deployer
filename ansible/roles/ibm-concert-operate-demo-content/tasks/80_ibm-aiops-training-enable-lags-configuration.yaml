@@ -42,7 +42,7 @@
     pwd
 
     export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
-    echo "       ✅ OK - IBMAIOps:    $AIOPS_NAMESPACE"
+    echo "       ✅ OK - Concert Operate :    $AIOPS_NAMESPACE"
 
     echo "***************************************************************************************************************************************************"
     echo "   🛠️   RE-START - LOAD LOG TRAINING DATA"
@@ -65,7 +65,7 @@
     pwd
 
     export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
-    echo "       ✅ OK - IBMAIOps:    $AIOPS_NAMESPACE"
+    echo "       ✅ OK - Concert Operate :    $AIOPS_NAMESPACE"
 
     echo "***************************************************************************************************************************************************"
     echo "   🛠️   Waiting for LAGS data load to complete"
@@ -121,7 +121,7 @@
 #     pwd
 
 #     export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
-#     echo "       ✅ OK - IBMAIOps:    $AIOPS_NAMESPACE"
+#     echo "       ✅ OK - Concert Operate :    $AIOPS_NAMESPACE"
 
 #     echo "***************************************************************************************************************************************************"
 #     echo "   🛠️   Waiting for LAGS data load to complete"

@@ -1,5 +1,5 @@
 """
-Risk proximity demo scenario for IBM AIOps DemoUI.
+Risk proximity demo scenario for IBM Concert Operate DemoUI.
 
 Triggers File Observer jobs to run network risk topology analysis.
 This scenario is unique to functions.py and not present in functions_NG.py.
@@ -17,7 +17,7 @@ class RiskScenario:
     """
     Risk proximity demo scenario controller.
 
-    Triggers IBM AIOps File Observer jobs to analyze network risk
+    Triggers IBM Concert Operate File Observer jobs to analyze network risk
     topologies (US network risk and EU risk proximity).
     """
 

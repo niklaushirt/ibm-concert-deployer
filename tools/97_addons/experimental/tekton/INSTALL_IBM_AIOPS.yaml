@@ -11,7 +11,7 @@
 #---------------------------------------------------------------------------------------------------------------------------------------------------"
 #  Installing IBM IT Automation Solutoions
 #
-#  CloudPak for AIOps
+#  CloudPak for Concert Operate
 #
 #  ©2026 nikh@ch.ibm.com
 # ---------------------------------------------------------------------------------------------------------------------------------------------------"
@@ -29,8 +29,8 @@
 # Installs:
 #
 #  - IBM Operator
-#  - IBM CloudPak for AIOps
-#  - IBM CloudPak for AIOps Demo Content
+#  - IBM CloudPak for Concert Operate
+#  - IBM CloudPak for Concert Operate Demo Content
 #     - OpenLDAP & Register with ibm-aiops
 #     - RobotShop Demo App
 #     - Demo Service Account
@@ -148,7 +148,7 @@ data:
 
     #--------------------------------------------------------------------------------------------------------------------------------------
 
-    # CloudPak for AIOps Base Install
+    # CloudPak for Concert Operate Base Install
 
     #--------------------------------------------------------------------------------------------------------------------------------------
     # Changing the project name / namespace is at your own risk. some things might break, I do not test this!
@@ -204,7 +204,7 @@ data:
 
 
     #--------------------------------------------------------------------------------------------------------------------------------------
-    # CloudPak for AIOps Demo Content Install
+    # CloudPak for Concert Operate Demo Content Install
     #--------------------------------------------------------------------------------------------------------------------------------------
       - name: ibm-aiops-demo-content
         kind: IBMAIOpsDemoContent
@@ -296,7 +296,7 @@ data:
         #ldap_user_password: CHANGEME
         # ldap namespace
         ldap_namespace: openldap
-        # Integrate AIOps Login with OpenLDAP 
+        # Integrate Concert Operate Login with OpenLDAP 
         ldap_register: true
         # Integrate OpenShift Login with OpenLDAP
         integrate_ocp_openldap: true
@@ -402,7 +402,7 @@ spec:
               echo "***************************************************************************************************************************************************"
               echo "***************************************************************************************************************************************************"
               echo "                                                                                                                                                   "
-              echo " 🚀 Install IBM AIOps                                                                                                                                                  "
+              echo " 🚀 Install IBM Concert Operate                                                                                                                                                  "
               echo "                                                                                                                                                   "
               echo "***************************************************************************************************************************************************"
               echo "***************************************************************************************************************************************************"

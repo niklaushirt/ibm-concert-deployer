@@ -75,8 +75,8 @@ app.get('/', function (req, res) {
     console.log(timestamp() + " 🚀 Request received on endpoint /");
     
     res.write('<H1>Turbonomic Gateway</H1>')
-    res.write('<H2>Push Turbonomic Actions to IBMAIOPS Event Manager</H2>')
-    res.write('<H4>Currently pushing actions for BA "' + TURBO_BA_NAME + '" to IBM AIOps</H4>')
+    res.write('<H2>Push Turbonomic Actions to Concert Operate Event Manager</H2>')
+    res.write('<H4>Currently pushing actions for BA "' + TURBO_BA_NAME + '" to IBM Concert Operate</H4>')
     res.write('')
     res.write('<H3>Available Endpoints</H3>')
     res.write('/getCurrentActions<BR>')
@@ -92,7 +92,7 @@ app.get('/', function (req, res) {
 app.get('/getCurrentActions', function (req, res) {
     console.log(timestamp() + " 🚀 Request received on endpoint /currentActions");
     res.write('<H1>Turbonomic Gateway</H1>')
-    res.write('<H2>Push Turbonomic Actions to IBMAIOPS Event Manager</H2>')
+    res.write('<H2>Push Turbonomic Actions to Concert Operate Event Manager</H2>')
     res.write('<H3>TURBONOMIC Current Actions for BA: ' + TURBO_BA_NAME + '</H3>')
     res.write('')
     res.write(currentJSON)
@@ -107,7 +107,7 @@ app.get('/getBusinessApplications', function (req, res) {
     console.log(timestamp() + " 🚀 Request received on endpoint /businessApplications");
     
     res.write('<H1>Turbonomic Gateway</H1>')
-    res.write('<H2>Push Turbonomic Actions to IBMAIOPS Event Manager</H2>')
+    res.write('<H2>Push Turbonomic Actions to Concert Operate Event Manager</H2>')
     res.write('<H3>Current Business Applications</H3>')
     res.write('')
     res.write(currentBAs)
@@ -123,7 +123,7 @@ app.get('/getConfiguration', function (req, res) {
     console.log(timestamp() + " 🚀 Request received on endpoint /businessApplications");
 
     res.write('<H1>Turbonomic Gateway</H1>')
-    res.write('<H2>Push Turbonomic Actions to IBMAIOPS Event Manager</H2>')
+    res.write('<H2>Push Turbonomic Actions to Concert Operate Event Manager</H2>')
     res.write('<H3>Current Configuration</H3>')
     res.write('')
     res.write("<BR> POLLING_INTERVAL    : " + POLLING_INTERVAL + " seconds");
@@ -151,7 +151,7 @@ app.get('/getConfiguration', function (req, res) {
 
 
 
-// Push Turbo Actions to IBM AIOps 
+// Push Turbo Actions to IBM Concert Operate 
 function pushBA(BAnames) {
 
     //cater for multiple business apps being passed as comma separated list e.g. app1:alertgroup,app2:alertgroup,app3:alertgroup and loop through results
@@ -421,7 +421,7 @@ function pushBA(BAnames) {
 
                                                     console.log(timestamp() + 'Got ' + expiredActions.length + ' expired actions');
 
-                                                    // Push the expired actions into the newActions array so they get pushed to AIOps without having to loop through them separately (status field is different)
+                                                    // Push the expired actions into the newActions array so they get pushed to Concert Operate without having to loop through them separately (status field is different)
                                                     for( var i=0;i<expiredActions.length; i++) {
                                                         newActions.push(expiredActions[i]);
                                                     }
@@ -601,9 +601,9 @@ app.listen(3000, function (req, res) {
     console.log(timestamp() + "-----------------------------------------------------------------------------------------");
     console.log(timestamp() + "-----------------------------------------------------------------------------------------");
     console.log(timestamp() + "");
-    console.log(timestamp() + " 🚀 IBM AIOps");
+    console.log(timestamp() + " 🚀 IBM Concert Operate");
     console.log(timestamp() + "");
-    console.log(timestamp() + "    🛰️ Turbonomic Gateway - Push Turbonomic Actions to IBMAIOPS Event Manager");
+    console.log(timestamp() + "    🛰️ Turbonomic Gateway - Push Turbonomic Actions to Concert Operate Event Manager");
     console.log(timestamp() + "");
     console.log(timestamp() + "-----------------------------------------------------------------------------------------");
     console.log(timestamp() + "-----------------------------------------------------------------------------------------");

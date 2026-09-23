@@ -1,8 +1,8 @@
 """
-Core functions for IBM AIOps DemoUI.
+Core functions for IBM Concert Operate DemoUI.
 
 This module provides the main entry points for injecting events, logs, and
-metrics into the IBM AIOps platform. It has been refactored to use modular
+metrics into the IBM Concert Operate platform. It has been refactored to use modular
 injectors and scenarios while maintaining backward compatibility with views.py.
 
 Refactoring Notes:
@@ -47,7 +47,7 @@ print("                                              /_/")
 print(
     "*************************************************************************************************"
 )
-print("    🛰️  DemoUI for IBM Automation AIOps")
+print("    🛰️  DemoUI for IBM Automation Concert Operate")
 print("       Provided by:")
 print("        🇨🇭 Niklaus Hirt (nikh@ch.ibm.com)")
 print(
@@ -256,7 +256,7 @@ def mitigateIssues(
     and resets the load error flag.
 
     Args:
-        datalayer_route: Route to the IBM AIOps datalayer API.
+        datalayer_route: Route to the IBM Concert Operate datalayer API.
         datalayer_user: Username for datalayer authentication.
         datalayer_pwd: Password for datalayer authentication.
 
@@ -287,12 +287,12 @@ def closeAlerts(
     datalayer_pwd: str,
 ) -> str:
     """
-    Close all active alerts in the IBM AIOps datalayer.
+    Close all active alerts in the IBM Concert Operate datalayer.
 
     Sends a PATCH request to set all alerts to 'closed' state.
 
     Args:
-        datalayer_route: Route to the IBM AIOps datalayer API.
+        datalayer_route: Route to the IBM Concert Operate datalayer API.
         datalayer_user: Username for datalayer authentication.
         datalayer_pwd: Password for datalayer authentication.
 
@@ -339,12 +339,12 @@ def closeStories(
     datalayer_pwd: str,
 ) -> str:
     """
-    Close all active stories in the IBM AIOps datalayer.
+    Close all active stories in the IBM Concert Operate datalayer.
 
     First sets all stories to 'inProgress', then to 'resolved' state.
 
     Args:
-        datalayer_route: Route to the IBM AIOps datalayer API.
+        datalayer_route: Route to the IBM Concert Operate datalayer API.
         datalayer_user: Username for datalayer authentication.
         datalayer_pwd: Password for datalayer authentication.
 
@@ -667,7 +667,7 @@ def injectEventsMemRobot(
     """Inject memory events for RobotShop scenario.
 
     Args:
-        datalayer_route: Route to the IBM AIOps datalayer API.
+        datalayer_route: Route to the IBM Concert Operate datalayer API.
         datalayer_user: Username for datalayer authentication.
         datalayer_pwd: Password for datalayer authentication.
 
@@ -687,7 +687,7 @@ def injectEventsNetRobot(
     """Inject network events for RobotShop scenario.
 
     Args:
-        datalayer_route: Route to the IBM AIOps datalayer API.
+        datalayer_route: Route to the IBM Concert Operate datalayer API.
         datalayer_user: Username for datalayer authentication.
         datalayer_pwd: Password for datalayer authentication.
 
@@ -709,7 +709,7 @@ def injectEventsFanACME(
     """Inject fan events for ACME scenario.
 
     Args:
-        datalayer_route: Route to the IBM AIOps datalayer API.
+        datalayer_route: Route to the IBM Concert Operate datalayer API.
         datalayer_user: Username for datalayer authentication.
         datalayer_pwd: Password for datalayer authentication.
 
@@ -731,7 +731,7 @@ def injectEventsNetSock(
     """Inject network events for SockShop scenario.
 
     Args:
-        datalayer_route: Route to the IBM AIOps datalayer API.
+        datalayer_route: Route to the IBM Concert Operate datalayer API.
         datalayer_user: Username for datalayer authentication.
         datalayer_pwd: Password for datalayer authentication.
 
@@ -753,7 +753,7 @@ def injectEventsTube(
     """Inject events for Tube scenario.
 
     Args:
-        datalayer_route: Route to the IBM AIOps datalayer API.
+        datalayer_route: Route to the IBM Concert Operate datalayer API.
         datalayer_user: Username for datalayer authentication.
         datalayer_pwd: Password for datalayer authentication.
 
@@ -775,7 +775,7 @@ def injectEventsTelco(
     """Inject events for Telco scenario.
 
     Args:
-        datalayer_route: Route to the IBM AIOps datalayer API.
+        datalayer_route: Route to the IBM Concert Operate datalayer API.
         datalayer_user: Username for datalayer authentication.
         datalayer_pwd: Password for datalayer authentication.
 
@@ -799,7 +799,7 @@ def injectEventsBusy(
     Repeats the same event set 10 times to simulate high event volume.
 
     Args:
-        datalayer_route: Route to the IBM AIOps datalayer API.
+        datalayer_route: Route to the IBM Concert Operate datalayer API.
         datalayer_user: Username for datalayer authentication.
         datalayer_pwd: Password for datalayer authentication.
 
@@ -826,7 +826,7 @@ def injectEventsRisk(
     It triggers two observer jobs for network risk topology analysis.
 
     Args:
-        datalayer_route: Route to the IBM AIOps datalayer API.
+        datalayer_route: Route to the IBM Concert Operate datalayer API.
         datalayer_user: Username for datalayer authentication.
         datalayer_pwd: Password for datalayer authentication.
 
@@ -884,7 +884,7 @@ def injectEventsCUSTOM(
     """Inject events for custom scenario.
 
     Args:
-        datalayer_route: Route to the IBM AIOps datalayer API.
+        datalayer_route: Route to the IBM Concert Operate datalayer API.
         datalayer_user: Username for datalayer authentication.
         datalayer_pwd: Password for datalayer authentication.
 
@@ -903,13 +903,13 @@ def injectEventsGeneric(
     demo_events: str,
 ) -> str:
     """
-    Inject events into the IBM AIOps Datalayer.
+    Inject events into the IBM Concert Operate Datalayer.
 
     Parses the events data (newline-separated JSON), replaces MY_TIMESTAMP
     placeholders, and POSTs each event to the datalayer API.
 
     Args:
-        datalayer_route: Route to the IBM AIOps datalayer API.
+        datalayer_route: Route to the IBM Concert Operate datalayer API.
         datalayer_user: Username for datalayer authentication.
         datalayer_pwd: Password for datalayer authentication.
         demo_events: Newline-separated JSON event definitions.
@@ -969,7 +969,7 @@ def injectMetricsMem(
     """Inject memory metrics for RobotShop scenario.
 
     Args:
-        metric_route: Route to the IBM AIOps metrics API.
+        metric_route: Route to the IBM Concert Operate metrics API.
         metric_token: Bearer token for metrics authentication.
 
     Returns:
@@ -999,7 +999,7 @@ def injectMetricsFiber(
     This function is unique to functions.py (not in functions_legacy.py).
 
     Args:
-        metric_route: Route to the IBM AIOps metrics API.
+        metric_route: Route to the IBM Concert Operate metrics API.
         metric_token: Bearer token for metrics authentication.
 
     Returns:
@@ -1029,7 +1029,7 @@ def injectMetricsFiberTransatlantic(
     This function is unique to functions.py (not in functions_legacy.py).
 
     Args:
-        metric_route: Route to the IBM AIOps metrics API.
+        metric_route: Route to the IBM Concert Operate metrics API.
         metric_token: Bearer token for metrics authentication.
 
     Returns:
@@ -1056,7 +1056,7 @@ def injectMetricsFanTemp(
     """Inject fan temperature metrics for RobotShop scenario.
 
     Args:
-        metric_route: Route to the IBM AIOps metrics API.
+        metric_route: Route to the IBM Concert Operate metrics API.
         metric_token: Bearer token for metrics authentication.
 
     Returns:
@@ -1083,7 +1083,7 @@ def injectMetricsFan(
     """Inject fan speed metrics for RobotShop scenario.
 
     Args:
-        metric_route: Route to the IBM AIOps metrics API.
+        metric_route: Route to the IBM Concert Operate metrics API.
         metric_token: Bearer token for metrics authentication.
 
     Returns:
@@ -1110,7 +1110,7 @@ def injectMetricsFanTempACME(
     """Inject fan temperature metrics for ACME scenario.
 
     Args:
-        metric_route: Route to the IBM AIOps metrics API.
+        metric_route: Route to the IBM Concert Operate metrics API.
         metric_token: Bearer token for metrics authentication.
 
     Returns:
@@ -1137,7 +1137,7 @@ def injectMetricsFanACME(
     """Inject fan speed metrics for ACME scenario.
 
     Args:
-        metric_route: Route to the IBM AIOps metrics API.
+        metric_route: Route to the IBM Concert Operate metrics API.
         metric_token: Bearer token for metrics authentication.
 
     Returns:
@@ -1164,7 +1164,7 @@ def injectMetricsSockNet(
     """Inject network metrics for SockShop scenario.
 
     Args:
-        metric_route: Route to the IBM AIOps metrics API.
+        metric_route: Route to the IBM Concert Operate metrics API.
         metric_token: Bearer token for metrics authentication.
 
     Returns:
@@ -1191,7 +1191,7 @@ def injectMetricsCUSTOM(
     """Inject metrics for custom scenario.
 
     Args:
-        metric_route: Route to the IBM AIOps metrics API.
+        metric_route: Route to the IBM Concert Operate metrics API.
         metric_token: Bearer token for metrics authentication.
 
     Returns:
@@ -1220,13 +1220,13 @@ def injectMetrics(
     metric_name: str,
 ) -> str:
     """
-    Inject simulated metrics into the IBM AIOps Metrics API.
+    Inject simulated metrics into the IBM Concert Operate Metrics API.
 
     Generates metric batches by iterating through the definitions,
     adding random variation to values, and POSTing to the metrics endpoint.
 
     Args:
-        metric_route: Route to the IBM AIOps metrics API.
+        metric_route: Route to the IBM Concert Operate metrics API.
         metric_token: Bearer token for metrics authentication.
         metrics_to_simulate: List of CSV metric definitions.
         metric_time_skew: Initial seconds to add to the base timestamp.
@@ -1559,7 +1559,7 @@ def resetMYSQL() -> None:
 
 def loadTopology() -> str:
     """
-    Load custom topology into IBM AIOps.
+    Load custom topology into IBM Concert Operate.
 
     Creates the topology file, uploads it to the file observer pod,
     creates the file observer job, template, and application group.

@@ -1,5 +1,5 @@
 """
-RobotShop demo scenario for IBM AIOps DemoUI.
+RobotShop demo scenario for IBM Concert Operate DemoUI.
 
 Simulates memory pressure and network issues in the RobotShop application.
 """
@@ -64,7 +64,7 @@ class RobotShopScenario:
         Inject RobotShop memory events into the datalayer.
 
         Args:
-            datalayer_route: Route to the IBM AIOps datalayer API.
+            datalayer_route: Route to the IBM Concert Operate datalayer API.
             datalayer_user: Username for datalayer authentication.
             datalayer_pwd: Password for datalayer authentication.
 
@@ -126,7 +126,7 @@ class RobotShopScenario:
         Inject RobotShop metrics into the metrics API.
 
         Args:
-            metric_route: Route to the IBM AIOps metrics API.
+            metric_route: Route to the IBM Concert Operate metrics API.
             metric_token: Bearer token for metrics authentication.
             time_skew: Initial seconds to add to the base timestamp.
             time_step: Milliseconds to advance between metric points.

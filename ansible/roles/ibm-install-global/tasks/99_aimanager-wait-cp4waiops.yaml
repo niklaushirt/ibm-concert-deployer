@@ -1,7 +1,7 @@
 
 # *************************************************************************************************************************************************
 # --------------------------------------------------------------------------------------------------------------------------------------
-# Waiting for IBMAIOPS installation to finish
+# Waiting for Concert Operate installation to finish
 # --------------------------------------------------------------------------------------------------------------------------------------
 # *************************************************************************************************************************************************
     
@@ -9,7 +9,7 @@
 
 - name: Log
   shell: |
-    export MESSAGE=" 🕦 Wait for IBMAIOps to become ready"
+    export MESSAGE=" 🕦 Wait for Concert Operate to become ready"
     export currentDate=$(date +%Y-%m-%d_%H:%M)
     echo "---------------------------------------------------------------------------------------------------------------------------------------------------" >> ../install_{{current_feature.kind}}.log
     echo $currentDate" - "$MESSAGE  >> ../install_{{current_feature.kind}}.log
@@ -26,7 +26,7 @@
       backgroundColor: '#ff7700'
       color: '#000'
       location: {{global_config.position_ocp_notifications | default("BannerTop")}}
-      text: 'Installing {{current_feature.kind}} - 🕦 Wait for IBMAIOps to become ready (about 10-20 minutes) - Started at $(date +%H:%M) UTC'    
+      text: 'Installing {{current_feature.kind}} - 🕦 Wait for Concert Operate to become ready (about 10-20 minutes) - Started at $(date +%H:%M) UTC'    
     EOF
   ignore_errors: true
   args:
@@ -68,7 +68,7 @@
 
 - name: Log
   shell: |
-    export MESSAGE=" ✅ IBMAIOps is ready"
+    export MESSAGE=" ✅ Concert Operate is ready"
     export currentDate=$(date +%Y-%m-%d_%H:%M)
     echo $currentDate" - "$MESSAGE  >> ../install_{{current_feature.kind}}.log
   ignore_errors: true
@@ -84,7 +84,7 @@
       backgroundColor: '#009a00'
       color: '#000'
       location: {{global_config.position_ocp_notifications | default("BannerTop")}}
-      text: 'Installing {{current_feature.kind}} - IBMAIOps is ready'    
+      text: 'Installing {{current_feature.kind}} - Concert Operate is ready'    
     EOF
   ignore_errors: true
   args:

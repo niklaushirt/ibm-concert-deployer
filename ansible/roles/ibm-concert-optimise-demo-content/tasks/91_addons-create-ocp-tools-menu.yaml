@@ -41,7 +41,7 @@
 
 
 
-- name: 🌏 OCP MENU - Create Openshift WebConsole Menu Item - concert Optimise
+- name: 🌏 OCP MENU - Create Openshift WebConsole Menu Item - Concert Optimise
   shell: |
     appURL=$(oc get route -n ibm-concert-optimise nginx -o jsonpath={.spec.host})|| true
 

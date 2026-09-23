@@ -11,7 +11,7 @@
 #---------------------------------------------------------------------------------------------------------------------------------------------------"
 #  Train on Log Templates
 #
-#  CloudPak for AIOps
+#  CloudPak for Concert Operate
 #
 #  ©2026 nikh@ch.ibm.com
 # ---------------------------------------------------------------------------------------------------------------------------------------------------"
@@ -357,7 +357,7 @@ if [[ $DO_COMM == "y" ||  $DO_COMM == "Y" ]]; then
 
 
     if [[ "${KAFKA_TOPIC_LOGS}" == "" ]]; then
-        echo "          ❗ Please define a Kafka connection in IBMAIOps of type $LOG_TYPE."
+        echo "          ❗ Please define a Kafka connection in Concert Operate of type $LOG_TYPE."
         echo "          ❗ Existing Log Topics are:"
         oc get kafkatopics -n $AIOPS_NAMESPACE | grep cp4waiops-cartridge-logs-| awk '{print $1;}'| ${SED} 's/^/                /'
         echo ""

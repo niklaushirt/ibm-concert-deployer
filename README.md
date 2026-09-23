@@ -1250,7 +1250,7 @@ At this point you have created your own Slack workspace where you are the admini
 
 6. Click `Create`
 
-7. Scroll down to Display Information and name your IBMAIOPS app.
+7. Scroll down to Display Information and name your Concert Operate app.
 
 8. You can add an icon to the app (there are some sample icons in the ./tools/4_integrations/slack/icons folder.
 

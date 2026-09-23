@@ -63,10 +63,10 @@ print ('------------------------------------------------------------------------
 # ('--------------------------------------------------')('--------------------------------------------------')--------------
 # GET NAMESPACES
 # ('--------------------------------------------------')('--------------------------------------------------')--------------
-print('     ❓ Getting IBMAIOps Namespace')
+print('     ❓ Getting Concert Operate Namespace')
 stream = os.popen("oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}'")
 aimanagerns = stream.read().strip()
-print('        ✅ IBMAIOps Namespace:       '+aimanagerns)
+print('        ✅ Concert Operate Namespace:       '+aimanagerns)
 
 
 
@@ -132,7 +132,7 @@ print ('           👩‍💻 BOT PREFIX:                   '+DISCORD_BOT_PREFI
 print ('')
 print ('')
 print ('    --------------------------------------------------------------------------------')
-print ('     🔎 IBMAIOps Connection Parameters')
+print ('     🔎 Concert Operate Connection Parameters')
 print ('    --------------------------------------------------------------------------------')
 print ('           🌏 IBMAIOPS:                     '+CPD_ROUTE)
 print ('           🌏 Demo UI:                      '+DENO_UI_ROUTE)
@@ -141,7 +141,7 @@ print ('           🌏 Turbonomic:                   '+TURBO_ROUTE)
 print ('')
 print ('')
 print ('    --------------------------------------------------------------------------------')
-print ('     🔎 IBMAIOps Datalayer Parameters')
+print ('     🔎 Concert Operate Datalayer Parameters')
 print ('    --------------------------------------------------------------------------------')
 print ('           🌏 Datalayer Route:              '+DATALAYER_ROUTE)
 print ('           👩‍💻 Datalayer User:               '+DATALAYER_USER)
@@ -403,12 +403,12 @@ class IncidentBot(commands.Bot):
             if len(myArguments) < 2:
                 print("  🚀 Command Detail: ROOT")
                 await message.channel.send('--------------------------------------------------')
-                await message.channel.send('**🤖 Welcome to the IBM AIOps Discord Bot for the "'+INSTANCE_NAME+'" Environment**')
+                await message.channel.send('**🤖 Welcome to the IBM Concert Operate Discord Bot for the "'+INSTANCE_NAME+'" Environment**')
                 await message.channel.send('--------------------------------------------------')
                 await message.channel.send('**🚀 Demo Assets**')
                 view = AIOPSLink(DENO_UI_ROUTE,'Demo Dashboard')
                 await message.channel.send(view=view)
-                view = AIOPSLink(CPD_ROUTE,'IBM AIOps')
+                view = AIOPSLink(CPD_ROUTE,'IBM Concert Operate')
                 await message.channel.send(view=view)
                 if INSTANA_ROUTE != '':
                     view = AIOPSLink(INSTANA_ROUTE,'Instana')
@@ -418,7 +418,7 @@ class IncidentBot(commands.Bot):
                     await message.channel.send(view=view)
 
                 await message.channel.send('--------------------------------------------------')
-                await message.channel.send('**🚀 AIOps Incidents**')
+                await message.channel.send('**🚀 Concert Operate Incidents**')
                 view = IncidentsActions()
                 await message.channel.send(view=view)
                 view = IncidentCreateActions()
@@ -513,7 +513,7 @@ class IncidentBot(commands.Bot):
                 elif myArgument == "aiops":
                     print("  🚀 Command Detail: aiops")
                     await message.channel.send('--------------------------------------------------')
-                    await message.channel.send('**🚀 AIOps Incidents**')
+                    await message.channel.send('**🚀 Concert Operate Incidents**')
                     view = IncidentsActions()
                     await message.channel.send(view=view)
                     view = IncidentActions()

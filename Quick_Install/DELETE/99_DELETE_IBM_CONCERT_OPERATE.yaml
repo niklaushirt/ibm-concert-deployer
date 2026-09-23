@@ -194,7 +194,8 @@ spec:
               echo "------------------------------------------------------------------------------------------------------------------------------"
               echo " 🧻 Delete Namespace ibm-concert-operate"
               oc delete ns ibm-concert-operate
-
+              oc delete ConsoleNotification --all
+              
               echo "------------------------------------------------------------------------------------------------------------------------------"
               echo " 🧻 Restart OLM Pod"
               oc -n openshift-operator-lifecycle-manager delete $(oc get pods  -l app=catalog-operator -o NAME -n openshift-operator-lifecycle-manager)

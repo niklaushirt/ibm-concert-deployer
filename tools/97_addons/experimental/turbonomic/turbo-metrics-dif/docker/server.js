@@ -1,7 +1,7 @@
 // ---------------------------------------------------------------------------------------------------------------------------------------------------"
 // ---------------------------------------------------------------------------------------------------------------------------------------------------"
 // ---------------------------------------------------------------------------------------------------------------------------------------------------"
-// Installing Script for all IBMAIOPS V3.1.1components
+// Installing Script for all Concert Operate V3.1.1components
 //
 // V3.1.1
 //
@@ -203,7 +203,7 @@ app.listen(3000, function (req, res) {
     console.log(timestamp() + "-----------------------------------------------------------------------------------------");
     console.log(timestamp() + "-----------------------------------------------------------------------------------------");
     console.log(timestamp() + "");
-    console.log(timestamp() + " 🚀 CloudPack for IBM AIOps");
+    console.log(timestamp() + " 🚀 CloudPack for IBM Concert Operate");
     console.log(timestamp() + "");
     console.log(timestamp() + "    📥 Turbonomic Dif Server");
     console.log(timestamp() + "");

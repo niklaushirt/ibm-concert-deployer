@@ -3,7 +3,7 @@
 # © Copyright IBM Corp. 2020, 2025
 # SPDX-License-Identifier: Apache2.0
 #
-# This script can be used to uninstall the IBM Cloud Pak for AIOps v4.12 product and
+# This script can be used to uninstall the IBM Cloud Pak for Concert Operate v4.12 product and
 # cleanup resources created by the product.  Please configure what you want to uninstall
 # in the uninstall-cp4waiops.props file first before running this script.
 
@@ -38,7 +38,7 @@ analyze_script_properties
 if [[ $SKIP_CONFIRM != "true" ]]; then
   log $INFO "\033[0;33mUninstall v2.0 for AIOPs v4.12\033[0m"
   log $INFO
-  log $INFO "This script will uninstall IBM Cloud Pak for AIOps version 4.12. Please ensure you have deleted any CRs you created before running this script."
+  log $INFO "This script will uninstall IBM Cloud Pak for Concert Operate version 4.12. Please ensure you have deleted any CRs you created before running this script."
   log $INFO ""
   log $INFO "##### IMPORTANT ######"
   log $INFO ""
@@ -52,14 +52,14 @@ if [[ $SKIP_CONFIRM != "true" ]]; then
   read -p "Please confirm you have reviewed and configured uninstall-cp4waiops.props and would like to proceed with uninstall. Y or y to continue: " -n 1 -r
   log " "
   if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-    log $INFO "Cancelling uninstall of IBM Cloud Pak for AIOps."
+    log $INFO "Cancelling uninstall of IBM Cloud Pak for Concert Operate."
     exit 0
   fi
   log " "
 else
   log $INFO "\033[0;33mUninstall v2.0 for AIOPs v4.12\033[0m"
   log $INFO
-  log $INFO "This script will uninstall IBM Cloud Pak for AIOps."
+  log $INFO "This script will uninstall IBM Cloud Pak for Concert Operate."
   display_script_properties
   log $INFO ""
 fi 
@@ -80,7 +80,7 @@ if [ $? -gt 0 ]; then
 fi
 
 echo
-log $INFO "Prereq checks passed. Starting uninstall of IBM Cloud Pak for AIOps ..."
+log $INFO "Prereq checks passed. Starting uninstall of IBM Cloud Pak for Concert Operate ..."
 echo
 
 # Check if the project configured in the props file exists
@@ -112,8 +112,8 @@ if [[ ! -z "$CP4WAIOPS_PROJECT"  ]]; then
    
    delete_securetunnel
    
-   # Finally uninstall the CP4AIOps operator by deleting the subscription & CSV
-   log $INFO "Uninstalling the CP4AIOps operator..."
+   # Finally uninstall the CP4Concert Operate operator by deleting the subscription & CSV
+   log $INFO "Uninstalling the CP4Concert Operate operator..."
    # Check if namespace scoped install. If namespaced, pass in CP4WAIOPS_PROJECT, else OPERATORS_PROJECT
    if [[ $AIOPS_NAMESPACED == "true" ]] ; then
       unsubscribe "ibm-aiops-orchestrator" $CP4WAIOPS_PROJECT ""
@@ -121,7 +121,7 @@ if [[ ! -z "$CP4WAIOPS_PROJECT"  ]]; then
 	   unsubscribe "ibm-aiops-orchestrator" $OPERATORS_PROJECT ""
    fi
 
-   # Start cleaning up remaining resources in the project that CP4AIOps created 
+   # Start cleaning up remaining resources in the project that CP4Concert Operate created 
    # and are not automatically deleted when CR is deleted
    log $INFO "Deleting kafkatopics in $CP4WAIOPS_PROJECT"
    for KAFKATOPICLABEL in ${CP4AIOPS_KAFKATOPICS_LABELS[@]}; do
@@ -188,14 +188,14 @@ if [[ ! -z "$CP4WAIOPS_PROJECT"  ]]; then
       oc delete secret -l $SECRETLABEL -n $CP4WAIOPS_PROJECT --ignore-not-found
    done   
 
-   # Always delete AIOps internal ServiceAccounts
+   # Always delete Concert Operate internal ServiceAccounts
    log $INFO "Deleting the serviceaccounts in $CP4WAIOPS_PROJECT"
    for SERVICEACCOUNT in ${CP4AIOPS_INTERNAL_SERVICEACCOUNTS[@]}; do
       log $INFO "Deleting serviceaccounts $SERVICEACCOUNT.."
       oc delete $SERVICEACCOUNT -n $CP4WAIOPS_PROJECT --ignore-not-found
    done
 
-   # Only delete shared ServiceAccounts if IA is not installed with AIOps
+   # Only delete shared ServiceAccounts if IA is not installed with Concert Operate
    if ! iaEnabled; then
       for SERVICEACCOUNT in ${CP4AIOPS_SHARED_SERVICEACCOUNTS[@]}; do
          log $INFO "Deleting serviceaccounts $SERVICEACCOUNT.."
@@ -222,9 +222,9 @@ if [[ ! -z "$CP4WAIOPS_PROJECT"  ]]; then
 
    # If user configured to delete crds, then delete the dependent CRDs.
    if [[ $DELETE_CRDS == "true" ]]; then
-      # Then delete the CP4AIOps CRDs
+      # Then delete the CP4Concert Operate CRDs
       checkForLeftOverCustomResources "${CP4AIOPS_CRDS[@]}" "CP4AIOPS"
-      log $INFO "Deleting the CP4AIOps Internal CRDs..."
+      log $INFO "Deleting the CP4Concert Operate Internal CRDs..."
       delete_crd_group "CP4AIOPS_CRDS"
 
       checkForLeftOverCustomResources "${CP4AIOPS_DEPENDENT_CRDS[@]}" "CP4AIOPS Dependent"   
@@ -252,7 +252,7 @@ if [[ ! -z "$CP4WAIOPS_PROJECT"  ]]; then
    fi
       
    # At this point we have cleaned up everything in the project
-   log "[SUCCESS]" "----Congratulations! IBM Cloud Pak for AIOps has been uninstalled!----"
+   log "[SUCCESS]" "----Congratulations! IBM Cloud Pak for Concert Operate has been uninstalled!----"
 else
    log $ERROR "CP4WAIOPS_PROJECT not set. Please specify project and try again."
    display_help

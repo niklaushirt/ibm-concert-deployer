@@ -240,7 +240,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Minor changes
 
 - Added Runbooks for Incident Creation
-- Added AIOps Dashboard Card for Incident Creation
+- Added Concert Operate Dashboard Card for Incident Creation
 - Overhaul of DemoUI
 
 ## [43.0.1] - 2023-12-06
@@ -399,7 +399,7 @@ Release for 3.6.0 GA
 
 ### Major changes
 
-- Added IBMAIOps Cards
+- Added IBMConcert Operate Cards
 - Added Turbonomic Demo Content
 
 ## [35.1.4] - 2022-11-15

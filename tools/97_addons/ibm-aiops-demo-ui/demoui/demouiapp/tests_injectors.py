@@ -1,5 +1,5 @@
 """
-Tests for IBM AIOps DemoUI refactored modules.
+Tests for IBM Concert Operate DemoUI refactored modules.
 
 Covers:
 - Phase 4: Injector refactoring (event, log, metric injectors)

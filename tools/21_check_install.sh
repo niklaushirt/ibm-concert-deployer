@@ -10,7 +10,7 @@
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 #---------------------------------------------------------------------------------------------------------------------------------------------------"
-#  IBMAIOPS  - Debug AIOPS Installation
+#  Concert Operate - Debug AIOPS Installation
 #
 #
 #  ©2026 nikh@ch.ibm.com
@@ -35,7 +35,7 @@ spec:
     backgroundColor: '#1122aa'
     color: '#fff'
     location: BannerTop
-    text: "🔎 FINALIZING: Checking IBM AIOps Installation"
+    text: "🔎 FINALIZING: Checking IBM Concert Operate Installation"
 EOF
 
 
@@ -144,7 +144,7 @@ function check_array(){
       echo "   🛠️  Get Namespaces"
 
         export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
-      echo "        IBM AIOps Namespace: $AIOPS_NAMESPACE"
+      echo "        IBM Concert Operate Namespace: $AIOPS_NAMESPACE"
 
 
       echo "   🛠️  Get Cluster Route"
@@ -182,7 +182,7 @@ function check_array(){
       echo ""
       echo ""
       echo "  ----------------------------------------------------------------------------------------------------------------------------------------------------------"
-      echo "   🚀  CHECK IBMAIOPS Basic Installation...." 
+      echo "   🚀  CHECK Concert Operate Basic Installation...." 
       echo "  ----------------------------------------------------------------------------------------------------------------------------------------------------------"
       echo ""
       echo "    🔎 Installed Openshift Operator Versions"
@@ -424,14 +424,14 @@ EOF
       echo ""
       echo ""
       echo "  ----------------------------------------------------------------------------------------------------------------------------------------------------------"
-      echo "  🚀 CHECK IBM AIOps Runbooks"
+      echo "  🚀 CHECK IBM Concert Operate Runbooks"
       echo "  ----------------------------------------------------------------------------------------------------------------------------------------------------------"
       echo ""
 
 
     CPD_ROUTE=$(oc get route cpd -n $AIOPS_NAMESPACE  -o jsonpath={.spec.host} || true) 
 
-    echo "      🔎 Check IBMAIOPS Runbooks"
+    echo "      🔎 Check Concert Operate Runbooks"
 
     export result=$(curl -X "GET" -s -k "https://$CPD_ROUTE/aiops/api/story-manager/rba/v1/runbooks" \
         -H "Authorization: bearer $ZEN_TOKEN" \
@@ -440,7 +440,7 @@ EOF
     if  ([[ $RB_COUNT -lt 7 ]]); 
       then 
             export CURRENT_ERROR=true
-            export CURRENT_ERROR_STRING="IBMAIOps Runbooks not ready"
+            export CURRENT_ERROR_STRING="Concert Operate Runbooks not ready"
             echo $result|jq -r '.[].name'| sed 's/^/          - /'
             handleError
       else  
@@ -459,7 +459,7 @@ EOF
       echo ""
       echo ""
       echo "  ----------------------------------------------------------------------------------------------------------------------------------------------------------"
-      echo "  🚀 CHECK IBM AIOps Policies"
+      echo "  🚀 CHECK IBM Concert Operate Policies"
       echo "  ----------------------------------------------------------------------------------------------------------------------------------------------------------"
       echo ""
 
@@ -561,7 +561,7 @@ spec:
         href: "https://$appURL"
         text: DemoUI
     location: BannerTop
-    text: "⚠️ IBMAIOPS is installed in this cluster. 🚀 Access the DemoUI with Password '$DEMO_PWD' here:"
+    text: "⚠️ Concert Operate is installed in this cluster. 🚀 Access the DemoUI with Password '$DEMO_PWD' here:"
 EOF
 
     else
@@ -587,7 +587,7 @@ spec:
         href: "https://$appURL"
         text: DemoUI
     location: BannerTop
-    text: "✅ IBMAIOPS is installed in this cluster. 🚀 Access the DemoUI with Password '$DEMO_PWD' here:"
+    text: "✅ Concert Operate is installed in this cluster. 🚀 Access the DemoUI with Password '$DEMO_PWD' here:"
 EOF
 
     fi

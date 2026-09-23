@@ -15,9 +15,9 @@ if [[  $AIOPS_NAMESPACE == "" ]]; then
     echo "   🔬 Getting Installation Namespace"
     echo "   ------------------------------------------------------------------------------------------------------------------------------"
     export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
-    echo "       ✅ IBMAIOps:         OK - $AIOPS_NAMESPACE"
+    echo "       ✅ Concert Operate :         OK - $AIOPS_NAMESPACE"
 else
-    echo "       ✅ IBMAIOps:         OK - $AIOPS_NAMESPACE"
+    echo "       ✅ Concert Operate :         OK - $AIOPS_NAMESPACE"
 fi
 
 

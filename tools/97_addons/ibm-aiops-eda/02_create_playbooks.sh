@@ -26,8 +26,8 @@ echo ""
 #     export result=$(curl -X "POST" -s "$AWX_URL/api/v2/execution_environments/" -u "admin:$AWX_PWD" --insecure \
 #     -H 'content-type: application/json' \
 #     -d $'{
-#       "name": "IBMAIOPS Execution Environment",
-#       "description": "IBMAIOPS Execution Environment",
+#       "name": "Concert Operate Execution Environment",
+#       "description": "Concert Operate Execution Environment",
 #       "organization": null,
 #       "image": "'$RUNNER_IMAGE'",
 #       "credential": null,
@@ -36,7 +36,7 @@ echo ""
 
 #     if [[ $result =~ " already exists" ]];
 #     then
-#         export EXENV_ID=$(curl -X "GET" -s "$AWX_URL/api/v2/execution_environments/" -u "admin:$AWX_PWD" --insecure|jq -c '.results[]| select( .name == "IBMAIOPS Execution Environment")|.id')
+#         export EXENV_ID=$(curl -X "GET" -s "$AWX_URL/api/v2/execution_environments/" -u "admin:$AWX_PWD" --insecure|jq -c '.results[]| select( .name == "Concert Operate Execution Environment")|.id')
 #     else
 #         export EXENV_ID=$(echo $result|jq ".id")
 #         sleep 60
@@ -93,7 +93,7 @@ echo ""
 
 #     if [[ $result =~ " already exists" ]];
 #     then
-#         export PROJECT_ID=$(curl -X "GET" -s "$AWX_URL/api/v2/projects/" -u "admin:$AWX_PWD" --insecure|jq -c '.results[]| select( .name == "IBMAIOPS Runbooks")|.id')
+#         export PROJECT_ID=$(curl -X "GET" -s "$AWX_URL/api/v2/projects/" -u "admin:$AWX_PWD" --insecure|jq -c '.results[]| select( .name == "Concert Operate Runbooks")|.id')
 #     else
 #         export PROJECT_ID=$(echo $result|jq ".id")
 #     fi
@@ -118,7 +118,7 @@ echo "🚀 AWX - Create AWX Inventory"
 
 if [[ $result =~ " already exists" ]];
 then
-    export INVENTORY_ID=$(curl -X "GET" -s "$AWX_URL/api/v2/inventories/" -u "admin:$AWX_PWD" --insecure|jq -c '.results[]| select( .name == "IBMAIOPS Runbooks")|.id')
+    export INVENTORY_ID=$(curl -X "GET" -s "$AWX_URL/api/v2/inventories/" -u "admin:$AWX_PWD" --insecure|jq -c '.results[]| select( .name == "Concert Operate Runbooks")|.id')
 else
     export INVENTORY_ID=$(echo $result|tr -d '\n'|jq ".id")
     sleep 15

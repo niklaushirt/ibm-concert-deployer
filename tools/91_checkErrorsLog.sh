@@ -58,7 +58,7 @@ spec:
         href: "https://$appURL"
         text: DemoUI
     location: BannerTop
-    text: "✅ IBMAIOPS is installed in this cluster. 🚀 Access the DemoUI with Password '$DEMO_PWD' here:"
+    text: "✅ Concert Operate is installed in this cluster. 🚀 Access the DemoUI with Password '$DEMO_PWD' here:"
 EOF
 
 echo ""

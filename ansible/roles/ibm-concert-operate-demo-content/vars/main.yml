@@ -6,7 +6,7 @@ create_topo_route: true
 
 # Create externally accessible Routes  (security risk!)
 # Flink
-# IBMAIOps API Route
+# Concert Operate API Route
 # Datalayer API ...
 create_external_routes: true
 

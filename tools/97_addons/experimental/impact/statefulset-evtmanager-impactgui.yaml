@@ -536,11 +536,11 @@ spec:
         release: evtmanager
       annotations:
         cloudpakId: f94bfc8150d34cb984dd6d355b2708d8
-        cloudpakName: IBM IBM AIOps
+        cloudpakName: IBM IBM Concert Operate
         cloudpakVersion: 3.5.0
         productID: 4dba2b5a269740caae5fecdafe0568aa
         productMetric: ''
-        productName: Event Manager - IBM IBM AIOps
+        productName: Event Manager - IBM IBM Concert Operate
         productVersion: 1.6.6
     spec:
       restartPolicy: Always

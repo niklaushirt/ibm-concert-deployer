@@ -34,7 +34,7 @@ print ('                                                /_/            ')
 print ('*************************************************************************************************')
 print ('*************************************************************************************************')
 print ('')
-print ('    🛰️  PAgerduty Incident Pusher for IBMAIOPS IBMAIOps')
+print ('    🛰️  Pagerduty Incident Pusher for Concert Operate IBMAIOps')
 print ('')
 print ('       Provided by:')
 print ('        🇨🇭 Niklaus Hirt (nikh@ch.ibm.com)')
@@ -67,10 +67,10 @@ except sqlite3.OperationalError as e:
 
 print ('')
 
-print('     ❓ Getting IBMAIOps Namespace')
+print('     ❓ Getting Concert Operate Namespace')
 stream = os.popen("oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}'")
 aimanagerns = stream.read().strip()
-print('        ✅ IBMAIOps Namespace:       '+aimanagerns)
+print('        ✅ Concert Operate Namespace:       '+aimanagerns)
 
 
 
@@ -120,7 +120,7 @@ print ('')
 print ('')
 
 print ('    ---------------------------------------------------------------------------------------------')
-print ('     🔎 IBMAIOps Connection Parameters')
+print ('     🔎 Concert Operate Connection Parameters')
 print ('    ---------------------------------------------------------------------------------------------')
 print ('           🌏 Datalayer Route:    '+DATALAYER_ROUTE)
 print ('           👩‍💻 Datalayer User:     '+DATALAYER_USER)

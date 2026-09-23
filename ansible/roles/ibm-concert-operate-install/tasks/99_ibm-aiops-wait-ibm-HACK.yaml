@@ -9,7 +9,7 @@
 
 - name: Log
   shell: |
-    export MESSAGE=" 🕦 Wait for IBM AIOps to become ready for HACK"
+    export MESSAGE=" 🕦 Wait for IBM Concert Operate to become ready for HACK"
     export currentDate=$(date +%Y-%m-%d_%H:%M)
     echo "---------------------------------------------------------------------------------------------------------------------------------------------------" >> ../install_{{current_feature.kind}}.log
     echo $currentDate" - "$MESSAGE  >> ../install_{{current_feature.kind}}.log
@@ -26,7 +26,7 @@
       backgroundColor: '#ff7700'
       color: '#000'
       location: {{global_config.position_ocp_notifications | default("BannerTop")}}
-      text: 'Installing {{current_feature.kind}} - 🕦 Wait for IBM AIOps to become ready for HACK - Started at $(date +%H:%M) UTC'    
+      text: 'Installing {{current_feature.kind}} - 🕦 Wait for IBM Concert Operate to become ready for HACK - Started at $(date +%H:%M) UTC'    
     EOF
   ignore_errors: true
   args:

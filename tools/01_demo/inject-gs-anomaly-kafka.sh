@@ -16,7 +16,7 @@ echo ""
 echo "***************************************************************************************************************************************************"
 echo "***************************************************************************************************************************************************"
 echo ""
-echo " 🚀  IBMAIOPS Inject Logs through Kafka"
+echo " 🚀  Concert Operate Inject Logs through Kafka"
 echo ""
 echo "***************************************************************************************************************************************************"
 echo "***************************************************************************************************************************************************"
@@ -51,7 +51,7 @@ echo "     📥 Get Kafka Topics"
 export KAFKA_TOPIC_LOGS=$(oc get kafkatopics -n $AIOPS_NAMESPACE | grep cp4waiops-cartridge-logs-elk| awk '{print $1;}')
 
 if [[ "${KAFKA_TOPIC_LOGS}" == "" ]]; then
-    echo "          ❗ Please define a Kafka connection in IBMAIOps of type $LOG_TYPE."
+    echo "          ❗ Please define a Kafka connection in Concert Operate of type $LOG_TYPE."
     echo "          ❗ Existing Log Topics are:"
     oc get kafkatopics -n $AIOPS_NAMESPACE | grep cp4waiops-cartridge-logs-| awk '{print $1;}'| sed 's/^/                /'
     echo ""

@@ -12,7 +12,7 @@
 
 - name: Log
   shell: |
-    export MESSAGE="Installing IBM AIOps Instance"
+    export MESSAGE="Installing IBM Concert Operate Instance"
     export currentDate=$(date +%Y-%m-%d_%H:%M)
     echo "---------------------------------------------------------------------------------------------------------------------------------------------------" >> ../install_{{current_feature.kind}}.log
     echo $currentDate" - "$MESSAGE  >> ../install_{{current_feature.kind}}.log
@@ -29,7 +29,7 @@
       backgroundColor: '#ffd500'
       color: '#000'
       location: {{global_config.position_ocp_notifications | default("BannerTop")}}
-      text: 'Installing {{current_feature.kind}} - Creating IBM AIOps Instance'    
+      text: 'Installing {{current_feature.kind}} - Creating IBM Concert Operate Instance'    
     EOF
   ignore_errors: true
   args:

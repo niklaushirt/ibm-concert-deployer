@@ -13,7 +13,7 @@
 # ---------------------------------------------------------------------------------------------------------------------------------------------------"
 #  Ansible Install Playbook V0.1
 #
-#  IBM AIOps
+#  IBM Concert Operate
 #
 #  ©2026 nikh@ch.ibm.com
 # ---------------------------------------------------------------------------------------------------------------------------------------------------"
@@ -69,10 +69,10 @@
 - name:   🚀 INITIALIZATION - Installation Parameters"
   debug:
     msg:
-    - "** IBM AIOps Parameters ***********************************************************************"
-    - " IBM AIOps Installation Name:      {{current_feature.concert_operate_name}}"
-    - " IBM AIOps Namespace:              {{ current_ibm_feature.project }}"
-    - " IBM AIOps Installation Size:      {{current_feature.concert_operate_size}}"
+    - "** IBM Concert Operate Parameters ***********************************************************************"
+    - " IBM Concert Operate Installation Name:      {{current_feature.concert_operate_name}}"
+    - " IBM Concert Operate Namespace:              {{ current_ibm_feature.project }}"
+    - " IBM Concert Operate Installation Size:      {{current_feature.concert_operate_size}}"
     - ""
     verbosity: 1
 

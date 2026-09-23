@@ -9,9 +9,9 @@
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 #---------------------------------------------------------------------------------------------------------------------------------------------------"
-#  Installing IBM Concert Operate
+#  Installing IBM IT Automation Solutoions
 #
-#  CloudPak for Concert Operate
+#  IBM Turbonomic
 #
 #  ©2026 nikh@ch.ibm.com
 # ---------------------------------------------------------------------------------------------------------------------------------------------------"
@@ -20,15 +20,16 @@
 # ---------------------------------------------------------------------------------------------------------------------------------------------------"
 # Get a Cluster from TechZone: https://techzone.ibm.com/collection/tech-zone-certified-base-images/journey-base-open-shift
 #   Type:               OpenShift Cluster (OCP-V) - IBM Cloud
-#   Worker node count:  5
+#   Worker node count:  4
 #   Flavour:            32 vCPU x 128 GB ❗ 
 #   OpenShift Version:  4.18
-#   ODF:                5TB
+#   Storage:            300GB ephemeral storage
 # ---------------------------------------------------------------------------------------------------------------------------------------------------"
 # ---------------------------------------------------------------------------------------------------------------------------------------------------"
 # Installs:
 #
-#     - Create Policies
+#  - IBM Turbonomic
+#  - IBM Turbonomic Demo Content
 # ---------------------------------------------------------------------------------------------------------------------------------------------------"
 # ---------------------------------------------------------------------------------------------------------------------------------------------------"
 ---
@@ -40,13 +41,12 @@ metadata:
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  name: ibm-aiops-install-configuration-missing-policies
+  name: ibm-install-configuration-turbo
   namespace: ibm-installer
 immutable: false
 data:
-  # Get your key from here https://myibm.ibm.com/products-services/containerlibrary
-  ENTITLED_REGISTRY_KEY: >-
-    <REGISTRY_TOKEN>
+  concert_optimise_license: >-
+    <NONE>
   INSTALLATION_CONFIG.yaml: >+
     #*************************************************************************************************************************************************
     #--------------------------------------------------------------------------------------------------------------------------------------
@@ -58,11 +58,14 @@ data:
       # --------------------------------------------------------------------------------------------------------------------------------------
       # Passwords and Licenses
       # --------------------------------------------------------------------------------------------------------------------------------------
-      # Use this Password for all Instances
-      global_password: notneeded
+      # Use this Password for all Instances - do NOT use the "-" character
+      global_password: CHANGEME
 
 
-      # Available Names: Test, Demo, AIOPS, CP4AIOPS, Arya,Bear,Cersei,Cersei1,Daenerys,Groot,Hodor,Hofstadter,Howard,Jimmy,John,King,Lemmy,Nightking,Penny,Raj,Robot1,Robot2,Robot3,Robot4,Robot5,Sansa,Sheldon,Sherlock,Slash,Tormund,Tyrion,Walker,Watson
+      # Available Names: Adam, Aajla, AIOPS, Alicent, Amy, Anakin, Angus, Arya, Austin, Barney, Bart, Batman, Bear, Bob, Bono, Bran, Brienne, Cara, Cassian, Cersei, Cersei1, Chewbacca, CP4AIOPS, Curt, Daenerys, Daffy, Darth, Demo, Dexter, 
+      # Dilbert, Edge, Finn, Fred, Freddie, Grogu, Groot, Hagrid, Han, Harley, Harry, Hodor, Hofstadter, Howard, Hulk, James, Jimmy, John, Joker, Jyn, King, Kirk, Kurt, Lando, Leia, Larry, Lemmy, Liam, Luke, Nightking, 
+      # Obiwan, Padme, Paul, Penny, Picard, Prince, Raj, Rey, Robin, Robot1, Robot2, Robot3, Robot4, Robot5, Ron, Sabine, Sansa, Sheldon, Sherlock, Slash, Spiderman, Spock, Strange, Superman, 
+      # Tormund, Tyrion, Walker, Watson, Wedge
       environment_name: Bear
       cloud_platform: existing-ocp
       # Set this value to True to accept all licenses
@@ -77,6 +80,7 @@ data:
       entitled_registry: cp.icr.io
       entitled_registry_user: cp
       catalog_image: icr.io/cpopen/ibm-aiops-catalog:latest
+      current_supported_operate_version: v4.10
 
       # --------------------------------------------------------------------------------------------------------------------------------------
       # Notifications and Cards
@@ -120,148 +124,72 @@ data:
 
     #*************************************************************************************************************************************************
     #--------------------------------------------------------------------------------------------------------------------------------------
-    # IBM AIOPS Configuration
+    # IBM IT AUTOMATION - INSTALLATION Configuration
     #--------------------------------------------------------------------------------------------------------------------------------------
     #*************************************************************************************************************************************************
+   
+    ibmitautomation:
 
-    ibmaiops:
-
-
-    #--------------------------------------------------------------------------------------------------------------------------------------
-
-    # CloudPak for Concert Operate Base Install
-
-    #--------------------------------------------------------------------------------------------------------------------------------------
-
-    - project: ibm-aiops
+    # --------------------------------------------------------------------------------------------------------------------------------------
+    # IBM TURBONOMIC
+    # --------------------------------------------------------------------------------------------------------------------------------------
+    
+    - project: ibm-turbonomic
       instances:
-    #--------------------------------------------------------------------------------------------------------------------------------------
-    # CloudPak for Concert Operate Demo Content Install
-    #--------------------------------------------------------------------------------------------------------------------------------------
-      - name: ibm-aiops-demo-content
-        kind: IBMAIOpsDemoContent
+
+      - name: ibm-turbonomic
+        kind: IBMTurbonomic
         install: true
+        concert_optimise_version: 8.20.2
+
+        # --------------------------------------------------------------------------------------------------------------------------------------
+        # Storage Classes Override for this Instance (see comment below)
+        # --------------------------------------------------------------------------------------------------------------------------------------
+        #storage_class_file: automatic
+        #storage_class_block: automatic
 
 
-         # ---------------------------------------------------------------------
-        # TRAINING
-        # Train the Models based on pre-canned content
-
-        training_load_data_events: false
-        training_create_training_temporal: false
-        training_run_training_temporal: false
-
-        # Enable Log Anomaly Golden Signals (Disables LAD-NLP Training - ❗ HIGHLY EXPERIMENTAL)
-        training_enable_log_golden_signals: false
-
-        # LAD-NLP Training (disabled if training_enable_log_golden_signals is false)
-
-
-        training_load_data_snow: false
-        training_create_training_snow: false
-        training_run_training_snow: false
-
-        training_load_data_metrics: false
-        training_create_training_metrics: false
-        training_run_training_metrics: false
-
-        # Create feature flag Training (Seasonality and XinY)
-        training_create_season_xiny: false
-
-        training_data_url: https://github.com/niklaushirt/
-        training_data_repo: ibm-aiops-trainingdata
-
+      - name: ibm-turbonomic-demo-content
+        kind: IBMTurbonomicDemoContent
+        install: true
+        # Admin User Password (OVERRIDES GLOBAL PASSWORD)
+        #concert_optimise_admin_password: CHANGEME
+        # ---------------------------------------------------------------------
+        # Create Demo User
+        create_user: true
+        # Demo User Name
+        demo_user: demo
+        # Demo User Password (OVERRIDES GLOBAL PASSWORD)
+        #concert_optimise_demo_password: CHANGEME
+        # ---------------------------------------------------------------------
+        # Create Groups
+        group_vcenter_vms: true
+        group_robotshop: true
+        group_licensing: true
 
         # ---------------------------------------------------------------------
-        # TOPOLOGY
-        # Install DemoApps Application
-        install_demoapps: false
-        # RobotShop interface color (Classic RobotShop: classic/white - AI enabled RobotShop: darkgreen/darkblue/lightblue)
-        robotshop_color: darkgreen
-        # Install DemoApps K8s Observer
-        install_demoapps_observer: false
-        # Create Topology
-        create_topology_templates: false
-        create_topology_apps: false
-        # Create Custom overlay topology
-        install_custom_topology: false
-
+        # Create Demo Apps
+        install_demoapps: true
 
         # ---------------------------------------------------------------------
-        # RUNBOOKS
-        # Install AWX and create Runbooks
-        install_awx: false
-        load_awx_playbooks: false
-        integrate_awx: false
-        load_runbooks: false
-        create_runbook_policy: false
-
+        # Create a custom app to show links to all installed IT Automation Products
+        create_home_ui: false
 
         # ---------------------------------------------------------------------
-        # Demo UI
-        install_demo_ui: false
-        demoui_slack_url: https://aiopsdemohq.slack.com/sign_in_with_password
-        # demoui_slack_url: https://aiops-fry2953.slack.com/x-p1624757694871-3716524482480-3705437209041/messages/C01JZLFJFMJ
-        demoui_slack_user: ibm-aiopsdemo@gmail.com
-        demoui_slack_pwd: CHANGEME
-        demoui_admin_mode: "false"
-        demoui_simulation_mode: "false"
-
-        # Create incident links to static Slack and Snow pages
-        demoui_create_slack_snow: false
-        
-        demoui_user: demo
-        # Password for the Demo UI (OVERRIDES GLOBAL PASSWORD)
-        #demoui_pwd: CHANGEME
-
-
+        # Create Targets
+        target_instana: true
         # ---------------------------------------------------------------------
-        # LDAP
-        install_ldap: false
-        # ldap domain
-        ldap_domain: ibm.com
-        # ldap base
-        ldap_base: dc=ibm,dc=com
-        # LDAP Admin Password (OVERRIDES GLOBAL PASSWORD)
-        #ldap_admin_password: CHANGEME
-        # LDAP Password for all Users (OVERRIDES GLOBAL PASSWORD)
-        #ldap_user_password: CHANGEME
-        # ldap namespace
-        ldap_namespace: openldap
-        # Integrate Concert Operate Login with OpenLDAP 
-        ldap_register: false
-        # Integrate OpenShift Login with OpenLDAP
-        integrate_ocp_openldap: false
-
+        # Create Memory and CPU hogs
+        resource_hogs: false
         # ---------------------------------------------------------------------
-        # MISC PARAMETERS (you should not modify those)
-        # Create external routes (needed to create demo content)
-        create_external_routes: false
-
+        # Create Metrics server, DIF integration and RobotShop BuisnessApp
+        metrics_dif: true
+        # ---------------------------------------------------------------------
+        # Turbo License (optional, must be base64 encoded)
+        concert_optimise_license: NONE
+        # ---------------------------------------------------------------------
         # Create a valid ingress certificate when on ITZ
         create_valid_ingress_itz: false
-
-        # Create Policy for Story Creation
-        create_incident_policy: true
-
-        # Create Kafka connection for Log inception (needed to create log anomalies in the demo environment)
-        create_log_connection: false
-
-        # Create Service Account
-        create_account: false
-
-
-
-
-    - project: ibm-aiops-addons
-      instances:
-      # --------------------------------------------------------------------------------------------------------------------------------------
-      # CP4WAIOPS ELK
-      # --------------------------------------------------------------------------------------------------------------------------------------
-
-      - name: ibm-aiops-elk
-        kind: ELK
-        install: false
 
 
 
@@ -324,12 +252,12 @@ subjects:
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: ibm-aiops-aiops-create-missing-policies
+  name: ibm-install-turbo
   namespace: ibm-installer
   labels:
    job-type: data-load-job
 spec:
-  serviceAccount: ibm-installer-admin
+
   template:
     metadata:
       labels:
@@ -397,16 +325,17 @@ spec:
               echo "------------------------------------------------------------------------------------------------------------------------------"
               echo ""
 
-              echo "------------------------------------------------------------------------------------------------------------------------------"
-              echo " 🚀 Prepare Ansible"
-              pip -q install openshift pyyaml kubernetes
-              echo ""
-              echo ""
+              # echo "------------------------------------------------------------------------------------------------------------------------------"
+              # echo " 🚀 Prepare Ansible"
+              #pip -q install openshift pyyaml kubernetes
+              #apt update && apt install -fy python3-kubernetes python3-openshift
+              # echo ""
+              # echo ""
 
               echo "------------------------------------------------------------------------------------------------------------------------------"
               echo " 🚀 Launching Ansible Playbook"
               export ANSIBLE_LOG_PATH=/tmp/ansible.log
-              ansible-playbook ./ansible/ibm-itautomation-products-install.yaml -e "config_file_path=/tmp/config-file/INSTALLATION_CONFIG.yaml" -e cp_entitlement_key=$ENTITLED_REGISTRY_KEY
+              ansible-playbook ./ansible/ibm-itautomation-products-install.yaml -e "config_file_path=/tmp/config-file/INSTALLATION_CONFIG.yaml" -e cp_entitlement_key=NOTNEEDED
               echo ""
               echo ""
 
@@ -430,30 +359,30 @@ spec:
           - name: INSTALL_REPO
             valueFrom:
               configMapKeyRef:
-                name: ibm-aiops-install-configuration-missing-policies
+                name: ibm-install-configuration-turbo
                 key: INSTALL_REPO
           - name: concert_optimise_license
             valueFrom:
               configMapKeyRef:
-                name: ibm-aiops-install-configuration-missing-policies
+                name: ibm-install-configuration-turbo
                 key: concert_optimise_license
                 optional: true
           - name: INSTANA_SALES_KEY
             valueFrom:
               configMapKeyRef:
-                name: ibm-aiops-install-configuration-missing-policies
+                name: ibm-install-configuration-turbo
                 key: INSTANA_SALES_KEY
                 optional: true
           - name: INSTANA_AGENT_KEY
             valueFrom:
               configMapKeyRef:
-                name: ibm-aiops-install-configuration-missing-policies
+                name: ibm-install-configuration-turbo
                 key: INSTANA_AGENT_KEY
                 optional: true
           - name: ENTITLED_REGISTRY_KEY
             valueFrom:
               configMapKeyRef:
-                name: ibm-aiops-install-configuration-missing-policies
+                name: ibm-install-configuration-turbo
                 key: ENTITLED_REGISTRY_KEY
                 optional: true
           volumeMounts:
@@ -462,10 +391,11 @@ spec:
       volumes:
         - name: config-file
           configMap:
-            name: ibm-aiops-install-configuration-missing-policies
+            name: ibm-install-configuration-turbo
             items:
             - key: INSTALLATION_CONFIG.yaml
               path: INSTALLATION_CONFIG.yaml
       restartPolicy: Never
   backoffLimit: 500
+
 

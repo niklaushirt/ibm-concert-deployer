@@ -17,7 +17,7 @@
 
 - name: Log
   shell: |
-    export MESSAGE="Integrate IBM AIOps with LDAP"
+    export MESSAGE="Integrate IBM Concert Operate with LDAP"
     export currentDate=$(date +%Y-%m-%d_%H:%M)
     echo "---------------------------------------------------------------------------------------------------------------------------------------------------" >> ../install_{{current_feature.kind}}.log
     echo $currentDate" - "$MESSAGE  >> ../install_{{current_feature.kind}}.log
@@ -34,7 +34,7 @@
       backgroundColor: '#ffd500'
       color: '#000'
       location: {{global_config.position_ocp_notifications | default("BannerTop")}}
-      text: 'Installing {{current_feature.kind}} - Integrate IBM AIOps with LDAP'    
+      text: 'Installing {{current_feature.kind}} - Integrate IBM Concert Operate with LDAP'    
     EOF
   ignore_errors: true
   args:
@@ -210,7 +210,7 @@
 
 
 
-- name: 🚀 LDAPREGISTER - CREATE IBM AIOps Groups and Users
+- name: 🚀 LDAPREGISTER - CREATE IBM Concert Operate Groups and Users
   shell: |
     set -x
     

@@ -56,7 +56,7 @@ print ('                                              /_/')
 print ('*************************************************************************************************')
 print ('*************************************************************************************************')
 print ('')
-print ('    🛰️  Generic Incident Simulator for IBMAIOPS IBMAIOps')
+print ('    🛰️  Generic Incident Simulator for Concert Operate IBMAIOps')
 print ('')
 print ('       Provided by:')
 print ('        🇨🇭 Niklaus Hirt (nikh@ch.ibm.com)')
@@ -73,10 +73,10 @@ loginip='0.0.0.0'
 # ----------------------------------------------------------------------------------------------------------------------------------------------------
 # GET NAMESPACES
 # ----------------------------------------------------------------------------------------------------------------------------------------------------
-print('     ❓ Getting IBMAIOps Namespace')
+print('     ❓ Getting Concert Operate Namespace')
 stream = os.popen("oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}'")
 aimanagerns = stream.read().strip()
-print('        ✅ IBMAIOps Namespace:       '+aimanagerns)
+print('        ✅ Concert Operate Namespace:       '+aimanagerns)
 
 
 
@@ -153,7 +153,7 @@ print ('')
 print ('')
 
 print ('    ---------------------------------------------------------------------------------------------')
-print ('     🔎 IBMAIOps Connection Parameters')
+print ('     🔎 Concert Operate Connection Parameters')
 print ('    ---------------------------------------------------------------------------------------------')
 print ('           🌏 Datalayer Route:    '+DATALAYER_ROUTE)
 print ('           👩‍💻 Datalayer User:     '+DATALAYER_USER)
