@@ -101,9 +101,9 @@ Basically:
 
 ### 🐥 Quick Install
 
-- 🚀 [Quick Install - Concert Operate](#21--install-ibm-aiops-with-demo-content)
+- 🚀 [Quick Install - Concert platform](#21--install-ibm-concert-platform)
+- 🚀 [Quick Install - Concert Operate](#22--install-ibm-concert-operate-with-demo-content)
 - 🧨 [Troubleshooting](#4-troubleshooting)
-- 🚀 Already have a cluster? [Dive right in](#21--install-ibm-aiops-with-demo-content)
 
 ### 🐥 IBM Concert Operate specific
 
@@ -218,7 +218,7 @@ If you think that you hit a problem:
 
 > ## ❗❗❗❗ If anything goes wrong, please restart/delete the installer pod ❗❗❗❗ and/or refer to [Troubleshooting](#4-troubleshooting)
 
-## 2.1 🐣 Install IBM Concert platform (❗EXPERIMENTAL)
+## 2.1 🐣 Install IBM Concert platform
 
 #### 🚀 Get IBM Concert platform installed in one simple script.
 
@@ -310,6 +310,13 @@ kubectl rollout restart -n $CONCERT_NAMESPACE deployment/roja-py-utils
 - When the Installation has succeeded, you get the top green Notification bar
 
   You can directly open IBM Turbonomic by clicking on the link
+
+</details>
+
+<details>
+<summary>🚀 2.1.5 Post-Installation - Preparing Demo Data</summary>
+
+You can follow [this guide](./doc/concert/IBM-Concert-Post-Installation-Tasks.md) to get usable demo data into your Concert platform.
 
 </details>
 
