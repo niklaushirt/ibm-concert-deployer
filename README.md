@@ -81,7 +81,7 @@ Basically:
 <div style="page-break-after: always;"></div>
 
 <details>
-<summary>✅ 1.1 Prerequisites</summary>
+<summary># ✅ 1.1 Prerequisites</summary>
 
 ### 1.1.1 Get an OpenShift Cluster (IBMers and IBM Partners only)
 
