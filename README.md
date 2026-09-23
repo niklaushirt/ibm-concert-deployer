@@ -174,6 +174,7 @@ If you think that you hit a problem:
 #### 🚀 Get IBM Concert platform installed in one simple script.
 
 ❗In order to install Concert platform you need a valid Turbonomic key ❗
+
 ❗If you don't provide one (it will still install) you will miss some features❗
 
 If you have any questions please read up here first https://www.ibm.com/docs/en/concert-platform?topic=platform-overview
@@ -326,7 +327,7 @@ This installation contains:
 1. Copy and paste the content from [this file](./Quick_Install/02_INSTALL_IBM_CONCERT_OPERATE.yaml)
 1. Replace `<REGISTRY_TOKEN>` at the top of the file with your entitlement key from step 1.1.2 (line 69 - the Entitlement key from https://myibm.ibm.com)
 1. Replace the default Password `global_password: CHANGEME` with a Password of your choice (line 82, ❗ do NOT use the "-" character and do NOT leave empty ❗)
-1. Accept the license by setting `accept_all_licenses` to `True` (line 92)
+1. Accept the license by setting `accept_all_licenses` to `True` (line 100)
 1. Optionally you can change the name of your Demo Environment `environment_name` to one of the provided characters (line 89)
 1. Click `Create`
 
