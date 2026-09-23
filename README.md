@@ -78,10 +78,12 @@ Basically:
 
 ---
 
+You need to get your cluster first:
+
 <div style="page-break-after: always;"></div>
 
 <details>
-<summary># ✅ 1.1 Prerequisites</summary>
+<summary>✅✅ Prerequisites</summary>
 
 ### 1.1.1 Get an OpenShift Cluster (IBMers and IBM Partners only)
 
@@ -140,9 +142,7 @@ You can get the credentials from [https://bob.ibm.com/admin/apikeys](https://bob
 
 </details>
 <details>
-<summary>⚠️⚠️ 1.2 Important remarks before you start ⚠️⚠️</summary>
-
-## ⚠️⚠️ 1.2 Important remarks before you start ⚠️⚠️
+<summary>⚠️⚠️ 1.2 Important remarks before you start</summary>
 
 Those are remarks to feedback and problem reports I got from the field.
 
