@@ -10,7 +10,7 @@
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 #---------------------------------------------------------------------------------------------------------------------------------------------------"
-#  IBMAIOPS  - Debug AIOPS Installation
+#  Concert Operate - Debug AIOPS Installation
 #
 #
 #  ©2026 nikh@ch.ibm.com
@@ -39,7 +39,7 @@ spec:
     backgroundColor: '#1122aa'
     color: '#fff'
     location: BannerTop
-    text: "🔎 FINALIZING: Checking IBM AIOps Installation"
+    text: "🔎 FINALIZING: Checking IBM Concert Operate Installation"
 EOF
 
 
@@ -164,7 +164,7 @@ function check_array(){
       echo ""
       echo "   🛠️  Get Namespaces"
       export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
-      echo "          IBM AIOps Namespace: $AIOPS_NAMESPACE"
+      echo "          IBM Concert Operate Namespace: $AIOPS_NAMESPACE"
 
 
       echo "   🌐  Get Cluster Route"
@@ -207,7 +207,7 @@ function check_array(){
       echo ""
       echo ""
       echo "  ----------------------------------------------------------------------------------------------------------------------------------------------------------"
-      echo "   🚀  CHECK IBMAIOPS Operators" 
+      echo "   🚀  CHECK Concert Operate Operators" 
       echo "  ----------------------------------------------------------------------------------------------------------------------------------------------------------"
       echo ""
       echo "    🔎 Installed Openshift Operator Versions"
@@ -218,7 +218,7 @@ function check_array(){
       export PODS_COUNT=$(oc get pods -n $AIOPS_NAMESPACE | grep -v "Completed"| grep "Running" | grep -c "")
       if  ([[ $PODS_COUNT -lt 125 ]]); 
       then 
-            echo "       ❗ FATAL: CP4AIOPS could not be installed - only $PODS_COUNT Pods running (should be around 130)"; 
+            echo "       ❗ FATAL: OPERATE could not be installed - only $PODS_COUNT Pods running (should be around 130)"; 
 
 #oc delete ConsoleNotification --all>/dev/null 2>/dev/null
 cat <<EOF | oc apply -f -
@@ -230,7 +230,7 @@ spec:
     backgroundColor: '#ff0000'
     color: '#fff'
     location: BannerTop
-    text: " 💣 FATAL: CP4AIOPS could not be installed - only $PODS_COUNT Pods running (should be around 130)"
+    text: " 💣 FATAL: OPERATE could not be installed - only $PODS_COUNT Pods running (should be around 130)"
 EOF
 cat <<EOF | oc apply -f -
 apiVersion: console.openshift.io/v1
@@ -255,7 +255,7 @@ EOF
       echo ""
       echo ""
       echo "  ----------------------------------------------------------------------------------------------------------------------------------------------------------"
-      echo "   🚀  CHECK IBMAIOPS Demo Namespaces" 
+      echo "   🚀  CHECK IBMDemo Namespaces" 
       echo "  ----------------------------------------------------------------------------------------------------------------------------------------------------------"
       echo ""
 
@@ -293,7 +293,7 @@ EOF
       export CURRENT_NAMESPACE=awx
       checkNamespace
 
-      export CURRENT_NAMESPACE=ibm-concert-demo-ui
+      export CURRENT_NAMESPACE=ibm-demo-ui
       checkNamespace
 
       export CURRENT_NAMESPACE=sock-shop
@@ -465,7 +465,7 @@ EOF
       if  ([[ $result == "1" ]]); 
             then 
                   export CURRENT_WARNING_STATE=true
-                  export CURRENT_WARNING_STRING="LAGS training incomplete - Log into CP4AIOPS and re-run the Metrics Training"
+                  export CURRENT_WARNING_STRING="LAGS training incomplete - Log into OPERATE and re-run the Metrics Training"
                   handleWarning
 
                   export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
@@ -494,7 +494,7 @@ EOF
 
                   echo "      ***************************************************************************************************************************************************"
                   echo "      🛠️   RESTART - LOG INJECTION POD"
-                  oc delete pod -n $AIOPS_NAMESPACE-demo-ui --ignore-not-found $(oc get po -n $AIOPS_NAMESPACE-demo-ui|grep ibm-aiops-stream-lags-normal|awk '{print$1}')
+                  oc delete pod -n ibm-demo-ui --ignore-not-found $(oc get po -n ibm-demo-ui|grep ibm-aiops-stream-lags-normal|awk '{print$1}')
 
 
 
@@ -525,7 +525,7 @@ EOF
       if  ([[ $existingIndexes == "0" ]]); 
             then 
                   export CURRENT_WARNING_STATE=true
-                  export CURRENT_WARNING_STRING="LAGS training incomplete - Log into CP4AIOPS and re-run the Metrics Training"
+                  export CURRENT_WARNING_STRING="LAGS training incomplete - Log into OPERATE and re-run the Metrics Training"
                   handleWarning
             else  
                   echo "          ✅ OK: LAGS Golden Signals Index exists in ElasticSearch"; 
@@ -600,14 +600,14 @@ EOF
       echo ""
       echo ""
       echo "  ----------------------------------------------------------------------------------------------------------------------------------------------------------"
-      echo "  🚀 CHECK IBM AIOps Runbooks"
+      echo "  🚀 CHECK IBM Concert Operate Runbooks"
       echo "  ----------------------------------------------------------------------------------------------------------------------------------------------------------"
       echo ""
 
 
     CPD_ROUTE=$(oc get route cpd -n $AIOPS_NAMESPACE  -o jsonpath={.spec.host} || true) 
 
-    echo "      🔎 Check IBMAIOPS Runbooks"
+    echo "      🔎 Check Concert Operate Runbooks"
 
     export result=$(curl -X "GET" -s -k "https://$CPD_ROUTE/aiops/api/story-manager/rba/v1/runbooks" \
         -H "Authorization: bearer $ZEN_TOKEN" \
@@ -616,7 +616,7 @@ EOF
     if  ([[ $RB_COUNT -lt 7 ]]); 
       then 
             export CURRENT_ERROR=true
-            export CURRENT_ERROR_STRING="IBMAIOps Runbooks not ready"
+            export CURRENT_ERROR_STRING="Concert Operate Runbooks not ready"
             echo $result|jq -r '.[].name'| sed 's/^/          - /'
             handleError
       else  
@@ -635,7 +635,7 @@ EOF
       echo ""
       echo ""
       echo "  ----------------------------------------------------------------------------------------------------------------------------------------------------------"
-      echo "  🚀 CHECK IBM AIOps Policies"
+      echo "  🚀 CHECK IBM Concert Operate Policies"
       echo "  ----------------------------------------------------------------------------------------------------------------------------------------------------------"
       echo ""
 
@@ -723,8 +723,8 @@ spec:
         text: Open Logs
 EOF
 export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
-export appURL=$(oc get routes -n $AIOPS_NAMESPACE-demo-ui ibm-concert-demo-ui  -o jsonpath="{['spec']['host']}")|| true
-export DEMO_PWD=$(oc get cm -n $AIOPS_NAMESPACE-demo-ui ibm-concert-demo-ui-config -o jsonpath='{.data.TOKEN}')
+export appURL=$(oc get routes -n ibm-demo-ui ibm-demo-ui  -o jsonpath="{['spec']['host']}")|| true
+export DEMO_PWD=$(oc get cm -n ibm-demo-ui ibm-demo-ui-config -o jsonpath='{.data.TOKEN}')
 cat <<EOF | oc apply -f -
 apiVersion: console.openshift.io/v1
 kind: ConsoleNotification
@@ -737,7 +737,7 @@ spec:
         href: "https://$appURL"
         text: DemoUI
     location: BannerTop
-    text: "⚠️ IBMAIOPS is installed in this cluster. 🚀 Access the DemoUI with Password '$DEMO_PWD' here:"
+    text: "⚠️ Concert Operate is installed in this cluster. 🚀 Access the DemoUI with Password '$DEMO_PWD' here:"
 EOF
 
     elif  ([[ $WARNING_STATE == true ]]); 
@@ -764,8 +764,8 @@ EOF
         echo ""
 
 export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
-export appURL=$(oc get routes -n $AIOPS_NAMESPACE-demo-ui ibm-concert-demo-ui  -o jsonpath="{['spec']['host']}")|| true
-export DEMO_PWD=$(oc get cm -n $AIOPS_NAMESPACE-demo-ui ibm-concert-demo-ui-config -o jsonpath='{.data.TOKEN}')
+export appURL=$(oc get routes -n ibm-demo-ui ibm-demo-ui  -o jsonpath="{['spec']['host']}")|| true
+export DEMO_PWD=$(oc get cm -n ibm-demo-ui ibm-demo-ui-config -o jsonpath='{.data.TOKEN}')
 #oc delete ConsoleNotification --all>/dev/null 2>/dev/null
 cat <<EOF | oc apply -f -
 apiVersion: console.openshift.io/v1
@@ -779,7 +779,7 @@ spec:
         href: "https://$appURL"
         text: DemoUI
     location: BannerTop
-    text: "✅ IBMAIOPS is installed in this cluster. 🚀 Access the DemoUI with Password '$DEMO_PWD' here:"
+    text: "✅ Concert Operate is installed in this cluster. 🚀 Access the DemoUI with Password '$DEMO_PWD' here:"
 EOF
 
 
@@ -796,8 +796,8 @@ EOF
         echo "***************************************************************************************************************************************************"
 
 export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
-export appURL=$(oc get routes -n $AIOPS_NAMESPACE-demo-ui ibm-concert-demo-ui  -o jsonpath="{['spec']['host']}")|| true
-export DEMO_PWD=$(oc get cm -n $AIOPS_NAMESPACE-demo-ui ibm-concert-demo-ui-config -o jsonpath='{.data.TOKEN}')
+export appURL=$(oc get routes -n ibm-demo-ui ibm-demo-ui  -o jsonpath="{['spec']['host']}")|| true
+export DEMO_PWD=$(oc get cm -n ibm-demo-ui ibm-demo-ui-config -o jsonpath='{.data.TOKEN}')
 #oc delete ConsoleNotification --all>/dev/null 2>/dev/null
 cat <<EOF | oc apply -f -
 apiVersion: console.openshift.io/v1
@@ -811,7 +811,7 @@ spec:
         href: "https://$appURL"
         text: DemoUI
     location: BannerTop
-    text: "✅ IBMAIOPS is installed in this cluster. 🚀 Access the DemoUI with Password '$DEMO_PWD' here:"
+    text: "✅ Concert Operate is installed in this cluster. 🚀 Access the DemoUI with Password '$DEMO_PWD' here:"
 EOF
 
     fi

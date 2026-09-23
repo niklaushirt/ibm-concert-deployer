@@ -42,7 +42,7 @@ metadata:
   name: aiops-easy-install-aimanager-practicum
   namespace: ibm-installer
   labels:
-   aiops-type: data-load-job
+   job-type: data-load-job
 spec:
   serviceAccount: ibm-installer-admin
   template:
@@ -66,7 +66,7 @@ spec:
               #set -x
 
               echo "*****************************************************************************************************************************"
-              echo " ✅ STARTING: INSTALL IBMAIOps with Demo Content"
+              echo " ✅ STARTING: INSTALL Concert Operate with Demo Content"
               echo "*****************************************************************************************************************************"
               echo ""
               echo ""

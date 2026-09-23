@@ -1,5 +1,5 @@
 """
-Logging configuration for IBM AIOps DemoUI.
+Logging configuration for IBM Concert Operate DemoUI.
 
 Centralized logging setup that replaces scattered print() statements.
 """

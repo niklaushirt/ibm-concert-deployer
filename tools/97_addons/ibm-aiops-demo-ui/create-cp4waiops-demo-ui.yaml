@@ -2,29 +2,29 @@
 apiVersion: v1                     
 kind: Namespace
 metadata:
-  name: ibm-concert-demo-ui
+  name: ibm-demo-ui
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ibm-concert-demo-ui
-  namespace: ibm-concert-demo-ui
+  name: ibm-demo-ui
+  namespace: ibm-demo-ui
   labels:
-      app: ibm-concert-demo-ui
+      app: ibm-demo-ui
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: ibm-concert-demo-ui
+      app: ibm-demo-ui
   template:
     metadata:
       labels:
-        app: ibm-concert-demo-ui
+        app: ibm-demo-ui
     spec:
       containers:
-      - image: quay.io/niklaushirt/ibm-concert-demo-ui:5.1.2
+      - image: quay.io/niklaushirt/ibm-demo-ui:5.2.0
         imagePullPolicy: Always
-        name: ibm-concert-demo-ui
+        name: ibm-demo-ui
         command:
         ports:
         - containerPort: 8080
@@ -47,23 +47,23 @@ spec:
             timeoutSeconds: 3
         envFrom:
         - configMapRef:
-            name:  ibm-concert-demo-ui-config
+            name:  ibm-demo-ui-config
         - configMapRef:
-            name:  ibm-concert-demo-ui-config-events
+            name:  ibm-demo-ui-config-events
         - configMapRef:
-            name:  ibm-concert-demo-ui-config-logs
+            name:  ibm-demo-ui-config-logs
         - configMapRef:
-            name:  ibm-concert-demo-ui-config-metrics
-      serviceAccount: ibm-concert-demo-ui-admin
+            name:  ibm-demo-ui-config-metrics
+      serviceAccount: ibm-demo-ui-admin
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: ibm-concert-demo-ui-service
-  namespace: ibm-concert-demo-ui
+  name: ibm-demo-ui-service
+  namespace: ibm-demo-ui
 spec:
   selector:
-    app: ibm-concert-demo-ui
+    app: ibm-demo-ui
   ports:
     - protocol: TCP
       port: 8000
@@ -72,12 +72,12 @@ spec:
 kind: Route
 apiVersion: route.openshift.io/v1
 metadata:
-  name:  ibm-concert-demo-ui
-  namespace: ibm-concert-demo-ui
+  name:  ibm-demo-ui
+  namespace: ibm-demo-ui
 spec:
   to:
     kind: Service
-    name: ibm-concert-demo-ui-service
+    name: ibm-demo-ui-service
     weight: 100
   port:
     targetPort: 8000

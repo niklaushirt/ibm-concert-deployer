@@ -1,5 +1,5 @@
 """
-Base scenario class for IBM AIOps DemoUI.
+Base scenario class for IBM Concert Operate DemoUI.
 
 Defines the interface that all demo scenarios must implement.
 """

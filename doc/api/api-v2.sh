@@ -346,7 +346,7 @@ ZEN_TOKEN=$(
 echo "ZEN_TOKEN: ${ZEN_TOKEN}"
 
 
-# Can now just use that to access AIOps APIs until its expiry:
+# Can now just use that to access Concert Operate APIs until its expiry:
 curl -k "${ZEN_URL}/aiops/api/v2/alerts" \
  -H "Accept: application/json" \
   -H "Authorization: Bearer ${ZEN_TOKEN}"

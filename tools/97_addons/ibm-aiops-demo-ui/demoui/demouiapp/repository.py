@@ -1,5 +1,5 @@
 """
-Repository module for IBM AIOps DemoUI.
+Repository module for IBM Concert Operate DemoUI.
 
 Single import point for all refactored modules. This module re-exports
 all public symbols from injectors, scenarios, and utilities so that

@@ -251,7 +251,7 @@
     pwd
 
     export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
-    echo "       ✅ OK - IBMAIOps:    $AIOPS_NAMESPACE"
+    echo "       ✅ OK - Concert Operate :    $AIOPS_NAMESPACE"
 
     echo "***************************************************************************************************************************************************"
     echo "   🛠️   Turn off RSA - Log Anomaly Statistical Baseline"
@@ -295,7 +295,7 @@
     oc set env deploy -n $AIOPS_NAMESPACE aimanager-aio-log-anomaly-golden-signals --overwrite HISTORIC_START_TIMESTAMP-
     oc set env deploy -n $AIOPS_NAMESPACE aimanager-aio-log-anomaly-golden-signals --overwrite HISTORIC_TIME_RANGE-
     
-    oc create ns $AIOPS_NAMESPACE-demo-ui
+    oc create ns ibm-demo-ui
 
   register: output_string
   ignore_errors: true
@@ -314,20 +314,21 @@
     state: absent
     namespace: turbonomic
     template: ./templates/training/stream-inject-lags.j2
-
+  ignore_errors: true
 
 - name: 📥 TRAINING LOAD LAD - CREATE CLUSTERROLE
   kubernetes.core.k8s:
     state: present
     namespace: default
     src: ./templates/training/default-clusterrole.yaml
-    
+  ignore_errors: true
 
 - name: 📥 TRAINING LOAD LAD - LOAD KAFKA LAGS DATA 
   kubernetes.core.k8s:
     state: present
     namespace: turbonomic
     template: ./templates/training/stream-inject-lags.j2
+  ignore_errors: true
 
 
 - name: 🚀 TRAINING CREATE LAGS - WAIT 5 MINUTES

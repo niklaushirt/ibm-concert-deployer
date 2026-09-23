@@ -1,1 +1,0 @@
-{unique_id: demoui-custom-topology,description: Automatically created by Nicks scripts,parameters: {file: /opt/ibm/netcool/asm/data/file-observer/custom-topology.txt}

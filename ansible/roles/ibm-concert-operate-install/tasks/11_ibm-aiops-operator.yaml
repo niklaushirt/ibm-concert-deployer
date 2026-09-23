@@ -41,7 +41,7 @@
 
 
 
-# Create IBM AIOps Operator Group
+# Create IBM Concert Operate Operator Group
 - name:   🚀 IBM AIOPS CATALOG - Install Operator Group
   kubernetes.core.k8s:
     state: present
@@ -137,14 +137,14 @@
 
 
 
-# Create IBM AIOps Subscription
+# Create IBM Concert Operate Subscription
 - name:   🚀 IBM AIOPS OPERATOR - Install Subscription - ONLINE
   kubernetes.core.k8s:
     state: present
     template: ./templates/aiops/3_sub-ibm-aiops-subscription.j2
   when: current_feature.case_install|bool == false
 
-# Create IBM AIOps Subscription
+# Create IBM Concert Operate Subscription
 - name:   🚀 IBM AIOPS OPERATOR - Install Subscription - CASE
   kubernetes.core.k8s:
     state: present

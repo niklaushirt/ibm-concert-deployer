@@ -61,18 +61,18 @@ subjects:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ibm-delete-aiops
+  name: ibm-delete-operate
   namespace: ibm-installer
   annotations: {}
 spec:
   selector:
     matchLabels:
-      app: ibm-concert-operate-wipe-aiops-install
+      app: ibm-operate-wipe-install
   replicas: 1
   template:
     metadata:
       labels:
-        app: ibm-concert-operate-wipe-aiops-install
+        app: ibm-operate-wipe-install
     spec:
       containers:
         - name: tools
@@ -97,7 +97,7 @@ spec:
               #set -x
 
               echo "*****************************************************************************************************************************"
-              echo " ✅ STARTING: DELETE CP4AIOPS"
+              echo " ✅ STARTING: DELETE OPERATE"
               echo "*****************************************************************************************************************************"
               echo ""
               echo "  ⏳ INSTALLATION START TIMESTAMP: $(date)"
@@ -108,9 +108,9 @@ spec:
               echo "------------------------------------------------------------------------------------------------------------------------------"
               echo " 🚀 Getting Installation source from GitHub"
               echo "------------------------------------------------------------------------------------------------------------------------------"
-              echo "   📥 Clone Repo https://github.com/niklaushirt/ibm-concert-operate-deployer.git -b dev_latest"
-              git clone https://github.com/niklaushirt/ibm-concert-operate-deployer.git -b dev_latest
-              cd ibm-concert-operate-deployer/
+              echo "   📥 Clone Repo https://github.com/niklaushirt/ibm-concert-deployer.git -b dev_latest"
+              git clone https://github.com/niklaushirt/ibm-concert-deployer.git -b dev_latest
+              cd ibm-concert-deployer/
 
               echo ""
               echo ""
@@ -124,7 +124,7 @@ spec:
               #oc delete ConsoleNotification --all &
 
               echo "*****************************************************************************************************************************"
-              echo " 💣 WIPE CUSTOM AIOPS NAMESPACES"
+              echo " 💣 WIPE CUSTOM NAMESPACES"
               echo "*****************************************************************************************************************************"
               echo "------------------------------------------------------------------------------------------------------------------------------"
               echo " 🧻 Delete Namespace sock-shop"
@@ -139,8 +139,8 @@ spec:
               echo " 🧻 Delete awx.ansible.com CustomResourceDefinition"
               oc delete CustomResourceDefinition $(oc get CustomResourceDefinition| grep awx.ansible.com|awk '{print$1}') --ignore-not-found
               echo "------------------------------------------------------------------------------------------------------------------------------"
-              echo " 🧻 Delete Namespace ibm-concert-operate-demo-ui"
-              oc delete ns ibm-concert-operate-demo-ui &
+              echo " 🧻 Delete Namespace ibm-demo-ui"
+              oc delete ns ibm-demo-ui &
               echo "------------------------------------------------------------------------------------------------------------------------------"
               echo " 🧻 Delete Namespace ibm-concert-operate-tools"
               oc delete ns ibm-concert-operate-tools &
@@ -150,14 +150,14 @@ spec:
 
 
               echo "*****************************************************************************************************************************"
-              echo " 💣 WIPE CP4AIOPS"
+              echo " 💣 WIPE OPERATE"
               echo "*****************************************************************************************************************************"
               cd ./tools/99_uninstall/ibm-concert-operate/
               ./uninstall-cp4waiops.sh -s
 
 
               echo "*****************************************************************************************************************************"
-              echo " 💣 WIPE REMAINING AIOPS STUFF"
+              echo " 💣 WIPE REMAINING STUFF"
               echo "*****************************************************************************************************************************"
               echo ""
               echo "  ⏳ INSTALLATION START TIMESTAMP: $(date)"
@@ -173,7 +173,7 @@ spec:
               oc delete ClusterRoleBinding default-robotinfo2-admin          
               oc delete ClusterRoleBinding default-sockinfo1-admin           
               oc delete ClusterRoleBinding default-sockinfo2-admin           
-              oc delete ClusterRoleBinding ibm-concert-operate-demo-ui-admin-crb       
+              oc delete ClusterRoleBinding ibm-demo-ui-admin-crb       
               oc delete ClusterRoleBinding ibm-installer-admin         
               oc delete ClusterRoleBinding robot-shop                        
               oc delete ClusterRoleBinding test-admin    
@@ -194,7 +194,8 @@ spec:
               echo "------------------------------------------------------------------------------------------------------------------------------"
               echo " 🧻 Delete Namespace ibm-concert-operate"
               oc delete ns ibm-concert-operate
-
+              oc delete ConsoleNotification --all
+              
               echo "------------------------------------------------------------------------------------------------------------------------------"
               echo " 🧻 Restart OLM Pod"
               oc -n openshift-operator-lifecycle-manager delete $(oc get pods  -l app=catalog-operator -o NAME -n openshift-operator-lifecycle-manager)
@@ -203,7 +204,7 @@ spec:
               echo " 🧻 Delete Namespace ibm-installer"
               oc delete ns ibm-installer &
               oc delete ClusterRoleBinding ibm-installer-default-admin &
-              oc delete deployment ibm-concert-operate-wipe-aiops-install &
+              oc delete deployment ibm-operate-wipe-install &
 
               echo ""
               echo ""

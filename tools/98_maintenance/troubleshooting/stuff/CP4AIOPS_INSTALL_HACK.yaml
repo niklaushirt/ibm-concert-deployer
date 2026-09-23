@@ -11,7 +11,7 @@
 #---------------------------------------------------------------------------------------------------------------------------------------------------"
 #  Install Hack for 4.5
 #
-#  IBM AIOps
+#  IBM Concert Operate
 #
 #  ©2026 nikh@ch.ibm.com
 # ---------------------------------------------------------------------------------------------------------------------------------------------------"
@@ -63,7 +63,7 @@ metadata:
   name: ibm-aiops-install-hack
   namespace: ibm-installer
   labels:
-   aiops-type: data-load-job
+   job-type: data-load-job
 spec:
   serviceAccount: ibm-installer-admin
   template:

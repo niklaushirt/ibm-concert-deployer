@@ -1,4 +1,4 @@
-<center> <h1>IBM AIOps </h1> </center>
+<center> <h1>IBM Concert Operate </h1> </center>
 <center> <h2>Sample Demo Script for the Live Environment</h2> </center>
 
 ![K8s CNI](./pics/aiops/00_aimanager_insights.png)
@@ -7,9 +7,9 @@
 
 # 1. Introduction
 
-This script is intended as a guide to demonstrate IBM AIOps using the live demo environment, running the Cloud Pak itself and the demo application. The script is presented in a few sections. You can utilize some or all sections depending upon your client’s needs.
+This script is intended as a guide to demonstrate IBM Concert Operate using the live demo environment, running the Cloud Pak itself and the demo application. The script is presented in a few sections. You can utilize some or all sections depending upon your client’s needs.
 
-The script is intended to be used with live IBM AIOps 3.x demo environment that you can reserve via [TechZone](https://techzone.ibm.com/collection/ibm-aiopsdemo#tab-1) or [install yourself](https://github.com/niklaushirt/ibm-concert-deployer#-1-quick-install).
+The script is intended to be used with live IBM Concert Operate 3.x demo environment that you can reserve via [TechZone](https://techzone.ibm.com/collection/ibm-aiopsdemo#tab-1) or [install yourself](https://github.com/niklaushirt/ibm-concert-deployer#-1-quick-install).
 
 You can watch the [Demo Walkthrough video](https://ibm.seismic.com/Link/Content/DCW3jb8Rf9VFf8mMT9BDB29MX6cB) to get an idea on how to do the demo (based on 4.10).
 
@@ -23,14 +23,14 @@ In the demo script,
 
 ## 1.1 Key Terminology
 
-You should be familiar with the following terminology when discussing IBM AIOps:
+You should be familiar with the following terminology when discussing IBM Concert Operate:
 
-- **Application**: IBM IBM AIOps brings together the capability to group resources from different data types into applications. Clients can flexibly define an application to meet their business needs. With applications, you can obtain an integrated view of resources to understand inter-dependencies.
-- **Event**: A point-in-time statement in IBM AIOps that tells us that something happened somewhere in a client’s environment. It tells us what happened, where it happened, and when it happened. An event does not have to be exceptional or actionable, it can simply tell us something has happened.
-- **Alert**: An alert in IBM AIOps represents an abnormal condition somewhere in an environment that requires resolution. It tells us what is happening, where it is happening, and when it started to happen. It may be informed by one or more events. It has a start time and end time.
-- **Incident**: A incident in IBM AIOps represents an outage or reduction in service which is currently impacting customers and requires rapid remediation. It is created based on one or more trigger alerts that indicate the outage or reduction in service. Any alert of severity Major or Critical will act as a trigger alert. Other alerts that share the same cause may add context to the incident.
+- **Application**: IBM IBM Concert Operate brings together the capability to group resources from different data types into applications. Clients can flexibly define an application to meet their business needs. With applications, you can obtain an integrated view of resources to understand inter-dependencies.
+- **Event**: A point-in-time statement in IBM Concert Operate that tells us that something happened somewhere in a client’s environment. It tells us what happened, where it happened, and when it happened. An event does not have to be exceptional or actionable, it can simply tell us something has happened.
+- **Alert**: An alert in IBM Concert Operate represents an abnormal condition somewhere in an environment that requires resolution. It tells us what is happening, where it is happening, and when it started to happen. It may be informed by one or more events. It has a start time and end time.
+- **Incident**: A incident in IBM Concert Operate represents an outage or reduction in service which is currently impacting customers and requires rapid remediation. It is created based on one or more trigger alerts that indicate the outage or reduction in service. Any alert of severity Major or Critical will act as a trigger alert. Other alerts that share the same cause may add context to the incident.
 - **Incident**: An incident in ServiceNow is an event of interruption disruption or degradation in normal service operation. An open incident in ServiceNow implies that the customer is impacted, or it represents the business risk.
-- **Topology**: A topology is a representation of how constituent parts are interrelated. In IBM AIOps, an algorithm analyzes how the event nodes are proximate to each other and groups them into a topology-based correlation.
+- **Topology**: A topology is a representation of how constituent parts are interrelated. In IBM Concert Operate, an algorithm analyzes how the event nodes are proximate to each other and groups them into a topology-based correlation.
 
 <div style="page-break-after: always;"></div>
 
@@ -40,13 +40,13 @@ You should be familiar with the following terminology when discussing IBM AIOps:
 
 The most important functionalities are:
 
-1. **Open IBMAIOps (login with the provided credentials)**
+1. **Open Concert Operate (login with the provided credentials)**
 2. **Clear all existing Stories and Alerts**
 3. **Create an Incident**
 
 > ℹ️ If you are asked to login to the Demo UI, please use the toekn/password that you have defined in the configuration file
 
-> ⚠️ Before start, you should open the IBMAIOps and check that there are no open stories and alerts pending. If there are some created few hours before (leftovers from somebody else not completing the demo) you can clean them up using IBMAIOps Demo UI as shown below.
+> ⚠️ Before start, you should open the Concert Operate and check that there are no open stories and alerts pending. If there are some created few hours before (leftovers from somebody else not completing the demo) you can clean them up using Concert Operate Demo UI as shown below.
 
 <div style="page-break-after: always;"></div>
 
@@ -54,15 +54,15 @@ The most important functionalities are:
 
 ### 1.2.1 Overview
 
-This use case shows clients how IBM IBM AIOps proactively helps avoid application downtimes and incidents impacting end-users. You play the role of an SRE/Operations person who has received a Slack message indicating that the RobotShop application is not displaying customer ratings. This is an important feature of the RobotShop application since RobotShop is the main platform from which the fictional company sells its robots.
+This use case shows clients how IBM IBM Concert Operate proactively helps avoid application downtimes and incidents impacting end-users. You play the role of an SRE/Operations person who has received a Slack message indicating that the RobotShop application is not displaying customer ratings. This is an important feature of the RobotShop application since RobotShop is the main platform from which the fictional company sells its robots.
 
 ### 1.2.2 Use Case
 
-The use case demonstrates how IBM AIOps can assist the SRE/Operations team as they identify, verify, and ultimately correct the issue. The demonstration shows integration with Instana, Turbonomic, ServiceNow, and Slack. Slack is the ChatOps environment used for working on this incident.
+The use case demonstrates how IBM Concert Operate can assist the SRE/Operations team as they identify, verify, and ultimately correct the issue. The demonstration shows integration with Instana, Turbonomic, ServiceNow, and Slack. Slack is the ChatOps environment used for working on this incident.
 
-You will demonstrate the following major selling points around IBM AIOps:
+You will demonstrate the following major selling points around IBM Concert Operate:
 
-1. **Pulls data from various IT platforms**: IBM IBM AIOps monitors incoming data feeds including logs, metrics, alerts, topologies, and tickets, highlighting potential problems across incoming data, based on trained machine learning models.
+1. **Pulls data from various IT platforms**: IBM IBM Concert Operate monitors incoming data feeds including logs, metrics, alerts, topologies, and tickets, highlighting potential problems across incoming data, based on trained machine learning models.
 1. **Utilizes AI and natural language processing**: An insight layer connects the dots between structured and unstructured data, using AI and natural language processing technologies. This allows you to quickly understand the nature of the incident.
 1. **Provides trust and transparency**: Using accurate and trustworthy recommendations, you can move forward with the diagnosis of IT system problems and the identification and prioritization of the best resolution path.
 1. **Resolves rapidly**: Time and money are saved from out-of-the-box productivity that enables automation and utilizes pre-trained models. A “similar issue feature” from past incidents allows you to get services back online for customers and end-users.
@@ -98,13 +98,13 @@ You can watch the [Demo Walkthrough video](https://ibm.box.com/s/icgkxzlt2ja6dth
 
 **📣 <u>Narration</u>**
 
-Welcome to this demonstration of the IBM AIOps platform. In this demo, I am going to show you how IBM AIOps can help your operations team proactively identify, diagnose, and resolve incidents across mission-critical workloads.
+Welcome to this demonstration of the IBM Concert Operate platform. In this demo, I am going to show you how IBM Concert Operate can help your operations team proactively identify, diagnose, and resolve incidents across mission-critical workloads.
 
 You’ll see how:
 
-- IBM AIOps intelligently correlates multiple disparate sources of information such as logs, metrics, events, tickets and topology
+- IBM Concert Operate intelligently correlates multiple disparate sources of information such as logs, metrics, events, tickets and topology
 - All of this information is condensed and presented in actionable alerts instead of large quantities of unrelated alerts
-- You can resolve a problem within seconds to minutes of being notified using IBM AIOps’ automation capabilities
+- You can resolve a problem within seconds to minutes of being notified using IBM Concert Operate’ automation capabilities
 
 During the demonstration, we will be using the sample application called RobotShop, which serves as a proxy for any type of app. The application is built on a microservices architecture, and the services are running on Kubernetes cluster.
 
@@ -155,9 +155,9 @@ Now let's start the demo.
 ![image](./pics/aiops/image.054.png)
 
 > **🚀 <u>Action</u>**
-> Open IBMAIOps **Demo** UI, and trigger the incident
+> Open Concert Operate **Demo** UI, and trigger the incident
 >
-> - Point your browser to the IBMAIOps Demo UI,
+> - Point your browser to the Concert Operate Demo UI,
 > - Login with the token that you have defined in the configuration file and
 > - Trigger the incident `(3)` you would like to use in your demo.
 >
@@ -207,13 +207,13 @@ I know that there are many ratings for each of the products that we sell, so whe
 
 > **🚀 <u>Action</u>**
 >
-> - In the Demo UI, click **IBMAIOps `(1)`**
+> - In the Demo UI, click **Concert Operate `(1)`**
 
 ![image](./pics/aiops/image.055.png)
 
 **📣 <u>Narration</u>**
 
-Let’s take a closer look at the incident that has been created in IBM AIOps.
+Let’s take a closer look at the incident that has been created in IBM Concert Operate.
 
 <div style="page-break-after: always;"></div>
 
@@ -250,9 +250,9 @@ Now let's have a look at the **Incident**.
 
 ![image](./pics/aiops/image.059.png)
 
-As I said before, the Incident regroups all relevant information concerning the incident at hand that have been identified by IBM AIOps.
+As I said before, the Incident regroups all relevant information concerning the incident at hand that have been identified by IBM Concert Operate.
 
-1. A list of Alerts that have been identified by IBM AIOps to be the most probable cause
+1. A list of Alerts that have been identified by IBM Concert Operate to be the most probable cause
 2. The localization of the problem related to the Topology
 3. The suggested Runbooks to automatically mitigate the incident
 4. Similar Incidents that resemble the incident at hand
@@ -286,9 +286,9 @@ First and before I continue examining the Incident I want to let my colleagues k
 
 **📣 <u>Narration</u>**
 
-Most large organizations use IT Service Management tools to govern processes around IT. Our organization is using ServiceNow for that purpose. Past incidents with resolution information are ingested and analysed by IBM AIOps.
+Most large organizations use IT Service Management tools to govern processes around IT. Our organization is using ServiceNow for that purpose. Past incidents with resolution information are ingested and analysed by IBM Concert Operate.
 
-The IBM IBM AIOps trains on exisitng tickets and it extracts the steps used to fix previous incidents (if documented) and recommend resolutions using natural language processing. This AI model helps you discover historical incidents to aid in the remediation of current problems.
+The IBM IBM Concert Operate trains on exisitng tickets and it extracts the steps used to fix previous incidents (if documented) and recommend resolutions using natural language processing. This AI model helps you discover historical incidents to aid in the remediation of current problems.
 
 So for the **Incident**, your team is presented with the top-ranked similar incidents from the past. These relevant similar incidents help speed up incident resolution even if the I don't have access to ServiceNow. Without these features, your team must manually search for past incidents and resolutions, which is time-consuming.
 
@@ -434,7 +434,7 @@ Other events are confirming the hypothesis.
 
 <div style="page-break-after: always;"></div>
 
-- IBM AIOps has learned the normal, good patterns for logs coming from the applications. The Incident contains a **Log Anomaly** that has been detected in the ratings service that cannot acces the mysql database.
+- IBM Concert Operate has learned the normal, good patterns for logs coming from the applications. The Incident contains a **Log Anomaly** that has been detected in the ratings service that cannot acces the mysql database.
 
 ![image](./pics/aiops/image.064.png)
 
@@ -444,7 +444,7 @@ Other events are confirming the hypothesis.
 
 **📣 <u>Narration</u>**
 
-- IBM AIOps is also capable of collecting metrics from multiple sources and detecting **Metric Anomalies**. It was trained on hundreds or thousands of metrics from the environment and constructs a dynamic baseline (shown in green). The graphic suddenly turns red which relates to detected anomaly when the database is consuming a higher amount of memory than usual.
+- IBM Concert Operate is also capable of collecting metrics from multiple sources and detecting **Metric Anomalies**. It was trained on hundreds or thousands of metrics from the environment and constructs a dynamic baseline (shown in green). The graphic suddenly turns red which relates to detected anomaly when the database is consuming a higher amount of memory than usual.
 
 ![image](./pics/aiops/image.065.png)
 
@@ -494,7 +494,7 @@ I can clearly see that the incident caused the **Latencies** to skyrocket and th
 
 **📣 <u>Narration</u>**
 
-The interface shows the **topology** of the application that is relevant to the incident. IBM IBM AIOps’ topology service delivers a working understanding of the resources that you have in your environment, how the resources relate to each other, and how the environment has changed over time.
+The interface shows the **topology** of the application that is relevant to the incident. IBM IBM Concert Operate’ topology service delivers a working understanding of the resources that you have in your environment, how the resources relate to each other, and how the environment has changed over time.
 
 You can see that there are some statuses attached to the different resources, marked with colorful dots. Let’s view the details and status of the **mysql** resource with red status.
 
@@ -565,7 +565,7 @@ Now I will examine the historical events for the **mysql** component. I can see 
 
 **📣 <u>Narration</u>**
 
-Now that we know what the problem is, let’s correct what has happened. A runbook has been automatically identified but have not been executed. Runbooks are guided steps that IT operations teams use to troubleshoot and resolve problems. Some organizations might call these standard operating procedures or playbooks. When an incident occurs, IBM IBM AIOps matches an appropriate runbook to the problem. The runbook can be set to run automatically when it is matched to an incident, or it can run with user approval and participation.
+Now that we know what the problem is, let’s correct what has happened. A runbook has been automatically identified but have not been executed. Runbooks are guided steps that IT operations teams use to troubleshoot and resolve problems. Some organizations might call these standard operating procedures or playbooks. When an incident occurs, IBM IBM Concert Operate matches an appropriate runbook to the problem. The runbook can be set to run automatically when it is matched to an incident, or it can run with user approval and participation.
 
 <div style="page-break-after: always;"></div>
 
@@ -614,7 +614,7 @@ Before confirming that the runbook worked as expected, I should check the RobotS
 
 **📣 <u>Narration</u>**
 
-So the runbook has resolved the problem. When I tell IBM AIOps that the Runbook worked, it will learn over time to prioritize and suggest more relevant Runbooks.
+So the runbook has resolved the problem. When I tell IBM Concert Operate that the Runbook worked, it will learn over time to prioritize and suggest more relevant Runbooks.
 
 <div style="page-break-after: always;"></div>
 
@@ -636,4 +636,4 @@ So now as we have resolved the problem, I will inform the development team of th
 
 **📣 <u>Narration</u>**
 
-Today, I have shown you how IBM AIOps can assist the SRE/Operations team to identify, verify, and ultimately correct an issue with a modern, distributed application running in a cloud-native environment. The presented solution provides automatic application topology discovery, anomaly detection both with metrics and logs, and sophisticated methods of correlation of events coming from different sources.
+Today, I have shown you how IBM Concert Operate can assist the SRE/Operations team to identify, verify, and ultimately correct an issue with a modern, distributed application running in a cloud-native environment. The presented solution provides automatic application topology discovery, anomaly detection both with metrics and logs, and sophisticated methods of correlation of events coming from different sources.

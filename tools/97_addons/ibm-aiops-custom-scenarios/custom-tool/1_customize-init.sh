@@ -16,7 +16,7 @@
 #
 #
 #
-#  CloudPak for AIOps
+#  CloudPak for Concert Operate
 #
 #  ©2026 nikh@ch.ibm.com
 # ---------------------------------------------------------------------------------------------------------------------------------------------------"
@@ -101,7 +101,7 @@ echo ""
     export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
     echo ""
     echo "   --------------------------------------------------------------------------------------------------"
-    echo "     🛠️ AIOps Namespace:        $AIOPS_NAMESPACE"
+    echo "     🛠️ Concert Operate Namespace:        $AIOPS_NAMESPACE"
     echo "     🛠️ Create Routes"
     # oc create route passthrough topology-file-api -n $AIOPS_NAMESPACE --insecure-policy="Redirect" --service=aiops-topology-file-observer --port=https-file-observer-api
     # oc create route passthrough topology-manage -n $AIOPS_NAMESPACE --service=aiops-topology-topology --port=https-topology-api

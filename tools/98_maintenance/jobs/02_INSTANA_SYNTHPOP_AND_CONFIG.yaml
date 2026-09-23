@@ -259,7 +259,7 @@ metadata:
   name: ibm-aiops-install-instana-addons
   namespace: ibm-installer
   labels:
-   aiops-type: data-load-job
+   job-type: data-load-job
 spec:
   serviceAccount: ibm-installer-admin
   template:
@@ -520,11 +520,11 @@ spec:
                   "tagFilterExpression": {
                     "type": "TAG_FILTER",
                     "name": "kubernetes.namespace",
-                    "stringValue": "ibm-concert-demo-ui",
+                    "stringValue": "ibm-demo-ui",
                     "numberValue": null,
                     "booleanValue": null,
                     "key": null,
-                    "value": "ibm-concert-demo-ui",
+                    "value": "ibm-demo-ui",
                     "operator": "EQUALS",
                     "entity": "DESTINATION"
                   },
@@ -712,11 +712,11 @@ spec:
                       {
                         "type": "TAG_FILTER",
                         "name": "kubernetes.namespace",
-                        "stringValue": "ibm-concert-demo-ui",
+                        "stringValue": "ibm-demo-ui",
                         "numberValue": null,
                         "booleanValue": null,
                         "key": null,
-                        "value": "ibm-concert-demo-ui",
+                        "value": "ibm-demo-ui",
                         "operator": "EQUALS",
                         "entity": "DESTINATION"
                       },

@@ -116,21 +116,21 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ibm-concert-demo-ui
+  name: ibm-demo-ui
   labels:
-    app: ibm-concert-demo-ui
+    app: ibm-demo-ui
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: ibm-concert-demo-ui
+      app: ibm-demo-ui
   template:
     metadata:
       labels:
-        app: ibm-concert-demo-ui
+        app: ibm-demo-ui
     spec:
       containers:
-        - image: quay.io/niklaushirt/ibm-concert-demo-ui:2.2
+        - image: quay.io/niklaushirt/ibm-demo-ui:2.2
           imagePullPolicy: Always
           name: gateway
           command:
@@ -150,10 +150,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: ibm-concert-demo-ui-service
+  name: ibm-demo-ui-service
 spec:
   selector:
-    app: ibm-concert-demo-ui
+    app: ibm-demo-ui
   ports:
     - protocol: TCP
       port: 8080
@@ -162,8 +162,8 @@ spec:
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
-  name: ibm-concert-demo-ui
+  name: ibm-demo-ui
 spec:
   to:
     kind: Service
-    name: ibm-concert-demo-ui-service
+    name: ibm-demo-ui-service

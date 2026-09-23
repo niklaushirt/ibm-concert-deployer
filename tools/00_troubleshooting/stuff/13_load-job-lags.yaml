@@ -4,7 +4,7 @@ metadata:
   name: troubleshoot-1-3-load-lags-indexes
   namespace: ibm-installer
   labels:
-   aiops-type: data-load-job
+   job-type: data-load-job
 spec:
   serviceAccount: demo-admin
   template:

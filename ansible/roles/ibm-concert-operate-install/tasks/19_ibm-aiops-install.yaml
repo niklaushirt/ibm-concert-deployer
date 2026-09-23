@@ -12,7 +12,7 @@
 
 - name: Log
   shell: |
-    export MESSAGE="Installing IBM AIOps Instance"
+    export MESSAGE="Installing IBM Concert Operate Instance"
     export currentDate=$(date +%Y-%m-%d_%H:%M)
     echo "---------------------------------------------------------------------------------------------------------------------------------------------------" >> ../install_{{current_feature.kind}}.log
     echo $currentDate" - "$MESSAGE  >> ../install_{{current_feature.kind}}.log
@@ -29,7 +29,7 @@
       backgroundColor: '#ffd500'
       color: '#000'
       location: {{global_config.position_ocp_notifications | default("BannerTop")}}
-      text: 'Installing {{current_feature.kind}} - Creating IBM AIOps Instance'    
+      text: 'Installing {{current_feature.kind}} - Creating IBM Concert Operate Instance'    
     EOF
   ignore_errors: true
   args:
@@ -44,7 +44,7 @@
     ls -al
     oc apply -n {{ current_ibm_feature.project }} -f {{current_feature.custom_size_file | default('none')}}
   register: kubectl_get_pods
-  when: current_feature.aiops_size | default('none') == "custom"
+  when: current_feature.concert_operate_size | default('none') == "custom"
 
 
 
@@ -52,11 +52,11 @@
   kubernetes.core.k8s:
     state: present
     template: './templates/aiops/4_aiops-install-template-custom.j2'
-  when: current_feature.aiops_size == "custom"
+  when: current_feature.concert_operate_size == "custom"
 
 
 - name:  🚀 IBM AIOPS INSTALL - Install Custom Resource - INSTALL IBM AIOPS
   kubernetes.core.k8s:
     state: present
     template: './templates/aiops/4_aiops-install-template.j2'
-  when: current_feature.aiops_size != "custom" 
+  when: current_feature.concert_operate_size != "custom" 

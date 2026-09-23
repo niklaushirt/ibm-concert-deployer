@@ -1,5 +1,5 @@
 """
-ACME demo scenario for IBM AIOps DemoUI.
+ACME demo scenario for IBM Concert Operate DemoUI.
 
 Simulates fan temperature and speed issues in ACME manufacturing equipment.
 """
@@ -47,7 +47,7 @@ class AcmeScenario:
         Inject ACME fan events into the datalayer.
 
         Args:
-            datalayer_route: Route to the IBM AIOps datalayer API.
+            datalayer_route: Route to the IBM Concert Operate datalayer API.
             datalayer_user: Username for datalayer authentication.
             datalayer_pwd: Password for datalayer authentication.
 
@@ -72,7 +72,7 @@ class AcmeScenario:
         Inject ACME fan temperature metrics.
 
         Args:
-            metric_route: Route to the IBM AIOps metrics API.
+            metric_route: Route to the IBM Concert Operate metrics API.
             metric_token: Bearer token for metrics authentication.
 
         Returns:
@@ -100,7 +100,7 @@ class AcmeScenario:
         Inject ACME fan speed metrics.
 
         Args:
-            metric_route: Route to the IBM AIOps metrics API.
+            metric_route: Route to the IBM Concert Operate metrics API.
             metric_token: Bearer token for metrics authentication.
             time_skew: Initial seconds to add to the base timestamp.
             time_step: Milliseconds to advance between metric points.

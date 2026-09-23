@@ -59,10 +59,10 @@ else:
 # ----------------------------------------------------------------------------------------------------------------------------------------------------
 # GET NAMESPACES
 # ----------------------------------------------------------------------------------------------------------------------------------------------------
-print('     ❓ Getting IBMAIOps Namespace')
+print('     ❓ Getting Concert Operate Namespace')
 stream = capture_shell("oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}'")
 aimanagerns = stream.read().strip()
-print('        ✅ IBMAIOps Namespace:       '+aimanagerns)
+print('        ✅ Concert Operate Namespace:       '+aimanagerns)
 
 
 
@@ -175,7 +175,7 @@ print('     🟣 OUTAGE - Incident:'+str(INCIDENT_ACTIVE)+' - RS-OUTAGE:'+str(RO
 
 cmd = '''
 echo "  <BR>"
-echo "  <h1>🚀 IBM AIOps - Logins and URLs </h1><BR>"
+echo "  <h1>🚀 IBM Concert Operate - Logins and URLs </h1><BR>"
 echo "  <BR>"
 echo "  <BR>"
 echo "  <BR>"
@@ -200,13 +200,13 @@ CLUSTER_FQDN=$( echo $CLUSTER_ROUTE | awk '{print $2}')
 CLUSTER_NAME=${CLUSTER_FQDN##*console.}
 
 echo "<HR><BR>"
-echo "<h2>🚀 1. IBM AIOps</h2><BR>"
+echo "<h2>🚀 1. IBM Concert Operate</h2><BR>"
 echo "<BR>"
 
     echo "    -----------------------------------------------------------------------------------------------------------------------------------------------<BR>"
     echo "<h3>    🐣 1.1 Demo UI</h3><BR>"
-    appURL=$(oc get routes -n $AIOPS_NAMESPACE-demo-ui ibm-concert-demo-ui  -o jsonpath="{['spec']['host']}")|| true
-    appToken=$(oc get cm -n $AIOPS_NAMESPACE-demo-ui ibm-concert-demo-ui-config -o jsonpath='{.data.TOKEN}')
+    appURL=$(oc get routes -n ibm-demo-ui ibm-demo-ui  -o jsonpath="{['spec']['host']}")|| true
+    appToken=$(oc get cm -n ibm-demo-ui ibm-demo-ui-config -o jsonpath='{.data.TOKEN}')
     echo "<table>"
     echo "<tr><td style=\"min-width:300px\">🌏 URL:</td><td><a target="_blank" href=\"https://$appURL/\">https://$appURL/</a></td></tr>"
     echo "<tr><td style=\"min-width:300px\">🔐 Token:</td><td>$appToken<BR>"
@@ -262,7 +262,7 @@ echo "    <BR>"
 echo "    <BR>"
 
 echo "<HR><BR>"
-echo "<h2>🚀 2. IBMAIOps Configuration Information</h2><BR>"
+echo "<h2>🚀 2. Concert Operate Configuration Information</h2><BR>"
 echo "    <BR>"
 echo "    -----------------------------------------------------------------------------------------------------------------------------------------------<BR>"
 echo "    <h3>🚀 2.1 Configure LDAP - Access Control </h3><BR>"
@@ -358,7 +358,7 @@ DEMO_TOKEN=$(oc create token -n default demo-admin --duration=999999999s)
 DEMO_URL=$(oc status|grep -m1 "In project"|awk '{print$6}')
 
 echo "<table>"
-echo "<tr><td style=\"min-width:300px\">🌏 Action:</td><td>IBMAIOPS Mitigate Robotshop Ratings Outage<BR>"
+echo "<tr><td style=\"min-width:300px\">🌏 Action:</td><td>Concert Operate Mitigate Robotshop Ratings Outage<BR>"
 echo "<tr><td style=\"min-width:300px\">🔐 Mapping:</td><td>Fixed Value<BR>"
 echo "<tr><td style=\"min-width:300px\">🗺️ Value:</td><td>"
 echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<BR>"
@@ -519,7 +519,7 @@ openshift_token = stream.read().strip()
 # stream = capture_shell("oc config view --minify|grep 'server:'| sed 's/.*server: .*\///'| head -1")
 # #stream = capture_shell("oc status|head -1|awk '{print$6}'")
 # openshift_server = stream.read().strip()
-stream = capture_shell("oc get deployment -n ibm-concert-demo-ui ibm-concert-demo-ui -ojson|jq -r '.spec.template.spec.containers[0].image'")
+stream = capture_shell("oc get deployment -n ibm-demo-ui ibm-demo-ui -ojson|jq -r '.spec.template.spec.containers[0].image'")
 demo_image = stream.read().strip()
 
 
@@ -1905,7 +1905,7 @@ def doc(request):
         template = loader.get_template('demouiapp/doc.html')
     else:
         template = loader.get_template('demouiapp/loginui.html')
-    return HttpResponse(template.render(get_base_context(page_title='IBM AIOps Demo UI', page_name='doc'), request))
+    return HttpResponse(template.render(get_base_context(page_title='IBM Concert Operate Demo UI', page_name='doc'), request))
 
 
 def apps(request):
@@ -2019,7 +2019,7 @@ def config(request):
         template = loader.get_template('demouiapp/config.html')
     else:
         template = loader.get_template('demouiapp/loginui.html')
-    context = get_base_context(page_title='Configuration for the IBM AIOps Training', page_name='config')
+    context = get_base_context(page_title='Configuration for the IBM Concert Operate Training', page_name='config')
     context['ALL_LOGINS'] = ALL_LOGINS
     return HttpResponse(template.render(context, request))
 

@@ -1,7 +1,7 @@
 ***************************************************************************************************************************************************
 ***************************************************************************************************************************************************
                                                                                                                                                    
- 🚀 Install IBM AIOps                                                                                                                                                  
+ 🚀 Install IBM Concert Operate                                                                                                                                                  
                                                                                                                                                    
 ***************************************************************************************************************************************************
 ***************************************************************************************************************************************************
@@ -312,7 +312,7 @@ changed: [localhost]
 TASK [tools-get-openshift-storage : Check if block storage class ocs-storagecluster-ceph-rbd exists in OpenShift] ***
 changed: [localhost]
 
-TASK [MAIN LOOP   🚀 Deploy IBM AIOps Assets - Loop over Instances for ibm-aiops] ***
+TASK [MAIN LOOP   🚀 Deploy IBM Concert Operate Assets - Loop over Instances for ibm-aiops] ***
 
 TASK [tools-install-modules-loop : 🚀 LOOP OVER PRODUCT FEATURES] **************
 ok: [localhost] => {
@@ -329,7 +329,7 @@ ok: [localhost] => {
 TASK [tools-install-modules-loop : 🟣  Show Current Feature] *******************
 skipping: [localhost]
 
-TASK [tools-install-modules-loop 🌡   CHECK for - IBM AIOps] ********************
+TASK [tools-install-modules-loop 🌡   CHECK for - IBM Concert Operate] ********************
 
 TASK [ibm-aiops-install : 🟣🟣🟣🟣🟣🟣  INSTALLATION MODULE START - IBMAIOps] ***
 ok: [localhost] => {
@@ -339,7 +339,7 @@ ok: [localhost] => {
         "***************************************************************************************************************************************************",
         "***************************************************************************************************************************************************",
         "                                                                                                                                                   ",
-        "      � IBM AIOps - INSTALLING IBMAIOps ",
+        "      � IBM Concert Operate - INSTALLING Concert Operate ",
         "                                                                                                                                                   ",
         "***************************************************************************************************************************************************",
         "***************************************************************************************************************************************************",
@@ -373,7 +373,7 @@ ok: [localhost] => {
         "-----------------------------------------------------------------------------------------------",
         "  📥 CONFIG",
         "     ✅ Installation Name:                        ibm-aiops",
-        "     🔎 IBM AIOps Size:                           small",
+        "     🔎 IBM Concert Operate Size:                           small",
         "     🔽 Custom Sizing File:                       none",
         "     📣 Show Notifications:                       True",
         "     📣 Primary Notifications Position:           BannerTop",
@@ -388,11 +388,11 @@ ok: [localhost] => {
     ]
 }
 
-TASK [ibm-aiops-install : 🟣 Installing IBMAIOps with the following configuration] ***
+TASK [ibm-aiops-install : 🟣 Installing Concert Operate with the following configuration] ***
 ok: [localhost] => {
     "current_feature": {
-        "aiops_name": "ibm-aiops",
-        "aiops_size": "small",
+        "concert_operate_name": "ibm-aiops",
+        "concert_operate_size": "small",
         "case_github_url": "https://github.com/IBM/cloud-pak/raw/master/repo/case",
         "case_install": false,
         "case_inventory_setup": "cpaiopsSetup",
@@ -593,7 +593,7 @@ ok: [localhost] => {
 TASK [ibm-aiops-install : Log] *************************************************
 changed: [localhost]
 
-TASK [ibm-aiops-install : (007/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 Install IBM AIOps Prerequisites] ***
+TASK [ibm-aiops-install : (007/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 Install IBM Concert Operate Prerequisites] ***
 included: /ibm-concert-deployer/ansible/roles/ibm-concert-deployer-install/tasks/06_ibm-aiops-prerequisites.yaml for localhost
 
 TASK [ibm-aiops-install : 🛰️  START - PREREQUISITES] ****************************
@@ -619,7 +619,7 @@ changed: [localhost]
 TASK [ibm-aiops-install : 🚀 PREREQUISITES - Patch default storage class if non defined] ***
 changed: [localhost]
 
-TASK [ibm-aiops-install : (008/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 IBM AIOps Custom Hook] ***
+TASK [ibm-aiops-install : (008/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 IBM Concert Operate Custom Hook] ***
 included: /ibm-concert-deployer/ansible/roles/ibm-concert-deployer-install/tasks/08_ibm-aiops-custom-hook.yaml for localhost
 
 TASK [ibm-aiops-install : 🛰️  START - IBM AIOPS CUSTOM HOOK] ********************
@@ -627,7 +627,7 @@ ok: [localhost] => {
     "msg": "27.03.2025---09:59:15"
 }
 
-TASK [ibm-aiops-install : (009/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 Install IBM AIOps Catalog - Classic Way (skipped if CASE selected)] ***
+TASK [ibm-aiops-install : (009/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 Install IBM Concert Operate Catalog - Classic Way (skipped if CASE selected)] ***
 included: /ibm-concert-deployer/ansible/roles/ibm-concert-deployer-install/tasks/10_ibm-operator-catalog.yaml for localhost
 
 TASK [ibm-aiops-install : 🛰️  START - IBM AIOPS CATALOG - ONLINE] ***************
@@ -644,13 +644,13 @@ changed: [localhost]
 TASK [ibm-aiops-install : 🚀 IBM AIOPS CATALOG - Install IBM Operator Catalog - Online] ***
 ok: [localhost]
 
-TASK [(010/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 Install IBM AIOps Catalog - Save Case File (this can take some time - skipped if not selected)] ***
+TASK [(010/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 Install IBM Concert Operate Catalog - Save Case File (this can take some time - skipped if not selected)] ***
 skipping: [localhost]
 
-TASK [(011/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 Install IBM AIOps Catalog - Create CatalogSources from Case File (this can take some time - skipped if not selected)] ***
+TASK [(011/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 Install IBM Concert Operate Catalog - Create CatalogSources from Case File (this can take some time - skipped if not selected)] ***
 skipping: [localhost]
 
-TASK [ibm-aiops-install : (012/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 Install the IBM AIOps Instance] ***
+TASK [ibm-aiops-install : (012/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 Install the IBM Concert Operate Instance] ***
 included: /ibm-concert-deployer/ansible/roles/ibm-concert-deployer-install/tasks/18_ibm-aiops-install-prerequisites.yaml for localhost
 
 TASK [ibm-aiops-install : 🛰️  START - IBM AIOPS PREREQUISITES INSTALLATION] *****
@@ -682,7 +682,7 @@ changed: [localhost]
 TASK [ibm-aiops-install : 🕦 IBM AIOPS INSTALL PREREQUISITES - WAIT FOR LICENSE MANAGER] ***
 changed: [localhost]
 
-TASK [ibm-aiops-install : (013/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 Install the IBM AIOps Operator] ***
+TASK [ibm-aiops-install : (013/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 Install the IBM Concert Operate Operator] ***
 included: /ibm-concert-deployer/ansible/roles/ibm-concert-deployer-install/tasks/11_ibm-aiops-operator.yaml for localhost
 
 TASK [ibm-aiops-install : 🛰️  START - IBM AIOPS OPERATORS] **********************
@@ -778,7 +778,7 @@ changed: [localhost]
 TASK [ibm-aiops-install : 🟣 INIT - RESULT] ************************************
 skipping: [localhost]
 
-TASK [ibm-aiops-install : (015/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 Install the IBM AIOps Instance] ***
+TASK [ibm-aiops-install : (015/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 Install the IBM Concert Operate Instance] ***
 included: /ibm-concert-deployer/ansible/roles/ibm-concert-deployer-install/tasks/19_ibm-aiops-install.yaml for localhost
 
 TASK [ibm-aiops-install : 🛰️  START - IBM AIOPS INSTALLATION] *******************
@@ -801,7 +801,7 @@ skipping: [localhost]
 TASK [ibm-aiops-install : 🚀 IBM AIOPS INSTALL - Install Custom Resource - INSTALL IBM AIOPS] ***
 changed: [localhost]
 
-TASK [ibm-aiops-install : (016/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 Wait for IBM AIOps to be ready] ***
+TASK [ibm-aiops-install : (016/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 Wait for IBM Concert Operate to be ready] ***
 included: /ibm-concert-deployer/ansible/roles/ibm-concert-deployer-install/tasks/99_ibm-aiops-wait-ibm-aiops.yaml for localhost
 
 TASK [ibm-aiops-install : Log] *************************************************
@@ -1029,7 +1029,7 @@ changed: [localhost]
 TASK [ibm-aiops-install : 🛠️ PATCH -  ASM Routes] *******************************
 changed: [localhost]
 
-TASK [ibm-aiops-install : (017/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Create IBM AIOps Openshift WebConsole Menu Item] ***
+TASK [ibm-aiops-install : (017/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Create IBM Concert Operate Openshift WebConsole Menu Item] ***
 included: /ibm-concert-deployer/ansible/roles/ibm-concert-deployer-install/tasks/91_ibm-aiops-create-ocp-menu.yaml for localhost
 
 TASK [ibm-aiops-install : 🛰️  START - OCP MENU] *********************************
@@ -1046,7 +1046,7 @@ changed: [localhost]
 TASK [ibm-aiops-install : 🌏 OCP MENU - Create Openshift WebConsole Menu Item] ***
 changed: [localhost]
 
-TASK [ibm-aiops-install : (018/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 Update IBM AIOps Cards] ***
+TASK [ibm-aiops-install : (018/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 Update IBM Concert Operate Cards] ***
 included: /ibm-concert-deployer/ansible/roles/ibm-install-global/tasks/99_update_cards.yaml for localhost
 
 TASK [ibm-aiops-install : Log] *************************************************
@@ -1114,7 +1114,7 @@ ok: [localhost] => {
         "***************************************************************************************************************************************************",
         "***************************************************************************************************************************************************",
         "                                                                                                                                                   ",
-        "       ✅ IBM IT Automation - DONE INSTALLING IBMAIOps                                                                                 ",
+        "       ✅ IBM IT Automation - DONE INSTALLING Concert Operate                                                                                ",
         "                                                                                                                                                   ",
         "***************************************************************************************************************************************************",
         "***************************************************************************************************************************************************",
@@ -1122,7 +1122,7 @@ ok: [localhost] => {
     ]
 }
 
-TASK [tools-install-modules-loop 🌡   CHECK for - IBM AIOps Demo Content] *******
+TASK [tools-install-modules-loop 🌡   CHECK for - IBM Concert Operate Demo Content] *******
 skipping: [localhost]
 
 TASK [tools-install-modules-loop 🌡   CHECK for - IBM Concert] ******************
@@ -1164,10 +1164,10 @@ ok: [localhost] => {
 TASK [tools-install-modules-loop : 🟣  Show Current Feature] *******************
 skipping: [localhost]
 
-TASK [tools-install-modules-loop 🌡   CHECK for - IBM AIOps] ********************
+TASK [tools-install-modules-loop 🌡   CHECK for - IBM Concert Operate] ********************
 skipping: [localhost]
 
-TASK [tools-install-modules-loop 🌡   CHECK for - IBM AIOps Demo Content] *******
+TASK [tools-install-modules-loop 🌡   CHECK for - IBM Concert Operate Demo Content] *******
 
 TASK [ibm-aiops-demo-content : 🟣🟣🟣🟣🟣🟣  INSTALLATION MODULE START - IBMAIOpsDemoContent] ***
 ok: [localhost] => {
@@ -1220,7 +1220,7 @@ ok: [localhost] => {
         "  🌏 GLOBAL CONFIG",
         "      🔐 Global Password for all Instances:       CHANGEME",
         "      📝 Create App Menu Items in OCP:            True",
-        "      📝 Create Welcome Cards in IBM AIOps:       True",
+        "      📝 Create Welcome Cards in IBM Concert Operate:       True",
         "-----------------------------------------------------------------------------------------------",
         "  📥 TRAINING",
         "     🔽 Load Data for Event Temporal Training:    True",
@@ -1245,14 +1245,14 @@ ok: [localhost] => {
         "  📥 RUNBOOKS",
         "     ✅ Install AWX:                              True",
         "     ✅ Load AWX Playbooks:                       True",
-        "     ✅ Integrate AWX and IBM AIOps:              True",
-        "     ✅ Load IBM AIOps Runbooks:                  True",
+        "     ✅ Integrate AWX and IBM Concert Operate:              True",
+        "     ✅ Load IBM Concert Operate Runbooks:                  True",
         "     ✅ Create Runbook Policy:                    True",
         "-----------------------------------------------------------------------------------------------",
         "  📥 DEMO UI",
         "     ✅ Install Demo UI:                          True",
-        "     👩‍💻 IBM AIOps Demo User:                      demo",
-        "     🔐 IBM AIOps Demo Password (override):       not defined",
+        "     👩‍💻 IBM Concert Operate Demo User:                      demo",
+        "     🔐 IBM Concert Operate Demo Password (override):       not defined",
         "     ❗ Admin Mode:                               true",
         "     ❗ Create precanned Slack and SNOW Links:    True",
         "-----------------------------------------------------------------------------------------------",
@@ -1620,7 +1620,7 @@ changed: [localhost]
 TASK [ibm-aiops-demo-content : 🟣  OUTPUT] *************************************
 skipping: [localhost]
 
-TASK [ibm-aiops-demo-content : 🚀 ROUTES - Create external IBM AIOps API Route] ***
+TASK [ibm-aiops-demo-content : 🚀 ROUTES - Create external IBM Concert Operate API Route] ***
 changed: [localhost]
 
 TASK [ibm-aiops-demo-content : 🟣  OUTPUT] *************************************
@@ -1795,7 +1795,7 @@ ok: [localhost] => {
         "deployment.apps/aimanager-aio-log-anomaly-golden-signals updated",
         "deployment.apps/aimanager-aio-log-anomaly-golden-signals updated",
         "deployment.apps/aimanager-aio-log-anomaly-golden-signals updated",
-        "namespace/ibm-concert-demo-ui created"
+        "namespace/ibm-demo-ui created"
     ]
 }
 
@@ -2194,7 +2194,7 @@ changed: [localhost]
 TASK [ibm-aiops-demo-content : 📣 OCP CONSOLE - Create Openshift NOTIFICATION] ***
 changed: [localhost]
 
-TASK [ibm-aiops-demo-content : 🚀 LDAPREGISTER - CREATE IBM AIOps Groups and Users] ***
+TASK [ibm-aiops-demo-content : 🚀 LDAPREGISTER - CREATE IBM Concert Operate Groups and Users] ***
 changed: [localhost]
 
 TASK [ibm-aiops-demo-content : 🟣  OUTPUT] *************************************
@@ -2907,9 +2907,9 @@ TASK [ibm-aiops-demo-content : 🟣  OUTPUT] ***********************************
 skipping: [localhost]
 
 TASK [ibm-aiops-demo-content : (046/051) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Install the Demo UI] ***
-included: /ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/tasks/26_ibm-concert-demo-ui.yaml for localhost
+included: /ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/tasks/26_ibm-demo-ui.yaml for localhost
 
-TASK [ibm-aiops-demo-content : 🛰️  START - AIOPS DEMO UI] ***********************
+TASK [ibm-aiops-demo-content : 🛰️  START - DEMO UI] ***********************
 ok: [localhost] => {
     "msg": "27.03.2025---11:35:25"
 }
@@ -2929,17 +2929,17 @@ ok: [localhost]
 TASK [ibm-aiops-demo-content : 🟣  DEMO-UI -  Demo UI Password CHANGEME] ******
 skipping: [localhost]
 
-TASK [ibm-aiops-demo-content : 🚀 DEMO-UI - Create IBM AIOPS Demo UI Configuration - WITHOUT Slack and SNOW Simulation] ***
+TASK [ibm-aiops-demo-content : 🚀 DEMO-UI - Create IBM Demo UI Configuration - WITHOUT Slack and SNOW Simulation] ***
 skipping: [localhost]
 
-TASK [ibm-aiops-demo-content : 🚀 DEMO-UI - Create IBM AIOPS Demo UI Configuration - WITH Slack and SNOW Simulation] ***
+TASK [ibm-aiops-demo-content : 🚀 DEMO-UI - Create IBM Demo UI Configuration - WITH Slack and SNOW Simulation] ***
 changed: [localhost]
 
 TASK [ibm-aiops-demo-content : 🕦 DEMO-UI - Wait for Demo UI Configuration being ready] ***
 FAILED - RETRYING: [localhost]: 🕦 DEMO-UI - Wait for Demo UI Configuration being ready (500 retries left).
 changed: [localhost]
 
-TASK [ibm-aiops-demo-content : 🚀 DEMO-UI - Create IBM AIOPS Demo UI Deployment] ***
+TASK [ibm-aiops-demo-content : 🚀 DEMO-UI - Create IBM Demo UI Deployment] ***
 changed: [localhost]
 
 TASK [ibm-aiops-demo-content : 🕦 DEMO-UI - Wait for Demo UI being ready] ******
@@ -3181,7 +3181,7 @@ changed: [localhost]
 TASK [ibm-aiops-demo-content : 🌏 OCP MENU - Create Openshift WebConsole Menu Item - Home UI] ***
 skipping: [localhost]
 
-TASK [ibm-aiops-demo-content : (050/051) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 Update IBM AIOps Cards] ***
+TASK [ibm-aiops-demo-content : (050/051) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 Update IBM Concert Operate Cards] ***
 included: /ibm-concert-deployer/ansible/roles/ibm-install-global/tasks/99_update_cards.yaml for localhost
 
 TASK [ibm-aiops-demo-content : Log] ********************************************
@@ -3447,7 +3447,7 @@ changed: [localhost]
 TASK [tools-get-openshift-storage : Check if block storage class ocs-storagecluster-ceph-rbd exists in OpenShift] ***
 changed: [localhost]
 
-TASK [MAIN LOOP   🚀 Deploy IBM AIOps Assets - Loop over Instances for ibm-aiops-addons] ***
+TASK [MAIN LOOP   🚀 Deploy IBM Concert Operate Assets - Loop over Instances for ibm-aiops-addons] ***
 
 TASK [tools-install-modules-loop : 🚀 LOOP OVER PRODUCT FEATURES] **************
 ok: [localhost] => {
@@ -3464,10 +3464,10 @@ ok: [localhost] => {
 TASK [tools-install-modules-loop : 🟣  Show Current Feature] *******************
 skipping: [localhost]
 
-TASK [tools-install-modules-loop 🌡   CHECK for - IBM AIOps] ********************
+TASK [tools-install-modules-loop 🌡   CHECK for - IBM Concert Operate] ********************
 skipping: [localhost]
 
-TASK [tools-install-modules-loop 🌡   CHECK for - IBM AIOps Demo Content] *******
+TASK [tools-install-modules-loop 🌡   CHECK for - IBM Concert Operate Demo Content] *******
 skipping: [localhost]
 
 TASK [tools-install-modules-loop 🌡   CHECK for - IBM Concert] ******************
@@ -3524,7 +3524,7 @@ consolenotification.console.openshift.io/ibm-concert-operate-notification-main c
   ------------------------------------------------------------------------------------------------------------------------------------------------------
 
    🛠️  Get Namespaces
-        IBM AIOps namespace: ibm-concert-operate
+        IBM Concert Operate namespace: ibm-concert-operate
    🛠️  Get Cluster Route
    🛠️  Get API Route
         Route: ai-platform-api-ibm-aiops.apps.67e4f622a503e6e92a9eb1fe.eu1.techzone.ibm.com
@@ -3536,20 +3536,20 @@ eeyJhxxxxxxxx
 
 
   ----------------------------------------------------------------------------------------------------------------------------------------------------------
-   🚀  CHECK IBMAIOPS Basic Installation....
+   🚀  CHECK Concert Operate Basic Installation....
   ----------------------------------------------------------------------------------------------------------------------------------------------------------
 
     🔎 Installed Openshift Operator Versions
        NAME                                          DISPLAY                                            VERSION    REPLACES                                           PHASE
-       aimanager-operator.v4.9.0                     IBM AIOps AI Manager                               4.9.0                                                         Succeeded
-       aiopsedge-operator.v4.9.0                     IBM AIOps Edge                                     4.9.0                                                         Succeeded
+       aimanager-operator.v4.9.0                     IBM Concert Operate AI Manager                               4.9.0                                                         Succeeded
+       aiopsedge-operator.v4.9.0                     IBM Concert Operate Edge                                     4.9.0                                                         Succeeded
        asm-operator.v4.9.0                           IBM Netcool Agile Service Manager                  4.9.0                                                         Succeeded
        cloud-native-postgresql.v1.22.8               EDB Postgres for Kubernetes                        1.22.8     cloud-native-postgresql.v1.22.7                    Succeeded
        external-secrets-operator.v0.11.0             External Secrets Operator                          0.11.0     external-secrets-operator.v0.10.7                  Succeeded
-       ibm-aiops-ir-ai.v4.9.0                        IBM Watson AIOps Issue Resolution AI & Analytics   4.9.0                                                         Succeeded
-       ibm-aiops-ir-core.v4.9.0                      IBM Watson AIOps Issue Resolution Core             4.9.0                                                         Succeeded
-       ibm-aiops-ir-lifecycle.v4.9.0                 IBM Cloud Pak for Watson AIOps Lifecycle           4.9.0                                                         Succeeded
-       ibm-aiops-orchestrator.v4.9.0                 IBM Cloud Pak for AIOps                            4.9.0                                                         Succeeded
+       ibm-aiops-ir-ai.v4.9.0                        IBM Watson Concert Operate Issue Resolution AI & Analytics   4.9.0                                                         Succeeded
+       ibm-aiops-ir-core.v4.9.0                      IBM Watson Concert Operate Issue Resolution Core             4.9.0                                                         Succeeded
+       ibm-aiops-ir-lifecycle.v4.9.0                 IBM Cloud Pak for Watson Concert Operate Lifecycle           4.9.0                                                         Succeeded
+       ibm-aiops-orchestrator.v4.9.0                 IBM Cloud Pak for Concert Operate                            4.9.0                                                         Succeeded
        ibm-appconnect.v12.8.2                        IBM App Connect                                    12.8.2                                                        Succeeded
        ibm-cert-manager-operator.v4.2.13             IBM Cert Manager                                   4.2.13                                                        Succeeded
        ibm-common-service-operator.v4.6.10           IBM Cloud Pak foundational services                4.6.10                                                        Succeeded
@@ -3561,7 +3561,7 @@ eeyJhxxxxxxxx
        ibm-redis-cp.v1.2.5                           ibm-redis-cp-controller                            1.2.5                                                         Succeeded
        ibm-secure-tunnel-operator.v4.9.0             IBM Secure Tunnel                                  4.9.0                                                         Succeeded
        ibm-tz-deployer.v0.0.5                        IBM Technology Zone Deployer                       0.0.5                                                         Succeeded
-       ibm-watson-aiops-ui-operator.v4.9.0           IBM AIOps UI                                       4.9.0                                                         Succeeded
+       ibm-watson-aiops-ui-operator.v4.9.0           IBM Concert Operate UI                                       4.9.0                                                         Succeeded
        ibm-zen-operator.v5.1.12                      IBM Zen Service                                    5.1.12                                                        Succeeded
        openshift-gitops-operator.v1.15.1             Red Hat OpenShift GitOps                           1.15.1     openshift-gitops-operator.v1.15.0-0.1738074324.p   Succeeded
        openshift-pipelines-operator-rh.v1.13.0       Red Hat OpenShift Pipelines                        1.13.0     openshift-pipelines-operator-rh.v1.12.2            Succeeded
@@ -3651,10 +3651,10 @@ Error from server (NotFound): routes.route.openshift.io "iaf-system-es" not foun
 
 
   ----------------------------------------------------------------------------------------------------------------------------------------------------------
-  🚀 CHECK IBM AIOps Runbooks
+  🚀 CHECK IBM Concert Operate Runbooks
   ----------------------------------------------------------------------------------------------------------------------------------------------------------
 
-      🔎 Check IBMAIOPS Runbooks
+      🔎 Check Concert Operate Runbooks
          ✅ OK (10 Runbooks)
           - 🚀 Create ACME Incident
           - 🚀 Create RobotShop Incident
@@ -3669,7 +3669,7 @@ Error from server (NotFound): routes.route.openshift.io "iaf-system-es" not foun
 
 
   ----------------------------------------------------------------------------------------------------------------------------------------------------------
-  🚀 CHECK IBM AIOps Policies
+  🚀 CHECK IBM Concert Operate Policies
   ----------------------------------------------------------------------------------------------------------------------------------------------------------
 
       🔎 Check Policies

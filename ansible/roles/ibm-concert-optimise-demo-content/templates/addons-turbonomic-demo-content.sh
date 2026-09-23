@@ -588,7 +588,7 @@ export TURBO_PASSWORD=CHANGEME
             "value": "http://turbo-metrics-dif-service.turbonomic:3000/helloworld"
           }
         ],
-        "type": "DataIngestionFramework-concert Optimise",
+        "type": "DataIngestionFramework-Concert Optimise",
         "readonly": false
       }')
 
@@ -618,7 +618,7 @@ export TURBO_PASSWORD=CHANGEME
             "value": "http://turbo-metrics-dif-service.turbonomic:3000/businessApplication/RobotShopSynthetic/'$robotshopUUID'"
           }
         ],
-        "type": "DataIngestionFramework-concert Optimise",
+        "type": "DataIngestionFramework-Concert Optimise",
         "readonly": false
         }
       }')

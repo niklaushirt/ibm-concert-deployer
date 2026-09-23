@@ -1,7 +1,7 @@
 """
-Metric injector for IBM AIOps DemoUI.
+Metric injector for IBM Concert Operate DemoUI.
 
-Handles injection of simulated metrics into the IBM AIOps Metrics API.
+Handles injection of simulated metrics into the IBM Concert Operate Metrics API.
 Supports CSV-formatted metric definitions with configurable variation.
 """
 
@@ -67,13 +67,13 @@ def inject_metrics(
     iterations: Optional[int] = None,
 ) -> str:
     """
-    Inject simulated metrics into the IBM AIOps Metrics API.
+    Inject simulated metrics into the IBM Concert Operate Metrics API.
 
     Generates metric batches by iterating through the definitions,
     adding random variation to values, and POSTing to the metrics endpoint.
 
     Args:
-        metric_route: Route to the IBM AIOps metrics API.
+        metric_route: Route to the IBM Concert Operate metrics API.
         metric_token: Bearer token for metrics authentication.
         metrics_to_simulate: List of CSV metric definitions.
         time_skew: Initial seconds to add to the base timestamp.

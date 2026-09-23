@@ -11,7 +11,7 @@
 #---------------------------------------------------------------------------------------------------------------------------------------------------"
 #  Installing IBM IT Automation Solutoions
 #
-#  CloudPak for AIOps
+#  CloudPak for Concert Operate
 #
 #  ©2026 nikh@ch.ibm.com
 # ---------------------------------------------------------------------------------------------------------------------------------------------------"
@@ -29,8 +29,8 @@
 # Installs:
 #
 #  - IBM Operator
-#  - IBM CloudPak for AIOps
-#  - IBM CloudPak for AIOps Demo Content
+#  - IBM CloudPak for Concert Operate
+#  - IBM CloudPak for Concert Operate Demo Content
 #     - OpenLDAP & Register with ibm-aiops
 #     - RobotShop Demo App
 #     - Demo Service Account
@@ -96,12 +96,12 @@ data:
       entitled_registry: cp.icr.io
       entitled_registry_user: cp
       catalog_image: icr.io/cpopen/ibm-aiops-catalog:latest
-      current_supported_aiops_version: v4.10
+      current_supported_operate_version: v4.10
 
       # --------------------------------------------------------------------------------------------------------------------------------------
       # Notifications and Cards
       # --------------------------------------------------------------------------------------------------------------------------------------
-      # Create Welcome Cards in ibm-aiops
+      # Create Welcome Cards
       create_cards: true
       # Create App Menu Items in OCP
       create_ocp_items: true
@@ -148,7 +148,7 @@ data:
 
     #--------------------------------------------------------------------------------------------------------------------------------------
 
-    # CloudPak for AIOps Base Install
+    # CloudPak for Concert Operate Base Install
 
     #--------------------------------------------------------------------------------------------------------------------------------------
     # Changing the project name / namespace is at your own risk. some things might break, I do not test this!
@@ -163,14 +163,14 @@ data:
         # Install Sizing
         # current_ibm-aiops_feature
         # ibm-aiops Size of the install (small: PoC/Demo, large: Production)
-        aiops_size: small
-        # Custom Sizing File (aiops_size must be set to "custom")
+        concert_operate_size: small
+        # Custom Sizing File (concert_operate_size must be set to "custom")
         #custom_size_file: none
 
         # --------------------------------------------------------------------------------------------------------------------------------------
         # Install Details
         # Name of the ibm-aiops instance
-        aiops_name: ibm-aiops
+        concert_operate_name: ibm-aiops
         # Version of the catalog subscription
         subscription_channel: v4.6
 
@@ -204,7 +204,7 @@ data:
 
 
     #--------------------------------------------------------------------------------------------------------------------------------------
-    # CloudPak for AIOps Demo Content Install
+    # CloudPak for Concert Operate Demo Content Install
     #--------------------------------------------------------------------------------------------------------------------------------------
       - name: ibm-aiops-demo-content
         kind: IBMAIOpsDemoContent
@@ -296,7 +296,7 @@ data:
         #ldap_user_password: CHANGEME
         # ldap namespace
         ldap_namespace: openldap
-        # Integrate AIOps Login with OpenLDAP 
+        # Integrate Concert Operate Login with OpenLDAP 
         ldap_register: true
         # Integrate OpenShift Login with OpenLDAP
         integrate_ocp_openldap: true
@@ -402,7 +402,7 @@ spec:
               echo "***************************************************************************************************************************************************"
               echo "***************************************************************************************************************************************************"
               echo "                                                                                                                                                   "
-              echo " 🚀 Install IBM AIOps                                                                                                                                                  "
+              echo " 🚀 Install IBM Concert Operate                                                                                                                                                  "
               echo "                                                                                                                                                   "
               echo "***************************************************************************************************************************************************"
               echo "***************************************************************************************************************************************************"

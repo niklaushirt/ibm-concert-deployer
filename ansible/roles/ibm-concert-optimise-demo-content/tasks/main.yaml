@@ -11,9 +11,9 @@
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 #---------------------------------------------------------------------------------------------------------------------------------------------------"
-#  Installing IBM AIOps
+#  Installing IBM Concert Operate
 #
-#  IBM AIOps
+#  IBM Concert Operate
 #
 #  ©2026 nikh@ch.ibm.com
 # ---------------------------------------------------------------------------------------------------------------------------------------------------"
@@ -22,8 +22,8 @@
 # ---------------------------------------------------------------------------------------------------------------------------------------------------"
 # Installs:
 #
-#  - concert Optimise
-#  - concert Optimise Demo Content
+#  - Concert Optimise
+#  - Concert Optimise Demo Content
 #     - Demo User
 #     - RobotShop Demo App with synthetic metric
 #     - Instana target (if Instana is installed - you have to enter the API Token Manually)
@@ -52,7 +52,7 @@
 - name: 📣 OCP CONSOLE - Create Openshift NOTIFICATION
   shell: |
     export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
-    appURL=$(oc get routes -n $AIOPS_NAMESPACE-demo-ui ibm-concert-demo-ui  -o jsonpath="{['spec']['host']}")|| true
+    appURL=$(oc get routes -n ibm-demo-ui ibm-demo-ui  -o jsonpath="{['spec']['host']}")|| true
     OPENSHIFT_ROUTE=$(oc get route -n openshift-console console -o jsonpath={.spec.host})    
 
     cat <<EOF | oc apply -f -
@@ -225,7 +225,7 @@
 # INSTALL CONCERT OPTIMISE DEMO CONTENT
 # ---------------------------------------------------------------------------------------------------------------------------------------------------"
 # Install CONCERT OPTIMISE
-- name: (001/003) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Install concert Optimise Demo Content
+- name: (001/003) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Install Concert Optimise Demo Content
   include_tasks: 10_addons-ibm-concert-optimise-demo-content.yaml
 
 
@@ -244,8 +244,8 @@
   when: (current_feature.create_home_ui | default(false))|bool == true
 
 
-# Update IBMAIOps Cards
-- name: 📥 Update IBMAIOps Cards
+# Update Concert Operate Cards
+- name: 📥 Update Concert Operate Cards
   include_tasks: "{{role_path}}/../ibm-install-global/tasks/99_update_cards.yaml"
 
 
@@ -278,7 +278,7 @@
             href: "https://$appURL"
             text: "IBM Concert Optimise"
         location: BannerTop
-        text: "✅ IBM concert Optimise is installed in this cluster. 🚀 Access it here:"
+        text: "✅ IBM Concert Optimise is installed in this cluster. 🚀 Access it here:"
     EOF
 
   ignore_errors: true

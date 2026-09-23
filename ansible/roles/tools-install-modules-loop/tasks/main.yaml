@@ -36,7 +36,7 @@
 - name: tools-install-modules-loop 🌡   CHECK for - IBM Concert Operate Demo Content
   include_role:
     name: ibm-concert-operate-demo-content
-  when: current_feature.kind=="ConcertOperateDemoContent" and current_feature.install|bool == true
+  when: current_feature.kind=="IBMConcertOperateDemoContent" and current_feature.install|bool == true
 
 
 

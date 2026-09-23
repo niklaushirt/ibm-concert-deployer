@@ -66,9 +66,14 @@ data:
       environment_name: Demo
       cloud_platform: existing-ocp
       # Set this value to True to accept all licenses
-      accept_all_licenses: False
       # Key to decrypt Licenses
       #license_token: NONE
+
+      # --------------------------------------------------------------------------------------------------------------------------------------
+      # License
+      # --------------------------------------------------------------------------------------------------------------------------------------
+      # Set this value to True to accept all licenses
+      accept_all_licenses: False
 
 
       # --------------------------------------------------------------------------------------------------------------------------------------
@@ -77,12 +82,13 @@ data:
       entitled_registry: cp.icr.io
       entitled_registry_user: cp
       catalog_image: icr.io/cpopen/ibm-operator-catalog:latest
-      current_supported_aiops_version: v4.7
+      current_supported_operate_version: v5.1
+
 
       # --------------------------------------------------------------------------------------------------------------------------------------
       # Notifications and Cards
       # --------------------------------------------------------------------------------------------------------------------------------------
-      # Create Welcome Cards in ibm-aiops
+      # Create Welcome Cards
       create_cards: true
       # Create App Menu Items in OCP
       create_ocp_items: true
@@ -91,12 +97,6 @@ data:
       position_ocp_notifications: BannerBottom
       position_final_ocp_notification: BannerTop
 
-
-      # --------------------------------------------------------------------------------------------------------------------------------------
-      # Passwords and Licenses
-      # --------------------------------------------------------------------------------------------------------------------------------------
-      # Set this value to True to accept all licenses
-      accept_all_licenses: False
 
 
     # *************************************************************************************************************************************************
@@ -242,9 +242,6 @@ data:
         # INSTALL_SECURECODER: Set to true if Secure Coder should be installed
         install_secure_coder: true
 
-        # Set to true to enable Concert buddy deployment
-        enable_buddy: true
-
         # Integrate Concert with ITOM and TurboLite
         integrate_itom_turboLite: true
 
@@ -314,7 +311,7 @@ data:
         #ldap_user_password: CHANGEME
         # ldap namespace
         ldap_namespace: openldap
-        # Integrate AIOps Login with OpenLDAP 
+        # Integrate Login with OpenLDAP 
         ldap_register: true
         # Integrate OpenShift Login with OpenLDAP
         integrate_ocp_openldap: true

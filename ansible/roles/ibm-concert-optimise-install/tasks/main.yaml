@@ -11,9 +11,9 @@
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 #---------------------------------------------------------------------------------------------------------------------------------------------------"
-#  Installing IBM AIOps
+#  Installing IBM Concert Operate
 #
-#  IBM AIOps
+#  IBM Concert Operate
 #
 #  ©2026 nikh@ch.ibm.com
 # ---------------------------------------------------------------------------------------------------------------------------------------------------"
@@ -53,7 +53,7 @@
 - name: 📣 OCP CONSOLE - Create Openshift NOTIFICATION
   shell: |
     export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
-    appURL=$(oc get routes -n $AIOPS_NAMESPACE-demo-ui ibm-concert-demo-ui  -o jsonpath="{['spec']['host']}")|| true
+    appURL=$(oc get routes -n ibm-demo-ui ibm-demo-ui  -o jsonpath="{['spec']['host']}")|| true
     OPENSHIFT_ROUTE=$(oc get route -n openshift-console console -o jsonpath={.spec.host})    
     INSTALL_POD=$(oc get po -n ibm-installer -l app=ibm-installer --no-headers|grep "Running"|grep "1/1"|grep 'install-turbo'|awk '{print$1}')
 
@@ -141,8 +141,8 @@
   include_tasks: 91_addons-ibm-concert-optimise-create-ocp-tools-menu.yaml
   when: (global_config.create_ocp_items | default(true))|bool == true  
 
-# Update IBMAIOps Cards
-- name: 🟡🟡🟡 Update IBMAIOps Cards
+# Update Concert Operate Cards
+- name: 🟡🟡🟡 Update Concert Operate Cards
   include_tasks: "{{role_path}}/../ibm-install-global/tasks/99_update_cards.yaml"
 
 

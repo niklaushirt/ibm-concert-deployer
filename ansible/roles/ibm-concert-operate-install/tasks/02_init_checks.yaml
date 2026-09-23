@@ -13,7 +13,7 @@
 # ---------------------------------------------------------------------------------------------------------------------------------------------------"
 #  Ansible Install Playbook V0.1
 #
-#  IBM AIOps
+#  IBM Concert Operate
 #
 #  ©2026 nikh@ch.ibm.com
 # ---------------------------------------------------------------------------------------------------------------------------------------------------"
@@ -74,9 +74,9 @@
       backgroundColor: '#ff7777'
       color: '#000'
       location: "BannerTop"
-      text: '⚠️ This automation has been tested with CP4AIOPS {{global_config.current_supported_aiops_version}} - You are trying to install {{current_feature.subscription_channel}} - Proceed at your own risk!'    
+      text: '⚠️ This automation has been tested with OPERATE {{global_config.current_supported_operate_version}} - You are trying to install {{current_feature.subscription_channel}} - Proceed at your own risk!'    
     EOF
   ignore_errors: true
   args:
     executable: /bin/bash
-  when: global_config.current_supported_aiops_version | default("v4.6") !=  current_feature.subscription_channel 
+  when: global_config.current_supported_operate_version | default("v4.6") !=  current_feature.subscription_channel 

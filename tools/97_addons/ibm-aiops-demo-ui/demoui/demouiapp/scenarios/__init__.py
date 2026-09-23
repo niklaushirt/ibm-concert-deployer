@@ -1,5 +1,5 @@
 """
-Demo scenario modules for IBM AIOps DemoUI.
+Demo scenario modules for IBM Concert Operate DemoUI.
 
 Each scenario encapsulates a specific demo use case (RobotShop, SockShop, etc.)
 and provides methods to inject events, metrics, and logs.

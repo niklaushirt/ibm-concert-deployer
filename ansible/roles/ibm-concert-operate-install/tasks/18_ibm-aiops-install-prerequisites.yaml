@@ -12,7 +12,7 @@
 
 - name: Log
   shell: |
-    export MESSAGE="Installing IBM AIOps Prerequisites"
+    export MESSAGE="Installing IBM Concert Operate Prerequisites"
     export currentDate=$(date +%Y-%m-%d_%H:%M)
     echo "---------------------------------------------------------------------------------------------------------------------------------------------------" >> ../install_{{current_feature.kind}}.log
     echo $currentDate" - "$MESSAGE  >> ../install_{{current_feature.kind}}.log
@@ -29,7 +29,7 @@
       backgroundColor: '#ffd500'
       color: '#000'
       location: {{global_config.position_ocp_notifications | default("BannerTop")}}
-      text: 'Installing {{current_feature.kind}} - Installing IBM AIOps Prerequisites'    
+      text: 'Installing {{current_feature.kind}} - Installing IBM Concert Operate Prerequisites'    
     EOF
   ignore_errors: true
   args:
@@ -69,7 +69,7 @@
       backgroundColor: '#ff7700'
       color: '#000'
       location: {{global_config.position_ocp_notifications | default("BannerTop")}}
-      text: 'Installing {{current_feature.kind}} - 🕦 Wait for IBM AIOps Prerequisites to become ready (about 5-10 minutes) - Started at $(date +%H:%M) UTC'    
+      text: 'Installing {{current_feature.kind}} - 🕦 Wait for IBM Concert Operate Prerequisites to become ready (about 5-10 minutes) - Started at $(date +%H:%M) UTC'    
     EOF
   ignore_errors: true
   args:

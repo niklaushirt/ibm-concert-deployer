@@ -11,7 +11,7 @@
 #---------------------------------------------------------------------------------------------------------------------------------------------------"
 #  LOGS STREAMING POD
 #
-#  IBM AIOps
+#  IBM Concert Operate
 #
 #  ©2026 nikh@ch.ibm.com
 # ---------------------------------------------------------------------------------------------------------------------------------------------------"
@@ -41,7 +41,7 @@ roleRef:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: ibm-concert-demo-ui
+  namespace: ibm-demo-ui
   name: ibm-aiops-simulate-change
   annotations: {}
 spec:
@@ -54,8 +54,8 @@ spec:
       labels:
         app: ibm-aiops-logs-streaming
     spec:
-      serviceAccount: ibm-concert-demo-ui-admin
-      serviceAccount: ibm-concert-demo-ui-admin
+      serviceAccount: ibm-demo-ui-admin
+      serviceAccount: ibm-demo-ui-admin
       containers:
         - name: tools
           image: quay.io/niklaushirt/ibm-concert-tools:1.0.0

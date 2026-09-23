@@ -21,7 +21,7 @@ echo $ZEN_TOKEN
 export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
 
 export ROUTE=$(oc get route -n $AIOPS_NAMESPACE cpd -o jsonpath={.spec.host})
-export DEMOUI_ROUTE=$(oc get route -n $AIOPS_NAMESPACE-demo-ui ibm-concert-demo-ui -o jsonpath={.spec.host})
+export DEMOUI_ROUTE=$(oc get route -n ibm-demo-ui ibm-demo-ui -o jsonpath={.spec.host})
 
     export DEMO_TOKEN=$(oc create token -n default demo-admin --duration=999999999s)
 
@@ -221,7 +221,7 @@ fi
 export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
 
 export ROUTE=$(oc get route -n $AIOPS_NAMESPACE cpd -o jsonpath={.spec.host})
-export DEMOUI_ROUTE=$(oc get route -n $AIOPS_NAMESPACE-demo-ui ibm-concert-demo-ui -o jsonpath={.spec.host})
+export DEMOUI_ROUTE=$(oc get route -n ibm-demo-ui ibm-demo-ui -o jsonpath={.spec.host})
 
     export DEMO_TOKEN=$(oc create token -n default demo-admin --duration=999999999s)
 
@@ -297,7 +297,7 @@ fi
 export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
 
 export ROUTE=$(oc get route -n $AIOPS_NAMESPACE cpd -o jsonpath={.spec.host})
-export DEMOUI_ROUTE=$(oc get route -n $AIOPS_NAMESPACE-demo-ui ibm-concert-demo-ui -o jsonpath={.spec.host})
+export DEMOUI_ROUTE=$(oc get route -n ibm-demo-ui ibm-demo-ui -o jsonpath={.spec.host})
 
     export DEMO_TOKEN=$(oc create token -n default demo-admin --duration=999999999s)
 
@@ -373,7 +373,7 @@ fi
 export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
 
 export ROUTE=$(oc get route -n $AIOPS_NAMESPACE cpd -o jsonpath={.spec.host})
-export DEMOUI_ROUTE=$(oc get route -n $AIOPS_NAMESPACE-demo-ui ibm-concert-demo-ui -o jsonpath={.spec.host})
+export DEMOUI_ROUTE=$(oc get route -n ibm-demo-ui ibm-demo-ui -o jsonpath={.spec.host})
 
     export DEMO_TOKEN=$(oc create token -n default demo-admin --duration=999999999s)
 
@@ -449,7 +449,7 @@ fi
 export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
 
 export ROUTE=$(oc get route -n $AIOPS_NAMESPACE cpd -o jsonpath={.spec.host})
-export DEMOUI_ROUTE=$(oc get route -n $AIOPS_NAMESPACE-demo-ui ibm-concert-demo-ui -o jsonpath={.spec.host})
+export DEMOUI_ROUTE=$(oc get route -n ibm-demo-ui ibm-demo-ui -o jsonpath={.spec.host})
 
     export DEMO_TOKEN=$(oc create token -n default demo-admin --duration=999999999s)
 

@@ -33,7 +33,7 @@ log () {
 display_help() {
    echo "**************************************** Usage ********************************************"
    echo ""
-   echo " This script is used to uninstall IBM Cloud Pak for AIOps version 4.12"
+   echo " This script is used to uninstall IBM Cloud Pak for Concert Operate version 4.12"
    echo " The following prereqs are required before you run this script: "
    echo " - oc CLI is installed and you have logged into the cluster using oc login"
    echo " - Update uninstall-cp4waiops.props with components that you want to uninstall"
@@ -62,7 +62,7 @@ check_namespaced_install () {
     if [[ ! -z "$operator_name" ]]; then
         # Operator is installed in all-ns mode
         AIOPS_NAMESPACED="false"
-        log $INFO "\033[1;36mUninstalling AIOps and its components from the cluster scope.\033[0m"
+        log $INFO "\033[1;36mUninstalling Concert Operate and its components from the cluster scope.\033[0m"
         return 0
     fi
 
@@ -71,7 +71,7 @@ check_namespaced_install () {
     if [[ ! -z "$operator_name" ]]; then
         # Operator is in the user provided ns, this is a namespaced install
         AIOPS_NAMESPACED="true"
-        log $INFO "\033[1;36mUninstalling AIOps from the namespace $CP4WAIOPS_PROJECT. \033[0m"
+        log $INFO "\033[1;36mUninstalling Concert Operate from the namespace $CP4WAIOPS_PROJECT. \033[0m"
         return 0
     fi
 
@@ -302,7 +302,7 @@ delete_installation_instance () {
 	
 	          log $INFO "Below operand requests are left behind in namespace $project"
 	          oc get operandrequests -n $project -o name
-	          log $INFO "Trying to delete remaining operandrequests manually, only for AIOps"
+	          log $INFO "Trying to delete remaining operandrequests manually, only for Concert Operate"
 	          oc delete operandrequests ibm-aiops-ai-manager -n $project --ignore-not-found
 	          oc delete operandrequests ibm-aiops-aiops-foundation -n $project --ignore-not-found
 	          oc delete operandrequests ibm-aiops-application-manager -n $project --ignore-not-found
@@ -385,7 +385,7 @@ delete_bedrock () {
     echo
     log $INFO "Starting uninstall of IBM Cloud Pak Foundational Services components"
 
-    # Only delete IBM Common Services resources if IA is not installed with AIOps
+    # Only delete IBM Common Services resources if IA is not installed with Concert Operate
     if ! iaEnabled; then
         # Since ZenService is automatically deleted via odlm and some resources linger due to their controller being
         # prematurely uplifted, we need to patch the finalizers for zenextension and zenclient.

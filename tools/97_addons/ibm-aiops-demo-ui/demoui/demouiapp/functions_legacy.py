@@ -42,7 +42,7 @@ print(
     "*************************************************************************************************"
 )
 print("")
-print("    🛰️  DemoUI for IBM Automation AIOps")
+print("    🛰️  DemoUI for IBM Automation Concert Operate")
 print("")
 print("       Provided by:")
 print("        🇨🇭 Niklaus Hirt (nikh@ch.ibm.com)")
@@ -744,12 +744,12 @@ def injectMetrics(
     # print ('           METRIC_TIME_SKEW:               '+str(METRIC_TIME_SKEW))
     # print ('           METRIC_TIME_STEP:               '+str(METRIC_TIME_STEP))
     # print ('           METRICS_TO_SIMULATE:               '+str(METRICS_TO_SIMULATE))
-    # print('     ❓ Getting IBMAIOps Namespace')
+    # print('     ❓ Getting Concert Operate Namespace')
     stream = capture_shell(
         "oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}'"
     )
     aimanagerns = stream.read().strip()
-    # print('        ✅ IBMAIOps Namespace:       '+aimanagerns)
+    # print('        ✅ Concert Operate Namespace:       '+aimanagerns)
 
     print("     ❓ Getting Details Metric Endpoint")
     stream = capture_shell(

@@ -1,0 +1,295 @@
+apiVersion: v1                     
+kind: Namespace
+metadata:
+  name: ibm-installer
+---
+apiVersion: operator.openshift.io/v1alpha1
+kind: ImageContentSourcePolicy
+metadata:
+  name: ibm-aiops-rc
+spec:
+  repositoryDigestMirrors:
+    - mirrors:
+        - cp.stg.icr.io/cp
+      source: cp.icr.io/cp
+    - mirrors:
+        - cp.stg.icr.io/cp
+      source: icr.io/cpopen
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: ibm-installer-admin
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+  - kind: ServiceAccount
+    name: default
+    namespace: ibm-installer
+---    
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: kubecost-cost-analyzer-admin
+subjects:
+  - kind: ServiceAccount
+    name: kubecost-cost-analyzer
+    namespace: kubecost
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: ibm-aiops-install-kubecost
+  namespace: ibm-installer
+  labels:
+   job-type: data-load-job
+spec:
+  serviceAccount: ibm-installer-admin
+  template:
+    spec:
+      containers:
+        - name: install
+          image: quay.io/niklaushirt/ibm-concert-tools:1.0.0
+          imagePullPolicy: IfNotPresent
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "150m"
+            limits:
+              memory: "2024Mi"
+              cpu: "1200m"
+          command:
+            - /bin/sh
+            - -c
+            - |
+              #!/bin/bash
+              #set -x
+
+              cat <<EOF | oc apply -f -
+              apiVersion: console.openshift.io/v1
+              kind: ConsoleNotification
+              metadata:
+                name: ibm-concert-operate-notification-kubecost
+              spec:
+                backgroundColor: '#141a6b'
+                color: '#fff'
+                location: "BannerTop"
+                text: 'Installing Kubecost'    
+              EOF
+
+
+              echo "*****************************************************************************************************************************"
+              echo " ✅ STARTING: INSTALL KUBECOST"
+              echo "*****************************************************************************************************************************"
+              echo ""
+              echo ""
+              # echo "------------------------------------------------------------------------------------------------------------------------------"
+              # echo " 🚀 Getting Source from GitHub"
+              # echo "------------------------------------------------------------------------------------------------------------------------------"
+              # echo "   📥 Clone Repo $REPO_URL"
+              # git clone $REPO_URL
+              # cd ibm-aiops-tools
+
+              # echo ""
+              # echo ""
+              # echo "------------------------------------------------------------------------------------------------------------------------------"
+              # echo "   🔎 This Repo includes those latestet Commits"
+              # git log|head -n 17
+              # echo ""
+              # echo ""
+
+
+              echo "------------------------------------------------------------------------------------------------------------------------------"
+              echo " 🚀 Install Helm"
+
+              curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
+              chmod 700 get_helm.sh
+              ./get_helm.sh
+
+
+
+              echo "------------------------------------------------------------------------------------------------------------------------------"
+              echo " 🚀 Install Kubecost"
+
+              cat << EOF > /tmp/values-openshift.yaml
+
+              # This Helm values file is a modified version of values-openshift.yaml
+              # The primary difference is that this file is configured to disable the Kubecost-bundled Prometheus, and instead leverage the Prometheus instance that is typically pre-installed in OpenShift clusters.
+              global:
+                platforms:
+                  # Deploying to OpenShift (OCP) requires enabling this option.
+                  openshift:
+                    enabled: true  # Deploy Kubecost to OpenShift.
+                    createMonitoringClusterRoleBinding: true  # Create a ClusterRoleBinding to grant the Kubecost serviceaccount access to query Prometheus.
+                    createMonitoringResourceReaderRoleBinding: true  # Create a Role and Role Binding to allow Prometheus to list and watch Kubecost resources.
+                    monitoringServiceAccountName: prometheus-k8s  # Name of the Prometheus serviceaccount to bind to the Resource Reader Role Binding.
+                    monitoringServiceAccountNamespace: openshift-monitoring  # Namespace of the Prometheus serviceaccount to bind to the Resource Reader Role Binding.
+                    route:
+                      enabled: true  # Create an OpenShift Route.
+                      annotations: {}  # Add annotations to the Route.
+
+
+              kubecostProductConfigs:
+                clusterName: primary-cluster
+                carbonEstimates:
+                  enabled: true
+
+              serviceMonitor:
+                enabled: true
+
+              prometheusRule:
+                enabled: true
+
+              clusterController:
+                enabled: true
+
+              networkCosts:
+                enabled: true
+                trafficLogging: true
+                logLevel: info  # error, warn, info, debug, trace
+                prometheusScrape: true
+
+                config:
+                  # Configuration for traffic destinations, including specific classification
+                  # for IPs and CIDR blocks. This configuration will act as an override to the
+                  # automatic classification provided by network-costs.
+                  destinations:
+                    # In Zone contains a list of address/range that will be
+                    # classified as in zone.
+                    in-zone:
+                      # Loopback Addresses in "IANA IPv4 Special-Purpose Address Registry"
+                      - "127.0.0.0/8"
+                      # IPv4 Link Local Address Space
+                      - "169.254.0.0/16"
+                      # Private Address Ranges in RFC-1918
+                      - "10.0.0.0/8"  # Remove this entry if using Multi-AZ Kubernetes
+                      - "172.16.0.0/12"
+                      - "192.168.0.0/16"
+
+                    # In Region contains a list of address/range that will be
+                    # classified as in region. This is synonymous with cross
+                    # zone traffic, where the regions between source and destinations
+                    # are the same, but the zone is different.
+                    in-region: []
+
+                    # Cross Region contains a list of address/range that will be
+                    # classified as non-internet egress from one region to another.
+                    cross-region: []
+
+                    # Internet contains a list of address/range that will be
+                    # classified as internet traffic. This is synonymous with traffic
+                    # that cannot be classified within the cluster.
+                    # NOTE: Internet classification filters are executed _after_
+                    # NOTE: direct-classification, but before in-zone, in-region,
+                    # NOTE: and cross-region.
+                    internet: []
+
+                    # Direct Classification specifically maps an ip address or range
+                    # to a region (required) and/or zone (optional). This classification
+                    # takes priority over in-zone, in-region, and cross-region configurations.
+                    direct-classification: []
+                    # - region: "us-east1"
+                    #   zone: "us-east1-c"
+                    #   ips:
+                    #     - "10.0.0.0/24"
+              
+              EOF
+
+
+              helm install kubecost cost-analyzer \
+              --repo https://kubecost.github.io/cost-analyzer/ \
+              --namespace kubecost --create-namespace \
+              --set kubecostToken="$KUBECOST_TOKEN"  \
+              -f /tmp/values-openshift.yaml
+
+
+
+              # helm install kubecost cost-analyzer \
+              # --repo https://kubecost.github.io/cost-analyzer/ \
+              # --namespace kubecost --create-namespace \
+              # --set kubecostToken="$KUBECOST_TOKEN"  \
+              # --set clusterController.enabled=true \
+              # --set prometheus.serviceAccounts.nodeExporter.enabled=false \
+              # -f /tmp/values-openshift.yaml
+
+
+              # helm upgrade kubecost cost-analyzer \
+              #               --repo https://kubecost.github.io/cost-analyzer/ \
+              #               --namespace kubecost --create-namespace \
+              #               -f /tmp/values-openshift.yaml
+
+              # helm uninstall -n kubecost kubecost || oc delete job ibm-aiops-install-kubecost -n ibm-installer
+
+              # kubectl port-forward --namespace kubecost deployment/kubecost-cost-analyzer 9090
+
+              cat <<EOF | oc apply -f -
+              kind: ClusterRoleBinding
+              apiVersion: rbac.authorization.k8s.io/v1
+              metadata:
+                name: kubecost-cluster-controller-admin
+              roleRef:
+                apiGroup: rbac.authorization.k8s.io
+                kind: ClusterRole
+                name: cluster-admin
+              subjects:
+                - kind: ServiceAccount
+                  name: kubecost-cluster-controller
+                  namespace: kubecost
+              EOF
+
+
+
+              cat <<EOF | oc apply -f -
+              apiVersion: console.openshift.io/v1
+              kind: ConsoleNotification
+              metadata:
+                  name: ibm-concert-operate-notification-kubecost
+              spec:
+                  backgroundColor: '#009a00'
+                  color: '#fff'
+                location: "BannerTop"
+                text: "✅ IBM Turbonomic Demo Content has been installed"
+              EOF
+              export KUBECOST_URL=$(oc get route kubecost-cost-analyzer-route -n kubecost  -o jsonpath={.spec.host})
+
+              cat <<EOF | oc apply -f -
+              apiVersion: console.openshift.io/v1
+              kind: ConsoleNotification
+              metadata:
+                  name: ibm-concert-operate-notification-ria
+              spec:
+                  backgroundColor: '#009a00'
+                  color: '#fff'
+                  link:
+                      href: "https://$KUBECOST_URL"
+                      text: Kubecost
+                  location: BannerTop
+                  text: "✅ IBM Kubecost is installed in this cluster. 🚀 Access it here:"
+              EOF
+
+
+
+              echo "*****************************************************************************************************************************"
+              echo " ✅ DONE"
+              echo "*****************************************************************************************************************************"
+
+              while true
+              do
+                sleep 1000
+              done
+              echo "*****************************************************************************************************************************"
+
+
+          env:
+          - name: REPO_URL
+            value : "https://github.com/niklaushirt/ibm-aiops-tools.git"
+          - name: KUBECOST_TOKEN
+            value : <REGISTRY_TOKEN>
+      restartPolicy: Never
+  backoffLimit: 4

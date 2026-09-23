@@ -1,7 +1,7 @@
 apiVersion: orchestrator.aiops.ibm.com/v1alpha1
 kind: Installation
 metadata:
-  name: {{ current_feature.aiops_name }}
+  name: {{ current_feature.concert_operate_name }}
   namespace: {{ current_ibm_feature.project }}
 spec:
   imagePullSecret: ibm-entitlement-key
@@ -32,7 +32,7 @@ spec:
       storageClass: ''
     data-iaf-system-kafka:
       storageClass: ''
-  size: {{ current_feature.aiops_size }}
+  size: {{ current_feature.concert_operate_size }}
   storageClass: '{{ STORAGE_CLASS_FILE }}'
   storageClassLargeBlock: '{{ STORAGE_CLASS_LARGE_BLOCK }}'
   topologyModel: {{ current_feature.topologyModel | default("application") }}

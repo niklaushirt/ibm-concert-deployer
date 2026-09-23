@@ -1,5 +1,5 @@
 """
-Custom demo scenario for IBM AIOps DemoUI.
+Custom demo scenario for IBM Concert Operate DemoUI.
 
 Loads user-defined events, metrics, and logs from environment variables.
 """
@@ -61,7 +61,7 @@ class CustomScenario:
         Inject custom events into the datalayer.
 
         Args:
-            datalayer_route: Route to the IBM AIOps datalayer API.
+            datalayer_route: Route to the IBM Concert Operate datalayer API.
             datalayer_user: Username for datalayer authentication.
             datalayer_pwd: Password for datalayer authentication.
 
@@ -128,7 +128,7 @@ class CustomScenario:
         Inject custom metrics into the metrics API.
 
         Args:
-            metric_route: Route to the IBM AIOps metrics API.
+            metric_route: Route to the IBM Concert Operate metrics API.
             metric_token: Bearer token for metrics authentication.
 
         Returns:

@@ -13,7 +13,7 @@
 # ---------------------------------------------------------------------------------------------------------------------------------------------------"
 #  Ansible Install Playbook V0.1
 #
-#  IBM AIOps
+#  IBM Concert Operate
 #
 #  ©2026 nikh@ch.ibm.com
 # ---------------------------------------------------------------------------------------------------------------------------------------------------"
@@ -137,7 +137,7 @@
       name: aimanager-aio-training-priority
     value: 1
     globalDefault: false
-    description: "This priority class is created for IBM AIOps Training Pods."   
+    description: "This priority class is created for IBM Concert Operate Training Pods."   
     EOF
 
     oc get PriorityClass

@@ -9,7 +9,7 @@
 
 - name: Log
   shell: |
-    export MESSAGE=" 🌏 Update IBMAIOps Cards"
+    export MESSAGE=" 🌏 Update Concert Operate Cards"
     export currentDate=$(date +%Y-%m-%d_%H:%M)
     echo "---------------------------------------------------------------------------------------------------------------------------------------------------" >> ../install_{{current_feature.kind}}.log
     echo $currentDate" - "$MESSAGE  >> ../install_{{current_feature.kind}}.log
@@ -26,7 +26,7 @@
       backgroundColor: '#ffd500'
       color: '#000'
       location: {{global_config.position_ocp_notifications | default("BannerTop")}}
-      text: 'Installing {{current_feature.kind}} - Update IBMAIOps Cards'    
+      text: 'Installing {{current_feature.kind}} - Update Concert Operate Cards'    
     EOF
   ignore_errors: true
   args:
@@ -73,7 +73,7 @@
         ZEN_TOKEN=$(echo "${ZEN_LOGIN_RESPONSE}" | jq -r .token)
         echo "${ZEN_TOKEN}"
       else
-        echo "Skipping: IBMAIOps not installed"
+        echo "Skipping: Concert Operate not installed"
       fi
     ignore_errors: true
     register: output   
@@ -102,7 +102,7 @@
         curl -X "DELETE" -k "https://$ROUTE/zen-data/v1/custom_cards/appscard" -H "Authorization: Bearer {{ZEN_TOKEN}}" -H "Content-Type: application/json"
 
       else
-        echo "Skipping: IBMAIOps not installed"
+        echo "Skipping: Concert Operate not installed"
       fi
     ignore_errors: true
     register: output
@@ -122,7 +122,7 @@
       if [ "${AIOPS_NAMESPACE}" != "" ]; then
 
         export ROUTE=$(oc get route -n $AIOPS_NAMESPACE cpd  -o jsonpath={.spec.host})          
-        demoURL=$(oc get routes -n $AIOPS_NAMESPACE-demo-ui ibm-concert-demo-ui  -o jsonpath="{['spec']['host']}")
+        demoURL=$(oc get routes -n ibm-demo-ui ibm-demo-ui  -o jsonpath="{['spec']['host']}")
 
         export ROWS=""
 
@@ -142,7 +142,7 @@
         echo "      🔎 Result: "
         echo "       "$result
       else
-        echo "Skipping: IBMAIOps not installed"
+        echo "Skipping: Concert Operate not installed"
       fi
     ignore_errors: true
     register: output
@@ -178,9 +178,9 @@
   #       ROWS=$ROWS'{"drilldown_url":  "", "label": "", "sub_text": "User: administrator - Password: {{current_feature.concert_optimise_admin_password  | default( global_config.global_password )}} "},'
   #       fi
 
-  #       ROWS=$ROWS'{"drilldown_url":  "", "label": "Select your IBM AIOps Application above.", "sub_text": ""}'
+  #       ROWS=$ROWS'{"drilldown_url":  "", "label": "Select your IBM Concert Operate Application above.", "sub_text": ""}'
 
-  #       PAYLOAD='{ "permissions": ["administrator"], "window_open_target": "_blank", "order": 2, "title": "🟣   IBM Automation - AIOps", "template_type": "text_list", "data": { "text_list_data": { "rows": [ '$ROWS' ] } }}'
+  #       PAYLOAD='{ "permissions": ["administrator"], "window_open_target": "_blank", "order": 2, "title": "🟣   IBM Automation - Concert Operate", "template_type": "text_list", "data": { "text_list_data": { "rows": [ '$ROWS' ] } }}'
   #       echo "PAYLOAD:"$PAYLOAD
 
   #       echo "curl -X \"PUT\" -k \"https://$ROUTE/zen-data/v1/custom_cards/aiopscard\" -H \"Authorization: Bearer {{ZEN_TOKEN}}\" -H \"Content-Type: application/json\" -d \"$PAYLOAD\""
@@ -189,7 +189,7 @@
   #       echo "      🔎 Result: "
   #       echo "       "$result
   #     else
-  #       echo "Skipping: IBMAIOps not installed"
+  #       echo "Skipping: Concert Operate not installed"
   #     fi
   #   ignore_errors: true
   #   register: output
@@ -206,7 +206,7 @@
       export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
       if [ "${AIOPS_NAMESPACE}" != "" ]; then
         export ROUTE=$(oc get route -n $AIOPS_NAMESPACE cpd  -o jsonpath={.spec.host})          
-        export demoURL=$(oc get route -n $AIOPS_NAMESPACE-demo-ui ibm-concert-demo-ui  -o jsonpath={.spec.host})          
+        export demoURL=$(oc get route -n ibm-demo-ui ibm-demo-ui  -o jsonpath={.spec.host})          
 
         export ROWS=""
 
@@ -224,7 +224,7 @@
         echo "      🔎 Result: "
         echo "       "$result
       else
-        echo "Skipping: IBMAIOps not installed"
+        echo "Skipping: Concert Operate not installed"
       fi
     ignore_errors: true
     register: output
@@ -240,7 +240,7 @@
       export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
       if [ "${AIOPS_NAMESPACE}" != "" ]; then
         export ROUTE=$(oc get route -n $AIOPS_NAMESPACE cpd  -o jsonpath={.spec.host})          
-        export demoURL=$(oc get route -n $AIOPS_NAMESPACE-demo-ui ibm-concert-demo-ui  -o jsonpath={.spec.host})          
+        export demoURL=$(oc get route -n ibm-demo-ui ibm-demo-ui  -o jsonpath={.spec.host})          
 
         export ROWS=""
 
@@ -257,7 +257,7 @@
         echo "      🔎 Result: "
         echo "       "$result
       else
-        echo "Skipping: IBMAIOps not installed"
+        echo "Skipping: Concert Operate not installed"
       fi
     ignore_errors: true
     register: output
@@ -275,7 +275,7 @@
       export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
       if [ "${AIOPS_NAMESPACE}" != "" ]; then
         export ROUTE=$(oc get route -n $AIOPS_NAMESPACE cpd  -o jsonpath={.spec.host})          
-        export demoURL=$(oc get route -n $AIOPS_NAMESPACE-demo-ui ibm-concert-demo-ui  -o jsonpath={.spec.host})          
+        export demoURL=$(oc get route -n ibm-demo-ui ibm-demo-ui  -o jsonpath={.spec.host})          
 
         export ROWS=""
 
@@ -291,7 +291,7 @@
         echo "      🔎 Result: "
         echo "       "$result
       else
-        echo "Skipping: IBMAIOps not installed"
+        echo "Skipping: Concert Operate not installed"
       fi
     ignore_errors: true
     register: output
@@ -360,7 +360,7 @@
         echo "      🔎 Result: "
         echo "       "$result
       else
-        echo "Skipping: IBMAIOps not installed"
+        echo "Skipping: Concert Operate not installed"
       fi
     ignore_errors: true
     register: output
@@ -420,7 +420,7 @@
   #       echo "      🔎 Result: "
   #       echo "       "$result
   #     else
-  #       echo "Skipping: IBMAIOps not installed"
+  #       echo "Skipping: Concert Operate not installed"
   #     fi
 
   #   ignore_errors: true

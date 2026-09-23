@@ -43,7 +43,7 @@
 - name: 🌏 OCP CONSOLE - Create Openshift WebConsole Menu Item
   shell: |
     export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
-    appURL=$(oc get routes -n $AIOPS_NAMESPACE-demo-ui ibm-concert-demo-ui  -o jsonpath="{['spec']['host']}")|| true
+    appURL=$(oc get routes -n ibm-demo-ui ibm-demo-ui  -o jsonpath="{['spec']['host']}")|| true
 
     cat <<EOF | oc apply -f -
       apiVersion: console.openshift.io/v1

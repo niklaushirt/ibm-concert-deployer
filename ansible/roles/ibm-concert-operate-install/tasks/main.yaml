@@ -11,9 +11,9 @@
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 #---------------------------------------------------------------------------------------------------------------------------------------------------"
-#  Installing IBM AIOps
+#  Installing IBM Concert Operate
 #
-#  IBM AIOps
+#  IBM Concert Operate
 #
 #  ©2026 nikh@ch.ibm.com
 # ---------------------------------------------------------------------------------------------------------------------------------------------------"
@@ -23,7 +23,7 @@
 # Installs:
 #
 #  - AIOPS Operator
-#  - IBM AIOps
+#  - IBM Concert Operate
 # ---------------------------------------------------------------------------------------------------------------------------------------------------"
 # ---------------------------------------------------------------------------------------------------------------------------------------------------"
  
@@ -37,7 +37,7 @@
     - "***************************************************************************************************************************************************"
     - "***************************************************************************************************************************************************"
     - "                                                                                                                                                   "
-    - "      � IBM AIOps - INSTALLING {{current_feature.kind}} "
+    - "      � IBM Concert Operate - INSTALLING {{current_feature.kind}} "
     - "                                                                                                                                                   "
     - "***************************************************************************************************************************************************"
     - "***************************************************************************************************************************************************"
@@ -46,7 +46,7 @@
 
 - name: Log
   shell: |
-    export MESSAGE="Installing IBM AIOps"
+    export MESSAGE="Installing IBM Concert Operate"
     export currentDate=$(date +%Y-%m-%d_%H:%M)
     echo "---------------------------------------------------------------------------------------------------------------------------------------------------" >> ../install_{{current_feature.kind}}.log
     echo $currentDate" - "$MESSAGE  >> ../install_{{current_feature.kind}}.log
@@ -57,7 +57,7 @@
 - name: 📣 OCP CONSOLE - Create Openshift NOTIFICATION
   shell: |
     export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
-    appURL=$(oc get routes -n $AIOPS_NAMESPACE-demo-ui ibm-concert-demo-ui  -o jsonpath="{['spec']['host']}")|| true
+    appURL=$(oc get routes -n ibm-demo-ui ibm-demo-ui  -o jsonpath="{['spec']['host']}")|| true
     OPENSHIFT_ROUTE=$(oc get route -n openshift-console console -o jsonpath={.spec.host})
     INSTALL_POD=$(oc get po -n ibm-installer -l app=ibm-installer --no-headers|grep "Running"|grep "1/1"|awk '{print$1}')
 
@@ -100,8 +100,8 @@
     - "        Storage Class InfraManagement:           {{ ocp_storage_class_file | default('not defined') }}"
     - "-----------------------------------------------------------------------------------------------"
     - "  📥 CONFIG"
-    - "     ✅ Installation Name:                        {{current_feature.aiops_name}}"
-    - "     🔎 IBM AIOps Size:                           {{current_feature.aiops_size}}"
+    - "     ✅ Installation Name:                        {{current_feature.concert_operate_name}}"
+    - "     🔎 IBM Concert Operate Size:                           {{current_feature.concert_operate_size}}"
     - "     🔽 Custom Sizing File:                       {{current_feature.custom_size_file | default('none')}}"
     - "     📣 Show Notifications:                       {{global_config.create_ocp_notifications | default('not defined')}}"
     - "     📣 Primary Notifications Position:           {{global_config.position_final_ocp_notification | default('not defined')}}"
@@ -144,12 +144,12 @@
   include_tasks: "{{role_path}}/../ibm-install-global/tasks/05_init-get-storage-class.yaml"
 
 
-- name: (007/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 Install IBM AIOps Prerequisites 
+- name: (007/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 Install IBM Concert Operate Prerequisites 
   include_tasks: 06_ibm-aiops-prerequisites.yaml
       
 
 # Install IBM AIOPS Operator
-- name: (008/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 IBM AIOps Custom Hook
+- name: (008/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 IBM Concert Operate Custom Hook
   include_tasks: 08_ibm-aiops-custom-hook.yaml
 
 
@@ -157,7 +157,7 @@
 # ---------------------------------------------------------------------------------------------------------------------------------------------------"
 # INSTALL CATALOG with YAML FILE
 # ---------------------------------------------------------------------------------------------------------------------------------------------------"
-- name: (009/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 Install IBM AIOps Catalog - Classic Way (skipped if CASE selected)
+- name: (009/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 Install IBM Concert Operate Catalog - Classic Way (skipped if CASE selected)
   include_tasks: 10_ibm-operator-catalog.yaml
   when: current_feature.case_install|bool == false
 
@@ -165,13 +165,13 @@
 # ---------------------------------------------------------------------------------------------------------------------------------------------------"
 # INSTALL CATALOG with CASE FILE
 # ---------------------------------------------------------------------------------------------------------------------------------------------------"
-- name: (010/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 Install IBM AIOps Catalog - Save Case File (this can take some time - skipped if not selected)
+- name: (010/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 Install IBM Concert Operate Catalog - Save Case File (this can take some time - skipped if not selected)
   include_role:
     name: tools-aiops-case-save
   when: current_feature.case_install|bool == true
 
 
-- name: (011/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 Install IBM AIOps Catalog - Create CatalogSources from Case File (this can take some time - skipped if not selected)
+- name: (011/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 Install IBM Concert Operate Catalog - Create CatalogSources from Case File (this can take some time - skipped if not selected)
   include_role:
     name: tools-aiops-case-catalog-source
   when: current_feature.case_install|bool == true
@@ -183,14 +183,14 @@
 # ---------------------------------------------------------------------------------------------------------------------------------------------------"
 
 # Install IBM AIOPS Prerequisites
-- name: (012/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 Install the IBM AIOps Instance
+- name: (012/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 Install the IBM Concert Operate Instance
   include_tasks: 18_ibm-aiops-install-prerequisites.yaml
 
 
 # ---------------------------------------------------------------------------------------------------------------------------------------------------"
 # INSTALL IBM AIOPS OPERATOR
 # ---------------------------------------------------------------------------------------------------------------------------------------------------"
-- name: (013/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 Install the IBM AIOps Operator
+- name: (013/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 Install the IBM Concert Operate Operator
   include_tasks: 11_ibm-aiops-operator.yaml
 
 
@@ -209,7 +209,7 @@
 # ---------------------------------------------------------------------------------------------------------------------------------------------------"
 
 # Install IBM AIOPS Instance
-- name: (015/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 Install the IBM AIOps Instance
+- name: (015/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 Install the IBM Concert Operate Instance
   include_tasks: 19_ibm-aiops-install.yaml
       
 
@@ -218,7 +218,7 @@
 # # ---------------------------------------------------------------------------------------------------------------------------------------------------"
 
 # # Wait for IBM AIOPS HACK
-# - name: (016/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 Wait for IBM AIOps to apply HACK
+# - name: (016/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 Wait for IBM Concert Operate to apply HACK
 #   include_tasks: 99_ibm-aiops-wait-ibm-HACK.yaml
 
 
@@ -227,18 +227,18 @@
 # ---------------------------------------------------------------------------------------------------------------------------------------------------"
 
 # Wait for IBM AIOPS being completely installed
-- name: (016/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 Wait for IBM AIOps to be ready
+- name: (016/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 Wait for IBM Concert Operate to be ready
   include_tasks: 99_ibm-aiops-wait-ibm-aiops.yaml
 
 # --------------------------------------------------------------------------------------------------------------------------------------
 # Create Openshift WebConsole Menu Item
 # --------------------------------------------------------------------------------------------------------------------------------------
-- name: (017/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Create IBM AIOps Openshift WebConsole Menu Item
+- name: (017/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Create IBM Concert Operate Openshift WebConsole Menu Item
   include_tasks: 91_ibm-aiops-create-ocp-menu.yaml
   when: (global_config.create_ocp_items | default(true))|bool == true  
 
-# Update IBM AIOps Cards
-- name: (018/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 Update IBM AIOps Cards
+# Update IBM Concert Operate Cards
+- name: (018/019) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 Update IBM Concert Operate Cards
   include_tasks: "{{role_path}}/../ibm-install-global/tasks/99_update_cards.yaml"
 
 

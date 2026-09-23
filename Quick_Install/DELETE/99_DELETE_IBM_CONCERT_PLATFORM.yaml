@@ -134,6 +134,8 @@ spec:
               oc delete Xl -n ibm-concert-optimise xl-release 
               sleep 15
               oc delete ns home-ui &
+              oc delete ns sock-shop &
+              oc delete ns robot-shop &
 
 
               oc delete ns ibm-concert &
@@ -147,9 +149,9 @@ spec:
 
               oc delete ns ibm-concert-optimise &
 
+              oc delete ConsoleNotifications --all
 
               oc delete ns ibm-installer &
-              oc delete ConsoleNotifications --all
 
 
 

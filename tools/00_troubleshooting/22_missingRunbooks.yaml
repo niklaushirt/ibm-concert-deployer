@@ -63,7 +63,7 @@ metadata:
   name: troubleshoot-2-2-create-missing-runbooks
   namespace: ibm-installer
   labels:
-   aiops-type: data-load-job
+   job-type: data-load-job
 spec:
   template:
     metadata:
@@ -389,7 +389,7 @@ spec:
               echo " 🚀 AWX - Create AIOPS Runbook - Clear All Incidents"
 
               export ROUTE=$(oc get route -n $AIOPS_NAMESPACE cpd -o jsonpath={.spec.host})
-              export DEMOUI_ROUTE=${ROUTE/cpd-ibm-aiops/ibm-concert-demo-ui-ibm-concert-demo-ui}
+              export DEMOUI_ROUTE=${ROUTE/cpd-ibm-aiops/ibm-demo-ui-ibm-demo-ui}
               
               export DEMO_TOKEN=$(oc create token -n default demo-admin --duration=999999999s)
 
@@ -470,7 +470,7 @@ spec:
               echo " 🚀 AWX - Create AIOPS Runbook - Create RobotShop Incident"
 
               export ROUTE=$(oc get route -n $AIOPS_NAMESPACE cpd -o jsonpath={.spec.host})
-              export DEMOUI_ROUTE=${ROUTE/cpd-ibm-aiops/ibm-concert-demo-ui-ibm-concert-demo-ui}
+              export DEMOUI_ROUTE=${ROUTE/cpd-ibm-aiops/ibm-demo-ui-ibm-demo-ui}
               
               export DEMO_TOKEN=$(oc create token -n default demo-admin --duration=999999999s)
 
@@ -549,7 +549,7 @@ spec:
               export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
               export ZEN_TOKEN=$ZEN_TOKEN
               export ROUTE=$(oc get route -n $AIOPS_NAMESPACE cpd -o jsonpath={.spec.host})
-              export DEMOUI_ROUTE=${ROUTE/cpd-ibm-aiops/ibm-concert-demo-ui-ibm-concert-demo-ui}
+              export DEMOUI_ROUTE=${ROUTE/cpd-ibm-aiops/ibm-demo-ui-ibm-demo-ui}
               
               export DEMO_TOKEN=$(oc create token -n default demo-admin --duration=999999999s)
 
@@ -627,7 +627,7 @@ spec:
               echo " 🚀 AWX - Create AIOPS Runbook - Create SockShop Incident"
 
               export ROUTE=$(oc get route -n $AIOPS_NAMESPACE cpd -o jsonpath={.spec.host})
-              export DEMOUI_ROUTE=${ROUTE/cpd-ibm-aiops/ibm-concert-demo-ui-ibm-concert-demo-ui}
+              export DEMOUI_ROUTE=${ROUTE/cpd-ibm-aiops/ibm-demo-ui-ibm-demo-ui}
               
               export DEMO_TOKEN=$(oc create token -n default demo-admin --duration=999999999s)
 
@@ -708,7 +708,7 @@ spec:
               echo " 🚀 AWX - Create AIOPS Runbook - Create ACME Incident"
 
               export ROUTE=$(oc get route -n $AIOPS_NAMESPACE cpd -o jsonpath={.spec.host})
-              export DEMOUI_ROUTE=${ROUTE/cpd-ibm-aiops/ibm-concert-demo-ui-ibm-concert-demo-ui}
+              export DEMOUI_ROUTE=${ROUTE/cpd-ibm-aiops/ibm-demo-ui-ibm-demo-ui}
               
               export DEMO_TOKEN=$(oc create token -n default demo-admin --duration=999999999s)
 
@@ -788,7 +788,7 @@ spec:
               echo " 🚀 AWX - Create AIOPS Runbook - Create London Underground Incident"
 
               export ROUTE=$(oc get route -n $AIOPS_NAMESPACE cpd -o jsonpath={.spec.host})
-              export DEMOUI_ROUTE=${ROUTE/cpd-ibm-aiops/ibm-concert-demo-ui-ibm-concert-demo-ui}
+              export DEMOUI_ROUTE=${ROUTE/cpd-ibm-aiops/ibm-demo-ui-ibm-demo-ui}
               
               export DEMO_TOKEN=$(oc create token -n default demo-admin --duration=999999999s)
 
@@ -870,7 +870,7 @@ spec:
               echo " 🚀 AWX - Create AIOPS Runbook - Create Optical Network Incident"
 
               export ROUTE=$(oc get route -n $AIOPS_NAMESPACE cpd -o jsonpath={.spec.host})
-              export DEMOUI_ROUTE=${ROUTE/cpd-ibm-aiops/ibm-concert-demo-ui-ibm-concert-demo-ui}
+              export DEMOUI_ROUTE=${ROUTE/cpd-ibm-aiops/ibm-demo-ui-ibm-demo-ui}
               
               export DEMO_TOKEN=$(oc create token -n default demo-admin --duration=999999999s)
 
@@ -940,7 +940,7 @@ spec:
               echo " 🚀 AWX - Create AIOPS Runbook - Create Optical Network Incident"
 
               export ROUTE=$(oc get route -n $AIOPS_NAMESPACE cpd -o jsonpath={.spec.host})
-              export DEMOUI_ROUTE=${ROUTE/cpd-ibm-aiops/ibm-concert-demo-ui-ibm-concert-demo-ui}
+              export DEMOUI_ROUTE=${ROUTE/cpd-ibm-aiops/ibm-demo-ui-ibm-demo-ui}
               
               export DEMO_TOKEN=$(oc create token -n default demo-admin --duration=999999999s)
 

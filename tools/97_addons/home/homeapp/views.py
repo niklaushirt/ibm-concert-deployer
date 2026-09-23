@@ -56,7 +56,7 @@ stream = os.popen('oc get route -n {{ current_ibm_feature.project }} concert -o 
 CONCERT_URL = stream.read().strip()
 
 
-print('     ❓ Getting Details AIOps Route')
+print('     ❓ Getting Details Concert Operate Route')
 stream = os.popen('oc get route -n ibm-aiops cpd -o jsonpath={.spec.host}')
 AIOPS_URL = stream.read().strip()
 

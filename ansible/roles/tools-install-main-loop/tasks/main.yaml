@@ -9,9 +9,9 @@
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 #---------------------------------------------------------------------------------------------------------------------------------------------------"
-#  Installing IBM AIOps
+#  Installing IBM Concert Operate
 #
-#  IBM AIOps
+#  IBM Concert Operate
 #
 #  ©2026 nikh@ch.ibm.com
 # ---------------------------------------------------------------------------------------------------------------------------------------------------"
@@ -69,7 +69,7 @@
     var: global_config
     verbosity: 1
 
-# Get OpenShift cluster associated with this IBMAIOPS project
+# Get OpenShift cluster associated with this Concert Operate project
 - name: Get OpenShift definition to use for {{ current_ibm_feature.project }}
   include_role: 
     name: tools-get-openshift-cluster
@@ -124,7 +124,7 @@
     _p_openshift_storage_name: "{{ current_ibm_feature.openshift_storage_name | default('') }}"
 
 # Loop over all instances
-- name: MAIN LOOP   🚀 Deploy IBM AIOps Assets - Loop over Instances for {{current_ibm_feature.project}}
+- name: MAIN LOOP   🚀 Deploy IBM Concert Operate Assets - Loop over Instances for {{current_ibm_feature.project}}
   include_role:
     name: tools-install-modules-loop
   loop: "{{ current_ibm_feature.instances}}"

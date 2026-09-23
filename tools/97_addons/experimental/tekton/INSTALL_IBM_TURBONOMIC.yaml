@@ -76,12 +76,12 @@ data:
       entitled_registry: cp.icr.io
       entitled_registry_user: cp
       catalog_image: icr.io/cpopen/ibm-aiops-catalog:latest
-      current_supported_aiops_version: v4.10
+      current_supported_operate_version: v4.10
 
       # --------------------------------------------------------------------------------------------------------------------------------------
       # Notifications and Cards
       # --------------------------------------------------------------------------------------------------------------------------------------
-      # Create Welcome Cards in ibm-aiops
+      # Create Welcome Cards
       create_cards: true
       # Create App Menu Items in OCP
       create_ocp_items: true
@@ -251,7 +251,7 @@ metadata:
   name: ibm-install-turbo
   namespace: ibm-installer
   labels:
-   aiops-type: data-load-job
+   job-type: data-load-job
 spec:
 
   template:
@@ -280,7 +280,7 @@ spec:
               echo "***************************************************************************************************************************************************"
               echo "***************************************************************************************************************************************************"
               echo "                                                                                                                                                   "
-              echo " 🚀 Install IBM AIOps                                                                                                                                                  "
+              echo " 🚀 Install IBM Concert Operate                                                                                                                                                  "
               echo "                                                                                                                                                   "
               echo "***************************************************************************************************************************************************"
               echo "***************************************************************************************************************************************************"

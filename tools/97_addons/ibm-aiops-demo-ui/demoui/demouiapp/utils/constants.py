@@ -1,11 +1,11 @@
 """
-Constants for IBM AIOps DemoUI.
+Constants for IBM Concert Operate DemoUI.
 
 Centralizes hardcoded values that were previously scattered across
 functions.py, functions_NG.py, and views.py.
 """
 
-# IBM AIOps subscription identifier (previously hardcoded ~20 times)
+# IBM Concert Operate subscription identifier (previously hardcoded ~20 times)
 SUBSCRIPTION_ID: str = "cfd95b7e-3bc7-4006-a4a8-a73a79c71255"
 
 # API base paths

@@ -1,7 +1,7 @@
 """
-Event injector for IBM AIOps DemoUI.
+Event injector for IBM Concert Operate DemoUI.
 
-Handles injection of events into the IBM AIOps Datalayer API.
+Handles injection of events into the IBM Concert Operate Datalayer API.
 Replaces the thin wrapper functions (injectEventsMemRobot, injectEventsNetRobot, etc.)
 with a data-driven approach.
 """
@@ -39,13 +39,13 @@ def inject_events(
     time_skew: int = DEFAULT_EVENTS_TIME_SKEW,
 ) -> str:
     """
-    Inject events into the IBM AIOps Datalayer.
+    Inject events into the IBM Concert Operate Datalayer.
 
     Parses the events data (newline-separated JSON), replaces MY_TIMESTAMP
     placeholders, and POSTs each event to the datalayer API.
 
     Args:
-        datalayer_route: Route to the IBM AIOps datalayer API.
+        datalayer_route: Route to the IBM Concert Operate datalayer API.
         datalayer_user: Username for datalayer authentication.
         datalayer_pwd: Password for datalayer authentication.
         events_data: Newline-separated JSON event definitions.
@@ -108,7 +108,7 @@ def inject_events_repeated(
     Used by the 'BUSY' scenario to simulate high event volume.
 
     Args:
-        datalayer_route: Route to the IBM AIOps datalayer API.
+        datalayer_route: Route to the IBM Concert Operate datalayer API.
         datalayer_user: Username for datalayer authentication.
         datalayer_pwd: Password for datalayer authentication.
         events_data: Newline-separated JSON event definitions.
@@ -137,7 +137,7 @@ def _log_datalayer_route_hint() -> None:
     try:
         stream = capture_shell(
             "oc get route -n "
-            + _get_aiops_namespace()
+            + _get_concert_operate_namespace()
             + " datalayer-api -o jsonpath='{.status.ingress[0].host}'"
         )
         route = stream.read().strip()
@@ -146,8 +146,8 @@ def _log_datalayer_route_hint() -> None:
         pass
 
 
-def _get_aiops_namespace() -> str:
-    """Retrieve the IBM AIOps namespace from the cluster."""
+def _get_concert_operate_namespace() -> str:
+    """Retrieve the IBM Concert Operate namespace from the cluster."""
     stream = capture_shell(
         "oc get po -A | grep aiops-orchestrator-controller | awk '{print $1}'"
     )

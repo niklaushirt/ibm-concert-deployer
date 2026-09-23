@@ -58,8 +58,8 @@
   register: ingress_patched
 
 
-# - name: HACK    -             🩹 Patch AIOpsAnalyticsOrchestrator Pull Secret
-#   shell: oc patch AIOpsAnalyticsOrchestrator aiops -n $AIOPS_NAMESPACE --type merge  --patch-file ./templates/aiops/patches/analytics-pull-patch.yaml
+# - name: HACK    -             🩹 Patch Concert OperateAnalyticsOrchestrator Pull Secret
+#   shell: oc patch Concert OperateAnalyticsOrchestrator aiops -n $AIOPS_NAMESPACE --type merge  --patch-file ./templates/aiops/patches/analytics-pull-patch.yaml
 #   ignore_errors: true
 #   register: irorchestrator_patched
 
@@ -252,7 +252,7 @@
 
 
 
-  - name: 🚀 ROUTES - Create external IBM AIOps API Route 
+  - name: 🚀 ROUTES - Create external IBM Concert Operate API Route 
     shell: |
       export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
       existing=$(oc get route ai-platform-api -n $AIOPS_NAMESPACE --no-headers|awk '{print$1}')

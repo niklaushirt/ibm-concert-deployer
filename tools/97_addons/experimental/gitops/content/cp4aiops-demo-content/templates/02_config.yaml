@@ -41,7 +41,7 @@ data:
       # --------------------------------------------------------------------------------------------------------------------------------------
       # Notifications and Cards
       # --------------------------------------------------------------------------------------------------------------------------------------
-      # Create Welcome Cards in ibm-aiops
+      # Create Welcome Cards
       create_cards: {{ .Values.cp4aiops.additional.create_cards }}
       # Create App Menu Items in OCP
       create_ocp_items: {{ .Values.cp4aiops.global.create_ocp_items }}
@@ -89,7 +89,7 @@ data:
 
     #--------------------------------------------------------------------------------------------------------------------------------------
 
-    # CloudPak for AIOps Base Install
+    # CloudPak for Concert Operate Base Install
 
     #--------------------------------------------------------------------------------------------------------------------------------------
 
@@ -97,7 +97,7 @@ data:
       instances:
 
     #--------------------------------------------------------------------------------------------------------------------------------------
-    # CloudPak for AIOps Demo Content Install
+    # CloudPak for Concert Operate Demo Content Install
     #--------------------------------------------------------------------------------------------------------------------------------------
       - name: ibm-aiops-demo-content
         kind: IBMAIOpsDemoContent

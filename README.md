@@ -47,48 +47,7 @@
 
 ---
 
-The idea of this repo is to provide an optimised, complete, pre-trained `🐣 Demo-in-a-Box` environments for IBM IT Automation Solutions that are self-contained (e.g. can be deployed in only one cluster)
-
-<details>
-<summary>Details...</summary>
-
-> It contains the following components (which can be installed independently):
->
-> - **IBM Concert Operate**
-> - **IBM Concert Operate Demo Content** (optional)
->   - **OpenLDAP** & Register with IBM Concert Operate
->   - **Runbooks** AWX (Open Source Ansible Tower) with preloaded Playbooks and Concert Operate Runbooks
->   - **AI Models** - Load and Train
->     - Load Training Data (LAGS, SNOW, MET, TG)
->     - Create Training Definitions (TG, LAGS, CR, SI, MET. Turn off RSA)
->     - Train Models (TG, LAGS, CR, SI, MET)
->   - **Topology**
->     - Live Demo Apps (RobotShop. SockShop)
->     - Create IBM Concert Operate Topology and Applications (RobotShop. SockShop, ACME, London Underground, Telecom FiberCut)
->     - Dedicated DemoUI that allows you to trigger different scenarios
->     - Custom Icons (styling and dynamic)
->   - **Configs**
->     - Policies for Incident creation
->     - Custom Alert View
->
-> #### ⚠️ **This method creates an in-cluster installation**
->
-> - It's way faster
-> - You don't have to install all the tooling locally
-> - You don’t need a connection to the cluster during the installation (fire and forget)
->
-> 🤓 So this could basically be done from an iPhone or iPad
-
-> ❗DEPRECATED❗:
->
-> - **IBM Concert**
-> - **IBM Concert Demo Content**
-> - **IBM Turbonomic**
-> - **IBM Turbonomic Demo Content**
-> - **IBM Instana**
-> - **IBM Instana Demo Content**
-
-</details>
+The idea of this repo is to provide `🐣 Demo-in-a-Box` environments for IBM IT Automation Solutions that are self-contained (e.g. can be deployed in only one cluster)
 
 ## 🚀 Getting Started
 
@@ -97,23 +56,19 @@ Basically:
 - Get an OpenShift Cluster
 - Get your entitlement key/pull token
 - Paste the install file into the OpenShift web UI and insert your entitlement key
-- Grab a coffe and come back after 2-3 hours depending on the modules you're installing
+- Grab a coffe and come back after 1-3 hours depending on the modules you're installing
 
 ### 🐥 Quick Install
 
-- 🚀 [Quick Install - Concert Operate](#21--install-ibm-aiops-with-demo-content)
+- 🚀 [Quick Install - Concert platform](#21--install-ibm-concert-platform)
+- 🚀 [Quick Install - Concert Operate](#22--install-ibm-concert-operate-with-demo-content)
 - 🧨 [Troubleshooting](#4-troubleshooting)
-- 🚀 Already have a cluster? [Dive right in](#21--install-ibm-aiops-with-demo-content)
 
 ### 🐥 IBM Concert Operate specific
 
 - 🚀 [Demo the Solution](#31-demo-the-solution)
 - 🤓 [Demo Setup - Explained](#32-demo-setup---explained)
 - 📦 [Create a custom Scenario](#33-custom-scenarios)
-
-### ❗EXPERIMENTAL❗
-
-- 🚀 [Quick Install - IBM Concert Platform ](#22--install-ibm-concert-platform-experimental)
 
 <div style="page-break-after: always;"></div>
 
@@ -123,12 +78,10 @@ Basically:
 
 ---
 
-<div style="page-break-after: always;"></div>
+You need to get your cluster first:
 
 <details>
-<summary>✅ Prerequisites</summary>
-
-## 1.1 Prerequisites
+<summary>✅✅ Prerequisites</summary>
 
 ### 1.1.1 Get an OpenShift Cluster (IBMers and IBM Partners only)
 
@@ -187,9 +140,7 @@ You can get the credentials from [https://bob.ibm.com/admin/apikeys](https://bob
 
 </details>
 <details>
-<summary>⚠️ Important remarks before you start</summary>
-
-## ⚠️⚠️ 1.2 Important remarks before you start ⚠️⚠️
+<summary>⚠️⚠️ 1.2 Important remarks before you start</summary>
 
 Those are remarks to feedback and problem reports I got from the field.
 
@@ -218,11 +169,12 @@ If you think that you hit a problem:
 
 > ## ❗❗❗❗ If anything goes wrong, please restart/delete the installer pod ❗❗❗❗ and/or refer to [Troubleshooting](#4-troubleshooting)
 
-## 2.1 🐣 Install IBM Concert platform (❗EXPERIMENTAL)
+## 2.1 🐣 Install IBM Concert platform
 
 #### 🚀 Get IBM Concert platform installed in one simple script.
 
 ❗In order to install Concert platform you need a valid Turbonomic key ❗
+
 ❗If you don't provide one (it will still install) you will miss some features❗
 
 If you have any questions please read up here first https://www.ibm.com/docs/en/concert-platform?topic=platform-overview
@@ -250,7 +202,7 @@ This installation contains:
 
 1. In the the OpenShift Web UI click on the `+` sign in the right upper corner
 1. Copy and paste the content from [this file](./Quick_Install/01_INSTALL_IBM_CONCERT_PLATFORM.yaml)
-1. Accept the license by setting `accept_all_licenses` to `True` (line 69)
+1. Accept the license by setting `accept_all_licenses` to `True` (line 76)
 1. Replace `<REGISTRY_TOKEN>` at the top of the file with your entitlement key from step 1.1.2 (line 50 - the Entitlement key from https://myibm.ibm.com)
 1. Replace the default Password `global_password: CHANGEME` with a Password of your choice (line 63, ❗ do NOT use the "-" character and do NOT leave empty ❗)
 1. If you want a full Concert Optimize/Turbonomic installed, set `concert_optimise_lite` (line 154) `True`
@@ -313,6 +265,13 @@ kubectl rollout restart -n $CONCERT_NAMESPACE deployment/roja-py-utils
 
 </details>
 
+<details>
+<summary>🚀 2.1.5 Post-Installation - Preparing Demo Data</summary>
+
+You can follow [this guide](./doc/concert/IBM-Concert-Post-Installation-Tasks.md) to get usable demo data into your Concert platform.
+
+</details>
+
 ## 2.2 🐣 Install IBM Concert Operate with demo content
 
 #### 🚀 Get IBM Concert Operate installed and pre-trained in one simple script.
@@ -368,7 +327,7 @@ This installation contains:
 1. Copy and paste the content from [this file](./Quick_Install/02_INSTALL_IBM_CONCERT_OPERATE.yaml)
 1. Replace `<REGISTRY_TOKEN>` at the top of the file with your entitlement key from step 1.1.2 (line 69 - the Entitlement key from https://myibm.ibm.com)
 1. Replace the default Password `global_password: CHANGEME` with a Password of your choice (line 82, ❗ do NOT use the "-" character and do NOT leave empty ❗)
-1. Accept the license by setting `accept_all_licenses` to `True` (line 92)
+1. Accept the license by setting `accept_all_licenses` to `True` (line 100)
 1. Optionally you can change the name of your Demo Environment `environment_name` to one of the provided characters (line 89)
 1. Click `Create`
 
@@ -862,7 +821,7 @@ Incidents are being created by using the high level APIs in order to simulate a 
 
 This feature allows you to easily create custom scenarios for the IBM Concert Operate Demo UI.
 
-By default the custom scenario is disabled. In order to enable it you have to modify the `ibm-concert-demo-ui-config-custom` ConfigMap in the `ibm-concert-demo-ui` Namespace.
+By default the custom scenario is disabled. In order to enable it you have to modify the `ibm-demo-ui-config-custom` ConfigMap in the `ibm-demo-ui` Namespace.
 
 > ℹ️ The Topology will be loaded only the first time. Once the Application exists it will not update.
 >
@@ -1073,8 +1032,8 @@ This is a small example containing a Topology, Events, Metrics and Logs.
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  name: ibm-concert-demo-ui-config-custom
-  namespace: ibm-concert-demo-ui
+  name: ibm-demo-ui-config-custom
+  namespace: ibm-demo-ui
 data:
   CUSTOM_NAME: "Custom Demo"
   CUSTOM_EVENTS: |-
@@ -1291,7 +1250,7 @@ At this point you have created your own Slack workspace where you are the admini
 
 6. Click `Create`
 
-7. Scroll down to Display Information and name your IBMAIOPS app.
+7. Scroll down to Display Information and name your Concert Operate app.
 
 8. You can add an icon to the app (there are some sample icons in the ./tools/4_integrations/slack/icons folder.
 

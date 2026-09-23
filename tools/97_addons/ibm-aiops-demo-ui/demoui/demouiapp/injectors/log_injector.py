@@ -1,5 +1,5 @@
 """
-Log injector for IBM AIOps DemoUI.
+Log injector for IBM Concert Operate DemoUI.
 
 Handles injection of log entries into Kafka. Supports both continuous
 (repeating current timestamp) and generic (progressive timestamp) modes.
