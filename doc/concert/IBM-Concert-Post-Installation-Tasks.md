@@ -59,9 +59,9 @@ Confirm that the installation completed and collect only the information needed 
 Start in the OpenShift console and verify both product components before proceeding.
 
 1. Open the OpenShift console and select Workloads, then Pods.
-1. Set the project to ibm-installer.
-1. Confirm the ibm-install-concert-xyzz pod is Running and Ready.
-1. Confirm the green installation banners for IBM Concert Platform and IBM Concert Optimize are visible.
+1. Set the project to ***ibm-installer.***
+1. Confirm the ***ibm-install-concert-xyzz*** pod is Running and Ready.
+1. Confirm the green installation banners for ***IBM Concert Platform*** and ***IBM Concert Optimize*** are visible.
 
 ![OpenShift Pods page showing the ibm-installer project, a running installer pod, and green IBM Concert installation banners.](IBM-Concert-Post-Installation-Tasks-images/figure-01.png)
 
@@ -72,8 +72,8 @@ Start in the OpenShift console and verify both product components before proceed
 The installer log contains the cluster endpoint and credentials needed for Resilience onboarding, but it also contains secrets.
 
 1. Open the installer pod and select Logs.
-1. Search for CHECK WATSONX CREDENTIALS and confirm the log reports that “You can access the WatsonX services in Concert platform”.
-1. Search for the LOGINS FOR RESILIENCE section, it contains the cluster logins that you will need later.
+1. Search for ***CHECK WATSONX CREDENTIALS*** and confirm the log reports that “***You can access the WatsonX services in Concert platform***”.
+1. Search for the ***LOGINS FOR RESILIENCE*** section, it contains the cluster logins that you will need later.
 1. Download the log only if needed to copy a long endpoint or token. Store it securely and delete the local copy after onboarding.
 
 ![OpenShift installer pod log with Resilience and watsonx verification lines visible while endpoint and token values are redacted.](IBM-Concert-Post-Installation-Tasks-images/figure-02.png)
@@ -129,7 +129,7 @@ License policy determines which detected package licenses are reported as denied
 
 1. In Protect Settings, select License preferences.
 1. Mark licenses Allowed or Denied according to organizational policy.
-1. The recording denies BSD 2-Clause Simplified and BSD 3-Clause New or Revised to create visible demonstration findings. Do not copy this example without policy approval.
+1. The recording denies ***BSD 2-Clause*** Simplified and ***BSD 3-Clause*** New or Revised to create visible demonstration findings. Do not copy this example without policy approval.
 
 ![IBM Concert Protect License preferences page showing a list of licenses with Allowed and Denied status toggles.](IBM-Concert-Post-Installation-Tasks-images/figure-06.png)
 
@@ -158,8 +158,8 @@ Create a Resilience integration for the cluster that hosts the target applicatio
 1. Open Resilience and select Discover your data.
 1. Select Red Hat OpenShift Container Platform OCP.
 1. Choose Create new connection.
-1. Enter the cluster API endpoint exactly as shown in the installer log (LOGINS FOR RESILIENCE), including its port.
-1. Enter the Resilience API token from the installer log (LOGINS FOR RESILIENCE).
+1. Enter the cluster API endpoint exactly as shown in the installer log (***LOGINS FOR RESILIENCE***), including its port.
+1. Enter the Resilience API token from the installer log (***LOGINS FOR RESILIENCE***).
 
 ![IBM Concert Resilience Discover data wizard with Red Hat OpenShift Container Platform selected and empty endpoint and token fields.](IBM-Concert-Post-Installation-Tasks-images/figure-08.png)
 
@@ -169,7 +169,7 @@ Create a Resilience integration for the cluster that hosts the target applicatio
 
 Validation must succeed before inventory selection becomes available.
 
-1. Enter a stable cluster name such as local for a local demonstration cluster.
+1. Enter a stable cluster name such as ***local*** for a local demonstration cluster.
 1. Select Validate connection and wait for a successful status.
 1. If validation fails, recheck the full endpoint, token, network reachability, and certificate settings before retrying.
 
@@ -182,9 +182,9 @@ Validation must succeed before inventory selection becomes available.
 Limit discovery to the namespaces and assessment cadence that are in scope.
 
 1. Accept or rename the discovery job.
-1. Type in the target environment, for example Production.
+1. Type in the target environment, for example ***Production***.
 1. Set the aggregation or assessment period. The recording uses a 24-hour schedule.
-1. Open Select namespaces, filter for robot-shop, select it, and save the selection.
+1. Open Select namespaces, filter for ***robot-shop***, select it, and save the selection.
 
 ![IBM Concert Resilience namespace selector showing advanced filters and available OpenShift namespaces.](IBM-Concert-Post-Installation-Tasks-images/figure-10.png)
 
@@ -195,9 +195,9 @@ Limit discovery to the namespaces and assessment cadence that are in scope.
 Clean application metadata prevents confusing names in later dashboards and reports.
 
 1. Create a new application.
-1. Set the application name to robot-shop and use the deployed version, shown as 1.0.0 in the recording.
-1. Replace the generated deployment name with a meaningful name such as robot-shop_1.0.0_Production production when appropriate.
-1. Select the Kubernetes Resilience profile and save.
+1. Set the application name to ***robot-shop*** and use the deployed version, shown as 1.0.0 in the recording.
+1. Replace the generated deployment name with a meaningful name such as ***robot-shop_1.0.0_Production*** production when appropriate.
+1. Select the ***Kubernetes*** Resilience profile and save.
 
 ![IBM Concert Resilience Edit details dialog with application name robot-shop, version 1.0.0, deployment name, and profile fields.](IBM-Concert-Post-Installation-Tasks-images/figure-11.png)
 
@@ -224,13 +224,18 @@ Connect source repositories so Protect can calculate CVE, exposure, SAST, and pa
 
 The sample data does not contain a codebase, so a real or demonstration repository must be connected separately.
 
-1. You might want to fork some repositories to your own workspace (otherwise you won’t be able to proceed):
-1. https://github.com/niklaushirt/robot-shop
-1. https://github.com/niklaushirt/galaxium-travels
+1. You might want to fork some repositories to your own workspace (otherwise <u>you won’t be able to proceed</u>):
+
+   - https://github.com/niklaushirt/robot-shop
+
+   - https://github.com/niklaushirt/galaxium-travels
 
 1. Open Protect and select Discover your data.
-1. Provide the GitHub repository URL, for example the robot-shop repository used in the recording.
-1. When prompted, provide a classic GitHub personal access token with the minimum required repository permissions.
+
+1. Provide the GitHub repository URL, for example the ***robot-shop*** repository used in the recording.
+
+1. When prompted, provide a **classic GitHub personal access token** with the minimum required repository permissions.
+
 1. Wait while the connection is validated. If the first attempt times out, verify permissions and retry rather than creating multiple credentials immediately.
 
 ![IBM Concert Protect quickstart with a GitHub repository URL, connection status, and successful GitHub connection message.](IBM-Concert-Post-Installation-Tasks-images/figure-13.png)
@@ -242,7 +247,7 @@ The sample data does not contain a codebase, so a real or demonstration reposito
 Associate the repository with the correct application before starting the scan.
 
 1. Open Advanced settings.
-1. Use the existing robot-shop application that already exists from Resilience onboarding.
+1. Use the existing ***robot-shop*** application that already exists from Resilience onboarding.
 1. Set the application version to 1.0.0 and verify the repository and branch.
 1. Save and start the scan.
 1. Wait for CVE, SAST, and package data to finish ingesting.
@@ -268,9 +273,9 @@ Protect may populate risk categories at different times while data is processed.
 
 A validated GitHub credential can be reused for other repositories that it is authorized to read.
 
-1. Start Discover your data again and provide the next repository URL (galaxium-travels for example).
+1. Start Discover your data again and provide the next repository URL (***galaxium-travels*** for example).
 1. Select the existing GitHub credential rather than entering the token again.
-1. Choose Create new application, set a recognizable name such as galaxium-travels, and set its version.
+1. Choose Create new application, set a recognizable name such as ***galaxium-travels***, and set its version.
 1. Verify the repository and branch, then save and scan.
 
 ![IBM Concert Protect Advanced settings dialog for creating a new application from the galaxium-travels repository.](IBM-Concert-Post-Installation-Tasks-images/figure-16.png)
@@ -311,9 +316,9 @@ Compliance discovery is accessed from the Protect Enterprise view in the recorde
 Define the namespace and display name that will appear in compliance results.
 
 1. Select the Kubernetes compliance profile.
-1. Select the robot-shop namespace.
-1. If the interface shortcut captures the hyphen as a browser zoom command, paste the complete namespace from outside instead of typing it.
-1. Set the environment name, for example robot-shop, and review the summary.
+1. Select the ***robot-shop*** namespace.
+1. *If the interface shortcut captures the hyphen as a browser zoom command, paste the complete namespace from outside instead of typing it.*
+1. Set the environment name, for example ***robot-shop***, and review the summary.
 
 ![IBM Concert Compliance inventory page showing the Kubernetes profile, one selected namespace, and robot-shop as the environment name.](IBM-Concert-Post-Installation-Tasks-images/figure-19.png)
 

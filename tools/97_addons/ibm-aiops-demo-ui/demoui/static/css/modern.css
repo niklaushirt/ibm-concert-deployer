@@ -323,6 +323,13 @@ a:hover { color: var(--ui-primary-dark); }
     transform: translateY(-1px);
 }
 
+.app-page .bx--btn > .bx--btn__icon {
+    position: static !important;
+    inset: auto !important;
+    flex: 0 0 auto;
+    margin: 0 !important;
+}
+
 .app-page .bx--btn:focus-visible,
 .app-page a:focus-visible,
 .app-nav a:focus-visible,
@@ -399,6 +406,7 @@ a:hover { color: var(--ui-primary-dark); }
 .app-page div[style*="#200e0e"] td div[style*="rgb(255, 198, 198)"] { border-color: #ffc4c6; background: var(--ui-danger-soft) !important; }
 .app-page div[style*="#200e0e"] .jxfOQM { display: flex; align-items: stretch; gap: .5rem; padding-bottom: .65rem !important; font-size: 0; }
 .app-page div[style*="#200e0e"] .jxfOQM > .bx--btn:not([style*="width:30px"]):not([style*="width:70px"]) { width: max-content !important; min-width: max-content !important; flex: 1 0 auto; }
+.app-page div[style*="#200e0e"] .jxfOQM > .bx--btn:not([style*="width:30px"]):not([style*="width:70px"]) > .bx--btn__icon { display: none; }
 .app-page div[style*="#200e0e"] .jxfOQM > .bx--btn[style*="width:30px"],
 .app-page div[style*="#200e0e"] .jxfOQM > .bx--btn[style*="width:70px"] { width: 48px !important; min-width: 48px !important; flex: 0 0 48px; padding: .75rem !important; }
 
@@ -445,6 +453,17 @@ a:hover { color: var(--ui-primary-dark); }
 .app-page div[style*="#fbedc0"] tr:has(> td[colspan]),
 .app-page div[style*="#f2f7ff"] tr:has(> td[colspan]),
 .app-page div[style*="#eeeeff"] tr:has(> td[colspan]) { display: none; }
+
+/* Give Automation launch buttons enough room for their full labels. */
+.app-page div[style*="#eeeeff"] > table,
+.app-page div[style*="#f2f7ff"] > table { table-layout: auto !important; }
+.app-page div[style*="#eeeeff"] td:has(> .jxfOQM),
+.app-page div[style*="#f2f7ff"] td:has(> .jxfOQM) {
+    width: 280px !important;
+    min-width: 280px;
+}
+.app-page div[style*="#eeeeff"] .jxfOQM > .bx--btn,
+.app-page div[style*="#f2f7ff"] .jxfOQM > .bx--btn { min-width: 260px; }
 
 .app-page div[style*="#1d0707"] > br,
 .app-page div[style*="#0e200e"] > br { display: none; }
@@ -515,6 +534,9 @@ a:hover { color: var(--ui-primary-dark); }
     .app-page td { max-width: 100%; }
     .app-page .bx--btn,
     .app-page a[class*="bx--btn--"] { width: 100% !important; min-width: 0 !important; white-space: normal; }
+    .app-page div[style*="#200e0e"] .jxfOQM > .bx--btn:not([style*="width:30px"]):not([style*="width:70px"]) { width: 100% !important; min-width: 0 !important; flex: 1 1 auto; white-space: normal; }
+    .app-page div[style*="#eeeeff"] td:has(> .jxfOQM),
+    .app-page div[style*="#f2f7ff"] td:has(> .jxfOQM) { width: 100% !important; min-width: 0; }
     .app-page div[style*="#d08ee3"] td:has(> .jxfOQM) { width: 100% !important; min-width: 0; }
     .app-footer { align-items: flex-start; flex-direction: column; }
 }
