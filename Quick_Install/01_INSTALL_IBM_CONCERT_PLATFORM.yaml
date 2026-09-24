@@ -245,6 +245,26 @@ data:
         # Integrate Concert with ITOM and TurboLite
         integrate_itom_turboLite: true
 
+
+        # ---------------------------------------------------------------------
+        # LDAP
+        install_ldap: true
+        # ldap domain
+        ldap_domain: ibm.com
+        # ldap base
+        ldap_base: dc=ibm,dc=com
+        # LDAP Admin Password (OVERRIDES GLOBAL PASSWORD)
+        #ldap_admin_password: CHANGEME
+        # LDAP Password for all Users (OVERRIDES GLOBAL PASSWORD)
+        #ldap_user_password: CHANGEME
+        # ldap namespace
+        ldap_namespace: openldap
+        # Integrate Login with OpenLDAP 
+        ldap_register: true
+        # Integrate OpenShift Login with OpenLDAP
+        integrate_ocp_openldap: true
+
+
         # Integrate Concert with Keycloak for SSO
         integrate_keycloak: false
 
