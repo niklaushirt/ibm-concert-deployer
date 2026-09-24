@@ -144,7 +144,7 @@ spec:
               oc delete ns ibm-concert-platform-hub &
               oc delete ns ibm-concert-platform-workflows &
               oc delete ns ibm-concert-dataapps &
-              oc delete ns ibm-concert-hub &
+              oc delete ns ibm-concert-platform-hub  &
               oc delete ns ibm-concert-workflows &
               oc delete ns ibm-concert-workflows-faas &
               oc delete ns ibm-concert-securecoder &
