@@ -374,7 +374,7 @@ Generate a dedicated API key only when Secure Coder or another approved integrat
 
 ## Integration with KeyCloak/OpenLDAP (Optional)
 
-If you have enabled KeyCloak and OpenLDAP in the installation configuration, please follow the steps below.
+If you have enabled KeyCloak (`integrate_keycloak`) and OpenLDAP (`install_ldap`) in the installation configuration, please follow the steps below.
 
 ### Task 23 — Connect to KeyCloak
 
