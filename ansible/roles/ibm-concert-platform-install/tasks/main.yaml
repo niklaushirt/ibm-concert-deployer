@@ -306,8 +306,39 @@
     echo ""
 
 
+    echo ""
+    echo ""
+    echo ""
+    echo ""
+    echo ""
+    echo ""
 
 
+
+    echo "------------------------------------------------------------------------------------------------------------------------------"
+    echo " ✅ LDAP CREDENTIALS"
+    echo "------------------------------------------------------------------------------------------------------------------------------"
+
+    echo "id": "LDAP",
+    echo "realm": "REALM",
+    echo "url": "ldap://openldap.openldap:389",
+    echo "host": "openldap.openldap",
+    echo "port": "389",
+    echo "protocol": "ldap",
+    echo "basedn": "dc=ibm,dc=com",
+    echo "binddn": "cn=admin,dc=ibm,dc=com",
+    echo "bindpassword: The one you selected at installation time",
+    echo "type": "Custom",
+    echo "ignorecase": "false",
+    echo "userfilter": "(&(uid=%v)(objectclass=Person))",
+    echo "useridmap": "*:uid",
+    echo "groupfilter": "(&(cn=%v)(objectclass=groupOfUniqueNames))",
+    echo "groupidmap": "*:cn",
+    echo "groupmemberidmap": "groupOfUniqueNames:uniqueMember",
+    echo "nestedsearch": "false",
+    echo "pagingsearch": "false"
+    export openldap_app_route=$(oc get route -n openldap openldap-admin -o jsonpath={.spec.host})          
+    echo "openldap_app_route:     http://$openldap_app_route"
 
 
   register: output_string
