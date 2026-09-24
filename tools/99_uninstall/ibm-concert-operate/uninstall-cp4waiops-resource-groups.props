@@ -5,17 +5,11 @@
 # Supplementary file to uninstall-cp4waiops.sh script for uninstalling
 # IBM Cloud Pak for Concert Operate version 4.12
 
-# Below are the PVC's that would be deleted if DELETE_PVCS in uninstall-cp4waiops-props.props is set
-to true
-# 1. app.kubernetes.io/instance=aimanager : This PVC is for minio StatefulSet. Change risk model and
-all the training logs are in the minio pvc.
-# 2. app.kubernetes.io/instance=example-couchdbcluster: This PVC contains AI training schedules and
-history
-# 3. app.kubernetes.io/managed-by=ir-core-operator : This PVC contains information about current and
-recent events and stories
-# 4. app.kubernetes.io/managed-by=ibm-elasticsearch/ibm-opensearch-operator : This PVC is used for
-storing log training data, AI models and training information, the Insights Dashboard, and as a
-policy registry
+# Below are the PVC's that would be deleted if DELETE_PVCS in uninstall-cp4waiops-props.props is set to true
+# 1. app.kubernetes.io/instance=aimanager : This PVC is for minio StatefulSet. Change risk model and all the training logs are in the minio pvc.
+# 2. app.kubernetes.io/instance=example-couchdbcluster: This PVC contains AI training schedules and history
+# 3. app.kubernetes.io/managed-by=ir-core-operator : This PVC contains information about current and recent events and stories
+# 4. app.kubernetes.io/managed-by=ibm-elasticsearch/ibm-opensearch-operator : This PVC is used for storing log training data, AI models and training information, the Insights Dashboard, and as a policy registry
 CP4AIOPS_PVC_LABEL=("app.kubernetes.io/instance=aimanager"
 "app.kubernetes.io/instance=example-couchdbcluster"
 "app.kubernetes.io/managed-by=ir-core-operator"

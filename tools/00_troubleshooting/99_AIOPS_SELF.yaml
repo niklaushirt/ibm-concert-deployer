@@ -142,13 +142,13 @@ spec:
               export AWX_PWD=$(oc -n awx get secret awx-admin-password -o jsonpath='{.data.password}' | base64 --decode && echo)
               echo "AWX_PWD: $AWX_PWD"
 
-              export EXENV_ID=$(curl -X "GET" -s "$AWX_URL/api/v2/execution_environments/" -u "admin:$AWX_PWD" --insecure|jq -c '.results[]| select( .name == "IBM AIOPS Execution Environment")|.id')         
+              export EXENV_ID=$(curl -X "GET" -s "$AWX_URL/api/v2/execution_environments/" -u "admin:$AWX_PWD" --insecure|jq -c '.results[]| select( .name == "IBM CONCERT OPERATE Execution Environment")|.id')         
               echo "EXENV_ID: '$EXENV_ID'"
           
-              export AWX_PROJECT_ID=$(curl -X "GET" -s "$AWX_URL/api/v2/projects/" -u "admin:$AWX_PWD" --insecure|jq -c '.results[]| select( .name == "IBM AIOPS Runbooks")|.id')
+              export AWX_PROJECT_ID=$(curl -X "GET" -s "$AWX_URL/api/v2/projects/" -u "admin:$AWX_PWD" --insecure|jq -c '.results[]| select( .name == "IBM CONCERT OPERATE Runbooks")|.id')
               echo "AWX_PROJECT_ID: $AWX_PROJECT_ID"
 
-              export AWX_INVENTORY_ID=$(curl -X "GET" -s "$AWX_URL/api/v2/inventories/" -u "admin:$AWX_PWD" --insecure|jq -c '.results[]| select( .name == "IBM AIOPS Runbooks")|.id')
+              export AWX_INVENTORY_ID=$(curl -X "GET" -s "$AWX_URL/api/v2/inventories/" -u "admin:$AWX_PWD" --insecure|jq -c '.results[]| select( .name == "IBM CONCERT OPERATE Runbooks")|.id')
               echo "AWX_INVENTORY_ID: $AWX_INVENTORY_ID"
 
 
@@ -179,8 +179,8 @@ spec:
               export result=$(curl -X "POST" -s "$AWX_URL/api/v2/job_templates/" -u "admin:$AWX_PWD" --insecure \
               -H 'content-type: application/json' \
               -d $'{
-                "name": "IBM AIOPS Self Check",
-                "description": "IBM AIOPS Self Check",
+                "name": "IBM CONCERT OPERATE Self Check",
+                "description": "IBM CONCERT OPERATE Self Check",
                 "job_type": "run",
                 "inventory": '$AWX_INVENTORY_ID',
                 "project": '$AWX_PROJECT_ID',
@@ -194,7 +194,7 @@ spec:
 
               echo $result
               
-              export AWX_TEMPL_CHECK_ID=$(echo $result|jq -c 'select( .name == "IBM AIOPS Self Check")|.id')
+              export AWX_TEMPL_CHECK_ID=$(echo $result|jq -c 'select( .name == "IBM CONCERT OPERATE Self Check")|.id')
               echo "AWX_TEMPL_CHECK_ID: $AWX_TEMPL_CHECK_ID"
               echo "            🛠️ API AWX_TEMPL_ID:      $AWX_TEMPL_CHECK_ID"
 
@@ -239,8 +239,8 @@ spec:
               export result=$(curl -X "POST" -s "$AWX_URL/api/v2/job_templates/" -u "admin:$AWX_PWD" --insecure \
               -H 'content-type: application/json' \
               -d $'{
-                "name": "IBM AIOPS Check '$CHECK_NAMESPACE'",
-                "description": "IBM AIOPS Check '$CHECK_NAMESPACE'",
+                "name": "IBM CONCERT OPERATE Check '$CHECK_NAMESPACE'",
+                "description": "IBM CONCERT OPERATE Check '$CHECK_NAMESPACE'",
                 "job_type": "run",
                 "inventory": '$AWX_INVENTORY_ID',
                 "project": '$AWX_PROJECT_ID',
@@ -254,7 +254,7 @@ spec:
 
               echo $result
               
-              export AWX_TEMPL_CHECK_ID=$(echo $result|jq -c 'select( .name == "IBM AIOPS Check '$CHECK_NAMESPACE'")|.id')
+              export AWX_TEMPL_CHECK_ID=$(echo $result|jq -c 'select( .name == "IBM CONCERT OPERATE Check '$CHECK_NAMESPACE'")|.id')
               echo "AWX_TEMPL_CHECK_ID: $AWX_TEMPL_CHECK_ID"
               echo "            🛠️ API AWX_TEMPL_ID:      $AWX_TEMPL_CHECK_ID"
 
@@ -299,8 +299,8 @@ spec:
               export result=$(curl -X "POST" -s "$AWX_URL/api/v2/job_templates/" -u "admin:$AWX_PWD" --insecure \
               -H 'content-type: application/json' \
               -d $'{
-                "name": "IBM AIOPS Test '$CHECK_NAMESPACE'",
-                "description": "IBM AIOPS Test '$CHECK_NAMESPACE'",
+                "name": "IBM CONCERT OPERATE Test '$CHECK_NAMESPACE'",
+                "description": "IBM CONCERT OPERATE Test '$CHECK_NAMESPACE'",
                 "job_type": "run",
                 "inventory": '$AWX_INVENTORY_ID',
                 "project": '$AWX_PROJECT_ID',
@@ -314,7 +314,7 @@ spec:
 
               echo $result
               
-              # export AWX_TEMPL_CHECK_ID=$(echo $result|jq -c 'select( .name == "IBM AIOPS Test '$CHECK_NAMESPACE'")|.id')
+              # export AWX_TEMPL_CHECK_ID=$(echo $result|jq -c 'select( .name == "IBM CONCERT OPERATE Test '$CHECK_NAMESPACE'")|.id')
               # echo "AWX_TEMPL_CHECK_ID: $AWX_TEMPL_CHECK_ID"
               # echo "            🛠️ API AWX_TEMPL_ID:      $AWX_TEMPL_CHECK_ID"
 

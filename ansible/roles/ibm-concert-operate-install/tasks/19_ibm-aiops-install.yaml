@@ -1,11 +1,11 @@
 
 # *************************************************************************************************************************************************
 # --------------------------------------------------------------------------------------------------------------------------------------
-# Install IBM AIOPS
+# Install IBM CONCERT OPERATE
 # --------------------------------------------------------------------------------------------------------------------------------------
 # *************************************************************************************************************************************************
 
-- name: 🛰️  START - IBM AIOPS INSTALLATION
+- name: 🛰️  START - IBM CONCERT OPERATE INSTALLATION
   debug: 
     msg="{{ lookup('pipe','date +%d.%m.%Y---%H:%M:%S') }}"
 
@@ -38,7 +38,7 @@
 
 
 
-- name:  🚀 IBM AIOPS INSTALL - Create Custom Profile ConfigMap
+- name:  🚀 IBM CONCERT OPERATE INSTALL - Create Custom Profile ConfigMap
   shell: |
     pwd
     ls -al
@@ -48,14 +48,14 @@
 
 
 
-- name:  🚀 IBM AIOPS INSTALL - Install Custom Resource with Custom Profile - INSTALL IBM AIOPS
+- name:  🚀 IBM CONCERT OPERATE INSTALL - Install Custom Resource with Custom Profile - INSTALL IBM CONCERT OPERATE
   kubernetes.core.k8s:
     state: present
     template: './templates/aiops/4_aiops-install-template-custom.j2'
   when: current_feature.concert_operate_size == "custom"
 
 
-- name:  🚀 IBM AIOPS INSTALL - Install Custom Resource - INSTALL IBM AIOPS
+- name:  🚀 IBM CONCERT OPERATE INSTALL - Install Custom Resource - INSTALL IBM CONCERT OPERATE
   kubernetes.core.k8s:
     state: present
     template: './templates/aiops/4_aiops-install-template.j2'

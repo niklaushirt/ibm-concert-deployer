@@ -338,8 +338,7 @@ spec:
         service: cart
     spec:
       
-      imagePullSecrets:
-        - name: dockerhub-secret
+
       containers:
       - name: cart
         image: quay.io/niklaushirt/rs-cart:1.0
@@ -380,8 +379,7 @@ spec:
         service: catalogue
     spec:
       
-      imagePullSecrets:
-        - name: dockerhub-secret
+
       containers:
       - name: catalogue
         image: quay.io/niklaushirt/rs-catalogue:1.0
@@ -501,8 +499,7 @@ spec:
         service: dispatch
     spec:
       
-      imagePullSecrets:
-        - name: dockerhub-secret
+
       containers:
       - name: dispatch
         image: quay.io/niklaushirt/rs-dispatch:1.0
@@ -542,8 +539,7 @@ spec:
         service: load-gen-controller
     spec:
       
-      imagePullSecrets:
-        - name: dockerhub-secret
+
       containers:
       - name: load-gen-controller
         image: quay.io/niklaushirt/rs-load-gen-controller:1.0
@@ -600,8 +596,7 @@ spec:
         service: mongodb
     spec:
       
-      imagePullSecrets:
-        - name: dockerhub-secret
+
       containers:
       - name: mongodb
         image: quay.io/niklaushirt/rs-mongodb:1.0
@@ -637,8 +632,7 @@ spec:
         service: mysql
     spec:
       
-      imagePullSecrets:
-        - name: dockerhub-secret
+
       containers:
       - name: mysql
         image: quay.io/niklaushirt/rs-mysql-db:1.0
@@ -681,8 +675,7 @@ spec:
         stage: prod
     spec:
       
-      imagePullSecrets:
-        - name: dockerhub-secret
+
       containers:
       - name: payment
         image: quay.io/niklaushirt/rs-payment:1.0
@@ -724,8 +717,7 @@ spec:
         service: rabbitmq
     spec:
       
-      imagePullSecrets:
-        - name: dockerhub-secret
+
       containers:
       - name: rabbitmq
         image: rabbitmq:3.7-management-alpine
@@ -762,8 +754,7 @@ spec:
         service: ratings
     spec:
       
-      imagePullSecrets:
-        - name: dockerhub-secret
+
       containers:
       - name: ratings
         image: quay.io/niklaushirt/rs-ratings:1.0
@@ -807,8 +798,7 @@ spec:
         service: shipping
     spec:
       
-      imagePullSecrets:
-        - name: dockerhub-secret
+
       containers:
       - name: shipping
         image: quay.io/niklaushirt/rs-shipping:1.0
@@ -853,8 +843,7 @@ spec:
         service: user
     spec:
       
-      imagePullSecrets:
-        - name: dockerhub-secret
+
       containers:
       - name: user
         image: quay.io/niklaushirt/rs-user:1.0
@@ -896,8 +885,7 @@ spec:
         service: web
     spec:
       
-      imagePullSecrets:
-        - name: dockerhub-secret
+
       containers:
       - name: web
         image: quay.io/niklaushirt/rs-web:2.0
@@ -951,8 +939,7 @@ spec:
         service: redis
     spec:
       
-      imagePullSecrets:
-        - name: dockerhub-secret
+
       containers:
       - name: redis
         image: redis:4.0.6

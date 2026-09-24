@@ -29,7 +29,7 @@
 # *************************************************************************************************************************************************
 
 
-- name: 🛰️  START - IBM AIOPS CUSTOM HOOK
+- name: 🛰️  START - IBM CONCERT OPERATE CUSTOM HOOK
   debug: 
     msg="{{ lookup('pipe','date +%d.%m.%Y---%H:%M:%S') }}"
 

@@ -103,7 +103,7 @@ echo $values| jq
 
 
 
-echo $values|jq -c '.results[]| select( .name == "IBM AIOPS Execution Environment")|.id'
+echo $values|jq -c '.results[]| select( .name == "IBM CONCERT OPERATE Execution Environment")|.id'
 
 
 

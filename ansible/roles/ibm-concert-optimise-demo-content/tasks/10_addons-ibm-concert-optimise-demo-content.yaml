@@ -1127,38 +1127,38 @@
 
 
 
-- name: 💊 CERTIFICATES - Patch Certificates for TechZone IPI/UPI
-  shell: |
-    CLUSTER_ROUTE=$(oc get routes console -n openshift-console | tail -n 1 2>&1 )
-    CLUSTER_FQDN=$( echo $CLUSTER_ROUTE | awk '{print $2}')
-    CLUSTER_NAME=${CLUSTER_FQDN##*console.}
+# - name: 💊 CERTIFICATES - Patch Certificates for TechZone IPI/UPI
+#   shell: |
+#     CLUSTER_ROUTE=$(oc get routes console -n openshift-console | tail -n 1 2>&1 )
+#     CLUSTER_FQDN=$( echo $CLUSTER_ROUTE | awk '{print $2}')
+#     CLUSTER_NAME=${CLUSTER_FQDN##*console.}
 
 
-    if [[ $CLUSTER_NAME =~ "cloud.techzone.ibm.com" ]];
-    then
-        echo "✅ Seems that you're on Techzone IPI/UPI"  
-        echo "✅ Let's patch the certificates"  
+#     if [[ $CLUSTER_NAME =~ "cloud.techzone.ibm.com" ]];
+#     then
+#         echo "✅ Seems that you're on Techzone IPI/UPI"  
+#         echo "✅ Let's patch the certificates"  
 
-        echo "Extracting signed cert"
-        oc get secret -n openshift-ingress letsencrypt-certs -o jsonpath='{.data.tls\.crt}'| base64 -d > cert.crt
-        oc get secret -n openshift-ingress letsencrypt-certs -o jsonpath='{.data.tls\.key}'| base64 -d > cert.key
+#         echo "Extracting signed cert"
+#         oc get secret -n openshift-ingress letsencrypt-certs -o jsonpath='{.data.tls\.crt}'| base64 -d > cert.crt
+#         oc get secret -n openshift-ingress letsencrypt-certs -o jsonpath='{.data.tls\.key}'| base64 -d > cert.key
 
-        oc create secret tls -n ibm-concert-optimise nginx-ingressgateway-certs --cert=cert.crt --key=cert.key --dry-run=client -o yaml | oc apply -f -
+#         oc create secret tls -n ibm-concert-optimise nginx-ingressgateway-certs --cert=cert.crt --key=cert.key --dry-run=client -o yaml | oc apply -f -
 
 
-        REPLICAS=$(oc get pods -n ibm-concert-optimise |grep nginx|wc -l |xargs)
-        oc scale Deployment/nginx --replicas=0 -n ibm-concert-optimise
-        sleep 10
-        oc scale Deployment/nginx --replicas=${REPLICAS} -n ibm-concert-optimise
-    else
-        echo "✅ Seems that you're NOT on Techzone IPI/UPI"  
-        echo "✅ No need to patch the certificates any further"  
-    fi
-  register: certificate_patch
-  ignore_errors: true
-  args:
-    executable: /bin/bash
-  when: (current_feature.create_valid_ingress_itz | default(false))|bool == true
+#         REPLICAS=$(oc get pods -n ibm-concert-optimise |grep nginx|wc -l |xargs)
+#         oc scale Deployment/nginx --replicas=0 -n ibm-concert-optimise
+#         sleep 10
+#         oc scale Deployment/nginx --replicas=${REPLICAS} -n ibm-concert-optimise
+#     else
+#         echo "✅ Seems that you're NOT on Techzone IPI/UPI"  
+#         echo "✅ No need to patch the certificates any further"  
+#     fi
+#   register: certificate_patch
+#   ignore_errors: true
+#   args:
+#     executable: /bin/bash
+#   when: (current_feature.create_valid_ingress_itz | default(false))|bool == true
 
 
 - name: 🟢 DEBUG - Patch Certificates for TechZone IPI/UPI

@@ -92,6 +92,7 @@ spec:
       labels:
         app: ibm-installer
     spec:
+      serviceAccount: ibm-installer-admin
       containers:
         - name: tools
           image: quay.io/niklaushirt/ibm-concert-tools:1.0.0
@@ -103,7 +104,6 @@ spec:
             capabilities:
               add: 
               - ALL
-          serviceAccount: ibm-installer-admin
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
@@ -140,16 +140,22 @@ spec:
 
               oc delete ns ibm-concert &
               oc delete ns ibm-concert-platform &
+              oc delete ns ibm-concert-platform-dataapps &
+              oc delete ns ibm-concert-platform-hub &
+              oc delete ns ibm-concert-platform-workflows &
               oc delete ns ibm-concert-dataapps &
               oc delete ns ibm-concert-hub &
               oc delete ns ibm-concert-workflows &
-              oc delete ns concert-securecoder &
+              oc delete ns ibm-concert-workflows-faas &
+              oc delete ns ibm-concert-securecoder &
               oc delete ns faas &
 
 
               oc delete ns ibm-concert-optimise &
 
               oc delete ConsoleNotifications --all
+
+              sleep 120 
 
               oc delete ns ibm-installer &
 

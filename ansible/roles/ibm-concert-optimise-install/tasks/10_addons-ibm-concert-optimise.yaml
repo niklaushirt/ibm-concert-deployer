@@ -152,14 +152,14 @@
 
 
 
-# - name: 🌐 CONCERT OPTIMISE - Create TLS Gateway Secret
-#   shell: |
-#         oc get secret -n openshift-ingress $(kubectl get secrets -n openshift-ingress | grep "-serving-cert" | awk '{print $1}') -o jsonpath='{.data.tls\.crt}'| base64 -d > cert.crt
-#         oc get secret -n openshift-ingress $(kubectl get secrets -n openshift-ingress | grep "-serving-cert" | awk '{print $1}') -o jsonpath='{.data.tls\.key}'| base64 -d > cert.key
-#         oc create secret tls -n ibm-concert-optimise nginx-ingressgateway-certs --cert=./cert.crt --key=./cert.key
-#   ignore_errors: true
-#   args:
-#     executable: /bin/bash
+- name: 🌐 CONCERT OPTIMISE - Create TLS Gateway Secret
+  shell: |
+        oc get secret -n openshift-ingress $(kubectl get secrets -n openshift-ingress | grep "-serving-cert" | awk '{print $1}') -o jsonpath='{.data.tls\.crt}'| base64 -d > cert.crt
+        oc get secret -n openshift-ingress $(kubectl get secrets -n openshift-ingress | grep "-serving-cert" | awk '{print $1}') -o jsonpath='{.data.tls\.key}'| base64 -d > cert.key
+        oc create secret tls -n ibm-concert-optimise nginx-ingressgateway-certs --cert=./cert.crt --key=./cert.key
+  ignore_errors: true
+  args:
+    executable: /bin/bash
 
 
 

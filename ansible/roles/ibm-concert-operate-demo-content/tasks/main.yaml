@@ -178,7 +178,7 @@
 # ---------------------------------------------------------------------------------------------------------------------------------------------------"
 # CHECK FOR INSTALLATION READY
 # ---------------------------------------------------------------------------------------------------------------------------------------------------"
-# Check that IBM AIOPS has been completely installed
+# Check that IBM CONCERT OPERATE has been completely installed
 # - name: (010/055) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Wait for IBM Concert Operate to be Ready
 #   include_tasks: 99_ibm-aiops-wait-ibm-aiops.yaml
 
@@ -300,11 +300,11 @@
 # POSTINSTALL TASKS
 # ---------------------------------------------------------------------------------------------------------------------------------------------------"
 # Register LDAP Users
-- name: (021/055) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Register LDAP Server with IBM AIOPS
+- name: (021/055) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Register LDAP Server with IBM CONCERT OPERATE
   include_tasks: 25-post-ldap-register.yaml
   when: current_feature.install_ldap|bool == true and current_feature.ldap_register|bool == true
 # Create valid certificate for Ingress (for Slack)
-- name: (022/055) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Create a valid certificate for the IBM AIOPS Ingress
+- name: (022/055) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Create a valid certificate for the IBM CONCERT OPERATE Ingress
   include_tasks: 31_ibm-aiops-patch-ingress.yaml
   when: (current_feature.create_valid_ingress_itz | default('false'))|bool == true 
 
@@ -327,12 +327,12 @@
   include_tasks: 48_ibm-aiops-load-awx-playbooks-for-demo.yaml
   when: current_feature.load_awx_playbooks|bool == true 
 
-- name: (025/055) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Create AWX Connection in IBM AIOPS
+- name: (025/055) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Create AWX Connection in IBM CONCERT OPERATE
   include_tasks: 47_ibm-aiops-create-awx-connection.yaml
   when: current_feature.integrate_awx|bool == true
 
 # Load Demo Runbooks into IBM Concert Operate
-- name: (026/055) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Load Demo Runbooks into IBM AIOPS
+- name: (026/055) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Load Demo Runbooks into IBM CONCERT OPERATE
   include_tasks: 49_ibm-aiops-load-runbooks-for-demo.yaml
   when: current_feature.load_runbooks|bool == true
 
