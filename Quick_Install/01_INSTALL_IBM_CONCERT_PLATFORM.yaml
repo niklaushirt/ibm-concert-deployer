@@ -311,10 +311,8 @@ data:
         #ldap_user_password: CHANGEME
         # ldap namespace
         ldap_namespace: openldap
-        # Integrate Login with OpenLDAP 
-        ldap_register: true
         # Integrate OpenShift Login with OpenLDAP
-        integrate_ocp_openldap: true
+        integrate_ocp_openldap: false
 
 
 

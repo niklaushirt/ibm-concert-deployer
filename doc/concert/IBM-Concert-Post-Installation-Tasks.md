@@ -368,6 +368,86 @@ Generate a dedicated API key only when Secure Coder or another approved integrat
 
 *Figure 22 The generated API key dialog. Secret values and the usage example are redacted. Recording timestamp 12:12*
 
+
+
+
+
+## Integration with KeyCloak/OpenLDAP (Optional)
+
+If you have enabled KeyCloak and OpenLDAP in the installation configuration, please follow the steps below.
+
+### Task 23 — Connect to KeyCloak
+
+Generate a dedicated API key only when Secure Coder or another approved integration requires it.
+
+1. Click on the banner `✅ IBM Concert KeyCloak. User: xxx - Password: yyyy 🚀 Access it here: IBM KeyCloak`
+1. Login with the provided parameters.
+
+
+
+>  You can find the KeyCloak Credentials in the Log File. 
+>
+> Search for `Keycloak Credentials` 
+
+
+
+### Task 23 — Integrate with OpenLDAP
+
+Generate a dedicated API key only when Secure Coder or another approved integration requires it.
+
+1. Click on `UserFederation`
+
+1. Add LDAP Provider
+
+1. Fill in the following parameters, don't touch the rest of the fields
+
+   | Field            | Value                                        |
+   | ---------------- | -------------------------------------------- |
+   | UI display name  | LDAP                                         |
+   | Vendor           | Other                                        |
+   | Connection URL   | ldap://openldap.openldap:389                 |
+   | BindDN           | cn=admin,dc=ibm,dc=com                       |
+   | Bind credentials | The Password you have set in the config file |
+   | Edit mode        | WRITABLE                                     |
+   | Users DN         | ou=People,dc=ibm,dc=com                      |
+
+1. Click save.
+
+1. Click on the newly created connection.
+
+1. Top right: click Action - Sync All Users
+
+1. You should get **Sync of users finished successfully. xx users added,**
+
+### Task 24 — Define Users
+
+Now the users have been imported but cannot access Concert platform yet.
+
+1. Click `Users` (there are no users shown).
+1. Search for `*`, you should get a list of predefined users.
+1. Select one (for example `demo`).
+1. Click `RoleMappling`
+1. Click `AssignRole` - `Client Roles`
+1. You can assign either `Admin` or `User` role (you probably want Admin for the demo)
+1. Click `Assign`
+1. Try to login with the user you just updated and the global password you have set in the config file
+
+
+
+>  As you have set the Edit Mode to WRITEABLE you can also create users in KeyCloak that will get stored in OpenLDAP. 
+
+>  You can find the OpenLDAP Credentials and the link to the Admin Console in the Log File if needed. 
+>
+> Search for `LDAP CREDENTIALS` and `openldap_app_route`
+>
+> The login is:
+>
+> **Login DN:**    cn=admin,dc=ibm,dc=com
+>
+> **Password:**  the global password you have set in the config file
+
+
+
 ## Final Verification Checklist
 
 The post-install work is complete when each applicable item below is confirmed.

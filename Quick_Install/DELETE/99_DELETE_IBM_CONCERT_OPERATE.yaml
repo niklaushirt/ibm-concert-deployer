@@ -204,6 +204,7 @@ spec:
               echo "------------------------------------------------------------------------------------------------------------------------------"
               echo " 🧻 Delete Namespace ibm-installer"
               oc delete ns ibm-installer &
+              sleep 10
               oc delete ClusterRoleBinding ibm-installer-default-admin &
               oc delete deployment ibm-operate-wipe-install &
 
