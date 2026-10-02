@@ -209,9 +209,9 @@ data:
     # IBM CONCERT platform
     # --------------------------------------------------------------------------------------------------------------------------------------
 
-    - project: ibm-concert-platform
+    - project: ibm-concert
       instances:
-      - name: ibm-concert-platform
+      - name: ibm-concert
         kind: IBMConcertPlatform
         install: true
 
@@ -282,7 +282,7 @@ data:
         #storage_class_block: automatic
 
 
-      - name: ibm-concert-platform-demo-content
+      - name: ibm-concert-demo-content
         kind: IBMConcertPlatformDemoContent
         install: true
 
@@ -500,6 +500,21 @@ spec:
               echo " 🚀 Finalize Installation"
               ./tools/90_finalizeInstallation.sh
               echo ""
+
+
+              echo "------------------------------------------------------------------------------------------------------------------------------"
+              echo " 🔎 Check for Errors in Ansible Log"
+              ./tools/93_checkErrorsLog_platform.sh
+              echo ""
+
+
+              echo "------------------------------------------------------------------------------------------------------------------------------"
+              echo " 🔎 Check Installation Consistency"
+              ./tools/94_check_install_platform.sh
+              echo ""
+
+
+
 
               while true
               do

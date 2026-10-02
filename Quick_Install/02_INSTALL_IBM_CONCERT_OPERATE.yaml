@@ -520,13 +520,13 @@ spec:
 
               echo "------------------------------------------------------------------------------------------------------------------------------"
               echo " 🔎 Check for Errors in Ansible Log"
-              ./tools/91_checkErrorsLog.sh
+              ./tools/91_checkErrorsLog_operate.sh
               echo ""
 
 
               echo "------------------------------------------------------------------------------------------------------------------------------"
               echo " 🔎 Check Installation Consistency"
-              ./tools/92_check_install_short.sh
+              ./tools/92_check_install_operate.sh
               echo ""
 
 
