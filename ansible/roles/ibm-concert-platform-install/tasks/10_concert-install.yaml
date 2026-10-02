@@ -844,8 +844,8 @@
 
 
     oc delete ConsoleNotification ibm-concert-operate-notification-kc>/dev/null 2>/dev/null
-    export KC_USER=$(kubectl exec -it $(kubectl get pods -n ibm-concert-platform-hub  | grep "ibm-solis-embedded-keycloak" | awk '{print $1}') -n ibm-concert-platform-hub  -- env | grep 'KC_BOOTSTRAP_ADMIN_USERNAME='| cut -d= -f2)
-    export KC_PWD=$(kubectl exec -it $(kubectl get pods -n ibm-concert-platform-hub  | grep "ibm-solis-embedded-keycloak" | awk '{print $1}') -n ibm-concert-platform-hub  -- env | grep 'KC_BOOTSTRAP_ADMIN_PASSWORD='| cut -d= -f2)
+    export KC_USER=$(kubectl exec -it $(kubectl get pods -n $CONCERT_HUB_NAMESPACE  | grep "ibm-solis-embedded-keycloak" | awk '{print $1}') -n $CONCERT_HUB_NAMESPACE  -- env | grep 'KC_BOOTSTRAP_ADMIN_USERNAME='| cut -d= -f2)
+    export KC_PWD=$(kubectl exec -it $(kubectl get pods -n $CONCERT_HUB_NAMESPACE  | grep "ibm-solis-embedded-keycloak" | awk '{print $1}') -n $CONCERT_HUB_NAMESPACE  -- env | grep 'KC_BOOTSTRAP_ADMIN_PASSWORD='| cut -d= -f2)
     export KC_ROUTE=$(oc get route solis-hub -o jsonpath={.spec.host} -n $CONCERT_HUB_NAMESPACE)
 
 

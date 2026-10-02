@@ -468,6 +468,27 @@ spec:
               echo ""
 
 
+              export CONCERT_NAMESPACE=$(oc get po -A|grep roja-portal |awk '{print$1}')
+              echo "CONCERT_NAMESPACE: $CONCERT_NAMESPACE"
+
+              export CONCERT_HUB_NAMESPACE=$(oc get po -A|grep ibm-solis-core |awk '{print$1}')
+              echo "CONCERT_HUB_NAMESPACE: $CONCERT_HUB_NAMESPACE"
+
+              export CONCERT_WORKFLOWS_NAMESPACE=$(oc get po -A|grep rna-core-mysql |awk '{print$1}')
+              echo "CONCERT_WORKFLOWS_NAMESPACE: $CONCERT_WORKFLOWS_NAMESPACE"
+
+              export CONCERT_DATAAPPS_NAMESPACE=$(oc get po -A|grep dataapps-solis |awk '{print$1}')
+              echo "CONCERT_DATAAPPS_NAMESPACE: $CONCERT_DATAAPPS_NAMESPACE"
+
+              export CONCERT_OPTIMISE_NAMESPACE=$(oc get po -A|grep t8c-operator |awk '{print$1}')
+              echo "CONCERT_OPTIMISE_NAMESPACE: $CONCERT_OPTIMISE_NAMESPACE"
+
+              echo "CONCERT_NAMESPACE: $CONCERT_NAMESPACE"
+              echo "CONCERT_HUB_NAMESPACE: $CONCERT_HUB_NAMESPACE"
+              echo "CONCERT_WORKFLOWS_NAMESPACE: $CONCERT_WORKFLOWS_NAMESPACE"
+              echo "CONCERT_DATAAPPS_NAMESPACE: $CONCERT_DATAAPPS_NAMESPACE"
+              echo "CONCERT_OPTIMISE_NAMESPACE: $CONCERT_OPTIMISE_NAMESPACE"
+
 
 
               echo "------------------------------------------------------------------------------------------------------------------------------"
