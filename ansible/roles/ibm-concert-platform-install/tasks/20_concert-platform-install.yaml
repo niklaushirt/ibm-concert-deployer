@@ -73,7 +73,7 @@
     mkdir -p /tmp/
     cd  /tmp/
 
-    wget https://github.com/IBM/Concert-Platform/releases/download/v3.0.0/ibm-itom-assembly-x86.tar.gz
+    wget https://github.com/IBM/Concert-Platform/releases/download/{{ current_feature.concert_platform_version | default("v3.0.2.1") }}/ibm-itom-assembly-x86.tar.gz
     tar xfz ibm-itom-assembly-x86.tar.gz
     cd /tmp/ibm-itom-assembly
 

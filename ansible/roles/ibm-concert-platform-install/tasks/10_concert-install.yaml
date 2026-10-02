@@ -73,7 +73,7 @@
     mkdir -p /tmp/
     cd  /tmp/
 
-    wget https://github.com/IBM/Concert/releases/download/{{ current_feature.concert_version | default("v3.0.0") }}/ibm-concert-x86.tar.gz
+    wget https://github.com/IBM/Concert/releases/download/{{ current_feature.concert_version | default("v3.0.1.1") }}/ibm-concert-x86.tar.gz
     tar xfz ibm-concert-x86.tar.gz
     cd /tmp/ibm-concert
     # find . -type f -exec sed -i \
@@ -155,6 +155,12 @@
 
     export OCP_URL=$(oc get Infrastructure cluster -o jsonpath={.status.apiServerURL})
     echo "OCP_URL: $OCP_URL"
+    CONSOLE_PATH=$(oc get route -n openshift-console console -o jsonpath={.spec.host})
+    #WORKFLOWS_INSTANCE_ADDRESS="{{ current_ibm_feature.project }}-workflows"${CONSOLE_PATH/console-openshift-console./}
+    WORKFLOWS_INSTANCE_ADDRESS=${CONSOLE_PATH/console-openshift-console/workflows}
+    echo ${WORKFLOWS_INSTANCE_ADDRESS}
+
+
     mv /tmp/ibm-concert/etc/params.ini /tmp/ibm-concert/etc/params.ini.all
     cat > /tmp/ibm-concert/etc/params.ini <<EOF
     
@@ -222,7 +228,7 @@
     WORKFLOWS_NS={{ current_ibm_feature.project }}-workflows
     # Domain name on which the application will listen
     # Example: solis-gw-workflows.apps.test.cp.my-domain.com
-    WORKFLOWS_INSTANCE_ADDRESS=$OCP_URL
+    WORKFLOWS_INSTANCE_ADDRESS=$WORKFLOWS_INSTANCE_ADDRESS
     # Takes a looooooot of time so set to false for the time being
     WORKFLOWS_INSTALL_ALL_INTEGRATIONS=false
 
