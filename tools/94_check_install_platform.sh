@@ -478,6 +478,7 @@ echo " ✅ KEYCLOAK CREDENTIALS"
 echo "------------------------------------------------------------------------------------------------------------------------------"
 
 export CONCERT_HUB_NAMESPACE=$(oc get po -A|grep ibm-solis-core |awk '{print$1}')
+export CONCERT_NAMESPACE=$(oc get po -A|grep roja-portal |awk '{print$1}')
 
 oc delete ConsoleNotification ibm-concert-operate-notification-kc>/dev/null 2>/dev/null
 export KC_USER=$(kubectl exec -it $(kubectl get pods -n $CONCERT_HUB_NAMESPACE  | grep "ibm-solis-embedded-keycloak" | awk '{print $1}') -n $CONCERT_HUB_NAMESPACE  -- env | grep 'KC_BOOTSTRAP_ADMIN_USERNAME='| cut -d= -f2)
@@ -489,7 +490,7 @@ echo "KC_USER:        $KC_USER"
 echo "KC_PWD:         $KC_PWD"
 echo "KC_ROUTE:       https://$KC_ROUTE/sys/internal/kc"
 
-export appURL=$(oc get routes -n {{ current_ibm_feature.project }} concert  -o jsonpath="{['spec']['host']}")|| true
+export appURL=$(oc get routes -n $CONCERT_NAMESPACE concert  -o jsonpath="{['spec']['host']}")|| true
 cat <<EOF | oc apply -f -
 apiVersion: console.openshift.io/v1
 kind: ConsoleNotification
