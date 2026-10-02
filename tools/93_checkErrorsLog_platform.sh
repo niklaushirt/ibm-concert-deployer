@@ -62,6 +62,18 @@ spec:
     location: BannerTop
     text: "✅ IBM Concert Platform is installed in this cluster. 🚀 Access it here:"
 EOF
+export appURL=$(oc get routes -n ibm-concert-optimise nginx -o jsonpath="{['spec']['host']}")|| true
+cat <<EOF | oc apply -f -
+apiVersion: console.openshift.io/v1
+kind: ConsoleNotification
+metadata:
+      name: ibm-concert-operate-notification-turbo
+spec:
+      backgroundColor: '#003148'
+      color: '#fff'
+      location: BannerTop
+      text: "✅ IBM Concert Optimise Lite is installed in this cluster."
+EOF
 
 echo ""
 echo " 🟢🟢🟢 Logs are looking good."

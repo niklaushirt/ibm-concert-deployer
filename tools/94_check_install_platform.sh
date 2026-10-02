@@ -538,7 +538,7 @@ kind: ConsoleNotification
 metadata:
       name: ibm-concert-operate-notification-turbo
 spec:
-      backgroundColor: '#009a00'
+      backgroundColor: '#003148'
       color: '#fff'
       location: BannerTop
       text: "✅ IBM Concert Optimise Lite is installed in this cluster."
