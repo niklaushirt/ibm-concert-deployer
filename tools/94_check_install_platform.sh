@@ -529,6 +529,42 @@ echo ""
 echo ""
 
 
+
+
+export appURL=$(oc get routes -n ibm-concert-optimise nginx -o jsonpath="{['spec']['host']}")|| true
+cat <<EOF | oc apply -f -
+apiVersion: console.openshift.io/v1
+kind: ConsoleNotification
+metadata:
+      name: ibm-concert-operate-notification-turbo
+spec:
+      backgroundColor: '#009a00'
+      color: '#fff'
+      location: BannerTop
+      text: "✅ IBM Concert Optimise Lite is installed in this cluster."
+EOF
+
+
+export CONCERT_NAMESPACE=$(oc get po -A|grep roja-portal |awk '{print$1}')
+export appURL=$(oc get routes -n $CONCERT_NAMESPACE concert  -o jsonpath="{['spec']['host']}")|| true
+cat <<EOF | oc apply -f -
+apiVersion: console.openshift.io/v1
+kind: ConsoleNotification
+metadata:
+    name: ibm-concert-operate-notification-concert
+spec:
+    backgroundColor: '#009a00'
+    color: '#fff'
+    link:
+        href: "https://$appURL"
+        text: IBM Concert Platform
+    location: BannerTop
+    text: "✅ IBM Concert Platform is installed in this cluster. 🚀 Access it here:"
+EOF
+
+
+
+
 echo "***************************************************************************************************************************************************"
 echo "***************************************************************************************************************************************************"
 echo ""
