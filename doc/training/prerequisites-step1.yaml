@@ -145,7 +145,7 @@ data:
 
         # Where to get the training data from
         training_data_url: https://github.com/niklaushirt/
-        training_data_repo: ibm-aiops-trainingdata
+        training_data_repo: ibm-concert-trainingdata
 
         # Create Kafka connection for Log inception (needed to create log anomalies in the demo environment)
         create_log_connection: true

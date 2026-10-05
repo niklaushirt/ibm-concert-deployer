@@ -164,8 +164,6 @@
     mv /tmp/ibm-concert/etc/params.ini /tmp/ibm-concert/etc/params.ini.all
     cat > /tmp/ibm-concert/etc/params.ini <<EOF
     
-    # INSTALL VEIAS - PROOF OF EXPLOITABILITY: Set as True if installing VEIAS
-    install_veias=true
     #cat concert-dataapps-workflows-k8s-params.ini
     # INSTALL_EKS: Set as True if installing on EKS
     INSTALL_EKS={{ current_feature.install_eks | default(false) }}
@@ -194,6 +192,11 @@
     STORAGE_CLASS_HUB={{ STORAGE_CLASS_FILE }}
 
 
+    # ----- Concert VEIADS Configuration -----
+
+    # INSTALL VEIAS - PROOF OF EXPLOITABILITY: Set as True if installing VEIAS
+    INSTALL_VEIAS=true
+
 
     # ----- Concert Configuration -----
 
@@ -204,6 +207,7 @@
     SCALE_CONFIG_CONCERT=level_1
     # storage class for Concert
     STORAGE_CLASS_CONCERT={{ STORAGE_CLASS_FILE }}
+    ENABLE_AI={{ current_feature.enable_WatsonX | default(false) }}
 
 
     # ----- Concert Secure Coder Configuration (DEPRECATED) -----

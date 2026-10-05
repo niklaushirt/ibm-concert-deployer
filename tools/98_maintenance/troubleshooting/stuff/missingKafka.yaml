@@ -169,7 +169,7 @@ data:
         training_create_season_xiny: false
 
         training_data_url: https://github.com/niklaushirt/
-        training_data_repo: ibm-aiops-trainingdata
+        training_data_repo: ibm-concert-trainingdata
 
 
         # ---------------------------------------------------------------------

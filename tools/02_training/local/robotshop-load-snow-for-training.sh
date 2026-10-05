@@ -16,7 +16,7 @@
 
 export APP_NAME=robot-shop
 export INDEX_TYPE=changerisk
-export TRAINING_DATA_URL=https://github.com/niklaushirt/ibm-aiops-trainingdata.git
+export TRAINING_DATA_URL=https://github.com/niklaushirt/ibm-concert-trainingdata.git
 
 
 if [[  $AIOPS_NAMESPACE =~ "" ]]; then
