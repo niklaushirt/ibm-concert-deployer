@@ -192,7 +192,7 @@
     STORAGE_CLASS_HUB={{ STORAGE_CLASS_FILE }}
 
 
-    # ----- Concert VEIADS Configuration -----
+    # ----- Concert VEIAS Configuration -----
 
     # INSTALL VEIAS - PROOF OF EXPLOITABILITY: Set as True if installing VEIAS
     INSTALL_VEIAS=true

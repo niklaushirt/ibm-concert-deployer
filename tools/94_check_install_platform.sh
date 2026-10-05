@@ -246,18 +246,6 @@ EOF
         echo "***************************************************************************************************************************************************"
         echo ""
 
-cat <<EOF | oc apply -f -
-apiVersion: console.openshift.io/v1
-kind: ConsoleNotification
-metadata:
-    name: ibm-concert-operate-notification-warning
-spec:
-    backgroundColor: '#dd4500'
-    color: '#fff'
-    location: "BannerTop"
-    text: "⚠️ WARNING: Your Installation has some problems. Please check the Installation Logs and re-run the installer by deleting the Pod"
-EOF
-
 
     else
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
