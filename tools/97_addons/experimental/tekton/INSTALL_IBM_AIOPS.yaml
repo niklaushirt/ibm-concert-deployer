@@ -217,7 +217,7 @@ data:
 
         # Where to get the training data from
         training_data_url: https://github.com/niklaushirt/
-        training_data_repo: ibm-aiops-trainingdata
+        training_data_repo: ibm-concert-trainingdata
 
         # Create Kafka connection for Log inception (needed to create log anomalies in the demo environment)
         create_log_connection: true
@@ -470,13 +470,13 @@ spec:
 
               echo "------------------------------------------------------------------------------------------------------------------------------"
               echo " 🔎 Check for Errors in Ansible Log"
-              ./tools/91_checkErrorsLog.sh
+              ./tools/91_checkErrorsLog_operate.sh
               echo ""
 
 
               echo "------------------------------------------------------------------------------------------------------------------------------"
               echo " 🔎 Check Installation Consistency"
-              ./tools/92_check_install_short.sh
+              ./tools/92_check_install_operate.sh
               echo ""
 
 

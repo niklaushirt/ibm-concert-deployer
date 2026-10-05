@@ -2,7 +2,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: load-events-cassandra
+  name: load-events-rest
   namespace: ibm-installer
   labels:
    job-type: data-load-job
@@ -35,9 +35,9 @@ spec:
               echo "   ------------------------------------------------------------------------------------------------------------------------------"
               echo "    📥 Downloading events anomaly training files"
               echo "   ------------------------------------------------------------------------------------------------------------------------------"
-              export TRAINING_REPO=https://github.com/niklaushirt/ibm-aiops-trainingdata.git
+              export TRAINING_REPO=https://github.com/niklaushirt/ibm-concert-trainingdata.git
               git clone $TRAINING_REPO
-              cd ibm-aiops-trainingdata
+              cd ibm-concert-trainingdata
 
               echo ""
               echo ""
@@ -50,7 +50,7 @@ spec:
               echo "   ------------------------------------------------------------------------------------------------------------------------------"
               echo "    🚀 Starting Data Load"
               echo "   ------------------------------------------------------------------------------------------------------------------------------"
-              cd ibm-aiops-trainingdata
+              cd ibm-concert-trainingdata
               echo "------------------------------------------------------------------------------------------------------------------------------"
               echo "This Repo includes those latestet Commits"
               echo "------------------------------------------------------------------------------------------------------------------------------"
@@ -58,7 +58,8 @@ spec:
               echo ""
               echo ""
 
-              ./training/load-events-for-training.sh
+              # Use the REST API to load the events as of 5.2
+              ./training/load-events-for-training_REST.sh
 
               echo "*****************************************************************************************************************************"
               echo " ✅ DONE"

@@ -108,11 +108,13 @@
 
 - name: 👩‍💻 CONCERT OPTIMISE - Get Concert Gateway Host
   shell: |
+        export CONCERT_NAMESPACE={{ current_ibm_feature.project }}
+        export CONCERT_HUB_NAMESPACE={{ current_ibm_feature.project }}-hub
         CONSOLE_PATH=$(oc get route -n openshift-console console -o jsonpath={.spec.host})
         CONSOLE_URL="https://"$CONSOLE_PATH
         API_URL=${CONSOLE_URL/console-openshift-console.apps/api}:6443
         BASE_URL=${CONSOLE_PATH/console-openshift-console.apps./}
-        PLATFORM_GW_HOST="solis-hub-ibm-concert-platform-hub .apps."$BASE_URL
+        PLATFORM_GW_HOST="solis-hub-$CONCERT_HUB_NAMESPACE.apps."$BASE_URL
         echo ${PLATFORM_GW_HOST}
   ignore_errors: true
   args:

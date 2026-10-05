@@ -119,9 +119,9 @@ spec:
               echo "   ------------------------------------------------------------------------------------------------------------------------------"
               echo "    📥 Downloading Training files"
               echo "   ------------------------------------------------------------------------------------------------------------------------------"
-              export TRAINING_REPO=https://github.com/niklaushirt/ibm-aiops-trainingdata.git
+              export TRAINING_REPO=https://github.com/niklaushirt/ibm-concert-trainingdata.git
               git clone $TRAINING_REPO
-              cd /ibm-aiops-trainingdata
+              cd /ibm-concert-trainingdata
 
               echo ""
               echo ""
@@ -249,7 +249,7 @@ spec:
               echo "   ------------------------------------------------------------------------------------------------------------------------------"
               echo "    🚀 Starting Data Load"
               echo "   ------------------------------------------------------------------------------------------------------------------------------"
-              cd /ibm-aiops-trainingdata
+              cd /ibm-concert-trainingdata
 
 
               echo "   ------------------------------------------------------------------------------------------------------------------------------"
@@ -300,13 +300,13 @@ spec:
 
               echo "------------------------------------------------------------------------------------------------------------------------------"
               echo " 🔎 Check for Errors in Ansible Log"
-              ./tools/91_checkErrorsLog.sh
+              ./tools/91_checkErrorsLog_operate.sh
               echo ""
 
 
               echo "------------------------------------------------------------------------------------------------------------------------------"
               echo " 🔎 Check Installation Consistency"
-              ./tools/92_check_install_short.sh
+              ./tools/92_check_install_operate.sh
               echo ""
 
 

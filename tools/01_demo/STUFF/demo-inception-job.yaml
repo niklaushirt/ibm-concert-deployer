@@ -28,9 +28,9 @@ spec:
               #!/bin/bash
               set -x
 
-              export GIT_REPO=https://github.com/niklaushirt/ibm-aiops-trainingdata.git
+              export GIT_REPO=https://github.com/niklaushirt/ibm-concert-trainingdata.git
               git clone $GIT_REPO
-              cd ibm-aiops-trainingdata
+              cd ibm-concert-trainingdata
               ./tools/01_demo/robotshop_incident_memory.sh
               sleep 6000000
       restartPolicy: Never

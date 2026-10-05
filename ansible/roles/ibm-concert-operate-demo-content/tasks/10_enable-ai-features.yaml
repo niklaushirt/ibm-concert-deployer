@@ -57,7 +57,7 @@
 # CHAT ASSISTANT - Create Enable Tile
 # --------------------------------------------------------------------------------------------------------------------------------------
 # --------------------------------------------------------------------------------------------------------------------------------------
-- name: 🗯️ CHAT ASSISTANT - Create Enable Tile
+- name: 🗯️ CHAT ASSISTANT - Enable Tile
   shell: |
     set -x
         
@@ -105,6 +105,175 @@
   debug: 
     var: output_string.stdout_lines
     verbosity: 0
+
+
+
+
+
+
+
+
+
+
+
+- name: 🗯️ DATA QUALITY INSIGHTS - Match Token - Enable Tile
+  shell: |
+    set -x
+        
+
+    export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
+    ZEN_API_HOST=$(oc get route -n $AIOPS_NAMESPACE cpd -o jsonpath='{.spec.host}')
+    ZEN_LOGIN_URL="https://${ZEN_API_HOST}/v1/preauth/signin"
+    LOGIN_USER=admin
+    LOGIN_PASSWORD="$(oc get secret admin-user-details -n $AIOPS_NAMESPACE -o jsonpath='{ .data.initial_admin_password }' | base64 --decode)"
+
+    ZEN_LOGIN_RESPONSE=$(
+    curl -k \
+    -H 'Content-Type: application/json' \
+    -XPOST \
+    "${ZEN_LOGIN_URL}" \
+    -d '{
+          "username": "'"${LOGIN_USER}"'",
+          "password": "'"${LOGIN_PASSWORD}"'"
+    }' 2> /dev/null
+    )
+
+    ZEN_TOKEN=$(echo "${ZEN_LOGIN_RESPONSE}" | jq -r .token)
+    #echo $ZEN_TOKEN
+
+    export ROUTE=$(oc get route -n $AIOPS_NAMESPACE cpd -o jsonpath={.spec.host})
+    echo "ROUTE: "$ROUTE
+
+
+    curl "https://$ROUTE/aiops/aimodels/api/p/ai_platform_api" \
+    -X 'POST' \
+    -H "Authorization: bearer $ZEN_TOKEN" \
+    -H 'Content-Type: application/json' \
+    --data-raw '{"operationName":"toggleAlgorithmEnablement","variables":{"algorithmName":"Data_Quality_Insights_Match_Token"},"query":"mutation toggleAlgorithmEnablement($algorithmName: String!) {\n  toggleAlgorithmEnablement(algorithmName: $algorithmName) {\n    message\n    status\n    __typename\n  }\n}"}'
+
+
+  
+  register: output_string
+  ignore_errors: true
+  args:
+    executable: /bin/bash
+  when: (current_feature.enable_chat_assistant | default(false))|bool == true  
+
+
+- name: 🟣  OUTPUT
+  debug: 
+    var: output_string.stdout_lines
+    verbosity: 0
+
+
+
+
+
+- name: 🗯️ DATA QUALITY INSIGHTS - Alert Regex - Enable Tile
+  shell: |
+    set -x
+        
+
+    export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
+    ZEN_API_HOST=$(oc get route -n $AIOPS_NAMESPACE cpd -o jsonpath='{.spec.host}')
+    ZEN_LOGIN_URL="https://${ZEN_API_HOST}/v1/preauth/signin"
+    LOGIN_USER=admin
+    LOGIN_PASSWORD="$(oc get secret admin-user-details -n $AIOPS_NAMESPACE -o jsonpath='{ .data.initial_admin_password }' | base64 --decode)"
+
+    ZEN_LOGIN_RESPONSE=$(
+    curl -k \
+    -H 'Content-Type: application/json' \
+    -XPOST \
+    "${ZEN_LOGIN_URL}" \
+    -d '{
+          "username": "'"${LOGIN_USER}"'",
+          "password": "'"${LOGIN_PASSWORD}"'"
+    }' 2> /dev/null
+    )
+
+    ZEN_TOKEN=$(echo "${ZEN_LOGIN_RESPONSE}" | jq -r .token)
+    #echo $ZEN_TOKEN
+
+    export ROUTE=$(oc get route -n $AIOPS_NAMESPACE cpd -o jsonpath={.spec.host})
+    echo "ROUTE: "$ROUTE
+
+
+    curl "https://$ROUTE/aiops/aimodels/api/p/ai_platform_api" \
+    -X 'POST' \
+    -H "Authorization: bearer $ZEN_TOKEN" \
+    -H 'Content-Type: application/json' \
+    --data-raw '{"operationName":"toggleAlgorithmEnablement","variables":{"algorithmName":"Data_Quality_Insights_Regex"},"query":"mutation toggleAlgorithmEnablement($algorithmName: String!) {\n  toggleAlgorithmEnablement(algorithmName: $algorithmName) {\n    message\n    status\n    __typename\n  }\n}"}'
+
+
+  
+  register: output_string
+  ignore_errors: true
+  args:
+    executable: /bin/bash
+  when: (current_feature.enable_chat_assistant | default(false))|bool == true  
+
+
+- name: 🟣  OUTPUT
+  debug: 
+    var: output_string.stdout_lines
+    verbosity: 0
+
+
+
+
+
+
+
+- name: 🗯️ OPS AGENT - Enable Tile
+  shell: |
+    set -x
+        
+
+    export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
+    ZEN_API_HOST=$(oc get route -n $AIOPS_NAMESPACE cpd -o jsonpath='{.spec.host}')
+    ZEN_LOGIN_URL="https://${ZEN_API_HOST}/v1/preauth/signin"
+    LOGIN_USER=admin
+    LOGIN_PASSWORD="$(oc get secret admin-user-details -n $AIOPS_NAMESPACE -o jsonpath='{ .data.initial_admin_password }' | base64 --decode)"
+
+    ZEN_LOGIN_RESPONSE=$(
+    curl -k \
+    -H 'Content-Type: application/json' \
+    -XPOST \
+    "${ZEN_LOGIN_URL}" \
+    -d '{
+          "username": "'"${LOGIN_USER}"'",
+          "password": "'"${LOGIN_PASSWORD}"'"
+    }' 2> /dev/null
+    )
+
+    ZEN_TOKEN=$(echo "${ZEN_LOGIN_RESPONSE}" | jq -r .token)
+    #echo $ZEN_TOKEN
+
+    export ROUTE=$(oc get route -n $AIOPS_NAMESPACE cpd -o jsonpath={.spec.host})
+    echo "ROUTE: "$ROUTE
+
+
+    curl "https://$ROUTE/aiops/aimodels/api/p/ai_platform_api" \
+    -X 'POST' \
+    -H "Authorization: bearer $ZEN_TOKEN" \
+    -H 'Content-Type: application/json' \
+    --data-raw '{"operationName":"createTrainingDefinition","variables":{"definitionName":"sre_agent_configuration","description":"","algorithmName":"SRE_Agent","createdBy":" ","filterId":null,"trainingSchedule":{"frequency":"manual","repeat":"daily","atTimeHour":0,"atTimeMinute":0,"timeRangeValidStart":null,"timeRangeValidEnd":null,"noEndDate":false},"promoteOption":"whenTrainingComplete","enableSelectiveTraining":false,"enableLADGoldenSignal":false,"integrationGenAI":"watsonx","enableGenAI":true,"selectedGenAIModel":"ibm/granite-4-h-small","dataSetIds":[]},"query":"mutation createTrainingDefinition($definitionName: String!, $description: String!, $algorithmName: String!, $createdBy: String, $trainingSchedule: TrainingScheduleInput!, $promoteOption: PromoteOption!, $enableSelectiveTraining: Boolean, $dataSetIds: [ID], $enableLADGoldenSignal: Boolean, $integrationGenAI: String, $enableGenAI: Boolean, $filterId: String, $selectedGenAIModel: String) {\n  createTrainingDefinition(\n    definitionName: $definitionName\n    description: $description\n    algorithmName: $algorithmName\n    createdBy: $createdBy\n    trainingSchedule: $trainingSchedule\n    promoteOption: $promoteOption\n    enableSelectiveTraining: $enableSelectiveTraining\n    dataSetIds: $dataSetIds\n    enableLADGoldenSignal: $enableLADGoldenSignal\n    integrationGenAI: $integrationGenAI\n    enableGenAI: $enableGenAI\n    filterId: $filterId\n    selectedGenAIModel: $selectedGenAIModel\n  ) {\n    status\n    message\n    __typename\n  }\n}"}'
+
+
+  
+  register: output_string
+  ignore_errors: true
+  args:
+    executable: /bin/bash
+  when: (current_feature.enable_chat_assistant | default(false))|bool == true  
+
+
+- name: 🟣  OUTPUT
+  debug: 
+    var: output_string.stdout_lines
+    verbosity: 0
+
+
 
 
 

@@ -73,7 +73,7 @@
     mkdir -p /tmp/
     cd  /tmp/
 
-    wget https://github.com/IBM/Concert/releases/download/{{ current_feature.concert_version | default("v3.0.0") }}/ibm-concert-x86.tar.gz
+    wget https://github.com/IBM/Concert/releases/download/{{ current_feature.concert_version | default("v3.0.1.1") }}/ibm-concert-x86.tar.gz
     tar xfz ibm-concert-x86.tar.gz
     cd /tmp/ibm-concert
     # find . -type f -exec sed -i \
@@ -155,6 +155,12 @@
 
     export OCP_URL=$(oc get Infrastructure cluster -o jsonpath={.status.apiServerURL})
     echo "OCP_URL: $OCP_URL"
+    CONSOLE_PATH=$(oc get route -n openshift-console console -o jsonpath={.spec.host})
+    #WORKFLOWS_INSTANCE_ADDRESS="{{ current_ibm_feature.project }}-workflows"${CONSOLE_PATH/console-openshift-console./}
+    WORKFLOWS_INSTANCE_ADDRESS=${CONSOLE_PATH/console-openshift-console/workflows}
+    echo ${WORKFLOWS_INSTANCE_ADDRESS}
+
+
     mv /tmp/ibm-concert/etc/params.ini /tmp/ibm-concert/etc/params.ini.all
     cat > /tmp/ibm-concert/etc/params.ini <<EOF
     
@@ -186,6 +192,11 @@
     STORAGE_CLASS_HUB={{ STORAGE_CLASS_FILE }}
 
 
+    # ----- Concert VEIAS Configuration -----
+
+    # INSTALL VEIAS - PROOF OF EXPLOITABILITY: Set as True if installing VEIAS
+    INSTALL_VEIAS=true
+
 
     # ----- Concert Configuration -----
 
@@ -196,6 +207,7 @@
     SCALE_CONFIG_CONCERT=level_1
     # storage class for Concert
     STORAGE_CLASS_CONCERT={{ STORAGE_CLASS_FILE }}
+    ENABLE_AI={{ current_feature.enable_WatsonX | default(false) }}
 
 
     # ----- Concert Secure Coder Configuration (DEPRECATED) -----
@@ -222,7 +234,7 @@
     WORKFLOWS_NS={{ current_ibm_feature.project }}-workflows
     # Domain name on which the application will listen
     # Example: solis-gw-workflows.apps.test.cp.my-domain.com
-    WORKFLOWS_INSTANCE_ADDRESS=$OCP_URL
+    WORKFLOWS_INSTANCE_ADDRESS=$WORKFLOWS_INSTANCE_ADDRESS
     # Takes a looooooot of time so set to false for the time being
     WORKFLOWS_INSTALL_ALL_INTEGRATIONS=false
 
@@ -417,7 +429,7 @@
     echo "------------------------------------------------------------------------------------------------------------------------------"
 
     export KC_USER=$(kubectl exec -it $(kubectl get pods -n $CONCERT_HUB_NAMESPACE  | grep "ibm-solis-embedded-keycloak" | awk '{print $1}') -n $CONCERT_HUB_NAMESPACE  -- env | grep 'KC_BOOTSTRAP_ADMIN_USERNAME='| cut -d= -f2)
-    export KC_PWD=$(kubectl exec -it $(kubectl get pods -n ibm-concert-platform-hub  | grep "ibm-solis-embedded-keycloak" | awk '{print $1}') -n $CONCERT_HUB_NAMESPACE  -- env | grep 'KC_BOOTSTRAP_ADMIN_PASSWORD='| cut -d= -f2)
+    export KC_PWD=$(kubectl exec -it $(kubectl get pods -n $CONCERT_HUB_NAMESPACE  | grep "ibm-solis-embedded-keycloak" | awk '{print $1}') -n $CONCERT_HUB_NAMESPACE  -- env | grep 'KC_BOOTSTRAP_ADMIN_PASSWORD='| cut -d= -f2)
     export KC_ROUTE=$(oc get route solis-hub -o jsonpath={.spec.host} -n $CONCERT_HUB_NAMESPACE)
 
     echo "KC_USER:        $KC_USER"
@@ -444,9 +456,10 @@
     echo " ✅ Register platform AI agents"
     echo "------------------------------------------------------------------------------------------------------------------------------"
 
+    export CONCERT_HUB_NAMESPACE=$(oc get po -A|grep ibm-solis-core |awk '{print$1}')
+    echo "CONCERT_HUB_NAMESPACE: $CONCERT_HUB_NAMESPACE"
 
     # https://www.ibm.com/docs/en/concert-platform?topic=guide-configuring-platform-ai-agents
-    export CONCERT_HUB_NAMESPACE="ibm-concert-platform-hub "
     export HUB_ROUTE=$(oc get route solis-hub -o jsonpath={.spec.host} -n $CONCERT_HUB_NAMESPACE)
 
     export AGENT_CARD_REGISTRATION_URL="https://$HUB_ROUTE/platform_hub/ai/registry/agent-cards/submit"
@@ -838,8 +851,8 @@
 
 
     oc delete ConsoleNotification ibm-concert-operate-notification-kc>/dev/null 2>/dev/null
-    export KC_USER=$(kubectl exec -it $(kubectl get pods -n ibm-concert-platform-hub  | grep "ibm-solis-embedded-keycloak" | awk '{print $1}') -n ibm-concert-platform-hub  -- env | grep 'KC_BOOTSTRAP_ADMIN_USERNAME='| cut -d= -f2)
-    export KC_PWD=$(kubectl exec -it $(kubectl get pods -n ibm-concert-platform-hub  | grep "ibm-solis-embedded-keycloak" | awk '{print $1}') -n ibm-concert-platform-hub  -- env | grep 'KC_BOOTSTRAP_ADMIN_PASSWORD='| cut -d= -f2)
+    export KC_USER=$(kubectl exec -it $(kubectl get pods -n $CONCERT_HUB_NAMESPACE  | grep "ibm-solis-embedded-keycloak" | awk '{print $1}') -n $CONCERT_HUB_NAMESPACE  -- env | grep 'KC_BOOTSTRAP_ADMIN_USERNAME='| cut -d= -f2)
+    export KC_PWD=$(kubectl exec -it $(kubectl get pods -n $CONCERT_HUB_NAMESPACE  | grep "ibm-solis-embedded-keycloak" | awk '{print $1}') -n $CONCERT_HUB_NAMESPACE  -- env | grep 'KC_BOOTSTRAP_ADMIN_PASSWORD='| cut -d= -f2)
     export KC_ROUTE=$(oc get route solis-hub -o jsonpath={.spec.host} -n $CONCERT_HUB_NAMESPACE)
 
 

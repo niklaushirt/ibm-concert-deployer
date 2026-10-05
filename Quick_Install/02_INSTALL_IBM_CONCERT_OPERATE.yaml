@@ -105,8 +105,8 @@ data:
       # --------------------------------------------------------------------------------------------------------------------------------------
       entitled_registry: cp.icr.io
       entitled_registry_user: cp
-      catalog_image: icr.io/cpopen/ibm-aiops-catalog@sha256:b62d055109cbb0231ad11422f8eff0b4f02e4bcaa8c9a3a3bfc5bff8318f7343
-      current_supported_operate_version: v5.1
+      catalog_image: icr.io/cpopen/ibm-aiops-catalog@sha256:dd001b156473070b5ea32b2e1968d844dc4df1da9c241a8776e24247c1359cf5
+      current_supported_operate_version: v5.2
 
 
 
@@ -186,7 +186,7 @@ data:
         # Name of the ibm-concert-operate instance
         concert_operate_name: ibm-concert-operate
         # Version of the catalog subscription
-        subscription_channel: v5.1
+        subscription_channel: v5.2
 
         # Enable Log Anomaly and Similar Tickets
         logAnomalyDetection: true
@@ -233,7 +233,7 @@ data:
 
         # Where to get the training data from
         training_data_url: https://github.com/niklaushirt/
-        training_data_repo: ibm-aiops-trainingdata
+        training_data_repo: ibm-concert-trainingdata
 
         # Create Kafka connection for Log inception (needed to create log anomalies in the demo environment)
         create_log_connection: true
@@ -520,13 +520,13 @@ spec:
 
               echo "------------------------------------------------------------------------------------------------------------------------------"
               echo " 🔎 Check for Errors in Ansible Log"
-              ./tools/91_checkErrorsLog.sh
+              ./tools/91_checkErrorsLog_operate.sh
               echo ""
 
 
               echo "------------------------------------------------------------------------------------------------------------------------------"
               echo " 🔎 Check Installation Consistency"
-              ./tools/92_check_install_short.sh
+              ./tools/92_check_install_operate.sh
               echo ""
 
 

@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+
+## [302.0.2] - 2026-10-03
+
+### Major changes
+
+- Concert Operate V5.2.0
+
+
+
+## [310.0.1] - 2026-10-01
+
+### Major changes
+
+- Concert platform V3.1.0
+
+
+
 ## [302.0.1] - 2026-09-22
 
 ### Major changes
@@ -14,12 +31,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   https://www.ibm.com/docs/en/concert-platform/
   https://www.ibm.com/docs/en/concert-operate/
 
+
+
 ## [519.0.1] - 2026-08-31
 
 ### Major changes
 
 - Revamp for Concert Operate 5.1.9 (former CP4AIOps)
 - Experimental installation script for IBM Concert Platform 3.0.1.1
+
+
 
 ## [510.0.2] - 2026-07-02
 

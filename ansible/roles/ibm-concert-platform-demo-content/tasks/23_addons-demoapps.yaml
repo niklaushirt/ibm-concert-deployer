@@ -136,6 +136,47 @@
 
 
 
+# --------------------------------------------------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------------------------------------------
+# APPLICATION GALAXIUM TRAVELS
+# --------------------------------------------------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------------------------------------------
+# - name: 📺 DEMO APPS - Check Galaxium Travels
+#   shell: |
+#     oc get namespace --ignore-not-found galaxium-travels
+#   ignore_errors: true
+#   register: OBJECT_EXISTS
+
+
+- name: 📺 DEMO APPS - Install Galaxium Travels
+  block:
+  - name: DEMO APPS -              🚀 Create galaxium-travels namespace
+    kubernetes.core.k8s:
+      api_version: v1
+      kind: Namespace
+      name: "galaxium-travels"
+      state: present
+    #when: INSTALL_DEMO_APPS|bool == true
+
+  - name: 📺 DEMO APPS - Create Galaxium Travels service account
+    shell: |
+      oc adm policy add-scc-to-user privileged -n galaxium-travels -z galaxium-travels
+      oc create clusterrolebinding default-galaxiuminfo1-admin --clusterrole=cluster-admin --serviceaccount=galaxium-travels:galaxium-travels
+      oc adm policy add-scc-to-user privileged -n galaxium-travels -z default                                
+      oc create clusterrolebinding default-galaxiuminfo2-admin --clusterrole=cluster-admin --serviceaccount=galaxium-travels:default
+    ignore_errors: true
+    register: demo_galaxium_travels
+    #when: INSTALL_DEMO_APPS|bool == true
+              
+
+  - name: 📺 DEMO APPS - Create Galaxium Travels application
+    kubernetes.core.k8s:
+      state: present
+      namespace: galaxium-travels
+      template: ./templates/demo_apps/galaxium-travels/galaxium-travels.yaml
+    #when: INSTALL_DEMO_APPS|bool == true
+
+
 
 
 # --------------------------------------------------------------------------------------------------------------------------------------
@@ -143,42 +184,40 @@
 # APPLICATION ACME AIR
 # --------------------------------------------------------------------------------------------------------------------------------------
 # --------------------------------------------------------------------------------------------------------------------------------------
-# - name: 📺 DEMO APPS - Check ACME
-#   shell: |
-#     oc get namespace --ignore-not-found acme-air
-#   ignore_errors: true
-#   register: OBJECT_EXISTS
+- name: 📺 DEMO APPS - Check ACME
+  shell: |
+    oc get namespace --ignore-not-found acme-air
+  ignore_errors: true
+  register: OBJECT_EXISTS
 
 
+- name: 📺 DEMO APPS - Install ACME
+  block:
+  - name: DEMO APPS -              🚀 Create acme namespace
+    kubernetes.core.k8s:
+      api_version: v1
+      kind: Namespace
+      name: "acme-air"
+      state: present
+    #when: INSTALL_DEMO_APPS|bool == true
 
-
-# - name: 📺 DEMO APPS - Install ACME
-#   block:
-#   - name: DEMO APPS -              🚀 Create acme namespace
-#     kubernetes.core.k8s:
-#       api_version: v1
-#       kind: Namespace
-#       name: "acme-air"
-#       state: present
-#     #when: INSTALL_DEMO_APPS|bool == true
-
-#   - name: 📺 DEMO APPS - Create acme service account
-#     shell: |
-#       oc adm policy add-scc-to-user privileged -n acme -z acme
-#       oc create clusterrolebinding default-acmeinfo1-admin --clusterrole=cluster-admin --serviceaccount=acme-air:acme
-#       oc adm policy add-scc-to-user privileged -n acme -z default                                
-#       oc create clusterrolebinding default-acmeinfo2-admin --clusterrole=cluster-admin --serviceaccount=acme-air:default
-#     ignore_errors: true
-#     register: demo_acme_shop
-#     #when: INSTALL_DEMO_APPS|bool == true
+  - name: 📺 DEMO APPS - Create acme service account
+    shell: |
+      oc adm policy add-scc-to-user privileged -n acme -z acme
+      oc create clusterrolebinding default-acmeinfo1-admin --clusterrole=cluster-admin --serviceaccount=acme-air:acme
+      oc adm policy add-scc-to-user privileged -n acme -z default                                
+      oc create clusterrolebinding default-acmeinfo2-admin --clusterrole=cluster-admin --serviceaccount=acme-air:default
+    ignore_errors: true
+    register: demo_acme_shop
+    #when: INSTALL_DEMO_APPS|bool == true
               
 
-#   - name: 📺 DEMO APPS - Create acme application
-#     kubernetes.core.k8s:
-#       state: present
-#       namespace: acme-air
-#       src: ./templates/demo_apps/acmeair/acme-all-in-one.yaml
-#     #when: INSTALL_DEMO_APPS|bool == true
+  - name: 📺 DEMO APPS - Create acme application
+    kubernetes.core.k8s:
+      state: present
+      namespace: acme-air
+      src: ./templates/demo_apps/acmeair/acme-all-in-one.yaml
+    #when: INSTALL_DEMO_APPS|bool == true
 
-#   when: OBJECT_EXISTS.stdout|length == 0
+  when: OBJECT_EXISTS.stdout|length == 0
 
