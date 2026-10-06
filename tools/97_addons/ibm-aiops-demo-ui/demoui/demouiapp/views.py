@@ -1,15 +1,25 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.http import HttpResponse
 from django.http import JsonResponse
 from django.template import loader
+from django.views.decorators.cache import never_cache
+from django.views.decorators.http import require_http_methods, require_POST
 import os
 import sys 
 import time 
-import hashlib
 from threading import Thread
 sys.path.append(os.path.abspath("demouiapp"))
 from functions import *
 from utils.commands import capture_shell, run_shell
+from .authentication import (
+    clear_authenticated_session,
+    credentials_match,
+    establish_authenticated_session,
+    is_authenticated,
+    is_login_rate_limited,
+    register_login_failure,
+    reset_login_failures,
+)
 INCIDENT_ACTIVE=False
 ROBOT_SHOP_OUTAGE_ACTIVE=False
 SOCK_SHOP_OUTAGE_ACTIVE=False
@@ -29,8 +39,9 @@ print ('')
 
 
 
-loggedin='false'
-loginip='0.0.0.0'
+# Authentication is enforced per request by TokenAuthenticationMiddleware.
+# This value is now only a legacy template display flag for protected pages.
+loggedin='true'
 
 
 
@@ -59,11 +70,16 @@ else:
 # ----------------------------------------------------------------------------------------------------------------------------------------------------
 # GET NAMESPACES
 # ----------------------------------------------------------------------------------------------------------------------------------------------------
+print('     ❓ Getting Concert platform Namespace')
+stream = capture_shell("oc get po -A|grep roja-ui |awk '{print$1}'")
+platformns = stream.read().strip()
+print('        ✅ Concert platform Namespace:       '+platformns)
+
+
 print('     ❓ Getting Concert Operate Namespace')
 stream = capture_shell("oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}'")
 aimanagerns = stream.read().strip()
 print('        ✅ Concert Operate Namespace:       '+aimanagerns)
-
 
 
 print ('')
@@ -206,7 +222,7 @@ echo "<BR>"
     echo "    -----------------------------------------------------------------------------------------------------------------------------------------------<BR>"
     echo "<h3>    🐣 1.1 Demo UI</h3><BR>"
     appURL=$(oc get routes -n ibm-demo-ui ibm-demo-ui  -o jsonpath="{['spec']['host']}")|| true
-    appToken=$(oc get cm -n ibm-demo-ui ibm-demo-ui-config -o jsonpath='{.data.TOKEN}')
+    appToken=$(oc get secret -n ibm-demo-ui ibm-demo-ui-auth -o jsonpath='{.data.TOKEN}' | base64 --decode)
     echo "<table>"
     echo "<tr><td style=\"min-width:300px\">🌏 URL:</td><td><a target="_blank" href=\"https://$appURL/\">https://$appURL/</a></td></tr>"
     echo "<tr><td style=\"min-width:300px\">🔐 Token:</td><td>$appToken<BR>"
@@ -480,6 +496,11 @@ stream = capture_shell('oc get route -n '+aimanagerns+' cpd -o jsonpath={.spec.h
 aimanager_url = stream.read().strip()
 aimanager_url=os.environ.get('AIOPS_URL_OVERRIDE', default=aimanager_url)
 
+print('     ❓ Getting Details IBM Concert Platform')
+stream = capture_shell('oc get route -n '+platformns+' concert -o jsonpath={.spec.host}')
+concertplatform_url = stream.read().strip()
+
+
 stream = capture_shell('oc -n '+aimanagerns+' get secret platform-auth-idp-credentials -o jsonpath={.data.admin_username} | base64 --decode && echo')
 aimanager_user = stream.read().strip()
 stream = capture_shell('oc -n '+aimanagerns+' get secret platform-auth-idp-credentials -o jsonpath={.data.admin_password} | base64 --decode')
@@ -585,7 +606,7 @@ print ('🟣    ----------------------------------------------------------------
 print ('🟣     🔎 Simulation Parameters')
 print ('🟣    ---------------------------------------------------------------------------------------------')
 print ('🟣           📥 Instance Name:                  '+str(INSTANCE_NAME))
-print ('🟣           🔐 Login Token:                    '+TOKEN)
+print ('🟣           🔐 Login Token:                    configured')
 print ('🟣')   
 print ('🟣           🟠 Admin Mode:                     '+ADMIN_MODE)
 print ('🟣           ⚠️  Can create incident:            '+SIMULATION_MODE)
@@ -689,6 +710,7 @@ print ('🟣           🌏 RobotShop URL:                  '+robotshop_url)
 print ('🟣           🌏 SockShop URL:                   '+sockshop_url)
 print ('🟣           🌏 AWX URL:                        '+awx_url)
 print ('🟣           🌏 AIOPS URL:                      '+aimanager_url)
+print ('🟣           🌏 Concert Platform URL:           '+concertplatform_url)
 print ('🟣')   
 print ('🟣')
 print ('🟣    --------------------------------------------------------------------------------------------------')
@@ -716,7 +738,7 @@ print ('************************************************************************
 
 def get_base_context(page_title='Welcome to your Demo UI', page_name='index'):
     return {
-        'loggedin': loggedin,
+        'loggedin': 'true',
         'aimanager_url': aimanager_url,
         'aimanager_user': aimanager_user,
         'aimanager_pwd': aimanager_pwd,
@@ -752,6 +774,8 @@ def get_base_context(page_title='Welcome to your Demo UI', page_name='index'):
         'SIMULATION_MODE': SIMULATION_MODE,
         'PAGE_TITLE': page_title,
         'PAGE_NAME': page_name,
+        'platformns': platformns,
+        'aimanagerns': aimanagerns,
     }
 
 
@@ -1766,60 +1790,47 @@ def injectRisk(request):
 
 
 
+@never_cache
+@require_http_methods(["GET", "POST"])
 def login(request):
-    print('🌏 login')
+    if request.method == "GET":
+        if is_authenticated(request):
+            return redirect("index")
+        return render(request, "demouiapp/loginui.html", {
+            "loggedin": "false",
+            "INSTANCE_NAME": INSTANCE_NAME,
+            "INSTANCE_IMAGE": INSTANCE_IMAGE,
+        })
 
-    global loggedin, loginip, INCIDENT_ACTIVE, ROBOT_SHOP_OUTAGE_ACTIVE, SOCK_SHOP_OUTAGE_ACTIVE
-    print('     🟣 OUTAGE - Incident:'+str(INCIDENT_ACTIVE)+' - RS-OUTAGE:'+str(ROBOT_SHOP_OUTAGE_ACTIVE)+' - SOCK-OUTAGE:'+str(SOCK_SHOP_OUTAGE_ACTIVE))
+    context = {
+        "loggedin": "false",
+        "INSTANCE_NAME": INSTANCE_NAME,
+        "INSTANCE_IMAGE": INSTANCE_IMAGE,
+    }
 
-    response = HttpResponse()
+    if is_login_rate_limited(request):
+        context["login_error"] = "Too many failed attempts. Please wait a few minutes and try again."
+        return render(request, "demouiapp/loginui.html", context, status=429)
 
-    currentip=request.META.get('REMOTE_ADDR')
-    verifyLogin(request)
-    currenttoken=request.GET.get("token", "none")
-    token=os.environ.get('TOKEN')
-    print ('  🔐 Login attempt with Password/Token: '+currenttoken + ' from ' +str(currentip))
-    if token==currenttoken:
-        loggedin='true'
-        template = loader.get_template('demouiapp/home.html')
-        print ('  ✅ Login SUCCESSFUL')
+    if credentials_match(request.POST.get("token", "")):
+        reset_login_failures(request)
+        establish_authenticated_session(request)
+        return redirect("index")
 
-        response.set_cookie('last_visit', time.localtime())
-        response.set_cookie('IP', request.META.get('REMOTE_ADDR'))
-        response.set_cookie('token', hashlib.md5((token).encode()).hexdigest())
-    else:
-        loggedin='false'
-        template = loader.get_template('demouiapp/loginui.html')
-        print ('  ❗ Login NOT SUCCESSFUL')
+    register_login_failure(request)
+    context["login_error"] = "The access password is not valid."
+    return render(request, "demouiapp/loginui.html", context, status=401)
 
-        response.set_cookie('last_visit', 'none')
-        response.set_cookie('IP', 'none')
-        response.set_cookie('token', 'none')
 
-    response.write(template.render(get_base_context(), request))
-    return response
+@never_cache
+@require_POST
+def logout(request):
+    clear_authenticated_session(request)
+    return redirect("login")
 
 
 def verifyLogin(request):
-    actToken=request.COOKIES.get('token', 'none')
-    print('   🔎 PROVIDED TOKEN:'+str(actToken))
-
-    global loggedin
-    
-    actloginip=request.META.get('REMOTE_ADDR')
-    token=os.environ.get('TOKEN')
-
-    if str(actToken)!=hashlib.md5((token).encode()).hexdigest():
-        loggedin='false'
-
-        #print('        ❌ LOGIN NOK: NEW IP')
-        print('   🔎 Check IP : ❌ LOGIN NOK: ACT SESSION TOKEN:'+str(actToken)+' - LOGGED IN: '+str(loggedin))
-        print('   🔎 SESSION TOKEN:'+str(actToken))
-    else:
-        #print('   🔎 Check IP : ✅ LOGIN OK: '+str(loggedin))
-        #print('        ✅ LOGIN OK')
-        #loggedin='true'
-        loginip=request.META.get('REMOTE_ADDR')
+    return is_authenticated(request)
 
 
 
@@ -1830,15 +1841,7 @@ def verifyLogin(request):
 # ----------------------------------------------------------------------------------------------------------------------------------------------------
 
 def loginui(request):
-    print('🌏 loginui')
-    global loggedin
-
-    verifyLogin(request)
-    template = loader.get_template('demouiapp/login.html')
-    context = {
-        'loggedin': loggedin,
-    }
-    return HttpResponse(template.render(context, request))
+    return redirect("login")
 
 
 def index(request):

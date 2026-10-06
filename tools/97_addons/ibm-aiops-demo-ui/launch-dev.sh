@@ -16,6 +16,8 @@ export DEMO_USER=demo
 export ADMIN_MODE='true'
 export INSTANCE_NAME=Nick
 export TOKEN=test
+export DJANGO_DEBUG=true
+export DJANGO_SECRET_KEY="${DJANGO_SECRET_KEY:-$(python3 -c 'import secrets; print(secrets.token_urlsafe(64))')}"
 export SIMULATION_MODE='true'
 
 export LOG_TIME_STEPS='1000'
@@ -622,6 +624,5 @@ python3 -m pip install Django --break-system-packages
 cd demoui
 
 python manage.py runserver 0.0.0.0:8000
-
 
 

@@ -1,0 +1,297 @@
+{% load static %}
+{% include "demouiapp/_header.html" %}
+<div role="main" class="container theme-showcase">
+    <div class="jumbotron container">
+
+
+
+        <div style="  background-color:#231426; padding: 40px; margin: 20px;">
+            <p style="font-size:35px; color:#ffeeee">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" width="32" height="32" viewBox="0 0 32 32"><path d="M28.447 16.105L23 13.383V7a1 1 0 00-.553-.894l-6-3a1 1 0 00-.894 0l-6 3A1 1 0 009 7v6.382l-5.447 2.723A1 1 0 003 17v7a1 1 0 00.553.894l6 3a1.001 1.001 0 00.894 0L16 25.119l5.553 2.777a1.001 1.001 0 00.894 0l6-3A1 1 0 0029 24v-7a1 1 0 00-.553-.895zM21 13.383l-4 2v-4.764l4-2zm-5-8.264L19.764 7 16 8.882 12.236 7zm-5 3.5l4 2v4.764l-4-2zM9 25.382l-4-2v-4.764l4 2zm1-6.5L6.236 17 10 15.118 13.764 17zm1 1.736l4-2v4.764l-4 2zm10 4.764l-4-2v-4.764l4 2zm1-6.5L18.236 17 22 15.118 25.764 17zm5 4.5l-4 2v-4.764l4-2z"></path></svg>
+                Supporting Tools</p>
+            <br />
+            <table style="width:90%;">
+                <tbody>
+                
+        
+                    {% if ADMIN_MODE == 'true' %}
+                    <tr>
+                        <td style="width:90%; padding-left:50px;">
+                            <div style="max-height: 100px;   background-color:#d08ee3; padding: 20px; margin: 5px;">
+                                <table cellspacing="0" cellpadding="0" style="width:90%; table-layout: fixed; ">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <div style="padding-bottom: 1rem;" class="sc-ftTHYK jxfOQM">
+                                                    <a target="_blank" tabindex="0"
+                                                        class="bx--btn bx--btn--pink bx--btn--expressive"
+                                                        href="https://{{ keycloak_url }}"
+                                                        style="width:200px;font-size: 18px;" onclick="toggle(this)"
+                                                        data-arg1='clearAllREST'>Keycloak   
+                                                        <svg focusable="false" preserveAspectRatio="xMidYMid meet"
+                                                            xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                                            width="32" height="32" viewBox="0 0 32 32"
+                                                            aria-hidden="true" class="bx--btn__icon">
+                                                            <path
+                                                                d="M16,8a5,5,0,1,0,5,5A5,5,0,0,0,16,8Zm0,8a3,3,0,1,1,3-3A3.0034,3.0034,0,0,1,16,16Z">
+                                                            </path>
+                                                            <path
+                                                                d="M16,2A14,14,0,1,0,30,16,14.0158,14.0158,0,0,0,16,2ZM10,26.3765V25a3.0033,3.0033,0,0,1,3-3h6a3.0033,3.0033,0,0,1,3,3v1.3765a11.8989,11.8989,0,0,1-12,0Zm13.9925-1.4507A5.0016,5.0016,0,0,0,19,20H13a5.0016,5.0016,0,0,0-4.9925,4.9258,12,12,0,1,1,15.985,0Z">
+                                                            </path>
+                                                        </svg>
+
+                                                    </a>
+                                                </div>
+                                            </td>
+                                            <td style="vertical-align:top;">
+                                                👩‍💻&nbsp;&nbsp;{{keycloak_user}}<BR><BR>🔐&nbsp;&nbsp;{{keycloak_pwd}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3">
+                                                &nbsp;
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width:90%; padding-left:50px;">
+                            <div style="max-height: 100px;   background-color:#d08ee3; padding: 20px; margin: 5px;">
+                                <table cellspacing="0" cellpadding="0" style="width:90%; table-layout: fixed; ">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <div style="padding-bottom: 1rem;" class="sc-ftTHYK jxfOQM">
+                                                    <a target="_blank" tabindex="0"
+                                                        class="bx--btn bx--btn--pink bx--btn--expressive"
+                                                        href="https://{{ ladp_url }}"
+                                                        style="width:200px;font-size: 18px;" onclick="toggle(this)"
+                                                        data-arg1='clearAllREST'>OpenLdap
+                                                        <svg focusable="false" preserveAspectRatio="xMidYMid meet"
+                                                            xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                                            width="32" height="32" viewBox="0 0 32 32"
+                                                            aria-hidden="true" class="bx--btn__icon">
+                                                            <path
+                                                                d="M16,8a5,5,0,1,0,5,5A5,5,0,0,0,16,8Zm0,8a3,3,0,1,1,3-3A3.0034,3.0034,0,0,1,16,16Z">
+                                                            </path>
+                                                            <path
+                                                                d="M16,2A14,14,0,1,0,30,16,14.0158,14.0158,0,0,0,16,2ZM10,26.3765V25a3.0033,3.0033,0,0,1,3-3h6a3.0033,3.0033,0,0,1,3,3v1.3765a11.8989,11.8989,0,0,1-12,0Zm13.9925-1.4507A5.0016,5.0016,0,0,0,19,20H13a5.0016,5.0016,0,0,0-4.9925,4.9258,12,12,0,1,1,15.985,0Z">
+                                                            </path>
+                                                        </svg>
+
+                                                    </a>
+                                                </div>
+                                            </td>
+                                            <td style="vertical-align:top;">
+                                                👩‍💻&nbsp;&nbsp;{{ladp_user}}<BR><BR>🔐&nbsp;&nbsp;{{ladp_pwd}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3">
+                                                &nbsp;
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+           
+
+
+                    <tr>
+                        <td style="width:90%; padding-left:50px;">
+                            <div style="max-height: 400px;   background-color:#d08ee3; padding: 20px; margin: 5px;">
+                                <table cellspacing="0" cellpadding="0" style="width:90%; table-layout: fixed; ">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <div style="padding-bottom: 1rem;" class="sc-ftTHYK jxfOQM">
+                                                    <a  tabindex="0"
+                                                        class="bx--btn bx--btn--pink bx--btn--expressive"
+                                                        
+                                                        style="width:200px;font-size: 18px;" onclick="toggle(this)"
+                                                        data-arg1=''>OpenLdap Credentials
+                                                       
+
+                                                    </a>
+                                                </div>
+                                            </td>
+                                            <td style="vertical-align:top;" nowrap><code>
+
+
+                                                    <BR>------------------------------------------------------------------------------------------------------------------------------"
+                                                    <BR>✅ LDAP CREDENTIALS"
+                                                    <BR>------------------------------------------------------------------------------------------------------------------------------"
+                                                    <BR>👩‍💻&nbsp;&nbsp;ID:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"LDAP",
+                                                    <BR>👩‍💻&nbsp;&nbsp;REALM:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"REALM",
+                                                    <BR>👩‍💻&nbsp;&nbsp;URL:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"ldap://openldap.openldap:389",
+                                                    <BR>👩‍💻&nbsp;&nbsp;HOST: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"openldap.openldap",
+                                                    <BR>👩‍💻&nbsp;&nbsp;PORT: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"389",
+                                                    <BR>👩‍💻&nbsp;&nbsp;PROTOCOL: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"ldap",
+                                                    <BR>👩‍💻&nbsp;&nbsp;BASEDN": &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"dc=ibm,dc=com",
+                                                    <BR>👩‍💻&nbsp;&nbsp;BINDDN": &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"cn=admin,dc=ibm,dc=com",
+                                                    <BR>👩‍💻&nbsp;&nbsp;BINDPASSWORD": &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"The one you selected at installation time",
+                                                    <BR>👩‍💻&nbsp;&nbsp;TYPE": &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Custom",
+                                                    <BR>👩‍💻&nbsp;&nbsp;IGNORECASE": &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"false",
+                                                    <BR>👩‍💻&nbsp;&nbsp;USERFILTER": &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"(&(uid=%v)(objectclass=Person))",
+                                                    <BR>👩‍💻&nbsp;&nbsp;USERIDMAP": &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"*:uid",
+                                                    <BR>👩‍💻&nbsp;&nbsp;GROUPFILTER": &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"(&(cn=%v)(objectclass=groupOfUniqueNames))",
+                                                    <BR>👩‍💻&nbsp;&nbsp;GROUPIDMAP": &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"*:cn",
+                                                    <BR>👩‍💻&nbsp;&nbsp;GROUPMEMBERIDMAP": &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"groupOfUniqueNames:uniqueMember",
+                                                    <BR>👩‍💻&nbsp;&nbsp;NESTEDSEARCH": &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"false",
+                                                    <BR>👩‍💻&nbsp;&nbsp;PAGINGSEARCH": "false"
+
+                                                 
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3">
+                                                &nbsp;
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td style="width:90%; padding-left:50px;">
+                            <div style="max-height: 400px;   background-color:#d08ee3; padding: 20px; margin: 5px;">
+                                <table cellspacing="0" cellpadding="0" style="width:90%; table-layout: fixed; ">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <div style="padding-bottom: 1rem;" class="sc-ftTHYK jxfOQM">
+                                                    <a tabindex="0"
+                                                        class="bx--btn bx--btn--pink bx--btn--expressive"
+                                                        style="width:200px;font-size: 18px;" onclick="toggle(this)"
+                                                        data-arg1=''>Logins for Resilience
+                                                       
+
+                                                    </a>
+                                                </div>
+                                            </td>
+                                            <td style="vertical-align:top;" nowrap><code>
+                                                    🌏 &nbsp;&nbsp;API URL:&nbsp;&nbsp;&nbsp;&nbsp;{{openshift_url}}<BR><BR>
+                                                    🔐&nbsp;&nbsp;"TOKEN:&nbsp;&nbsp;&nbsp;&nbsp; <BR>
+                                                    <div style="float:left; width: 900px; text-wrap: wrap;">
+
+                                                    oc login --server={{openshift_url}} --token={{openshift_token}}
+
+                                                    </div>
+                                                   </code>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3">
+                                                &nbsp;
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+
+
+
+
+                    <tr>
+                        <td style="width:90%; padding-left:50px;">
+                            <div style="max-height: 400px;   background-color:#d08ee3; padding: 20px; margin: 5px;">
+                                <table cellspacing="0" cellpadding="0" style="width:90%; table-layout: fixed; ">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <div style="padding-bottom: 1rem;" class="sc-ftTHYK jxfOQM">
+                                                    <a target="_blank" tabindex="0"
+                                                        class="bx--btn bx--btn--pink bx--btn--expressive"
+                                                        href="https://{{openshift_server}}"
+                                                        style="width:200px;font-size: 18px;" onclick="toggle(this)"
+                                                        data-arg1='clearAllREST'>OpenShift
+                                                        <svg focusable="false" preserveAspectRatio="xMidYMid meet"
+                                                            xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                                            aria-hidden="true" width="16" height="16"
+                                                            viewBox="0 0 16 16" class="bx--btn__icon">
+                                                            <path
+                                                                d="M9.3 3.7L13.1 7.5 1 7.5 1 8.5 13.1 8.5 9.3 12.3 10 13 15 8 10 3z">
+                                                            </path>
+                                                        </svg>
+
+                                                    </a>
+                                                </div>
+                                            </td>
+                                            <td style="vertical-align:top;" nowrap><code>
+                                                    👩‍💻&nbsp;&nbsp;kubeadmin<BR><BR>🔐&nbsp;&nbsp;"ask your
+                                                    administrator"<BR><BR>🚀&nbsp;&nbsp;Cluster Login<BR>
+                                                    <div style="float:left; width: 900px; text-wrap: wrap;">
+
+                                                    oc login --server={{openshift_url}} --token={{openshift_token}}
+
+                                                    </div></code>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3">
+                                                &nbsp;
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+
+                    {% endif %}
+
+                    {% if elk_url != '' %}
+                    <tr>
+                        <td style="width:90%; padding-left:50px;">
+                            <div style="max-height: 100px;   background-color:#d08ee3; padding: 20px; margin: 5px;">
+                                <table cellspacing="0" cellpadding="0" style="width:90%; table-layout: fixed; ">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <div style="padding-bottom: 1rem;" class="sc-ftTHYK jxfOQM">
+                                                    <a target="_blank" tabindex="0"
+                                                        class="bx--btn bx--btn--pink bx--btn--expressive"
+                                                        href="https://{{ elk_url }}"
+                                                        style="width:200px;font-size: 18px;" onclick="toggle(this)"
+                                                        data-arg1='clearAllREST'>ELK
+                                                        <svg focusable="false" preserveAspectRatio="xMidYMid meet"
+                                                            xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                                            aria-hidden="true" width="16" height="16"
+                                                            viewBox="0 0 16 16" class="bx--btn__icon">
+                                                            <path
+                                                                d="M9.3 3.7L13.1 7.5 1 7.5 1 8.5 13.1 8.5 9.3 12.3 10 13 15 8 10 3z">
+                                                            </path>
+                                                        </svg>
+
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3">
+                                                &nbsp;
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endif %}
+                 
+
+                </tbody>
+            </table>
+        </div>
+     
+    </div>
+</div>
+{% include "demouiapp/_footer.html" %}

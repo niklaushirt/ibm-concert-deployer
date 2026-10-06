@@ -23,6 +23,7 @@ RUN apt update && apt install -y jq && rm -rf /var/lib/apt/lists/*
 
 # copy whole project to your docker home directory. 
 COPY . $DockerHOME  
+RUN chmod 0755 ./docker-entrypoint.sh
 # run this command to install all dependencies  
 RUN pip install -r requirements.txt 
 
@@ -34,4 +35,5 @@ RUN ls -al
 
 
 # start server
+ENTRYPOINT ["./docker-entrypoint.sh"]
 CMD ["gunicorn", "demoui.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "1", "--timeout", "300", "--access-logfile", "-", "--error-logfile", "-"]

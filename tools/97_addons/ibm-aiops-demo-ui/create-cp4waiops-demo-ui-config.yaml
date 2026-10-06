@@ -46,12 +46,27 @@ spec:
             - /bin/sh
             - -c
             - |
-              set -x
+              set -e
 
 
               export AIOPS_NAMESPACE=ibm-demo-ui
-              export TOKEN="CHANGEME"
               export INSTANCE_NAME="Tyrion"
+
+              TOKEN="$(oc get secret ibm-demo-ui-auth -n ibm-demo-ui -o jsonpath='{.data.TOKEN}' 2>/dev/null | base64 -d || true)"
+              if [ -z "$TOKEN" ]; then
+                TOKEN="$(od -An -N32 -tx1 /dev/urandom | tr -d ' \n')"
+              fi
+
+              DJANGO_SECRET_KEY="$(oc get secret ibm-demo-ui-auth -n ibm-demo-ui -o jsonpath='{.data.DJANGO_SECRET_KEY}' 2>/dev/null | base64 -d || true)"
+              if [ -z "$DJANGO_SECRET_KEY" ]; then
+                DJANGO_SECRET_KEY="$(od -An -N48 -tx1 /dev/urandom | tr -d ' \n')"
+              fi
+
+              oc create secret generic ibm-demo-ui-auth \
+                -n ibm-demo-ui \
+                --from-literal=TOKEN="$TOKEN" \
+                --from-literal=DJANGO_SECRET_KEY="$DJANGO_SECRET_KEY" \
+                --dry-run=client -o yaml | oc apply -f -
 
               export LOG_ITERATIONS=20
               export LOG_TIME_FORMAT="%Y-%m-%dT%H:%M:%S.000000"
@@ -75,8 +90,8 @@ spec:
                   name:  ibm-demo-ui-config
                   namespace: ibm-demo-ui
                 data:
-                  TOKEN: $TOKEN
                   INSTANCE_NAME: $INSTANCE_NAME
+                  DJANGO_DEBUG: "false"
                   LOG_ITERATIONS: "$LOG_ITERATIONS"
                   LOG_TIME_FORMAT: "$LOG_TIME_FORMAT"
                   LOG_TIME_STEPS: "$LOG_TIME_STEPS"

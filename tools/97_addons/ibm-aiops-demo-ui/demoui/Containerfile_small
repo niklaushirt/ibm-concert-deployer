@@ -1,4 +1,4 @@
-FROM python:3.11.15-trixie
+FROM python:3.14.8-trixie
 ENV DockerHOME=/home/app/demoui
 
 # set work directory
@@ -24,6 +24,7 @@ RUN wget  -O oc.tar.gz https://github.com/okd-project/okd/releases/download/4.14
 
 # copy whole project to your docker home directory.
 COPY . $DockerHOME
+RUN chmod 0755 ./docker-entrypoint.sh
 # run this command to install all dependencies
 RUN pip install -r requirements.txt
 
@@ -35,4 +36,5 @@ RUN ls -al
 
 
 # start server
+ENTRYPOINT ["./docker-entrypoint.sh"]
 CMD ["gunicorn", "demoui.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "1", "--timeout", "300", "--access-logfile", "-", "--error-logfile", "-", "--log-level", "info", "--capture-output", "--enable-stdio-inheritance", "--preload"]

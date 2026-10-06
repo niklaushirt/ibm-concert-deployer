@@ -27,13 +27,16 @@
         </a>
 
         {% if loggedin == 'true' %}
-        <a class="app-logout" href="/login" aria-label="Log out">
-            <span>Log out</span>
-            <svg viewBox="0 0 32 32" width="20" height="20" fill="currentColor" aria-hidden="true">
-                <path d="M6 30h12a2 2 0 0 0 2-2v-3h-2v3H6V4h12v3h2V4a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v24a2 2 0 0 0 2 2Z"/>
-                <path d="m20.6 20.6 3.6-3.6H10v-2h14.2l-3.6-3.6L22 10l6 6-6 6-1.4-1.4Z"/>
-            </svg>
-        </a>
+        <form class="app-logout-form" action="{% url 'logout' %}" method="post">
+            {% csrf_token %}
+            <button class="app-logout" type="submit" aria-label="Log out">
+                <span>Log out</span>
+                <svg viewBox="0 0 32 32" width="20" height="20" fill="currentColor" aria-hidden="true">
+                    <path d="M6 30h12a2 2 0 0 0 2-2v-3h-2v3H6V4h12v3h2V4a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v24a2 2 0 0 0 2 2Z"/>
+                    <path d="m20.6 20.6 3.6-3.6H10v-2h14.2l-3.6-3.6L22 10l6 6-6 6-1.4-1.4Z"/>
+                </svg>
+            </button>
+        </form>
         {% endif %}
     </header>
 

@@ -43,13 +43,15 @@
                 </div>
                 <p class="login-eyebrow">Welcome back</p>
                 <h2 id="login-title">Log in to Demo UI</h2>
-                <p class="login-intro">Enter the access password for this environment.</p>
+                <p class="login-intro">Enter the access token or password for this environment.</p>
 
-                <form action="login" method="GET" id="loginform">
-                    <label for="login-password">Password</label>
+                {% if login_error %}<p class="login-error" role="alert">{{ login_error }}</p>{% endif %}
+                <form action="{% url 'login' %}" method="POST" id="loginform">
+                    {% csrf_token %}
+                    <label for="login-password">Access token / password</label>
                     <div class="login-input-wrap">
                         <svg viewBox="0 0 32 32" width="20" height="20" aria-hidden="true"><path d="M24 14h-2v-4a6 6 0 0 0-12 0v4H8a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V16a2 2 0 0 0-2-2Zm-12-4a4 4 0 0 1 8 0v4h-8v-4Zm12 18H8V16h16v12Z"/></svg>
-                        <input id="login-password" type="password" name="token" required placeholder="Enter your password" autocomplete="current-password" autofocus>
+                        <input id="login-password" type="password" name="token" required maxlength="4096" placeholder="Enter your access token or password" autocomplete="current-password" autofocus>
                     </div>
                     <button type="submit">
                         <span>Continue</span>

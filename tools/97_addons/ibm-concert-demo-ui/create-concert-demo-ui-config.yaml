@@ -1,0 +1,157 @@
+---
+apiVersion: v1                     
+kind: Namespace
+metadata:
+  name: ibm-demo-ui
+---  
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: ibm-demo-ui-admin
+  namespace: ibm-demo-ui
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: ibm-demo-ui-admin-crb
+subjects:
+  - kind: ServiceAccount
+    name: ibm-demo-ui-admin
+    namespace: ibm-demo-ui
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: ibm-demo-ui-create-config
+  namespace: ibm-demo-ui
+spec:
+  template:
+    spec:
+      containers:
+        - name: config
+          image: quay.io/openshift/origin-cli:latest
+          imagePullPolicy: IfNotPresent
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "150m"
+            limits:
+              memory: "512Mi"
+              cpu: "200m"
+          command:
+            - /bin/sh
+            - -c
+            - |
+              set -x
+
+
+              export AIOPS_NAMESPACE=ibm-demo-ui
+              export TOKEN="CHANGEME"
+              export INSTANCE_NAME="Tyrion"
+
+              export ADMIN_MODE='true'
+              export GET_CONFIG='true'
+
+              export DEMO_USER='demo'
+              export DEMO_PWD='CHANGEME'
+
+              cat <<EOF | oc apply -n ibm-demo-ui -f -
+                apiVersion: v1
+                kind: ConfigMap
+                metadata:
+                  name:  ibm-demo-ui-config
+                  namespace: ibm-demo-ui
+                data:
+                  GET_CONFIG: "$GET_CONFIG"
+                  TOKEN: $TOKEN
+                  INSTANCE_NAME: $INSTANCE_NAME
+
+
+                  ADMIN_MODE: "$ADMIN_MODE"
+                  
+                  DEMO_USER: "$DEMO_USER"
+                  DEMO_PWD: "$DEMO_PWD"
+
+                  CONTACT_INFO: '<p style="font-size:40px;">Contacts</p><BR><p>Niklaus Hirt - nikh@ch.ibm.com</p><p></p>'
+
+                  ENV_CMD: |-
+                      export OCP_URL=\$(oc get Infrastructure cluster -o jsonpath={.status.apiServerURL})
+                      export OCP_TOKEN=\$(oc create token -n ibm-installer ibm-installer-admin --duration=999999999s)
+
+                      echo "------------------------------------------------------------------------------------------------------------------------------<BR>"
+                      echo " ✅ LOGINS FOR RESILIENCE<BR>"
+                      echo "------------------------------------------------------------------------------------------------------------------------------<BR>"
+                      export API_TOKEN=\$(oc create token -n default demo-admin-concert --duration=999999999s)
+
+                      export CONSOLE_PATH=\$(oc get route -n openshift-console console -o jsonpath={.spec.host})
+                      export CONSOLE_URL="https://"\$CONSOLE_PATH
+                      export API_URL="https://api\${CONSOLE_PATH#console-openshift-console}:6443"
+
+                      echo "<BR>"
+                      echo "  🌏 API URL  :   \$OCP_URL<BR>"
+                      echo "  🔐 API TOKEN:   \$OCP_TOKEN"
+
+                      echo "<BR>"
+                      echo "<BR>"
+
+
+                  
+
+                      echo "------------------------------------------------------------------------------------------------------------------------------<BR>"
+                      echo " ✅ CHECK WATSONX CREDENTIALS<BR>"
+                      echo "------------------------------------------------------------------------------------------------------------------------------<BR>"
+                      CONCERT_NAMESPACE=\$(oc get po -A|grep roja-portal |awk '{print\$1}')
+
+                      API_KEY="\$(oc get secret app-cfg-secret -n \$CONCERT_NAMESPACE -o jsonpath='{ .data.WATSONX_API_KEY }' | base64 --decode)"
+
+
+                      RESPONSE=\$(curl -s -X POST https://iam.cloud.ibm.com/identity/token -H "Content-Type: application/x-www-form-urlencoded" -d "grant_type=urn:ibm:params:oauth:grant-type:apikey&apikey=\$API_KEY")
+
+                      #echo "\$RESPONSE" | jq
+
+                      if echo "\$RESPONSE" | jq -e '.errorMessage' > /dev/null 2>&1; then
+                      echo "<BR>"
+                      echo "    🔴🔴🔴🔴🔴🔴 WATSONX TOKEN INVALID - Error returned from IAM. You won't be able to access the WatsonX services in Concert platform.<BR>"
+                      echo ""
+                      exit 1
+                      else
+                      echo "<BR>"
+                      echo "    ✅ Successfully retrieved IAM token. You can access the WatsonX services in Concert platform.<BR>"
+                      echo "<BR>"
+                      fi
+
+
+                      echo "------------------------------------------------------------------------------------------------------------------------------<BR>"
+                      echo " ✅ LDAP CREDENTIALS<BR>"
+                      echo "------------------------------------------------------------------------------------------------------------------------------<BR>"
+
+                      echo "id": "LDAP<BR>"
+                      echo "realm": "REALM<BR>"
+                      echo "url": "ldap://openldap.openldap:389<BR>"
+                      echo "host": "openldap.openldap<BR>"
+                      echo "port": "389<BR>"
+                      echo "protocol": "ldap<BR>"
+                      echo "basedn": "dc=ibm,dc=com<BR>"
+                      echo "binddn": "cn=admin,dc=ibm,dc=com<BR>"
+                      echo "bindpassword: The one you selected at installation time<BR>"
+                      echo "type": "Custom<BR>"
+                      echo "ignorecase": "false<BR>"
+                      echo "userfilter": "(&(uid=%v)(objectclass=Person))<BR>"
+                      echo "useridmap": "*:uid<BR>"
+                      echo "groupfilter": "(&(cn=%v)(objectclass=groupOfUniqueNames))<BR>"
+                      echo "groupidmap": "*:cn<BR>"
+                      echo "groupmemberidmap": "groupOfUniqueNames:uniqueMember<BR>"
+                      echo "nestedsearch": "false<BR>"
+                      echo "pagingsearch": "false<BR>"
+                      export openldap_app_route=\$(oc get route -n openldap admin -o jsonpath={.spec.host})          
+                      echo "openldap_app_route:     https://\$openldap_app_route<BR>"
+
+              EOF
+
+      restartPolicy: Never
+      serviceAccount: ibm-demo-ui-admin
+  backoffLimit: 500
