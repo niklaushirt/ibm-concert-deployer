@@ -148,7 +148,7 @@ data:
       - name: ibm-concert-optimise
         kind: IBMConcertOptimise
         install: true
-        concert_optimise_version: 8.20.6
+        concert_optimise_version: 8.21.2
 
         # Only install Concert Optimise Lite (no additional add-ons) if set to true - as Concert platform Backend
         concert_optimise_lite: true
@@ -218,7 +218,7 @@ data:
         # ---------------------------------------------------------------------
         # CONCERT SETTINGS
         concert_user: admin
-
+        
         # ---------------------------------------------------------------------
         # CONCERT AI FEATURES - Configure AI Features (WatsonX)
         # See her https://www.ibm.com/docs/en/concert-platform?topic=guide-configuring-watsonxai-concert-platform
@@ -261,9 +261,15 @@ data:
         private_registry_location: cp.icr.io/cp
         prod_user: cp
 
+        # --------------------------------------------------------------------- DEPRECATED - use concert_version instead
+        # CONCERT PLATFORM VERSION - check https://github.com/IBM/Concert-Platform/releases
+        # concert_platform_version: v3.0.2.1
+
         # ---------------------------------------------------------------------
         # CONCERT VERSION - check https://github.com/IBM/Concert/releases
-        concert_version: v3.0.1.1
+        concert_version: v3.1.0
+
+
 
         # ---------------------------------------------------------------------
         # PROJECT SETTINGS
@@ -296,8 +302,7 @@ data:
         # ---------------------------------------------------------------------
         # Create a custom app to show links to all installed IT Automation Products
         create_home_ui: false
-        
-        
+
         # ---------------------------------------------------------------------
         # Demo UI
         install_demo_ui: true
@@ -311,7 +316,7 @@ data:
 
         # ---------------------------------------------------------------------
         # LDAP
-        install_ldap: false
+        install_ldap: true
         # ldap domain
         ldap_domain: ibm.com
         # ldap base
@@ -323,7 +328,7 @@ data:
         # ldap namespace
         ldap_namespace: openldap
         # Integrate OpenShift Login with OpenLDAP
-        integrate_ocp_openldap: false
+        integrate_ocp_openldap: true
 
 
 
@@ -432,7 +437,8 @@ spec:
               echo ""
               echo "------------------------------------------------------------------------------------------------------------------------------"
               echo " 📥 Housekeeping"
-              #oc delete ConsoleNotification --all>/dev/null 2>/dev/null 
+              oc delete ConsoleNotification --all>/dev/null 2>/dev/null 
+
               oc delete job  -n ibm-installer --ignore-not-found $(oc get job -n ibm-installer|grep load-|awk '{print$1}'):-notfound  --ignore-not-found>/dev/null 2>/dev/null 
               oc delete pod  -n ibm-installer $(oc get po -n ibm-installer|grep load-|awk '{print$1}'):-notfound  --ignore-not-found>/dev/null 2>/dev/null 
               echo ""
@@ -472,7 +478,7 @@ spec:
               # echo ""
               # echo ""
 
-              echo "   Follow install at tail -f /tmp/ibm-concert/localstorage/logs/product_install_logs_xxxxx_yyyyy.log"
+              echo "   Follow install at tail -f /tmp/ibm-concert/logs/product_install_logs_xxxxx_yyyyy.log"
               echo "------------------------------------------------------------------------------------------------------------------------------"
               echo " 🚀 Launching Ansible Playbook"
               export ANSIBLE_LOG_PATH=/tmp/ansible.log
@@ -485,6 +491,7 @@ spec:
               echo "------------------------------------------------------------------------------------------------------------------------------"
               echo "  ⏳ INSTALLATION END TIMESTAMP: $(date)"
               echo ""
+
 
 
               echo "------------------------------------------------------------------------------------------------------------------------------"
