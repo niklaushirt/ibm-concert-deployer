@@ -297,6 +297,17 @@ data:
         # Create a custom app to show links to all installed IT Automation Products
         create_home_ui: false
         
+        
+        # ---------------------------------------------------------------------
+        # Demo UI
+        install_demo_ui: true
+        demoui_admin_mode: "true"
+        demoui_simulation_mode: "true"
+        demoui_user: admin
+        # Password for the Demo UI (OVERRIDES GLOBAL PASSWORD)
+        #demoui_pwd: CHANGEME
+
+
 
         # ---------------------------------------------------------------------
         # LDAP

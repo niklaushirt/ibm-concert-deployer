@@ -186,15 +186,15 @@
 # ---------------------------------------------------------------------------------------------------------------------------------------------------"
 # POSTINSTALL TASKS
 # ---------------------------------------------------------------------------------------------------------------------------------------------------"
-- name: (011/014) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Integrate OpenShift Login with OpenLDAP
+- name: (012/014) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Integrate OpenShift Login with OpenLDAP
   include_tasks: 90_integrate-ocp-openldap.yaml
   when: (current_feature.integrate_ocp_openldap | default(false))|bool == true  
 
-- name: (012/014) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Create Demo UI Openshift WebConsole Additional Menu Item
+- name: (013/014) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Create Demo UI Openshift WebConsole Additional Menu Item
   include_tasks: 91_addons-create-ocp-tools-menu.yaml
   when: (global_config.create_ocp_items | default(true))|bool == true  
 
-- name: (013/014) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Create Home UI
+- name: (014/014) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Create Home UI
   include_tasks: 27_ibm-home-ui.yaml
   when: (current_feature.create_home_ui | default(false))|bool == true
 

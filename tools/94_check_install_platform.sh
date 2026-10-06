@@ -420,7 +420,6 @@ echo "openldap_app_route:     https://$openldap_app_route"
 
 
 oc delete ConsoleNotification ibm-concert-operate-notification-openldap>/dev/null 2>/dev/null
-
 cat <<EOF | oc apply -f -
 apiVersion: console.openshift.io/v1
 kind: ConsoleNotification
@@ -433,7 +432,7 @@ spec:
             href: "https://$openldap_app_route"
             text: OpenLDAP
       location: BannerTop
-      text: "✅ IBM Concert OpenLDAP. User: cn=admin,dc=ibm,dc=com - Password: $KC_PWD  🚀 Access it here:"
+      text: "✅ IBM Concert OpenLDAP. User: cn=admin,dc=ibm,dc=com - Password: From Configuration   🚀 Access it here:"
 EOF
 
 
@@ -519,7 +518,7 @@ echo ""
 
 
 
-
+oc delete ConsoleNotification ibm-concert-operate-notification-turbo>/dev/null 2>/dev/null
 export appURL=$(oc get routes -n ibm-concert-optimise nginx -o jsonpath="{['spec']['host']}")|| true
 cat <<EOF | oc apply -f -
 apiVersion: console.openshift.io/v1
@@ -534,6 +533,9 @@ spec:
 EOF
 
 
+
+
+oc delete ConsoleNotification ibm-concert-operate-notification-concert>/dev/null 2>/dev/null
 export CONCERT_NAMESPACE=$(oc get po -A|grep roja-portal |awk '{print$1}')
 export appURL=$(oc get routes -n $CONCERT_NAMESPACE concert  -o jsonpath="{['spec']['host']}")|| true
 cat <<EOF | oc apply -f -
@@ -550,6 +552,64 @@ spec:
     location: BannerTop
     text: "✅ IBM Concert Platform is installed in this cluster. 🚀 Access it here:"
 EOF
+
+
+
+
+oc delete ConsoleLink ibm-concert-platform>/dev/null 2>/dev/null
+cat <<EOF | oc apply -f -
+apiVersion: console.openshift.io/v1
+kind: ConsoleLink
+metadata:
+      name: ibm-concert-platform
+spec:
+      applicationMenu:
+            imageURL: https://raw.githubusercontent.com/niklaushirt/ibm-concert-deployer/main/doc/pics/icons/ibm-cloud-pak--multicloud-mgmt.svg
+            section: IBM IT Automation
+      href: https://$appURL
+      location: ApplicationMenu
+      text: IBM Concert platform
+EOF
+
+
+
+
+oc delete ConsoleNotification ibm-concert-operate-notification-demoui>/dev/null 2>/dev/null
+export CONCERT_DEMO_UI_NAMESPACE=$(oc get po -A|grep ibm-demo-ui |grep -v ibm-demo-ui-create |awk '{print$1}')
+export appURL=$(oc get routes -n $CONCERT_DEMO_UI_NAMESPACE ibm-demo-ui -o jsonpath="{['spec']['host']}")|| true
+cat <<EOF | oc apply -f -
+apiVersion: console.openshift.io/v1
+kind: ConsoleNotification
+metadata:
+    name: ibm-concert-operate-notification-demoui
+spec:
+    backgroundColor: '#009a00'
+    color: '#fff'
+    link:
+        href: "https://$appURL"
+        text: IBM Concert Demo UI
+    location: BannerTop
+    text: "✅ IBM Concert Demo UI is installed in this cluster. 🚀 Access it here:"
+EOF
+
+
+
+oc delete ConsoleLink ibm-concert-operate-link-demoui>/dev/null 2>/dev/null
+cat <<EOF | oc apply -f -
+apiVersion: console.openshift.io/v1
+kind: ConsoleLink
+metadata:
+      name: ibm-concert-operate-link-demoui
+spec:
+      applicationMenu:
+            imageURL: 'https://raw.githubusercontent.com/niklaushirt/ibm-concert-deployer/main/doc/pics/icons/demo-icon-white.svg'
+            section: IBM Demo
+      href: https://$appURL
+      location: ApplicationMenu
+      text: IBM Concert Operate Demo UI
+EOF
+
+
 
 
 

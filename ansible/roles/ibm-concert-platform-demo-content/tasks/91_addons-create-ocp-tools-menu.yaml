@@ -50,7 +50,7 @@
       apiVersion: console.openshift.io/v1
       kind: ConsoleLink
       metadata:
-        name: ibm-concert
+        name: ibm-concert-platform
       spec:
         applicationMenu:
           imageURL: >-
@@ -59,7 +59,7 @@
         href: >-
           https://$appURL
         location: ApplicationMenu
-        text: IBM Concert
+        text: IBM Concert platform
     EOF
   ignore_errors: true
   args:
