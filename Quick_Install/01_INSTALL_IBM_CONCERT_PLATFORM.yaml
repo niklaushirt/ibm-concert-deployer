@@ -233,6 +233,10 @@ data:
         # INSTALL_CONCERT: Set as true if Concert should be installed
         install_concert: true
 
+        # INSTALL_CONCERT: Set as true if Concert should be installed
+        enable_VEIAS: false
+
+
         # INSTALL_DATAAPPS: Set as true if Data Apps should be installed
         install_dataapps: true
 

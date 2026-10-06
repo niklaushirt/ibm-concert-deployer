@@ -195,7 +195,7 @@
     # ----- Concert VEIAS Configuration -----
 
     # INSTALL VEIAS - PROOF OF EXPLOITABILITY: Set as True if installing VEIAS
-    INSTALL_VEIAS=true
+    INSTALL_VEIAS={{ current_feature.enable_VEIAS | default(false) }}
 
 
     # ----- Concert Configuration -----
