@@ -140,6 +140,7 @@ spec:
               oc delete ns acme-air &
 
               oc delete ns openldap &
+              oc delete ns ibm-demo-ui &
 
               oc delete ns ibm-concert &
               oc delete ns ibm-concert-dataapps &
