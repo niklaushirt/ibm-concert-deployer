@@ -207,7 +207,7 @@
     SCALE_CONFIG_CONCERT=level_1
     # storage class for Concert
     STORAGE_CLASS_CONCERT={{ STORAGE_CLASS_FILE }}
-    ENABLE_AI={{ current_feature.enable_WatsonX | default(false) }}
+    #ENABLE_AI={{ current_feature.enable_WatsonX | default(false) }}
 
 
     # ----- Concert Secure Coder Configuration (DEPRECATED) -----
