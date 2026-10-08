@@ -194,9 +194,9 @@
   include_tasks: 91_addons-create-ocp-tools-menu.yaml
   when: (global_config.create_ocp_items | default(true))|bool == true  
 
-- name: (014/014) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Create Home UI
-  include_tasks: 27_ibm-home-ui.yaml
-  when: (current_feature.create_home_ui | default(false))|bool == true
+# - name: (014/014) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Create Home UI
+#   include_tasks: 27_ibm-home-ui.yaml
+#   when: (current_feature.create_home_ui | default(false))|bool == true
 
 # - name: (014/014) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 Install OCP Menu Item
 #   include_tasks: 91_addons-create-ocp-tools-menu.yaml

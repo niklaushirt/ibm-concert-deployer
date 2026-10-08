@@ -215,28 +215,28 @@
     executable: /bin/bash
 
 
-- name: 🌏 OCP MENU - Create Openshift WebConsole Menu Item - Home UI
-  shell: |
-    appURL=$(oc get routes -n home-ui home-ui  -o jsonpath="{['spec']['host']}")|| true
+# - name: 🌏 OCP MENU - Create Openshift WebConsole Menu Item - Home UI
+#   shell: |
+#     appURL=$(oc get routes -n home-ui home-ui  -o jsonpath="{['spec']['host']}")|| true
 
-    cat <<EOF | oc apply -f -
-      apiVersion: console.openshift.io/v1
-      kind: ConsoleLink
-      metadata:
-        name: ibm-home
-      spec:
-        applicationMenu:
-          imageURL: >-
-            https://raw.githubusercontent.com/niklaushirt/ibm-concert-deployer/main/doc/pics/icons/ibm-cloud-pak--business-automation-white.svg
-          section: IBM IT Automation
-        href: >-
-          https://$appURL
-        location: ApplicationMenu
-        text: Home UI
-    EOF
-  ignore_errors: true
-  args:
-    executable: /bin/bash
-  when: (current_feature.create_home_ui | default(false))|bool == true
+#     cat <<EOF | oc apply -f -
+#       apiVersion: console.openshift.io/v1
+#       kind: ConsoleLink
+#       metadata:
+#         name: ibm-home
+#       spec:
+#         applicationMenu:
+#           imageURL: >-
+#             https://raw.githubusercontent.com/niklaushirt/ibm-concert-deployer/main/doc/pics/icons/ibm-cloud-pak--business-automation-white.svg
+#           section: IBM IT Automation
+#         href: >-
+#           https://$appURL
+#         location: ApplicationMenu
+#         text: Home UI
+#     EOF
+#   ignore_errors: true
+#   args:
+#     executable: /bin/bash
+#   when: (current_feature.create_home_ui | default(false))|bool == true
 
 

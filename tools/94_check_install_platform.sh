@@ -606,7 +606,7 @@ spec:
             section: IBM Demo
       href: https://$appURL
       location: ApplicationMenu
-      text: IBM Concert Operate Demo UI
+      text: IBM Concert platform Demo UI
 EOF
 
 
