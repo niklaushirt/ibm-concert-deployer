@@ -46,7 +46,7 @@ spec:
             - /bin/sh
             - -c
             - |
-              set -x
+              set -e
 
 
               export AIOPS_NAMESPACE=ibm-demo-ui
@@ -59,6 +59,8 @@ spec:
               export DEMO_USER='demo'
               export DEMO_PWD='CHANGEME'
 
+              export DJANGO_SECRET_KEY="$(tr -dc 'a-z0-9!@#$%^&*(-_=+)' < /dev/urandom | head -c50) 
+
               cat <<EOF | oc apply -n ibm-demo-ui -f -
                 apiVersion: v1
                 kind: ConfigMap
@@ -67,12 +69,11 @@ spec:
                   namespace: ibm-demo-ui
                 data:
                   GET_CONFIG: "$GET_CONFIG"
-                  TOKEN: $TOKEN
                   INSTANCE_NAME: $INSTANCE_NAME
 
-
                   ADMIN_MODE: "$ADMIN_MODE"
-                  
+                  TOKEN: "$TOKEN"
+
                   DEMO_USER: "$DEMO_USER"
                   DEMO_PWD: "$DEMO_PWD"
 
@@ -129,26 +130,16 @@ spec:
                       echo " ✅ LDAP CREDENTIALS<BR>"
                       echo "------------------------------------------------------------------------------------------------------------------------------<BR>"
 
-                      echo "id": "LDAP<BR>"
-                      echo "realm": "REALM<BR>"
-                      echo "url": "ldap://openldap.openldap:389<BR>"
-                      echo "host": "openldap.openldap<BR>"
-                      echo "port": "389<BR>"
-                      echo "protocol": "ldap<BR>"
-                      echo "basedn": "dc=ibm,dc=com<BR>"
-                      echo "binddn": "cn=admin,dc=ibm,dc=com<BR>"
-                      echo "bindpassword: The one you selected at installation time<BR>"
-                      echo "type": "Custom<BR>"
-                      echo "ignorecase": "false<BR>"
-                      echo "userfilter": "(&(uid=%v)(objectclass=Person))<BR>"
-                      echo "useridmap": "*:uid<BR>"
-                      echo "groupfilter": "(&(cn=%v)(objectclass=groupOfUniqueNames))<BR>"
-                      echo "groupidmap": "*:cn<BR>"
-                      echo "groupmemberidmap": "groupOfUniqueNames:uniqueMember<BR>"
-                      echo "nestedsearch": "false<BR>"
-                      echo "pagingsearch": "false<BR>"
-                      export openldap_app_route=\$(oc get route -n openldap admin -o jsonpath={.spec.host})          
-                      echo "openldap_app_route:     https://\$openldap_app_route<BR>"
+                      echo "------------------------------------------------------------------------------------------------------------------------------<BR>"
+                      echo " ✅ LDAP CREDENTIALS  for Keycloak User Federation<BR>"
+                      echo "------------------------------------------------------------------------------------------------------------------------------<BR>"
+                      echo "UI display name": "LDAP<BR>"
+                      echo "Vendor": "Other<BR>"
+                      echo "Connection URL": "ldap://openldap.openldap:389<BR>"
+                      echo "BindDN": "cn=admin,dc=ibm,dc=com<BR>"
+                      echo "Bind credentials": "The Password you have set in the config file<BR>"
+                      echo "Edit mode": "WRITABLE<BR>"
+                      echo "Users DN": "ou=People,dc=ibm,dc=com<BR>"
 
               EOF
 

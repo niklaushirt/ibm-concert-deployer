@@ -122,28 +122,21 @@
 
 
                                                     <BR>------------------------------------------------------------------------------------------------------------------------------"
-                                                    <BR>✅ LDAP CREDENTIALS"
+                                                    <BR>✅ LDAP CREDENTIALS for Keycloak User Federation"
                                                     <BR>------------------------------------------------------------------------------------------------------------------------------"
-                                                    <BR>👩‍💻&nbsp;&nbsp;ID:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"LDAP",
-                                                    <BR>👩‍💻&nbsp;&nbsp;REALM:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"REALM",
-                                                    <BR>👩‍💻&nbsp;&nbsp;URL:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"ldap://openldap.openldap:389",
-                                                    <BR>👩‍💻&nbsp;&nbsp;HOST: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"openldap.openldap",
-                                                    <BR>👩‍💻&nbsp;&nbsp;PORT: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"389",
-                                                    <BR>👩‍💻&nbsp;&nbsp;PROTOCOL: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"ldap",
-                                                    <BR>👩‍💻&nbsp;&nbsp;BASEDN": &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"dc=ibm,dc=com",
-                                                    <BR>👩‍💻&nbsp;&nbsp;BINDDN": &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"cn=admin,dc=ibm,dc=com",
-                                                    <BR>👩‍💻&nbsp;&nbsp;BINDPASSWORD": &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"The one you selected at installation time",
-                                                    <BR>👩‍💻&nbsp;&nbsp;TYPE": &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Custom",
-                                                    <BR>👩‍💻&nbsp;&nbsp;IGNORECASE": &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"false",
-                                                    <BR>👩‍💻&nbsp;&nbsp;USERFILTER": &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"(&(uid=%v)(objectclass=Person))",
-                                                    <BR>👩‍💻&nbsp;&nbsp;USERIDMAP": &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"*:uid",
-                                                    <BR>👩‍💻&nbsp;&nbsp;GROUPFILTER": &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"(&(cn=%v)(objectclass=groupOfUniqueNames))",
-                                                    <BR>👩‍💻&nbsp;&nbsp;GROUPIDMAP": &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"*:cn",
-                                                    <BR>👩‍💻&nbsp;&nbsp;GROUPMEMBERIDMAP": &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"groupOfUniqueNames:uniqueMember",
-                                                    <BR>👩‍💻&nbsp;&nbsp;NESTEDSEARCH": &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"false",
-                                                    <BR>👩‍💻&nbsp;&nbsp;PAGINGSEARCH": "false"
+                                                    <BR>👩‍💻&nbsp;&nbsp;UI display name:&nbsp;&nbsp;LDAP
+                                                    <BR>👩‍💻&nbsp;&nbsp;Vendor:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Other
+                                                    <BR>👩‍💻&nbsp;&nbsp;Connection URL:&nbsp;&nbsp;&nbsp;ldap://openldap.openldap:389
+                                                    <BR>👩‍💻&nbsp;&nbsp;BindDN:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cn=admin,dc=ibm,dc=com
+                                                    <BR>👩‍💻&nbsp;&nbsp;Bind credentials:&nbsp;The Password you have set in the config file
+                                                    <BR>👩‍💻&nbsp;&nbsp;Edit mode:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WRITABLE
+                                                    <BR>👩‍💻&nbsp;&nbsp;Users DN:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ou=People,dc=ibm,dc=com
 
-                                                 
+                                                    <BR><BR><BR>👩‍💻&nbsp;&nbsp;Don't change anything else!
+
+
+
+
                                             </td>
                                         </tr>
                                         <tr>
@@ -179,7 +172,7 @@
                                                     🔐&nbsp;&nbsp;"TOKEN:&nbsp;&nbsp;&nbsp;&nbsp; <BR>
                                                     <div style="float:left; width: 900px; text-wrap: wrap;">
 
-                                                    oc login --server={{openshift_url}} --token={{openshift_token}}
+                                                    {{openshift_token}}
 
                                                     </div>
                                                    </code>

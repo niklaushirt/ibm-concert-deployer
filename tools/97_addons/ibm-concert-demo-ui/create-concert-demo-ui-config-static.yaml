@@ -24,12 +24,21 @@ roleRef:
   name: cluster-admin
 ---
 apiVersion: v1
+kind: Secret
+metadata:
+  name: ibm-demo-ui-auth
+  namespace: ibm-demo-ui
+type: Opaque
+stringData:
+  TOKEN: CHANGEME
+  DJANGO_SECRET_KEY: CHANGE_ME_TO_A_LONG_RANDOM_SECRET_BEFORE_DEPLOYING
+---
+apiVersion: v1
 kind: ConfigMap
 metadata:
   name:  ibm-demo-ui-config
   namespace: ibm-demo-ui
 data:
-  TOKEN: CHANGEME
   INSTANCE_NAME: Dexter
 
   DEMO_USER: "demo"

@@ -43,6 +43,8 @@ spec:
         envFrom:
         - configMapRef:
             name:  ibm-demo-ui-config
+        - secretRef:
+            name: ibm-demo-ui-auth
         env:
           - name: INSTANA_SERVICE_NAME
             value: ibm-demo-ui
