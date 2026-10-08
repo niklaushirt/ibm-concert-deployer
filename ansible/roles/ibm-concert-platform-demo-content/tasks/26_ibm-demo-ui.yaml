@@ -42,7 +42,6 @@
 
 - name: 🚀 DEMO-UI - Delete old instance (ignore problems in this step))
   shell: |
-    export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
     oc delete deployment -n ibm-demo-ui ibm-demo-ui --ignore-not-found
     oc delete job -n ibm-demo-ui ibm-demo-ui-create-config --ignore-not-found
     oc delete job -n ibm-demo-ui ibm-demo-ui-create-config-events --ignore-not-found
@@ -79,7 +78,6 @@
 # --------------------------------------------------------------------------------------------------------------------------------------
 - name: 🕦 DEMO-UI - Wait for Demo UI Configuration being ready
   shell: |   
-          export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
           oc get cm -n ibm-demo-ui ibm-demo-ui-config --ignore-not-found --no-headers|grep -c ""
   register: kubectl_get_pods
   until: kubectl_get_pods.stdout == "1"
@@ -97,7 +95,6 @@
 # --------------------------------------------------------------------------------------------------------------------------------------
 - name: 🕦 DEMO-UI - Wait for Demo UI being ready
   shell: | 
-            export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
             oc get pod -n ibm-demo-ui |grep ibm-demo-ui|grep "1/1"|grep -v "Terminating"|grep -c ""
   register: kubectl_get_pods
   until: kubectl_get_pods.stdout == "1"

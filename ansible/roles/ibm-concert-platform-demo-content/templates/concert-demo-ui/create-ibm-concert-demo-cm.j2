@@ -59,7 +59,7 @@ spec:
 
               export TOKEN='{{current_demoui_pwd}}'
 
-              export DJANGO_SECRET_KEY="$(tr -dc 'a-z0-9!@#$%^&*(-_=+)' < /dev/urandom | head -c50) 
+              export DJANGO_SECRET_KEY="$(tr -dc 'a-z0-9!@#$%^&*(-_=+)' < /dev/urandom | head -c50)"
 
 
               cat <<EOF | oc apply -n ibm-demo-ui -f -
