@@ -1,0 +1,703 @@
+{% load static %}
+{% include "demouiapp/_header.html" %}
+<center>
+    <div hidden id="mydiv" class="alert alert-success" role="alert"
+        style="min-height:100px; min-width: 600px; background-color: rgb(228, 252, 233); padding:10px; margin: 20px; margin-left: 150px; margin-right: 250px; border-style:solid; border-color:rgb(0, 182, 39);border-width: 1px;">
+        <h4 class="alert-heading">🚀 Running!</h4>
+        <br />
+        <p>Operation will continue running in the background.</p>
+    </div>
+</center>
+
+<div role="main-panel" id="main-panel" class="container theme-showcase">
+    <div class="jumbotron container">
+        <table>
+            <tbody>
+                <tr>
+                    <td style="width:90%; padding-left:50px;">
+                        <div style="  background-color:#1d0707; padding: 40px; margin: 20px;">
+
+                            <script>
+                                let toggle = button => {
+                                    let element = document.getElementById("mydiv");
+                                    let elementMain = document.getElementById("main-panel");
+                                    let arg1 = event.target.getAttribute('data-arg1');
+                                    element.removeAttribute("hidden");
+                                    elementMain.setAttribute("hidden", "hidden");
+                                    button.innerText = "Running";
+                                    window.open(arg1, "_self");
+                                }
+                            </script>
+
+                            {% if SIMULATION_MODE == 'true' %}
+                            <p style="font-size:35px; color:#ffeeee">
+
+                                <svg focusable="false" preserveAspectRatio="xMidYMid meet"
+                                    xmlns="http://www.w3.org/2000/svg" fill="currentColor" width="35" height="35"
+                                    viewBox="0 0 32 32" aria-hidden="true" class="icon-gradient">
+                                    <path
+                                        d="M26,6a3.9963,3.9963,0,0,0-3.8579,3H17.9305A7.9964,7.9964,0,1,0,9,17.9307v4.2114a4,4,0,1,0,2,0V17.9307a7.951,7.951,0,0,0,3.8976-1.6192l3.6693,3.67A3.9529,3.9529,0,0,0,18,22a4,4,0,1,0,4-4,3.9521,3.9521,0,0,0-2.019.5669l-3.6694-3.6694A7.9493,7.9493,0,0,0,17.9305,11h4.2116A3.9934,3.9934,0,1,0,26,6ZM12,26a2,2,0,1,1-2-2A2.0023,2.0023,0,0,1,12,26ZM10,16a6,6,0,1,1,6-6A6.0066,6.0066,0,0,1,10,16Zm14,6a2,2,0,1,1-2-2A2.0023,2.0023,0,0,1,24,22Zm2-10a2,2,0,1,1,2-2A2.0023,2.0023,0,0,1,26,12Z">
+                                    </path>
+                                </svg>
+
+
+
+                                Create Application Incidents</p>
+                            <br />
+
+
+                            <table cellspacing="0" cellpadding="0" style="width: 90%; table-layout: fixed">
+                                <tbody>
+
+                                    <BR><BR><BR>
+
+                                    <tr>
+                                        <td style="width: 50%; vertical-align:top">
+
+                                            <div style="padding-bottom: 1rem;" class="sc-ftTHYK jxfOQM">
+                                                <a target="_blank" tabindex="0"
+                                                    class="bx--btn bx--btn--red bx--btn--expressive"
+                                                    style="font-size: 18px;" onclick="toggle(this)"
+                                                    data-arg1='injectAllREST'>
+                                                    RobotShop Memory Problem
+                                                    <svg focusable="false" preserveAspectRatio="xMidYMid meet"
+                                                        xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                                        aria-label="Table" aria-hidden="true" width="30" height="30"
+                                                        viewBox="0 0 28 28" role="img" class="bx--btn__icon">
+                                                        <path stroke="transparent"
+                                                            d="M16 18H6a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v10a2 2 0 01-2 2zM6 6v10h10V6zm20 6v4h-4v-4h4m0-2h-4a2 2 0 00-2 2v4a2 2 0 002 2h4a2 2 0 002-2v-4a2 2 0 00-2-2zm0 12v4h-4v-4h4m0-2h-4a2 2 0 00-2 2v4a2 2 0 002 2h4a2 2 0 002-2v-4a2 2 0 00-2-2zm-10 2v4h-4v-4h4m0-2h-4a2 2 0 00-2 2v4a2 2 0 002 2h4a2 2 0 002-2v-4a2 2 0 00-2-2z">
+                                                        </path>
+                                                    </svg>
+
+                                                </a>
+                                            </div>
+
+
+
+                                        </td>
+                                        <td width="40px">
+                                            &nbsp;
+                                        </td>
+                                        <td style="width: 50%; vertical-align:top">
+
+                                            <div style="padding-bottom: 1rem;" class="sc-ftTHYK jxfOQM">
+                                                <a target="_blank" tabindex="0"
+                                                    class="bx--btn bx--btn--red bx--btn--expressive"
+                                                    style="font-size: 18px;" onclick="toggle(this)"
+                                                    data-arg1='injectAllFanACMEREST'>
+                                                    ACME Fan Failure
+                                                    <svg focusable="false" preserveAspectRatio="xMidYMid meet"
+                                                        xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                                        aria-label="Table" aria-hidden="true" width="30" height="30"
+                                                        viewBox="0 0 28 28" role="img" class="bx--btn__icon">
+                                                        <path stroke="transparent"
+                                                            d="M16 18H6a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v10a2 2 0 01-2 2zM6 6v10h10V6zm20 6v4h-4v-4h4m0-2h-4a2 2 0 00-2 2v4a2 2 0 002 2h4a2 2 0 002-2v-4a2 2 0 00-2-2zm0 12v4h-4v-4h4m0-2h-4a2 2 0 00-2 2v4a2 2 0 002 2h4a2 2 0 002-2v-4a2 2 0 00-2-2zm-10 2v4h-4v-4h4m0-2h-4a2 2 0 00-2 2v4a2 2 0 002 2h4a2 2 0 002-2v-4a2 2 0 00-2-2z">
+                                                        </path>
+                                                    </svg>
+
+                                                </a>
+                                            </div>
+
+
+
+                                        </td>
+                                        <td width="40px">
+                                            &nbsp;
+                                        </td>
+
+                                        <td width="10px">
+                                            &nbsp;
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+                                        <td
+                                            style="width: 50%; vertical-align:middle; background-color: rgb(255, 198, 198); padding:10px; margin: 20px;">
+                                            <p style="font-size:16px;">Create Incident simulating a Git Commit for the
+                                                Robotshop
+                                                Application.</p>
+                                            <p style="font-size:16px;">Creates Events and Log and Metric Anomalies,
+                                                linked to ServiceNow
+                                                Incidents and Ansible Runbooks for the mysql component of the
+                                                application.</p>
+                                            <p style="font-size:16px;">❗ Creates a real outage for the Ratings service
+                                                in the Application.</p>
+
+                                        </td>
+                                        <td width="40px">
+                                            &nbsp;
+                                        </td>
+                                        <td
+                                            style="width: 50%; vertical-align:middle; background-color: rgb(255, 198, 198); padding:10px; margin: 20px;">
+                                            <p style="font-size:16px;">Create Incident simulating a Datacenter Fan
+                                                Failure leading to a VM failure and the Booking DB being unavailable.
+                                            </p>
+                                            <p style="font-size:16px;">Creates Events and Metric Anomalies,
+                                                linked to ServiceNow
+                                                Incidents and Ansible Runbooks for the acme-booking-db component of the
+                                                application.</p>
+                                        </td>
+
+                                        <td width="40px">
+                                            &nbsp;
+                                        </td>
+
+
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <BR><BR><BR>
+                            <table cellspacing="0" cellpadding="0" style="width: 90%; table-layout: fixed">
+                                <tbody>
+
+                                    <BR><BR><BR>
+
+                                    <tr>
+
+                                        <td style="width: 50%; vertical-align:top">
+
+                                            <div style="padding-bottom: 1rem;" class="sc-ftTHYK jxfOQM">
+                                                <a target="_blank" tabindex="0"
+                                                    class="bx--btn bx--btn--red bx--btn--expressive"
+                                                    style="font-size: 18px;" onclick="toggle(this)"
+                                                    data-arg1='injectAllTUBEREST'>
+                                                    London Tube Fire Alert
+                                                    <svg focusable="false" preserveAspectRatio="xMidYMid meet"
+                                                        xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                                        aria-label="Table" aria-hidden="true" width="30" height="30"
+                                                        viewBox="0 0 28 28" role="img" class="bx--btn__icon">
+                                                        <path stroke="transparent"
+                                                            d="M16 18H6a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v10a2 2 0 01-2 2zM6 6v10h10V6zm20 6v4h-4v-4h4m0-2h-4a2 2 0 00-2 2v4a2 2 0 002 2h4a2 2 0 002-2v-4a2 2 0 00-2-2zm0 12v4h-4v-4h4m0-2h-4a2 2 0 00-2 2v4a2 2 0 002 2h4a2 2 0 002-2v-4a2 2 0 00-2-2zm-10 2v4h-4v-4h4m0-2h-4a2 2 0 00-2 2v4a2 2 0 002 2h4a2 2 0 002-2v-4a2 2 0 00-2-2z">
+                                                        </path>
+                                                    </svg>
+
+                                                </a>
+                                            </div>
+
+
+                                        </td>
+                                        <td width="40px">
+                                            &nbsp;
+                                        </td>
+
+                                        <td style="width: 50%; vertical-align:top">
+
+                                            <div style="padding-bottom: 1rem;" class="sc-ftTHYK jxfOQM">
+                                                <a target="_blank" tabindex="0"
+                                                    class="bx--btn bx--btn--red bx--btn--expressive"
+                                                    style="font-size: 18px;" onclick="toggle(this)"
+                                                    data-arg1='injectBusy'>
+                                                    Create Busy Environment
+                                                    <svg focusable="false" preserveAspectRatio="xMidYMid meet"
+                                                        xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                                        aria-label="Table" aria-hidden="true" width="30" height="30"
+                                                        viewBox="0 0 28 28" role="img" class="bx--btn__icon">
+                                                        <path stroke="transparent"
+                                                            d="M16 18H6a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v10a2 2 0 01-2 2zM6 6v10h10V6zm20 6v4h-4v-4h4m0-2h-4a2 2 0 00-2 2v4a2 2 0 002 2h4a2 2 0 002-2v-4a2 2 0 00-2-2zm0 12v4h-4v-4h4m0-2h-4a2 2 0 00-2 2v4a2 2 0 002 2h4a2 2 0 002-2v-4a2 2 0 00-2-2zm-10 2v4h-4v-4h4m0-2h-4a2 2 0 00-2 2v4a2 2 0 002 2h4a2 2 0 002-2v-4a2 2 0 00-2-2z">
+                                                        </path>
+                                                    </svg>
+                                                </a>
+                                            </div>
+
+
+                                        </td>
+
+                                            </td>
+                                        <td width="40px">
+                                            &nbsp;
+                                        </td>
+
+                                        <td style="width: 50%; vertical-align:top">
+
+                                            <div style="padding-bottom: 1rem;" class="sc-ftTHYK jxfOQM">
+                                                <a target="_blank" tabindex="0"
+                                                    class="bx--btn bx--btn--red bx--btn--expressive"
+                                                    style="font-size: 18px;" onclick="toggle(this)"
+                                                    data-arg1='injectRisk'>
+                                                    Create Environment Hazards
+                                                    <svg focusable="false" preserveAspectRatio="xMidYMid meet"
+                                                        xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                                        aria-label="Table" aria-hidden="true" width="30" height="30"
+                                                        viewBox="0 0 28 28" role="img" class="bx--btn__icon">
+                                                        <path stroke="transparent"
+                                                            d="M16 18H6a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v10a2 2 0 01-2 2zM6 6v10h10V6zm20 6v4h-4v-4h4m0-2h-4a2 2 0 00-2 2v4a2 2 0 002 2h4a2 2 0 002-2v-4a2 2 0 00-2-2zm0 12v4h-4v-4h4m0-2h-4a2 2 0 00-2 2v4a2 2 0 002 2h4a2 2 0 002-2v-4a2 2 0 00-2-2zm-10 2v4h-4v-4h4m0-2h-4a2 2 0 00-2 2v4a2 2 0 002 2h4a2 2 0 002-2v-4a2 2 0 00-2-2z">
+                                                        </path>
+                                                    </svg>
+                                                </a>
+                                            </div>
+
+
+                                        </td>
+
+
+                                        <td width="10px">
+                                            &nbsp;
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+
+                                        <td
+                                            style="width: 50%; vertical-align:middle; background-color: rgb(255, 198, 198); padding:10px; margin: 20px;">
+                                            <p style="font-size:16px;">Create Incident simulating a Fire Alert at Mile
+                                                End Tube Station.</p>
+                                            <p style="font-size:16px;">Creates Events that are geographically mapped to
+                                                the London
+                                                Underground Stations.</p>
+                                        </td>
+
+                                        <td width="50px">
+                                            &nbsp;
+                                        </td>
+                                        <td
+                                            style="width: 50%; vertical-align:middle; background-color: rgb(255, 198, 198); padding:10px; margin: 20px;">
+                                            <p style="font-size:16px;">Creates loads of synthetic Alerts and Incidents,
+                                                simulating
+                                                a busy environment.</p>
+                                        </td>
+
+                                            <td width="50px">
+                                            &nbsp;
+                                        </td>
+                                        <td
+                                            style="width: 50%; vertical-align:middle; background-color: rgb(255, 198, 198); padding:10px; margin: 20px;">
+                                            <p style="font-size:16px;">Creates Environmental Hazards (Fire, Flood, Power Outages, ...) for Risk Proximity</p>
+                                        </td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </td>
+                </tr>
+
+
+
+
+
+
+                <tr>
+                    <td style="width:90%; padding-left:50px;">
+                        <div style="  background-color:#1d0707; padding: 40px; margin: 20px;">
+
+
+                            <p style="font-size:35px; color:#ffeeee">
+                                <svg focusable=" false" preserveAspectRatio="xMidYMid meet" fill="currentColor"
+                                    width="35" height="35" viewBox="0 0 32 32" aria-hidden="true"
+                                    class="DatagridActions__RefreshIcon-sc-116e3u8-0 blcMXr"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke="transparent"
+                                        d="M16 7a3 3 0 113-3 3.003 3.003 0 01-3 3zm0-4a1 1 0 101 1 1.001 1.001 0 00-1-1zm-5 27a3 3 0 113-3 3.003 3.003 0 01-3 3zm0-4a1 1 0 101 1 1.001 1.001 0 00-1-1zM7 11a3 3 0 113-3 3.003 3.003 0 01-3 3zm0-4a1 1 0 101 1 1.001 1.001 0 00-1-1zm14 23a3 3 0 113-3 3.003 3.003 0 01-3 3zm0-4a1 1 0 101 1 1.001 1.001 0 00-1-1zm4-15a3 3 0 113-3 3.003 3.003 0 01-3 3zm0-4a1 1 0 101 1 1.001 1.001 0 00-1-1zM4 21a3 3 0 113-3 3.003 3.003 0 01-3 3zm0-4a1 1 0 101 1 1.001 1.001 0 00-1-1zm24 4a3 3 0 113-3 3.003 3.003 0 01-3 3zm0-4a1 1 0 101 1 1.001 1.001 0 00-1-1zm-12 5a6 6 0 116-6 6.007 6.007 0 01-6 6zm0-10a4 4 0 104 4 4.005 4.005 0 00-4-4z">
+                                    </path>
+                                </svg>
+
+                                Create Network Incidents</p>
+                            <br />
+                            <table cellspacing="0" cellpadding="0" style="width: 90%; table-layout: fixed">
+                                <tbody>
+
+                                    <BR><BR><BR>
+
+                                    <tr>
+
+                                        <td style="width: 50%; vertical-align:top">
+
+                                            <div style="padding-bottom: 1rem;" class="sc-ftTHYK jxfOQM">
+
+                                                <a target="_blank" tabindex="0"
+                                                    class="bx--btn bx--btn--red bx--btn--expressive"
+                                                    style="font-size: 18px;" onclick="toggle(this)"
+                                                    data-arg1='injectAllTELCOREST'>
+                                                    RobotShop - Fiber Cut
+                                                    <svg focusable="false" preserveAspectRatio="xMidYMid meet"
+                                                        xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                                        aria-label="Table" aria-hidden="true" width="20" height="20"
+                                                        viewBox="0 0 28 28" role="img" class="bx--btn__icon">
+                                                        <path
+                                                            d="M10 10H2V2h8zM4 8h4V4H4zM30 30h-8v-8h8zm-6-2h4v-4h-4zM20 27H8a6 6 0 010-12v2a4 4 0 000 8h12zM24 17v-2a4 4 0 000-8H12V5h12a6 6 0 010 12z">
+                                                        </path>
+                                                        <path d="M19 11h-6l-3 4 6 6 6-6z"></path>
+                                                    </svg>
+                                                </a>
+                                            </div>
+
+
+                                        </td>
+                                        <td width="40px">
+                                            &nbsp;
+                                        </td>
+                                        <td style="width: 50%; vertical-align:top">
+
+                                            <div style="padding-bottom: 1rem;" class="sc-ftTHYK jxfOQM">
+                                                <a target="_blank" tabindex="0"
+                                                    class="bx--btn bx--btn--red bx--btn--expressive"
+                                                    style="font-size: 18px;" onclick="toggle(this)"
+                                                    data-arg1='injectAllNetSOCKREST'>
+                                                    SockShop Network Failure
+                                                    <svg focusable="false" preserveAspectRatio="xMidYMid meet"
+                                                        xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                                        aria-label="Table" aria-hidden="true" width="20" height="20"
+                                                        viewBox="0 0 28 28" role="img" class="bx--btn__icon">
+                                                        <path
+                                                            d="M10 10H2V2h8zM4 8h4V4H4zM30 30h-8v-8h8zm-6-2h4v-4h-4zM20 27H8a6 6 0 010-12v2a4 4 0 000 8h12zM24 17v-2a4 4 0 000-8H12V5h12a6 6 0 010 12z">
+                                                        </path>
+                                                        <path d="M19 11h-6l-3 4 6 6 6-6z"></path>
+                                                    </svg>
+
+                                                </a>
+                                            </div>
+
+
+
+                                        </td>
+
+                                        <td width="40px">
+                                            &nbsp;
+                                        </td>
+                                        <td width="10px">
+                                            &nbsp;
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+
+                                        <td
+                                            style="width: 50%; vertical-align:middle; background-color: rgb(255, 198, 198); padding:10px; margin: 20px;">
+                                            <p style="font-size:16px;">Create Incident simulating a fiber cut between
+                                                Bern and Frankfurt leading to an outage of the ratings service. Creates
+                                                Events and Metric Anomalies that are geographically mapped to
+                                                the network locations.
+                                                Provides Ansible Runbooks for quick mitigation.
+                                            </p>
+
+                                        </td>
+
+                                        <td width="50px">
+                                            &nbsp;
+                                        </td>
+                                        <td
+                                            style="width: 50%; vertical-align:middle; background-color: rgb(255, 198, 198); padding:10px; margin: 20px;">
+                                            <p style="font-size:16px;">Create Incident simulating a Datacenter Switch
+                                                Failure leading to the Catalogue DB Pod being unavailable.</p>
+                                            <p style="font-size:16px;">Creates Events and Metric Anomalies,
+                                                linked to ServiceNow
+                                                Incidents and Ansible Runbooks for the catalogue-db component of the
+                                                application.</p>
+                                            <p style="font-size:16px;">❗ Creates a real outage for the Ratings service
+                                                in the Application.</p>
+
+                                        </td>
+                                        <td width="50px">
+                                            &nbsp;
+                                        </td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <BR><BR><BR>
+                            <table cellspacing="0" cellpadding="0" style="width: 90%; table-layout: fixed">
+                                <tbody>
+
+
+                                    <tr>
+
+
+                                        <td style="width: 49%; vertical-align:top">
+
+                                        </td>
+                                        <td width="40px">
+                                            &nbsp;
+                                        </td>
+
+
+                                    </tr>
+                                    <tr>
+
+                                        <td style="width: 50%; vertical-align:top">
+
+                                            <div style="padding-bottom: 1rem;" class="sc-ftTHYK jxfOQM">
+                                                <a target="_blank" tabindex="0"
+                                                    class="bx--btn bx--btn--red bx--btn--expressive"
+                                                    style="font-size: 18px;" onclick="toggle(this)"
+                                                    data-arg1='injectAllTELCOREST'>
+                                                    Optical Network - Fiber Cut
+
+                                                    <svg focusable="false" preserveAspectRatio="xMidYMid meet"
+                                                        xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                                        aria-label="Table" aria-hidden="true" width="20" height="20"
+                                                        viewBox="0 0 28 28" role="img" class="bx--btn__icon">
+                                                        <path
+                                                            d="M10 10H2V2h8zM4 8h4V4H4zM30 30h-8v-8h8zm-6-2h4v-4h-4zM20 27H8a6 6 0 010-12v2a4 4 0 000 8h12zM24 17v-2a4 4 0 000-8H12V5h12a6 6 0 010 12z">
+                                                        </path>
+                                                        <path d="M19 11h-6l-3 4 6 6 6-6z"></path>
+                                                    </svg>
+
+                                                </a>
+                                            </div>
+
+
+                                        </td>
+                                        <td width="40px">
+                                            &nbsp;
+                                        </td>
+
+                                        <td width="10px">
+                                            &nbsp;
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+
+                                        <td
+                                            style="width: 50%; vertical-align:middle; background-color: rgb(255, 198, 198); padding:10px; margin: 20px;">
+                                            <p style="font-size:16px;">Create Incident simulating a fiber cut between
+                                                Richmond and NYC.</p>
+                                            <p style="font-size:16px;">Creates Events that are geographically mapped to
+                                                the network locations.</p>
+                                        </td>
+
+                                        <td width="50px">
+                                            &nbsp;
+                                        </td>
+                                        <td style="width: 259px; vertical-align:top">
+                                            <p style="font-size:16px; color:#ffeeee">❗ Don't launch both RobotShop
+                                                Scenarios at the same
+                                                time. This might lead to incorrect grouping!</p>
+                                        </td>
+
+                                    </tr>
+
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+
+
+
+
+                <tr>
+                    <td style="width:90%; padding-left:50px;">
+                        <div style="  background-color:#0e200e; padding: 40px; margin: 20px;">
+
+
+                            <p style="font-size:35px; color:#ffeeee">
+
+
+                                <svg focusable="false" preserveAspectRatio="xMidYMid meet"
+                                    xmlns="http://www.w3.org/2000/svg" fill="currentColor" width="35" height="35"
+                                    viewBox="0 0 32 32" aria-hidden="true" class="icon-gradient">
+                                    <path d="M12 12H14V24H12zM18 12H20V24H18z"></path>
+                                    <path d="M4 6V8H6V28a2 2 0 002 2H24a2 2 0 002-2V8h2V6zM8 28V8H24V28zM12 2H20V4H12z">
+                                    </path>
+                                </svg>
+
+                                Clear all Incidents</p>
+                            <br />
+                            <table cellspacing="0" cellpadding="0" style="width: 90%; table-layout: fixed">
+                                <tbody>
+
+
+
+                                    <tr>
+                                        <td style="width: 50%; vertical-align:top">
+
+
+                                            <div style="padding-bottom: 1rem;" class="sc-ftTHYK jxfOQM">
+                                                <a target="_blank" tabindex="0"
+                                                    class="bx--btn bx--btn--green bx--btn--expressive"
+                                                    style="font-size: 18px;" onclick="toggle(this)"
+                                                    data-arg1='instanaMitigateIncident'>
+                                                    Clear all Incidents <svg focusable="false"
+                                                        preserveAspectRatio="xMidYMid meet"
+                                                        xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                                        aria-hidden="true" width="32" height="32" viewBox="0 0 32 32"
+                                                        class="bx--btn__icon">
+                                                        <path d="M12 12H14V24H12zM18 12H20V24H18z"></path>
+                                                        <path
+                                                            d="M4 6V8H6V28a2 2 0 002 2H24a2 2 0 002-2V8h2V6zM8 28V8H24V28zM12 2H20V4H12z">
+                                                        </path>
+                                                    </svg>
+
+                                                </a>
+                                            </div>
+
+
+                                        </td>
+                                        <td width="40px">
+                                            &nbsp;
+                                        </td>
+
+                                        <td width="10px">
+                                            &nbsp;
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+                                        <td
+                                            style="width: 50%; vertical-align:middle; background-color: #ddeedd; padding:10px; margin: 20px;">
+
+                                            <p style="font-size:16px;">Clear Incidents and Alerts to reset environment
+                                                if
+                                                needed . </p>
+                                            <p style="font-size:16px;">❗ Wait
+                                                up
+                                                to 10 minutes after clearing for all Incidents and Alerts to disappear.
+                                            </p>
+                                        </td>
+
+                                        <td width="50px">
+                                            &nbsp;
+                                        </td>
+
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <td style="width:90%; padding-left:50px;">
+                        <div style="  background-color:#0e200e; padding: 40px; margin: 20px;">
+
+
+                            <p style="font-size:35px; color:#ffeeee">🚀 Create Live Incidents for Instana</p>
+                            <br />
+                            <table cellspacing="0" cellpadding="0" style="width: 90%; table-layout: fixed">
+                                <tbody>
+
+
+
+                                    <tr>
+                                        <td style="width: 50%; vertical-align:top">
+
+                                            <div style="padding-bottom: 1rem;" class="sc-ftTHYK jxfOQM">
+                                                <a target="_blank" tabindex="0"
+                                                    class="bx--btn bx--btn--red bx--btn--expressive"
+                                                    style="font-size: 18px;" onclick="toggle(this)"
+                                                    data-arg1='instanaCreateIncident'>
+                                                    Create Incident - Instana <svg focusable="false"
+                                                        preserveAspectRatio="xMidYMid meet"
+                                                        xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                                        aria-label="Table" aria-hidden="true" width="20" height="20"
+                                                        viewBox="0 0 32 32" role="img" class="bx--btn__icon">
+                                                        <path
+                                                            d="M29,5a2,2,0,0,0-2-2H5A2,2,0,0,0,3,5V27a2,2,0,0,0,2,2H27a2,2,0,0,0,2-2ZM27,5V9H5V5Zm0,22H5V23H27Zm0-6H5V17H27Zm0-6H5V11H27Z">
+                                                        </path>
+                                                    </svg>
+
+                                                </a>
+                                            </div>
+                                            <div style="padding-bottom: 1rem;" class="sc-ftTHYK jxfOQM">
+                                                <a target="_blank" tabindex="0"
+                                                    class="bx--btn bx--btn--green bx--btn--expressive"
+                                                    style="font-size: 18px;" onclick="toggle(this)"
+                                                    data-arg1='instanaMitigateIncident'>
+                                                    Mitigate Incident - Instana <svg focusable="false"
+                                                        preserveAspectRatio="xMidYMid meet"
+                                                        xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                                        aria-hidden="true" width="32" height="32" viewBox="0 0 32 32"
+                                                        class="bx--btn__icon">
+                                                        <path d="M12 12H14V24H12zM18 12H20V24H18z"></path>
+                                                        <path
+                                                            d="M4 6V8H6V28a2 2 0 002 2H24a2 2 0 002-2V8h2V6zM8 28V8H24V28zM12 2H20V4H12z">
+                                                        </path>
+                                                    </svg>
+
+                                                </a>
+                                            </div>
+
+
+                                        </td>
+                                        <td width="40px">
+                                            &nbsp;
+                                        </td>
+
+                                        <td width="10px">
+                                            &nbsp;
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+                                        <td
+                                            style="width: 50%; vertical-align:middle; background-color: #ddeedd; padding:10px; margin: 20px;">
+                                            <p style="font-size:16px;">Create Incident simulating an outage
+                                                Robotshop
+                                                Application.</p>
+                                            <p style="font-size:16px;">Disables access from Ratings to the MySQL DB and
+                                                injects errors into User.</p>
+                                        </td>
+
+                                        <td width="50px">
+                                            &nbsp;
+                                        </td>
+
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+
+
+
+
+
+            </tbody>
+        </table>
+
+
+        {% else %}
+        <p> </p>
+        <p> </p>
+        <p> </p>
+
+        <table width="300" cellspacing="0" cellpadding="0" style="width: 90%; table-layout: fixed">
+            <tbody>
+                <tr>
+                    <td colspan="2">
+                        <p>You cannot simulate incidents on this system.</p>
+                        <p>Please use the existing incidents for demo purposes.</p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        {% endif %}
+
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</tbody>
+</table>
+</div>
+</div>
+{% include "demouiapp/_footer.html" %}

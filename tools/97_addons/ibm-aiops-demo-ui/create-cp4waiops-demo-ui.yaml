@@ -54,6 +54,8 @@ spec:
             name:  ibm-demo-ui-config-logs
         - configMapRef:
             name:  ibm-demo-ui-config-metrics
+        - secretRef:
+            name: ibm-demo-ui-auth
       serviceAccount: ibm-demo-ui-admin
 ---
 apiVersion: v1
@@ -83,5 +85,5 @@ spec:
     targetPort: 8000
   tls:
     termination: edge
-    insecureEdgeTerminationPolicy: Allow
+    insecureEdgeTerminationPolicy: Redirect
   wildcardPolicy: None

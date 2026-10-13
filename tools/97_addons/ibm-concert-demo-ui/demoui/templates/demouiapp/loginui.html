@@ -1,0 +1,66 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#081329">
+    <link rel="icon" href="{% static 'favicon.ico' %}">
+    <link rel="stylesheet" href="{% static 'css/login-modern.css' %}">
+    <title>Log in · IBM Concert platform Demo UI</title>
+</head>
+<body>
+    <main class="login-shell">
+        <section class="login-story" aria-label="IBM Concert platform Demo UI">
+            <a class="login-brand" href="/login" aria-label="IBM Concert platform Demo UI">
+                <span class="login-brand__mark" aria-hidden="true">
+                    <svg viewBox="0 0 32 32" width="26" height="26" fill="currentColor">
+                        <path d="M16 2 3 9v14l13 7 13-7V9L16 2Zm0 2.3L26.8 10 16 15.8 5.2 10 16 4.3Zm-11 7.4 10 5.4v10.1L5 21.8V11.7Zm12 15.5V17.1l10-5.4v10.1l-10 5.4Z"/>
+                    </svg>
+                </span>
+                <span><strong>IBM</strong> Concert platform</span>
+            </a>
+            <div class="login-story__content">
+                <p class="login-eyebrow">Demo environment</p>
+                <h1>Operate your demo from one place.</h1>
+                <p>Launch products and tools.</p>
+            </div>
+            <div class="login-orbit" aria-hidden="true">
+                <span class="login-orbit__core"></span>
+                <span class="login-orbit__ring login-orbit__ring--one"></span>
+                <span class="login-orbit__ring login-orbit__ring--two"></span>
+                <span class="login-orbit__node login-orbit__node--one"></span>
+                <span class="login-orbit__node login-orbit__node--two"></span>
+                <span class="login-orbit__node login-orbit__node--three"></span>
+            </div>
+        </section>
+
+        <section class="login-panel" aria-labelledby="login-title">
+            <div class="login-card">
+                <div class="login-instance">
+                    {% if INSTANCE_IMAGE != 'None' %}<img src="{{ INSTANCE_IMAGE }}" alt="">{% endif %}
+                    <span>{{ INSTANCE_NAME }}</span>
+                </div>
+                <p class="login-eyebrow">Welcome back</p>
+                <h2 id="login-title">Log in to Demo UI</h2>
+                <p class="login-intro">Enter the access token for this environment.</p>
+
+                {% if login_error %}<p class="login-error" role="alert">{{ login_error }}</p>{% endif %}
+                <form action="{% url 'login' %}" method="POST" id="loginform">
+                    {% csrf_token %}
+                    <label for="login-password">Access token / password</label>
+                    <div class="login-input-wrap">
+                        <svg viewBox="0 0 32 32" width="20" height="20" aria-hidden="true"><path d="M24 14h-2v-4a6 6 0 0 0-12 0v4H8a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V16a2 2 0 0 0-2-2Zm-12-4a4 4 0 0 1 8 0v4h-8v-4Zm12 18H8V16h16v12Z"/></svg>
+                        <input id="login-password" type="password" name="token" required maxlength="4096" placeholder="Enter your access token" autocomplete="current-password" autofocus>
+                    </div>
+                    <button type="submit">
+                        <span>Continue</span>
+                        <svg viewBox="0 0 16 16" width="18" height="18" aria-hidden="true"><path d="m9.3 3.7 3.8 3.8H1v1h12.1l-3.8 3.8.7.7 5-5-5-5-.7.7Z"/></svg>
+                    </button>
+                </form>
+            </div>
+            <p class="login-help">IBM Concert platform Demo UI</p>
+        </section>
+    </main>
+</body>
+</html>

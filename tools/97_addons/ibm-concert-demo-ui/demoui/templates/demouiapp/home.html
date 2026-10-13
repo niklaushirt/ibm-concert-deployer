@@ -1,0 +1,288 @@
+{% load static %}
+{% include "demouiapp/_header.html" %}
+
+<center>
+    <div hidden id="mydiv" class="alert alert-success" role="alert"
+        style="min-height:100px; min-width: 600px; background-color: rgb(228, 252, 233); padding:10px; margin: 20px; margin-left: 150px; margin-right: 250px; border-style:solid; border-color:rgb(0, 182, 39);border-width: 1px;">
+        <h4 class="alert-heading">🚀 Running!</h4>
+        <br />
+        <p>Operation will continue running in the background.</p>
+    </div>
+</center>
+
+<div id="main-panel" role="main" class="container theme-showcase">
+    <div class="jumbotron container">
+        <table cellspacing="20" cellpadding="20" style="width: 100%; table-layout: fixed">
+            <tbody>
+                <tr>
+
+                    <td style="width:90%; padding-left:50px;">
+                    
+
+                        {% if platformns != '' %}
+                        <div style="  background-color:#10192b; padding: 20px; margin: 5px">
+                            <table cellspacing="0" cellpadding="0" style="width:90%; table-layout: fixed;">
+                                <tbody>
+                                    <tr>
+                                        <td colspan="1" style="width: 30%; vertical-align:top">
+                                            <p style="font-size:35px; color:#ffeeee">
+
+                                                <svg focusable="false" preserveAspectRatio="xMidYMid meet"
+                                                    fill="currentColor" width="45" height="45" viewBox="0 -10 39 39"
+                                                    aria-hidden="true"
+                                                    class="DatagridActions__RefreshIcon-sc-116e3u8-0 blcMXr"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <path stroke="transparent"
+                                                        d="M16 10a6 6 0 00-6 6v8a6 6 0 0012 0v-8a6 6 0 00-6-6zm-4.25 7.87h8.5v4.25h-8.5zM16 28.25A4.27 4.27 0 0111.75 24v-.13h8.5V24A4.27 4.27 0 0116 28.25zm4.25-12.13h-8.5V16a4.25 4.25 0 018.5 0zm10.41 3.09L24 13v9.1a4 4 0 008 0 3.83 3.83 0 00-1.34-2.89zM28 24.35a2.25 2.25 0 01-2.25-2.25V17l3.72 3.47A2.05 2.05 0 0130.2 22a2.25 2.25 0 01-2.2 2.35zM0 22.1a4 4 0 008 0V13l-6.66 6.21A3.88 3.88 0 000 22.1zm2.48-1.56L6.25 17v5.1a2.25 2.25 0 01-4.5 0 2.05 2.05 0 01.73-1.56zM15 5.5A3.5 3.5 0 1011.5 9 3.5 3.5 0 0015 5.5zm-5.25 0a1.75 1.75 0 111.75 1.75A1.77 1.77 0 019.75 5.5zM20.5 2A3.5 3.5 0 1024 5.5 3.5 3.5 0 0020.5 2zm0 5.25a1.75 1.75 0 111.75-1.75 1.77 1.77 0 01-1.75 1.75z">
+                                                    </path>
+                                                </svg>
+
+                                                IBM Concert platform
+                                            </p>
+                                            <p> &nbsp;</p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+
+
+
+                                        <td colspan="1" style="width: 30%; vertical-align:top">
+                                            <div style="padding-bottom: 1rem;" class="sc-ftTHYK jxfOQM">
+                                                <a target="_blank" tabindex="0"
+                                                    class="bx--btn bx--btn--primary bx--btn--expressive"
+                                                    href="https://{{ concertplatform_url }}"
+                                                    style="width:300px;font-size: 18px;">IBM Concert platform
+                                                    <svg focusable="false" preserveAspectRatio="xMidYMid meet"
+                                                        xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                                        aria-hidden="true" width="16" height="16" viewBox="0 0 16 16"
+                                                        class="bx--btn__icon">
+                                                        <path
+                                                            d="M9.3 3.7L13.1 7.5 1 7.5 1 8.5 13.1 8.5 9.3 12.3 10 13 15 8 10 3z">
+                                                        </path>
+                                                    </svg>
+
+                                                </a>
+                                            </div>
+                                        </td>
+
+
+
+
+                                        <td colspan="2" style="width: 30%; vertical-align:top">
+
+                                            <div style="color:rgb(0, 0, 0);background-color: #bad0fc; padding:10px; margin-left: 20px;"
+                                                colspan="2">
+                                                <p style="font-size:18px;">👩‍💻&nbsp;&nbsp;{{ DEMO_USER }}
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;</p>
+                                                <p style="font-size:18px;">🔐&nbsp;&nbsp;{{ DEMO_PWD }}</p>
+                                                <p></p>
+                                                <p></p>
+                                            </div>
+                                        </td>
+
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        {% endif %}
+
+
+
+
+
+
+                </tr>
+                <tr>
+                    <td>
+                        &nbsp;
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+
+
+
+
+    <div class="jumbotron container">
+
+        <div style="  background-color:#faf9fa; padding: 40px; margin: 20px;">
+            <p style="font-size:35px; color:#000000">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" width="32" height="32" viewBox="0 0 32 32">
+                    <path
+                        d="M22 28H12v-2h10V10H6v10H4V10a2.002 2.002 0 012-2h16a2.002 2.002 0 012 2v16a2.002 2.002 0 01-2 2z">
+                    </path>
+                    <path
+                        d="M28 22h-2v-2h2V4H12v2h-2V4a2.002 2.002 0 012-2h16a2.002 2.002 0 012 2v16a2.002 2.002 0 01-2 2z">
+                    </path>
+                    <path d="M10 14v2h4.586L3 27.586 4.414 29 16 17.414V22h2v-8h-8z"></path>
+                </svg>
+                Demo Applications
+            </p>
+            <br />
+            <table style="width:90%;">
+                <tbody>
+                    <tr>
+                        <td style="width:90%; padding-left:50px;">
+                            <div style="max-height: 120px;   background-color:#d08ee3; padding: 20px; margin: 5px;">
+                                <table cellspacing="0" cellpadding="0" style="width:90%; table-layout: fixed; ">
+                                    <tbody>
+
+
+                                        <tr>
+                                            <td>
+                                                <div style="padding-bottom: 1rem;" class="sc-ftTHYK jxfOQM">
+                                                    <a target="_blank" tabindex="0"
+                                                        class="bx--btn bx--btn--pink bx--btn--expressive"
+                                                        href="https://{{ robotshop_url }}"
+                                                        style="width:200px;font-size: 18px;" onclick="toggle(this)"
+                                                        data-arg1='clearAllREST'>RobotShop
+                                                        <svg focusable="false" preserveAspectRatio="xMidYMid meet"
+                                                            xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                                            width="20" height="20" viewBox="0 0 32 32"
+                                                            aria-hidden="true" class="bx--btn__icon">
+                                                            <path
+                                                                d="M30.94,15.66A16.69,16.69,0,0,0,16,5,16.69,16.69,0,0,0,1.06,15.66a1,1,0,0,0,0,.68A16.69,16.69,0,0,0,16,27,16.69,16.69,0,0,0,30.94,16.34,1,1,0,0,0,30.94,15.66ZM16,25c-5.3,0-10.9-3.93-12.93-9C5.1,10.93,10.7,7,16,7s10.9,3.93,12.93,9C26.9,21.07,21.3,25,16,25Z">
+                                                            </path>
+                                                            <path
+                                                                d="M16,10a6,6,0,1,0,6,6A6,6,0,0,0,16,10Zm0,10a4,4,0,1,1,4-4A4,4,0,0,1,16,20Z">
+                                                            </path>
+                                                        </svg>
+
+                                                    </a>
+                                                </div>
+                                            </td>
+                                            <td style="vertical-align:top;">
+                                                👩‍💻&nbsp;&nbsp;user<BR><BR>🔐&nbsp;&nbsp;password</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3">
+                                                &nbsp;
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width:90%; padding-left:50px;">
+                            <div style="max-height: 120px;   background-color:#d08ee3; padding: 20px; margin: 5px;">
+                                <table cellspacing="0" cellpadding="0" style="width:90%; table-layout: fixed; ">
+                                    <tbody>
+                                        <tr>
+                                            <td width="10%">
+                                                &nbsp;
+                                            </td>
+                                            <td width="100px">
+                                                &nbsp;
+                                            </td>
+                                            <td width="10px">
+                                                &nbsp;
+                                            </td>
+                                            <td width="10px">
+                                                &nbsp;
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>
+                                                <div style="padding-bottom: 1rem;" class="sc-ftTHYK jxfOQM">
+                                                    <a target="_blank" tabindex="0"
+                                                        class="bx--btn bx--btn--pink bx--btn--expressive"
+                                                        href="https://{{ sockshop_url }}"
+                                                        style="width:200px;font-size: 18px;" onclick="toggle(this)"
+                                                        data-arg1='clearAllREST'>SockShop
+                                                        <svg focusable="false" preserveAspectRatio="xMidYMid meet"
+                                                            xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                                            width="20" height="20" viewBox="0 0 32 32"
+                                                            aria-hidden="true" class="bx--btn__icon">
+                                                            <path
+                                                                d="M30.94,15.66A16.69,16.69,0,0,0,16,5,16.69,16.69,0,0,0,1.06,15.66a1,1,0,0,0,0,.68A16.69,16.69,0,0,0,16,27,16.69,16.69,0,0,0,30.94,16.34,1,1,0,0,0,30.94,15.66ZM16,25c-5.3,0-10.9-3.93-12.93-9C5.1,10.93,10.7,7,16,7s10.9,3.93,12.93,9C26.9,21.07,21.3,25,16,25Z">
+                                                            </path>
+                                                            <path
+                                                                d="M16,10a6,6,0,1,0,6,6A6,6,0,0,0,16,10Zm0,10a4,4,0,1,1,4-4A4,4,0,0,1,16,20Z">
+                                                            </path>
+                                                        </svg>
+
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3">
+                                                &nbsp;
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width:90%; padding-left:50px;">
+                            <div style="max-height: 120px;   background-color:#d08ee3; padding: 20px; margin: 5px;">
+                                <table cellspacing="0" cellpadding="0" style="width:90%; table-layout: fixed; ">
+                                    <tbody>
+                                        <tr>
+                                            <td width="10%">
+                                                &nbsp;
+                                            </td>
+                                            <td width="100px">
+                                                &nbsp;
+                                            </td>
+                                            <td width="10px">
+                                                &nbsp;
+                                            </td>
+                                            <td width="10px">
+                                                &nbsp;
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>
+                                                <div style="padding-bottom: 1rem;" class="sc-ftTHYK jxfOQM">
+                                                    <a target="_blank" tabindex="0"
+                                                        class="bx--btn bx--btn--pink bx--btn--expressive"
+                                                        href="https://{{ galaxium_travels_url }}"
+                                                        style="width:200px;font-size: 18px;" onclick="toggle(this)"
+                                                        data-arg1='clearAllREST'>Galaxium Travels
+                                                        <svg focusable="false" preserveAspectRatio="xMidYMid meet"
+                                                            xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                                            width="20" height="20" viewBox="0 0 32 32"
+                                                            aria-hidden="true" class="bx--btn__icon">
+                                                            <path
+                                                                d="M30.94,15.66A16.69,16.69,0,0,0,16,5,16.69,16.69,0,0,0,1.06,15.66a1,1,0,0,0,0,.68A16.69,16.69,0,0,0,16,27,16.69,16.69,0,0,0,30.94,16.34,1,1,0,0,0,30.94,15.66ZM16,25c-5.3,0-10.9-3.93-12.93-9C5.1,10.93,10.7,7,16,7s10.9,3.93,12.93,9C26.9,21.07,21.3,25,16,25Z">
+                                                            </path>
+                                                            <path
+                                                                d="M16,10a6,6,0,1,0,6,6A6,6,0,0,0,16,10Zm0,10a4,4,0,1,1,4-4A4,4,0,0,1,16,20Z">
+                                                            </path>
+                                                        </svg>
+
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3">
+                                                &nbsp;
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+
+
+
+
+    </div>
+</div>
+{% include "demouiapp/_footer.html" %}

@@ -239,9 +239,9 @@
   when: (current_feature.install_demoapps | default(false))|bool == true
 
 
-- name: (003/003) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Create Home UI
-  include_tasks: 27_ibm-home-ui.yaml
-  when: (current_feature.create_home_ui | default(false))|bool == true
+# - name: (003/003) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Create Home UI
+#   include_tasks: 27_ibm-home-ui.yaml
+#   when: (current_feature.create_home_ui | default(false))|bool == true
 
 
 # Update Concert Operate Cards

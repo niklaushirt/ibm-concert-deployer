@@ -1,4 +1,6 @@
 export TOKEN=test
+export DJANGO_DEBUG=true
+export DJANGO_SECRET_KEY="${DJANGO_SECRET_KEY:-$(python3 -c 'import secrets; print(secrets.token_urlsafe(64))')}"
 export LOG_ITERATIONS=5
 export LOG_TIME_FORMAT="%Y-%m-%dT%H:%M:%S.000000"
 export LOG_TIME_STEPS=1000
@@ -157,7 +159,6 @@ export DEMO_LOGS='
 
 cd demoui
 python manage.py runserver
-
 
 
 

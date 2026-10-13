@@ -3,6 +3,8 @@ export DEMO_USER=demo
 export ADMIN_MODE='true'
 export INSTANCE_NAME=Demo
 export TOKEN=test
+export DJANGO_DEBUG=true
+export DJANGO_SECRET_KEY="${DJANGO_SECRET_KEY:-$(python3 -c 'import secrets; print(secrets.token_urlsafe(64))')}"
 export SIMULATION_MODE='true'
 
 export LOG_TIME_STEPS='1000'
@@ -307,7 +309,6 @@ export DEMO_LOGS_SOCK='
 
 cd demoui
 python3 manage.py runserver
-
 
 
 

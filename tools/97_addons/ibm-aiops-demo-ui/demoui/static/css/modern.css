@@ -103,9 +103,14 @@ a:hover { color: var(--ui-primary-dark); }
     padding: .65rem .85rem;
     border: 1px solid rgba(255,255,255,.18);
     border-radius: 10px;
+    background: transparent;
     font-size: .875rem;
+    font-family: inherit;
+    cursor: pointer;
     transition: background .18s ease, border-color .18s ease;
 }
+
+.app-logout-form { margin: 0; }
 
 .app-logout:hover { border-color: rgba(255,255,255,.4); background: rgba(255,255,255,.1); }
 

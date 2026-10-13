@@ -50,12 +50,11 @@
       apiVersion: console.openshift.io/v1
       kind: ConsoleLink
       metadata:
-        name: ibm-concert
+        name: ibm-concert-platform
       spec:
         applicationMenu:
-          imageURL: >-
-            https://raw.githubusercontent.com/niklaushirt/ibm-concert-deployer/main/doc/pics/icons/ibm-aiops5.svg
-          section: IBM IT Automation
+            imageURL: https://raw.githubusercontent.com/niklaushirt/ibm-concert-deployer/main/doc/pics/icons/ibm-cloud-pak--multicloud-mgmt.svg
+            section: IBM IT Automation
         href: >-
           https://$appURL
         location: ApplicationMenu
