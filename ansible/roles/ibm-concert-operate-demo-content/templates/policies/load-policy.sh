@@ -15,7 +15,7 @@
       -H 'content-type: application/json' \
       -u $POLICY_LOGIN|grep "DEMO Incident creation policy for all alerts"|wc -l|tr -d ' ')
 
-    export POLICY_FILE="./ansible/roles/ibm-concert-deployer-demo-content/templates/policies/temporal1.json"
+    export POLICY_FILE="./ansible/roles/ibm-concert-operate-demo-content/templates/policies/temporal1.json"
     echo $POLICY_FILE
     cp $POLICY_FILE /tmp/temporal_policy.json
 

@@ -32,7 +32,7 @@
     OS=$(uname -s | tr '[:upper:]' '[:lower:]')
     if [[ "${OS}" == "darwin" ]]; then
           echo "MAC"
-          TOPOLOGY_CUSTOM_FILE=$(pwd)"/roles/ibm-concert-deployer-demo-content/templates/topology/asm_config.json"
+          TOPOLOGY_CUSTOM_FILE=$(pwd)"/roles/ibm-concert-operate-demo-content/templates/topology/asm_config.json"
     else
           TOPOLOGY_CUSTOM_FILE="{{role_path}}/templates/topology/asm_config.json"
     fi    

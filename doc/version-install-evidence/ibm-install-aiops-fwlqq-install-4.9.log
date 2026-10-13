@@ -1391,7 +1391,7 @@ TASK [ibm-aiops-demo-content : Log] ********************************************
 changed: [localhost]
 
 TASK [ibm-aiops-demo-content : (005/051) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Install OpenLDAP] ***
-included: /ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/tasks/21_addons-ldap.yaml for localhost
+included: /ibm-concert-deployer/ansible/roles/ibm-concert-operate-demo-content/tasks/21_addons-ldap.yaml for localhost
 
 TASK [ibm-aiops-demo-content : 🛰️  START - INSTALL OPENLDAP] ********************
 ok: [localhost] => {
@@ -1443,7 +1443,7 @@ ok: [localhost] => {
 }
 
 TASK [ibm-aiops-demo-content : (006/051) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Create the Admin Service Account] ***
-included: /ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/tasks/22_addons-user.yaml for localhost
+included: /ibm-concert-deployer/ansible/roles/ibm-concert-operate-demo-content/tasks/22_addons-user.yaml for localhost
 
 TASK [ibm-aiops-demo-content : 🛰️  START - CREATE USER] *************************
 ok: [localhost] => {
@@ -1469,7 +1469,7 @@ TASK [ibm-aiops-demo-content : 👩‍💻 DEMO USER - Set Global Token as eyJhx
 ok: [localhost]
 
 TASK [ibm-aiops-demo-content : (007/051) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Create the Demo Apps] ***
-included: /ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/tasks/23_addons-demoapps.yaml for localhost
+included: /ibm-concert-deployer/ansible/roles/ibm-concert-operate-demo-content/tasks/23_addons-demoapps.yaml for localhost
 
 TASK [ibm-aiops-demo-content : 🛰️  START - INSTALL DEMO APPS] *******************
 ok: [localhost] => {
@@ -1504,7 +1504,7 @@ TASK [ibm-aiops-demo-content : 📺 DEMO APPS - Create sock-shop application] **
 changed: [localhost]
 
 TASK [ibm-aiops-demo-content : (008/051) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Install AWX] ****
-included: /ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/tasks/24_addons-awx.yaml for localhost
+included: /ibm-concert-deployer/ansible/roles/ibm-concert-operate-demo-content/tasks/24_addons-awx.yaml for localhost
 
 TASK [ibm-aiops-demo-content : 🛰️  START - INSTALL AWX] *************************
 ok: [localhost] => {
@@ -1547,7 +1547,7 @@ TASK [ibm-aiops-demo-content : 🚀 AWX - Create AWX Instance (while waiting for
 changed: [localhost]
 
 TASK [ibm-aiops-demo-content : (008/051) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Create Routes] ***
-included: /ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/tasks/30_ibm-aiops-create-routes.yaml for localhost
+included: /ibm-concert-deployer/ansible/roles/ibm-concert-operate-demo-content/tasks/30_ibm-aiops-create-routes.yaml for localhost
 
 TASK [ibm-aiops-demo-content : 🛰️  START - CREATE ROUTES] ***********************
 ok: [localhost] => {
@@ -1654,7 +1654,7 @@ TASK [ibm-aiops-demo-content : 🚀 ROUTES - Delete Pods with ImgPull Error] ***
 changed: [localhost]
 
 TASK [ibm-aiops-demo-content : (009/051) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Load SNOW Training Data] ***
-included: /ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/tasks/51_ibm-aiops-training-load-snow.yaml for localhost
+included: /ibm-concert-deployer/ansible/roles/ibm-concert-operate-demo-content/tasks/51_ibm-aiops-training-load-snow.yaml for localhost
 
 TASK [ibm-aiops-demo-content : 🛰️  START - LOAD SNOW TRAINING DATA] *************
 ok: [localhost] => {
@@ -1677,7 +1677,7 @@ TASK [ibm-aiops-demo-content : 📥 TRAINING LOAD SNOW - LOAD ELASTICSEARCH SNOW
 changed: [localhost]
 
 TASK [ibm-aiops-demo-content : (011/051) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Load METRICS Training Data] ***
-included: /ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/tasks/53_ibm-aiops-training-load-metric.yaml for localhost
+included: /ibm-concert-deployer/ansible/roles/ibm-concert-operate-demo-content/tasks/53_ibm-aiops-training-load-metric.yaml for localhost
 
 TASK [ibm-aiops-demo-content : 🛰️  START - LOAD METRIC TRAINING DATA] ***********
 ok: [localhost] => {
@@ -1700,7 +1700,7 @@ TASK [ibm-aiops-demo-content : 📥 TRAINING LOAD METRIC - LOAD CASSANDRA METRIC
 changed: [localhost]
 
 TASK [ibm-aiops-demo-content : (012/051) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Load EVENTS Training Data] ***
-included: /ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/tasks/53_ibm-aiops-training-load-events.yaml for localhost
+included: /ibm-concert-deployer/ansible/roles/ibm-concert-operate-demo-content/tasks/53_ibm-aiops-training-load-events.yaml for localhost
 
 TASK [ibm-aiops-demo-content : 🛰️  START - LOAD EVENTS TRAINING DATA] ***********
 ok: [localhost] => {
@@ -1723,7 +1723,7 @@ TASK [ibm-aiops-demo-content : 📥 TRAINING LOAD EVENTS - LOAD CASSANDRA EVENTS
 changed: [localhost]
 
 TASK [ibm-aiops-demo-content : (013/051) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Create Training Definition for Lags] ***
-included: /ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/tasks/52_ibm-aiops-training-create-lags-configuration.yaml for localhost
+included: /ibm-concert-deployer/ansible/roles/ibm-concert-operate-demo-content/tasks/52_ibm-aiops-training-create-lags-configuration.yaml for localhost
 
 TASK [ibm-aiops-demo-content : 🛰️  START - CREATE LOG GOLDEN SIGNALS ANALYSIS DEFINITIONS] ***
 ok: [localhost] => {
@@ -1784,11 +1784,11 @@ ok: [localhost] => {
         "       ✅ OK - IBMAIOps:    ibm-aiops",
         "***************************************************************************************************************************************************",
         "   🛠️   Turn off RSA - Log Anomaly Statistical Baseline",
-        "awx configs custom-sizes ibm-itautomation-products-install.yaml roles 🔐 Getting credentials awx configs custom-sizes ibm-itautomation-products-install.yaml roles ✅ IBMAIOps: OK - ibm-aiops 🛠️ Create Route Route: ai-platform-api-ibm-aiops.apps.67e4f622a503e6e92a9eb1fe.eu1.techzone.ibm.com 🛠️ Getting ZEN Token Sucessfully logged in 📥 Launch Query for file: /ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/templates/training/training-definitions//check-RSA.graphql 🔎 Result: { \"getRegisteredAlgorithms\": [ { \"algorithmName\": \"Moving_Average_Log_Anomaly_Detection\", \"isEnabled\": false } ] }",
+        "awx configs custom-sizes ibm-itautomation-products-install.yaml roles 🔐 Getting credentials awx configs custom-sizes ibm-itautomation-products-install.yaml roles ✅ IBMAIOps: OK - ibm-aiops 🛠️ Create Route Route: ai-platform-api-ibm-aiops.apps.67e4f622a503e6e92a9eb1fe.eu1.techzone.ibm.com 🛠️ Getting ZEN Token Sucessfully logged in 📥 Launch Query for file: /ibm-concert-deployer/ansible/roles/ibm-concert-operate-demo-content/templates/training/training-definitions//check-RSA.graphql 🔎 Result: { \"getRegisteredAlgorithms\": [ { \"algorithmName\": \"Moving_Average_Log_Anomaly_Detection\", \"isEnabled\": false } ] }",
         "      ❌ RSA already Disabled: Nothing to do",
         "***************************************************************************************************************************************************",
         "   🛠️   Create Analysis Definiton: Log Anomaly Golden Signals",
-        "awx configs custom-sizes ibm-itautomation-products-install.yaml roles 🔐 Getting credentials awx configs custom-sizes ibm-itautomation-products-install.yaml roles ✅ IBMAIOps: OK - ibm-aiops 🛠️ Create Route Route: ai-platform-api-ibm-aiops.apps.67e4f622a503e6e92a9eb1fe.eu1.techzone.ibm.com 🛠️ Getting ZEN Token Sucessfully logged in 📥 Launch Query for file: /ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/templates/training/training-definitions//create-analysis-LAGS.graphql 🔎 Result: { \"createTrainingDefinition\": { \"status\": \"SUCCEEDED\", \"message\": \"Training definition log_anomaly_golden_signal_configuration created successfully\" } }",
+        "awx configs custom-sizes ibm-itautomation-products-install.yaml roles 🔐 Getting credentials awx configs custom-sizes ibm-itautomation-products-install.yaml roles ✅ IBMAIOps: OK - ibm-aiops 🛠️ Create Route Route: ai-platform-api-ibm-aiops.apps.67e4f622a503e6e92a9eb1fe.eu1.techzone.ibm.com 🛠️ Getting ZEN Token Sucessfully logged in 📥 Launch Query for file: /ibm-concert-deployer/ansible/roles/ibm-concert-operate-demo-content/templates/training/training-definitions//create-analysis-LAGS.graphql 🔎 Result: { \"createTrainingDefinition\": { \"status\": \"SUCCEEDED\", \"message\": \"Training definition log_anomaly_golden_signal_configuration created successfully\" } }",
         "GS_DEPLOYMENT: NAME READY UP-TO-DATE AVAILABLE AGE aimanager-aio-log-anomaly-golden-signals 1/1 1 1 16m",
         "***************************************************************************************************************************************************",
         "   🛠️   CONFIG - LAGS POD",
@@ -1812,7 +1812,7 @@ TASK [ibm-aiops-demo-content : 🚀 TRAINING CREATE LAGS - WAIT 5 MINUTES] *****
 changed: [localhost]
 
 TASK [ibm-aiops-demo-content : (014/051) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Disable Topology Match Rules] ***
-included: /ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/tasks/44_ibm-aiops-disable-match-token-rule.yaml for localhost
+included: /ibm-concert-deployer/ansible/roles/ibm-concert-operate-demo-content/tasks/44_ibm-aiops-disable-match-token-rule.yaml for localhost
 
 TASK [ibm-aiops-demo-content : 🛰️  START - DISABLE SERVICE MATCH TOKEN RULE] ****
 ok: [localhost] => {
@@ -1829,7 +1829,7 @@ TASK [ibm-aiops-demo-content : 🚀 TOPOLOGY - Disable Match Token RULE for Serv
 changed: [localhost]
 
 TASK [ibm-aiops-demo-content : (015/051) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Create Topology Observers] ***
-included: /ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/tasks/41_ibm-aiops-create-observers.yaml for localhost
+included: /ibm-concert-deployer/ansible/roles/ibm-concert-operate-demo-content/tasks/41_ibm-aiops-create-observers.yaml for localhost
 
 TASK [ibm-aiops-demo-content : 🛰️  START - CREATE OBSERVERS] ********************
 ok: [localhost] => {
@@ -1862,7 +1862,7 @@ ok: [localhost] => {
 }
 
 TASK [ibm-aiops-demo-content : (016/051) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Load Topology Merge Rules] ***
-included: /ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/tasks/42_ibm-aiops-load-topology-merge.yaml for localhost
+included: /ibm-concert-deployer/ansible/roles/ibm-concert-operate-demo-content/tasks/42_ibm-aiops-load-topology-merge.yaml for localhost
 
 TASK [ibm-aiops-demo-content : 🛰️  START - CREATE MERGE RULE] *******************
 ok: [localhost] => {
@@ -1882,7 +1882,7 @@ TASK [ibm-aiops-demo-content : 🚀 TOPOLOGY - CREATE MERGE RULES] *************
 changed: [localhost]
 
 TASK [ibm-aiops-demo-content : (017/051) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Create Application Overlay Topology] ***
-included: /ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/tasks/43_ibm-aiops-create-topology.yaml for localhost
+included: /ibm-concert-deployer/ansible/roles/ibm-concert-operate-demo-content/tasks/43_ibm-aiops-create-topology.yaml for localhost
 
 TASK [ibm-aiops-demo-content : 🛰️  START - LOAD OVERLAY MERGE TOPOLOGY] *********
 ok: [localhost] => {
@@ -1975,10 +1975,10 @@ ok: [localhost] => {
         "Create Custom Topology - Copy Topology to File Observer",
         "aiops-topology-file-observer-58d55864c5-vttht",
         "aiops-topology-file-observer-58d55864c5-vttht",
-        "/ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/templates/topology/london-underground-file.txt",
+        "/ibm-concert-deployer/ansible/roles/ibm-concert-operate-demo-content/templates/topology/london-underground-file.txt",
         "",
-        "  Copying capture file [/ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/templates/topology/london-underground-file.txt] to file observer pod",
-        "oc cp -n ibm-aiops /ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/templates/topology/london-underground-file.txt aiops-topology-file-observer-58d55864c5-vttht:/opt/ibm/netcool/asm/data/file-observer/london-underground-file.txt",
+        "  Copying capture file [/ibm-concert-deployer/ansible/roles/ibm-concert-operate-demo-content/templates/topology/london-underground-file.txt] to file observer pod",
+        "oc cp -n ibm-aiops /ibm-concert-deployer/ansible/roles/ibm-concert-operate-demo-content/templates/topology/london-underground-file.txt aiops-topology-file-observer-58d55864c5-vttht:/opt/ibm/netcool/asm/data/file-observer/london-underground-file.txt",
         "----------------------------------------------------------------------------------------------------------",
         "----------------------------------------------------------------------------------------------------------",
         "🚀 TOPOLOGY - CREATE OVERLAY TOPOLOGY - london-underground",
@@ -2030,13 +2030,13 @@ ok: [localhost] => {
         "POLICY_ROUTE: policy-api-ibm-aiops.apps.67e4f622a503e6e92a9eb1fe.eu1.techzone.ibm.com",
         "----------------------------------------------------------------------------------------------------------",
         "🛠️  POLICIES - Create Scope Policy - DEMO London-Underground - Scope Grouping",
-        "/ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/templates/policies/london-underground-scope-based-grouping.json",
+        "/ibm-concert-deployer/ansible/roles/ibm-concert-operate-demo-content/templates/policies/london-underground-scope-based-grouping.json",
         "{ \"id\": \"6b148a70-0afc-11f0-ab7c-f35b702a28e3\", \"req_id\": \"6ac86640-0afc-11f0-ab7c-f35b702a28e3\" }"
     ]
 }
 
 TASK [ibm-aiops-demo-content : (019/051) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Create Application Topology Templates] ***
-included: /ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/tasks/45_ibm-aiops-create-aiops-application-templates.yaml for localhost
+included: /ibm-concert-deployer/ansible/roles/ibm-concert-operate-demo-content/tasks/45_ibm-aiops-create-aiops-application-templates.yaml for localhost
 
 TASK [ibm-aiops-demo-content : 🛰️  START - CREATE TEMPLATES AND APPS] ***********
 ok: [localhost] => {
@@ -2074,7 +2074,7 @@ TASK [ibm-aiops-demo-content : 🟣  OUTPUT] ***********************************
 skipping: [localhost]
 
 TASK [ibm-aiops-demo-content : (020/051) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Create Application Topology Application] ***
-included: /ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/tasks/45_ibm-aiops-create-aiops-application.yaml for localhost
+included: /ibm-concert-deployer/ansible/roles/ibm-concert-operate-demo-content/tasks/45_ibm-aiops-create-aiops-application.yaml for localhost
 
 TASK [ibm-aiops-demo-content : 🛰️  START - CREATE TEMPLATES AND APPS] ***********
 ok: [localhost] => {
@@ -2115,7 +2115,7 @@ TASK [ibm-aiops-demo-content : 🚀 TOPOLOGY - REBROADCAST] ********************
 changed: [localhost]
 
 TASK [ibm-aiops-demo-content : (021/051) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Register LDAP Server with IBM CONCERT OPERATE] ***
-included: /ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/tasks/25-post-ldap-register.yaml for localhost
+included: /ibm-concert-deployer/ansible/roles/ibm-concert-operate-demo-content/tasks/25-post-ldap-register.yaml for localhost
 
 TASK [ibm-aiops-demo-content : 🛰️  START - LDAP REGISTER] ***********************
 ok: [localhost] => {
@@ -2201,7 +2201,7 @@ TASK [ibm-aiops-demo-content : 🟣  OUTPUT] ***********************************
 skipping: [localhost]
 
 TASK [ibm-aiops-demo-content : (022/051) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Create a valid certificate for the IBM CONCERT OPERATE Ingress] ***
-included: /ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/tasks/31_ibm-aiops-patch-ingress.yaml for localhost
+included: /ibm-concert-deployer/ansible/roles/ibm-concert-operate-demo-content/tasks/31_ibm-aiops-patch-ingress.yaml for localhost
 
 TASK [ibm-aiops-demo-content : 🛰️  START - PATCH INGRESS] ***********************
 ok: [localhost] => {
@@ -2252,7 +2252,7 @@ TASK [ibm-aiops-demo-content : SLACK -                  🩹 Patch Slack Welcome
 changed: [localhost]
 
 TASK [ibm-aiops-demo-content : (023/051) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Wait for AWX to become ready] ***
-included: /ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/tasks/46_ibm-aiops-wait-awx.yaml for localhost
+included: /ibm-concert-deployer/ansible/roles/ibm-concert-operate-demo-content/tasks/46_ibm-aiops-wait-awx.yaml for localhost
 
 TASK [ibm-aiops-demo-content : Log] ********************************************
 changed: [localhost]
@@ -2279,7 +2279,7 @@ TASK [ibm-aiops-demo-content : 🚀 AWX - Adapt service account (you can ignore 
 changed: [localhost]
 
 TASK [ibm-aiops-demo-content : (024/051) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Load Demo Playbooks into AWX] ***
-included: /ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/tasks/48_ibm-aiops-load-awx-playbooks-for-demo.yaml for localhost
+included: /ibm-concert-deployer/ansible/roles/ibm-concert-operate-demo-content/tasks/48_ibm-aiops-load-awx-playbooks-for-demo.yaml for localhost
 
 TASK [ibm-aiops-demo-content : 🛰️  START - LOAD AWX RUNBOOKS] *******************
 ok: [localhost] => {
@@ -2426,7 +2426,7 @@ ok: [localhost] => {
 }
 
 TASK [ibm-aiops-demo-content : (025/051) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Create AWX Connection in IBM CONCERT OPERATE] ***
-included: /ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/tasks/47_ibm-aiops-create-awx-connection.yaml for localhost
+included: /ibm-concert-deployer/ansible/roles/ibm-concert-operate-demo-content/tasks/47_ibm-aiops-create-awx-connection.yaml for localhost
 
 TASK [ibm-aiops-demo-content : 🛰️  START - CREATE AWX CONNECTION] ***************
 ok: [localhost] => {
@@ -2465,7 +2465,7 @@ ok: [localhost] => {
 }
 
 TASK [ibm-aiops-demo-content : (026/051) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Load Demo Runbooks into IBM CONCERT OPERATE] ***
-included: /ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/tasks/49_ibm-aiops-load-runbooks-for-demo.yaml for localhost
+included: /ibm-concert-deployer/ansible/roles/ibm-concert-operate-demo-content/tasks/49_ibm-aiops-load-runbooks-for-demo.yaml for localhost
 
 TASK [ibm-aiops-demo-content : 🛰️  START - INSTALL IBM CONCERT OPERATE RUNBOOKS] **********
 ok: [localhost] => {
@@ -2599,7 +2599,7 @@ ok: [localhost] => {
 }
 
 TASK [ibm-aiops-demo-content : (027/051) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Check if AI Models exist] ***
-included: /ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/tasks/54_ibm-aiops-training-check-exists.yaml for localhost
+included: /ibm-concert-deployer/ansible/roles/ibm-concert-operate-demo-content/tasks/54_ibm-aiops-training-check-exists.yaml for localhost
 
 TASK [ibm-aiops-demo-content : 🛰️  START - CHECK LAD EXISTS] ********************
 ok: [localhost] => {
@@ -2628,7 +2628,7 @@ TASK [ibm-aiops-demo-content : Log] ********************************************
 changed: [localhost]
 
 TASK [ibm-aiops-demo-content : (028/051) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Create Training Definition for Temporal Grouping] ***
-included: /ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/tasks/55_ibm-aiops-training-create-tg-configuration.yaml for localhost
+included: /ibm-concert-deployer/ansible/roles/ibm-concert-operate-demo-content/tasks/55_ibm-aiops-training-create-tg-configuration.yaml for localhost
 
 TASK [ibm-aiops-demo-content : 🛰️  START - CREATE TG ANALYSIS DEFINITIONS] ******
 ok: [localhost] => {
@@ -2648,7 +2648,7 @@ TASK [ibm-aiops-demo-content : 🟣 TRAINING CREATE EVENTS - RESULT] ***********
 skipping: [localhost]
 
 TASK [ibm-aiops-demo-content : (029/051) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Create Training  Definition for Metrics] ***
-included: /ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/tasks/56_ibm-aiops-training-create-metric-configuration.yaml for localhost
+included: /ibm-concert-deployer/ansible/roles/ibm-concert-operate-demo-content/tasks/56_ibm-aiops-training-create-metric-configuration.yaml for localhost
 
 TASK [ibm-aiops-demo-content : 🛰️  START - CREATE METRICS ANALYSIS DEFINITIONS] ***
 ok: [localhost] => {
@@ -2671,7 +2671,7 @@ TASK [ibm-aiops-demo-content : 🟣 TRAINING CREATE METRICS - RESULT] **********
 skipping: [localhost]
 
 TASK [ibm-aiops-demo-content : (030/051) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Create Training  Definition for SNOW] ***
-included: /ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/tasks/57_ibm-aiops-training-create-snow-configuration.yaml for localhost
+included: /ibm-concert-deployer/ansible/roles/ibm-concert-operate-demo-content/tasks/57_ibm-aiops-training-create-snow-configuration.yaml for localhost
 
 TASK [ibm-aiops-demo-content : 🛰️  START - CREATE SNOW ANALYSIS DEFINITIONS] ****
 ok: [localhost] => {
@@ -2694,7 +2694,7 @@ TASK [ibm-aiops-demo-content : (032/051) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 
 skipping: [localhost]
 
 TASK [ibm-aiops-demo-content : (033/051) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Load LAGS Training Data] ***
-included: /ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/tasks/58_ibm-aiops-training-load-lags.yaml for localhost
+included: /ibm-concert-deployer/ansible/roles/ibm-concert-operate-demo-content/tasks/58_ibm-aiops-training-load-lags.yaml for localhost
 
 TASK [ibm-aiops-demo-content : 🛰️  START - LOAD LOG TRAINING DATA] **************
 ok: [localhost] => {
@@ -2714,7 +2714,7 @@ TASK [ibm-aiops-demo-content : 📥 TRAINING LOAD LAD - LOAD KAFKA LAGS DATA] **
 ok: [localhost]
 
 TASK [ibm-aiops-demo-content : (034/051) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Create Custom Incident Creation Policy] ***
-included: /ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/tasks/50_ibm-aiops-create-policies-stories.yaml for localhost
+included: /ibm-concert-deployer/ansible/roles/ibm-concert-operate-demo-content/tasks/50_ibm-aiops-create-policies-stories.yaml for localhost
 
 TASK [ibm-aiops-demo-content : 🛰️  START - CREATE POLICY STORIES] ***************
 ok: [localhost] => {
@@ -2752,7 +2752,7 @@ TASK [ibm-aiops-demo-content : 🟣 OUTPUT] ************************************
 skipping: [localhost]
 
 TASK [ibm-aiops-demo-content : (035/051) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Create Custom Runbook Trigger Policy] ***
-included: /ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/tasks/50_ibm-aiops-create-policies-runbooks.yaml for localhost
+included: /ibm-concert-deployer/ansible/roles/ibm-concert-operate-demo-content/tasks/50_ibm-aiops-create-policies-runbooks.yaml for localhost
 
 TASK [ibm-aiops-demo-content : 🛰️  START - CREATE RUNBOOKS TRIGGER POLICY] ******
 ok: [localhost] => {
@@ -2784,7 +2784,7 @@ TASK [ibm-aiops-demo-content : 🟣 OUTPUT] ************************************
 skipping: [localhost]
 
 TASK [ibm-aiops-demo-content : (036/051) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Wait for Trainingdata to finish loading] ***
-included: /ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/tasks/60_ibm-aiops-training-load-wait.yaml for localhost
+included: /ibm-concert-deployer/ansible/roles/ibm-concert-operate-demo-content/tasks/60_ibm-aiops-training-load-wait.yaml for localhost
 
 TASK [ibm-aiops-demo-content : 🛰️  START - WAIT FOR TRAINING DATA TO LOAD] ******
 ok: [localhost] => {
@@ -2807,7 +2807,7 @@ TASK [ibm-aiops-demo-content : 🕦 TRAINING WAIT - WAIT FOR COMPLETION LAD LOAD
 changed: [localhost]
 
 TASK [ibm-aiops-demo-content : (037/051) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Run SNOW AI Model Training] ***
-included: /ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/tasks/61_ibm-aiops-training-run-snow.yaml for localhost
+included: /ibm-concert-deployer/ansible/roles/ibm-concert-operate-demo-content/tasks/61_ibm-aiops-training-run-snow.yaml for localhost
 
 TASK [ibm-aiops-demo-content : 🛰️  START - RUN SNOW TRAINING] *******************
 ok: [localhost] => {
@@ -2827,7 +2827,7 @@ TASK [ibm-aiops-demo-content : 🟣 TRAINING RUN - RESULT] *********************
 skipping: [localhost]
 
 TASK [ibm-aiops-demo-content : (039/051) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Run LAGS AI Model Training] ***
-included: /ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/tasks/62_ibm-aiops-training-run-lags.yaml for localhost
+included: /ibm-concert-deployer/ansible/roles/ibm-concert-operate-demo-content/tasks/62_ibm-aiops-training-run-lags.yaml for localhost
 
 TASK [ibm-aiops-demo-content : 🛰️  START - RUN LAGS TRAINING] *******************
 ok: [localhost] => {
@@ -2847,7 +2847,7 @@ TASK [ibm-aiops-demo-content : 🟣 TRAINING RUN - RESULT] *********************
 skipping: [localhost]
 
 TASK [ibm-aiops-demo-content : (040/051) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Run METRICS  AI Model Training] ***
-included: /ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/tasks/63_ibm-aiops-training-run-metric.yaml for localhost
+included: /ibm-concert-deployer/ansible/roles/ibm-concert-operate-demo-content/tasks/63_ibm-aiops-training-run-metric.yaml for localhost
 
 TASK [ibm-aiops-demo-content : 🛰️  START - RUN METRIC TRAINING] *****************
 ok: [localhost] => {
@@ -2867,7 +2867,7 @@ TASK [ibm-aiops-demo-content : 🟣 TRAINING RUN - RESULT] *********************
 skipping: [localhost]
 
 TASK [ibm-aiops-demo-content : (041/051) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Run TEMPORAL EVENTS  AI Model Training] ***
-included: /ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/tasks/64_ibm-aiops-training-run-temporal.yaml for localhost
+included: /ibm-concert-deployer/ansible/roles/ibm-concert-operate-demo-content/tasks/64_ibm-aiops-training-run-temporal.yaml for localhost
 
 TASK [ibm-aiops-demo-content : 🛰️  START - RUN TEMPORAL TRAINING] ***************
 ok: [localhost] => {
@@ -2887,7 +2887,7 @@ TASK [ibm-aiops-demo-content : 🟣 TRAINING RUN - RESULT] *********************
 skipping: [localhost]
 
 TASK [ibm-aiops-demo-content : (045/051) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Create Custom Views for Alerts] ***
-included: /ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/tasks/72_ibm-aiops-create-custom-views.yaml for localhost
+included: /ibm-concert-deployer/ansible/roles/ibm-concert-operate-demo-content/tasks/72_ibm-aiops-create-custom-views.yaml for localhost
 
 TASK [ibm-aiops-demo-content : 🛰️  START - CREATE CUSTOM VIEWS] *****************
 ok: [localhost] => {
@@ -2907,7 +2907,7 @@ TASK [ibm-aiops-demo-content : 🟣  OUTPUT] ***********************************
 skipping: [localhost]
 
 TASK [ibm-aiops-demo-content : (046/051) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Install the Demo UI] ***
-included: /ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/tasks/26_ibm-demo-ui.yaml for localhost
+included: /ibm-concert-deployer/ansible/roles/ibm-concert-operate-demo-content/tasks/26_ibm-demo-ui.yaml for localhost
 
 TASK [ibm-aiops-demo-content : 🛰️  START - DEMO UI] ***********************
 ok: [localhost] => {
@@ -2958,7 +2958,7 @@ TASK [ibm-aiops-demo-content : ⚠️ HACK - Delete lingering Luigi Pods  (hack)
 changed: [localhost]
 
 TASK [ibm-aiops-demo-content : (047/051) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Enable LAGS Training] ***
-included: /ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/tasks/80_ibm-aiops-training-enable-lags-configuration.yaml for localhost
+included: /ibm-concert-deployer/ansible/roles/ibm-concert-operate-demo-content/tasks/80_ibm-aiops-training-enable-lags-configuration.yaml for localhost
 
 TASK [ibm-aiops-demo-content : 🛰️  START - ENABLE LOG GOLDEN SIGNALS ANALYSIS] ***
 ok: [localhost] => {
@@ -3019,7 +3019,7 @@ ok: [localhost] => {
         "Sucessfully logged in",
         "",
         "     ",
-        "      📥 Launch Query for file: /ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/templates/training/training-definitions//run-analysis-METRIC.graphql",
+        "      📥 Launch Query for file: /ibm-concert-deployer/ansible/roles/ibm-concert-operate-demo-content/templates/training/training-definitions//run-analysis-METRIC.graphql",
         "     ",
         "      🔎 Result: ",
         "     ",
@@ -3028,7 +3028,7 @@ ok: [localhost] => {
 }
 
 TASK [ibm-aiops-demo-content : (047.1/051) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Create Application Topology Templates] ***
-included: /ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/tasks/45_ibm-aiops-create-aiops-application-templates.yaml for localhost
+included: /ibm-concert-deployer/ansible/roles/ibm-concert-operate-demo-content/tasks/45_ibm-aiops-create-aiops-application-templates.yaml for localhost
 
 TASK [ibm-aiops-demo-content : 🛰️  START - CREATE TEMPLATES AND APPS] ***********
 ok: [localhost] => {
@@ -3066,7 +3066,7 @@ TASK [ibm-aiops-demo-content : 🟣  OUTPUT] ***********************************
 skipping: [localhost]
 
 TASK [ibm-aiops-demo-content : (047.2/051) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Create Application Topology Application] ***
-included: /ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/tasks/45_ibm-aiops-create-aiops-application.yaml for localhost
+included: /ibm-concert-deployer/ansible/roles/ibm-concert-operate-demo-content/tasks/45_ibm-aiops-create-aiops-application.yaml for localhost
 
 TASK [ibm-aiops-demo-content : 🛰️  START - CREATE TEMPLATES AND APPS] ***********
 ok: [localhost] => {
@@ -3107,7 +3107,7 @@ TASK [ibm-aiops-demo-content : 🚀 TOPOLOGY - REBROADCAST] ********************
 changed: [localhost]
 
 TASK [ibm-aiops-demo-content : (048/051) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Integrate OpenShift Login with OpenLDAP] ***
-included: /ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/tasks/90_integrate-ocp-openldap.yaml for localhost
+included: /ibm-concert-deployer/ansible/roles/ibm-concert-operate-demo-content/tasks/90_integrate-ocp-openldap.yaml for localhost
 
 TASK [ibm-aiops-demo-content : 🛰️  START - OCP CONSOLE] *************************
 ok: [localhost] => {
@@ -3127,7 +3127,7 @@ TASK [ibm-aiops-demo-content : (049/051) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡 
 changed: [localhost]
 
 TASK [ibm-aiops-demo-content : (049/051) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Create Demo UI Openshift WebConsole Demo Menu Item] ***
-included: /ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/tasks/91_ibm-aiops-create-ocp-demo-menu.yaml for localhost
+included: /ibm-concert-deployer/ansible/roles/ibm-concert-operate-demo-content/tasks/91_ibm-aiops-create-ocp-demo-menu.yaml for localhost
 
 TASK [ibm-aiops-demo-content : 🛰️  START - OCP CONSOLE] *************************
 ok: [localhost] => {
@@ -3144,7 +3144,7 @@ TASK [ibm-aiops-demo-content : 🌏 OCP CONSOLE - Create Openshift WebConsole Me
 changed: [localhost]
 
 TASK [ibm-aiops-demo-content : (050/051) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Create Demo UI Openshift WebConsole Additional Menu Item] ***
-included: /ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/tasks/91_ibm-aiops-create-ocp-tools-menu.yaml for localhost
+included: /ibm-concert-deployer/ansible/roles/ibm-concert-operate-demo-content/tasks/91_ibm-aiops-create-ocp-tools-menu.yaml for localhost
 
 TASK [ibm-aiops-demo-content : 🛰️  START - OCP CONSOLE] *************************
 ok: [localhost] => {
