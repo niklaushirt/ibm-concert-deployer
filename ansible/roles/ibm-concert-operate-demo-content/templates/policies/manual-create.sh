@@ -16,7 +16,7 @@
     # ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     # ALL - DISABLED
 
-    export POLICY_FILE="./ansible/roles/ibm-concert-deployer-demo-content/templates/policies/incident-creation-policy.json"
+    export POLICY_FILE="./ansible/roles/ibm-concert-operate-demo-content/templates/policies/incident-creation-policy.json"
     echo $POLICY_FILE
     cp $POLICY_FILE /tmp/incident_policy.json
 
@@ -43,7 +43,7 @@
     
     # ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     # ROBOT SHOP
-    export POLICY_FILE="./ansible/roles/ibm-concert-deployer-demo-content/templates/policies/incident-creation-policy-robot.json"
+    export POLICY_FILE="./ansible/roles/ibm-concert-operate-demo-content/templates/policies/incident-creation-policy-robot.json"
     echo $POLICY_FILE
     cp $POLICY_FILE /tmp/incident_policy.json
 
@@ -68,7 +68,7 @@
 
     # ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     # SOCK SHOP
-    export POLICY_FILE="./ansible/roles/ibm-concert-deployer-demo-content/templates/policies/incident-creation-policy-sock.json"
+    export POLICY_FILE="./ansible/roles/ibm-concert-operate-demo-content/templates/policies/incident-creation-policy-sock.json"
     echo $POLICY_FILE
     cp $POLICY_FILE /tmp/incident_policy.json
 
@@ -93,7 +93,7 @@
 
     # ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     # ACME
-    export POLICY_FILE="./ansible/roles/ibm-concert-deployer-demo-content/templates/policies/incident-creation-policy-acme.json"
+    export POLICY_FILE="./ansible/roles/ibm-concert-operate-demo-content/templates/policies/incident-creation-policy-acme.json"
     echo $POLICY_FILE
     cp $POLICY_FILE /tmp/incident_policy.json
 
@@ -118,7 +118,7 @@
 
     # ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     # ROBOT TELCO
-    export POLICY_FILE="./ansible/roles/ibm-concert-deployer-demo-content/templates/policies/incident-creation-policy-telco.json"
+    export POLICY_FILE="./ansible/roles/ibm-concert-operate-demo-content/templates/policies/incident-creation-policy-telco.json"
     echo $POLICY_FILE
     cp $POLICY_FILE /tmp/incident_policy.json
 
@@ -143,7 +143,7 @@
 
     # ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     # ROBOT TUBE
-    export POLICY_FILE="./ansible/roles/ibm-concert-deployer-demo-content/templates/policies/incident-creation-policy-tube.json"
+    export POLICY_FILE="./ansible/roles/ibm-concert-operate-demo-content/templates/policies/incident-creation-policy-tube.json"
     echo $POLICY_FILE
     cp $POLICY_FILE /tmp/incident_policy.json
 
@@ -169,7 +169,7 @@
 
     # ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     # ROBOT CATCHALL
-    export POLICY_FILE="./ansible/roles/ibm-concert-deployer-demo-content/templates/policies/incident-creation-policy-catchall.json"
+    export POLICY_FILE="./ansible/roles/ibm-concert-operate-demo-content/templates/policies/incident-creation-policy-catchall.json"
     echo $POLICY_FILE
     cp $POLICY_FILE /tmp/incident_policy.json
 

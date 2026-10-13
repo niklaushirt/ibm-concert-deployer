@@ -144,7 +144,7 @@ spec:
 
 
                     # Create Runbook Trigger Policy
-                    export POLICY_FILE="/ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/templates/policies/runbook-trigger-policy-robot.json"
+                    export POLICY_FILE="/ibm-concert-deployer/ansible/roles/ibm-concert-operate-demo-content/templates/policies/runbook-trigger-policy-robot.json"
                     cp $POLICY_FILE /tmp/runbook_policy.json
                     cat /tmp/runbook_policy.json
                     echo "RUNBOOK_ID: $RUNBOOK_ID"
@@ -216,7 +216,7 @@ spec:
 
 
                     # Create Runbook Trigger Policy
-                    export POLICY_FILE="/ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/templates/policies/runbook-trigger-policy-robot-network.json"
+                    export POLICY_FILE="/ibm-concert-deployer/ansible/roles/ibm-concert-operate-demo-content/templates/policies/runbook-trigger-policy-robot-network.json"
                     cp $POLICY_FILE /tmp/runbook_policy.json
                     cat /tmp/runbook_policy.json
                     echo "RUNBOOK_ID: $RUNBOOK_ID"
@@ -304,7 +304,7 @@ spec:
 
 
                     # Create Runbook Trigger Policy
-                    export POLICY_FILE="/ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/templates/policies/runbook-trigger-policy-robot-restart.json"
+                    export POLICY_FILE="/ibm-concert-deployer/ansible/roles/ibm-concert-operate-demo-content/templates/policies/runbook-trigger-policy-robot-restart.json"
                     cp $POLICY_FILE /tmp/runbook_policy.json
                     cat /tmp/runbook_policy.json
                     echo "RUNBOOK_ID: $RUNBOOK_ID"
@@ -391,7 +391,7 @@ spec:
 
 
                     # Create Runbook Trigger Policy
-                    export POLICY_FILE="/ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/templates/policies/runbook-trigger-policy-sock.json"
+                    export POLICY_FILE="/ibm-concert-deployer/ansible/roles/ibm-concert-operate-demo-content/templates/policies/runbook-trigger-policy-sock.json"
                     cp $POLICY_FILE /tmp/runbook_policy.json
                     cat /tmp/runbook_policy.json
                     echo "RUNBOOK_ID: $RUNBOOK_ID"
@@ -481,7 +481,7 @@ spec:
                     # Create Runbook Trigger Policy
 
 
-                    export POLICY_FILE="/ibm-concert-deployer/ansible/roles/ibm-concert-deployer-demo-content/templates/policies/runbook-trigger-policy-telco.json"
+                    export POLICY_FILE="/ibm-concert-deployer/ansible/roles/ibm-concert-operate-demo-content/templates/policies/runbook-trigger-policy-telco.json"
                     cp $POLICY_FILE /tmp/runbook_policy.json
                     cat /tmp/runbook_policy.json
                     echo "RUNBOOK_ID: $RUNBOOK_ID"

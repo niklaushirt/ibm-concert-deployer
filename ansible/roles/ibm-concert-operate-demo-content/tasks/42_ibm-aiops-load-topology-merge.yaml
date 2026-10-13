@@ -206,7 +206,7 @@
       OS=$(uname -s | tr '[:upper:]' '[:lower:]')
       if [[ "${OS}" == "darwin" ]]; then
             echo "MAC"
-            FILE_OBSERVER_CAP=$(pwd)"/roles/ibm-concert-deployer-demo-content/templates/topology/$LOAD_FILE_NAME"
+            FILE_OBSERVER_CAP=$(pwd)"/roles/ibm-concert-operate-demo-content/templates/topology/$LOAD_FILE_NAME"
       else
             FILE_OBSERVER_CAP="{{role_path}}/templates/topology/$LOAD_FILE_NAME"
       fi    
@@ -307,7 +307,7 @@
       OS=$(uname -s | tr '[:upper:]' '[:lower:]')
       if [[ "${OS}" == "darwin" ]]; then
             echo "MAC"
-            FILE_OBSERVER_CAP=$(pwd)"/roles/ibm-concert-deployer-demo-content/templates/topology/$LOAD_FILE_NAME"
+            FILE_OBSERVER_CAP=$(pwd)"/roles/ibm-concert-operate-demo-content/templates/topology/$LOAD_FILE_NAME"
       else
             FILE_OBSERVER_CAP="{{role_path}}/templates/topology/$LOAD_FILE_NAME"
       fi    
@@ -413,7 +413,7 @@
       OS=$(uname -s | tr '[:upper:]' '[:lower:]')
       if [[ "${OS}" == "darwin" ]]; then
             echo "MAC"
-            FILE_OBSERVER_CAP=$(pwd)"/roles/ibm-concert-deployer-demo-content/templates/topology/$LOAD_FILE_NAME"
+            FILE_OBSERVER_CAP=$(pwd)"/roles/ibm-concert-operate-demo-content/templates/topology/$LOAD_FILE_NAME"
       else
             FILE_OBSERVER_CAP="{{role_path}}/templates/topology/$LOAD_FILE_NAME"
       fi    

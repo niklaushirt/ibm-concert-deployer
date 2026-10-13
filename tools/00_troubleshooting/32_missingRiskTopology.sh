@@ -24,7 +24,7 @@ FILE_OBSERVER_POD=$(oc get po -n $AIOPS_NAMESPACE -l app.kubernetes.io/instance=
 echo $FILE_OBSERVER_POD
 LOAD_FILE_NAME=$TOPOLOGY_NAME"-file.txt"
 
-FILE_OBSERVER_CAP=$(pwd)"/roles/ibm-concert-deployer-demo-content/templates/topology/$LOAD_FILE_NAME"
+FILE_OBSERVER_CAP=$(pwd)"/roles/ibm-concert-operate-demo-content/templates/topology/$LOAD_FILE_NAME"
 
 
 echo $FILE_OBSERVER_POD
@@ -105,7 +105,7 @@ FILE_OBSERVER_POD=$(oc get po -n $AIOPS_NAMESPACE -l app.kubernetes.io/instance=
 echo $FILE_OBSERVER_POD
 LOAD_FILE_NAME=$TOPOLOGY_NAME"-file.txt"
 
-FILE_OBSERVER_CAP=$(pwd)"/roles/ibm-concert-deployer-demo-content/templates/topology/$LOAD_FILE_NAME"
+FILE_OBSERVER_CAP=$(pwd)"/roles/ibm-concert-operate-demo-content/templates/topology/$LOAD_FILE_NAME"
 
 echo $FILE_OBSERVER_POD
 echo $FILE_OBSERVER_CAP
@@ -185,7 +185,7 @@ FILE_OBSERVER_POD=$(oc get po -n $AIOPS_NAMESPACE -l app.kubernetes.io/instance=
 echo $FILE_OBSERVER_POD
 LOAD_FILE_NAME=$TOPOLOGY_NAME"-file.txt"
 
-FILE_OBSERVER_CAP=$(pwd)"/roles/ibm-concert-deployer-demo-content/templates/topology/$LOAD_FILE_NAME"
+FILE_OBSERVER_CAP=$(pwd)"/roles/ibm-concert-operate-demo-content/templates/topology/$LOAD_FILE_NAME"
 
 echo $FILE_OBSERVER_POD
 echo $FILE_OBSERVER_CAP
