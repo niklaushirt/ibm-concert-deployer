@@ -56,8 +56,8 @@ oc project $AIOPS_NAMESPACE
 export EVENTS_TOPIC="ibm-aiops-cartridge-connections"
 export FILE="./tools/02_training/scripts/test.json"
 
-export KAFKA_SECRET=$(oc get secret -n $AIOPS_NAMESPACE |grep 'aiops-kafka-secret'|awk '{print$1}')
-export SASL_USER=$(oc get secret $KAFKA_SECRET -n $AIOPS_NAMESPACE --template={{.data.username}} | base64 --decode)
+export KAFKA_SECRET=$(oc get secret -n $AIOPS_NAMESPACE |grep 'kafka-secrets'|awk '{print$1}')
+export SASL_USER=$(oc get secret $KAFKA_SECRET -n $AIOPS_NAMESPACE --template={{.data.user}} | base64 --decode)
 export SASL_PASSWORD=$(oc get secret $KAFKA_SECRET -n $AIOPS_NAMESPACE --template={{.data.password}} | base64 --decode)
 export KAFKA_BROKER=$(oc get routes iaf-system-kafka-0 -n $AIOPS_NAMESPACE -o=jsonpath='{.status.ingress[0].host}{"\n"}'):443
 
