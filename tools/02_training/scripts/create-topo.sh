@@ -56,8 +56,8 @@ oc project $AIOPS_NAMESPACE
 export EVENTS_TOPIC="cp4waiops-cartridge.topology.input.resources"
 export FILE="./tools/02_training/scripts/topo.json"
 
-export KAFKA_SECRET=$(oc get secret -n $AIOPS_NAMESPACE |grep 'aiops-kafka-secret'|awk '{print$1}')
-export SASL_USER=$(oc get secret $KAFKA_SECRET -n $AIOPS_NAMESPACE --template={{.data.username}} | base64 --decode)
+export KAFKA_SECRET=$(oc get secret -n $AIOPS_NAMESPACE |grep 'kafka-secrets'|awk '{print$1}')
+export SASL_USER=$(oc get secret $KAFKA_SECRET -n $AIOPS_NAMESPACE --template={{.data.user}} | base64 --decode)
 export SASL_PASSWORD=$(oc get secret $KAFKA_SECRET -n $AIOPS_NAMESPACE --template={{.data.password}} | base64 --decode)
 export KAFKA_BROKER=$(oc get routes iaf-system-kafka-0 -n $AIOPS_NAMESPACE -o=jsonpath='{.status.ingress[0].host}{"\n"}'):443
 

@@ -268,7 +268,7 @@ exit 1
 export AIOPS_NAMESPACE=ibm-aiops
 export KAFKA_TOPIC_EVENTS=$(oc get kafkatopics -n $AIOPS_NAMESPACE | grep -v ibm-aiopsibm-aiops|grep -v noi-integration | grep ibm-aiops-cartridge-alerts-$EVENTS_TYPE| awk '{print $1;}')
 export KAFKA_TOPIC_LOGS=$(oc get kafkatopics -n $AIOPS_NAMESPACE  | grep -v ibm-aiopsibm-aiops| grep cp4waiops-cartridge-logs-elk| awk '{print $1;}')
-export KAFKA_SECRET=$(oc get secret -n $AIOPS_NAMESPACE |grep 'aiops-kafka-secret'|awk '{print$1}')
+export KAFKA_SECRET=$(oc get secret -n $AIOPS_NAMESPACE |grep 'kafka-secrets'|awk '{print$1}')
 export KAFKA_USER=$(oc get secret $KAFKA_SECRET -n $AIOPS_NAMESPACE --template={{.data.username}} | base64 --decode)
 export KAFKA_PWD=$(oc get secret $KAFKA_SECRET -n $AIOPS_NAMESPACE --template={{.data.password}} | base64 --decode)
 export KAFKA_BROKER=$(oc get routes iaf-system-kafka-0 -n $AIOPS_NAMESPACE -o=jsonpath='{.status.ingress[0].host}{"\n"}'):443
