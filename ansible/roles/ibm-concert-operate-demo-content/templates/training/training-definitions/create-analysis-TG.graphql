@@ -7,6 +7,9 @@ mutation createTrainingDefinition {
     createdBy: "demo"
     dataSetIds: []
     promoteOption: whenTrainingComplete
+    enableSelectiveTraining: false
+    enableLADGoldenSignal: false
+    enableGenAI: false
     trainingSchedule: {
       frequency: manual
       repeat: daily
