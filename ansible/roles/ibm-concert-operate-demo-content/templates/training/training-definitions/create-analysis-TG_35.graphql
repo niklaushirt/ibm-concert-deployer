@@ -6,7 +6,10 @@ mutation createTrainingDefinition {
     version: "v0"
     description: "Automatically created by Nick's scripts"
     createdBy: "demo"
-    promoteOption: manual
+    promoteOption: whenTrainingComplete
+    enableSelectiveTraining: false
+    enableLADGoldenSignal: false
+    enableGenAI: false
     trainingSchedule: {
       frequency: scheduled
       repeat: daily

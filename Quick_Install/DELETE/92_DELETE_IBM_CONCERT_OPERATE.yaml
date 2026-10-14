@@ -106,21 +106,6 @@ spec:
               echo "------------------------------------------------------------------------------------------------------------------------------"
     
 
-              echo "------------------------------------------------------------------------------------------------------------------------------"
-              echo " 🚀 Getting Installation source from GitHub"
-              echo "------------------------------------------------------------------------------------------------------------------------------"
-              echo "   📥 Clone Repo https://github.com/niklaushirt/ibm-concert-deployer.git -b dev_latest"
-              git clone https://github.com/niklaushirt/ibm-concert-deployer.git -b dev_latest
-              cd ibm-concert-deployer/
-
-              echo ""
-              echo ""
-              echo "------------------------------------------------------------------------------------------------------------------------------"
-              echo "   🔎 This Repo includes those latestet Commits"
-              git log|head -n 17
-              echo ""
-              echo ""
-
 
               #oc delete ConsoleNotification --all &
 
@@ -153,8 +138,80 @@ spec:
               echo "*****************************************************************************************************************************"
               echo " 💣 WIPE OPERATE"
               echo "*****************************************************************************************************************************"
-              cd ./tools/99_uninstall/ibm-concert-operate/
-              ./uninstall-cp4waiops.sh -s
+            
+
+              export PROJECT_CP4AIOPS=ibm-concert-operate
+              export INSTALLATION_NAME="$(oc get installation.orchestrator.aiops.ibm.com -n ${PROJECT_CP4AIOPS} -o jsonpath="{.items[0].metadata.name}")"
+
+              echo "    ------------------------------------------------------------------------------------------------------------------------------"
+              echo "     🧻 Deleting Concert Operate Instance ${INSTALLATION_NAME} in Namespace ${PROJECT_CP4AIOPS}"
+
+              oc delete installation ${INSTALLATION_NAME} -n ${PROJECT_CP4AIOPS}
+              
+              remaining=$(oc get installation -n ${PROJECT_CP4AIOPS} --no-headers | wc -l)
+              while [[ $remaining -gt 0 ]]; do
+                sleep 10
+                remaining=$(oc get installation -n ${PROJECT_CP4AIOPS} --no-headers | wc -l)
+              done
+
+
+              echo "    ------------------------------------------------------------------------------------------------------------------------------"
+              echo "      🧻 Delete Namespace ibm-concert-operate"
+              oc delete ns ibm-concert-operate
+              oc delete ConsoleNotification --all
+
+
+              echo "    ------------------------------------------------------------------------------------------------------------------------------"
+              echo "      🧻 Delete remaining stuff"
+
+              remaining=$(oc get installation.orchestrator.aiops.ibm.com -n ${PROJECT_CP4AIOPS} --no-headers | wc -l)
+              while [[ $remaining -gt 0 ]]; do
+
+                oc delete persistentVolumeClaims -n ${PROJECT_CP4AIOPS} --all &
+                oc delete installations.orchestrator.aiops.ibm.com -n ${PROJECT_CP4AIOPS} --all &
+                oc delete operandconfigs.operator.ibm.com -n ${PROJECT_CP4AIOPS} --all &
+                oc delete operandregistries.operator.ibm.com -n ${PROJECT_CP4AIOPS} --all &
+                oc delete operandrequests.operator.ibm.com -n ${PROJECT_CP4AIOPS} --all &
+
+                sleep 30
+
+                CSV_NAME=$(oc get operandconfigs.operator.ibm.com -n ${PROJECT_CP4AIOPS} --no-headers | grep ibm-aiops | awk '{print $1}')
+                oc patch operandconfigs.operator.ibm.com ${CSV_NAME} -n ${PROJECT_CP4AIOPS} --type json -p='[{"op": "remove", "path": "/metadata/finalizers"}]'
+                CSV_NAME=$(oc get operandregistries.operator.ibm.com -n ${PROJECT_CP4AIOPS} --no-headers | grep ibm-aiops | awk '{print $1}')
+                oc patch operandregistries.operator.ibm.com ${CSV_NAME} -n ${PROJECT_CP4AIOPS} --type json -p='[{"op": "remove", "path": "/metadata/finalizers"}]'
+                CSV_NAME=$(oc get operandregistries.operator.ibm.com -n ${PROJECT_CP4AIOPS} --no-headers | grep aiops-foundational-services | awk '{print $1}')
+                oc patch operandregistries.operator.ibm.com ${CSV_NAME} -n ${PROJECT_CP4AIOPS} --type json -p='[{"op": "remove", "path": "/metadata/finalizers"}]'
+                CSV_NAME=$(oc get operandrequests.operator.ibm.com -n ${PROJECT_CP4AIOPS} --no-headers | grep aiops-platformui-operator | awk '{print $1}')
+                oc patch operandrequests.operator.ibm.com ${CSV_NAME} -n ${PROJECT_CP4AIOPS} --type json -p='[{"op": "remove", "path": "/metadata/finalizers"}]'
+                CSV_NAME=$(oc get installations.orchestrator.aiops.ibm.com -n ${PROJECT_CP4AIOPS} --no-headers | grep ibm-concert-operate | awk '{print $1}')
+                oc patch installations.orchestrator.aiops.ibm.com ${CSV_NAME} -n ${PROJECT_CP4AIOPS} --type json -p='[{"op": "remove", "path": "/metadata/finalizers"}]'
+
+                remaining=$(oc get installation.orchestrator.aiops.ibm.com -n ${PROJECT_CP4AIOPS} --no-headers | wc -l)
+              done
+
+
+              # CSV_NAME=$(oc get csv -n ${PROJECT_CP4AIOPS} --no-headers | grep ibm-aiops-orchestrator | awk '{print $1}')
+              # oc delete csv ${CSV_NAME} -n ${PROJECT_CP4AIOPS}
+
+
+
+              # oc delete subscription ibm-aiops-orchestrator -n ${PROJECT_CP4AIOPS}
+              # oc delete pod -l app.kubernetes.io/name=ibm-aiops-orchestrator-controller-manager -n ${PROJECT_CP4AIOPS}
+
+
+              # # For CSV
+              # CSV_NAME=$(oc get csv -n ${PROJECT_CP4AIOPS} --no-headers | grep ibm-aiops-orchestrator | awk '{print $1}')
+              # oc patch csv ${CSV_NAME} -n ${PROJECT_CP4AIOPS} --type json -p='[{"op": "remove", "path": "/metadata/finalizers"}]'
+
+              # # For Subscription
+              # oc patch subscription ibm-aiops-orchestrator -n ${PROJECT_CP4AIOPS} --type json -p='[{"op": "remove", "path": "/metadata/finalizers"}]'
+
+              # oc delete catalogsource -n ${PROJECT_CP4AIOPS} ibm-aiops-catalog
+
+              # oc get catalogsource -n ${PROJECT_CP4AIOPS}
+
+
+
 
 
               echo "*****************************************************************************************************************************"
@@ -192,10 +249,7 @@ spec:
               oc delete ConsoleLink ibm-concert-operate-spark
 
 
-              echo "------------------------------------------------------------------------------------------------------------------------------"
-              echo " 🧻 Delete Namespace ibm-concert-operate"
-              oc delete ns ibm-concert-operate
-              oc delete ConsoleNotification --all
+
               
               echo "------------------------------------------------------------------------------------------------------------------------------"
               echo " 🧻 Restart OLM Pod"
