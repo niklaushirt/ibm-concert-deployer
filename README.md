@@ -91,7 +91,7 @@ Techzone interface changest constantly. Below steps are indicative but should ge
    - **OpenShift Cluster OCPv IBM Cloud** from this collection (https://techzone.ibm.com/collection/69c6c2db1bdc18e8109d08ed)
 
    - 4x worker nodes with **32 CPU / 128 GB** ❗ for Concert Operate
-   - 43 worker nodes with **32 CPU / 128 GB** ❗ for Concert platform
+   - 3x worker nodes with **32 CPU / 128 GB** ❗ for Concert platform
 
    You **might** get away with less if you don't install some components but no guarantee.
 
