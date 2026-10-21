@@ -611,6 +611,8 @@ spec:
             value: instana
           - name: INSTANA_DEBUG
             value: 'false'
+          - name: DJANGO_DEBUG
+            value: 'true'
       serviceAccount: ibm-demo-ui-admin
 
 ---
