@@ -1379,3 +1379,31 @@
     verbosity: 1
   when: current_feature.metrics_dif|bool == true
 
+
+
+
+
+- name: 🚀 CONCERT OPTIMISE - INTEGRATE WITH CONCERT PLATFORM - PATCH
+  kubernetes.core.k8s:
+    state: present
+    template: ./templates/patch.j2
+    apply: yes
+  ignore_errors: true
+
+
+- name: 🚀 CONCERT OPTIMISE - INTEGRATE WITH CONCERT PLATFORM - RESTART
+  shell: |
+    #oc patch xl xl-release -n ibm-concert-optimise --type=merge --patch-file PATCH.yaml
+    oc rollout restart deployment/api deployment/auth deployment/consul deployment/nginx deployment/oauth2 -n ibm-concert-optimise
+    oc get pods -n ibm-concert-optimise | grep "concert"
+    echo ""
+    echo ""
+  ignore_errors: true
+  register: output
+  args:
+    executable: /bin/bash
+- name: 🟣  OUTPUT
+  debug:
+    var: output.stdout_lines
+    verbosity: 1
+

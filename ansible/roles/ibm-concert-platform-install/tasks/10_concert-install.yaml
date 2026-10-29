@@ -421,7 +421,9 @@
 
 
     # kubectl exec -it $(kubectl get pods -n ibm-installer | grep "ibm-install-concert" | awk '{print $1}') -n ibm-installer -- ls -al /tmp/ibm-concert/concert-hub/bin/
-    # kubectl exec -it $(kubectl get pods -n ibm-installer | grep "ibm-install-concert" | awk '{print $1}') -n ibm-installer -- /tmp/ibm-concert/concert-hub/bin/manage-product.sh --action=add --deployment-type=k8s --product-id=turbonomic --instance-url=https://$TURBO_URL --namespace={{ current_ibm_feature.project }}-hub --restart-hub=true
+    # kubectl exec -it $(kubectl get pods -n ibm-installer | grep "ibm-install-concert" | awk '{print $1}') -n ibm-installer -- /tmp/ibm-concert/concert-hub/bin/manage-product.sh --action=add --deployment-type=k8s --product-id=turbonomic --instance-url=https://nginx.ibm-concert-optimise.svc.cluster.local:443 --kc-entrypoint-url=https://$TURBO_URL --namespace={{ current_ibm_feature.project }}-hub --restart-hub=true
+
+
 
 
     echo "------------------------------------------------------------------------------------------------------------------------------"
@@ -816,6 +818,39 @@
   debug: 
     var: output_string.stdout_lines
     #verbosity: 1
+
+
+
+
+- name:   🚀 IBM Concert - Add Watson Key to Turbo
+  shell: |
+    echo "------------------------------------------------------------------------------------------------------------------------------"
+    echo " ✅ ADD WatsonX to Turbo"
+    echo "------------------------------------------------------------------------------------------------------------------------------"
+    
+
+    # echo "------------------------------------------------------------------------------------------------------------------------------"
+    # echo " 🚀 Enable WatsonX In Turbo"
+
+    kubectl create secret generic turboai-secret \
+    -n ibm-concert-optimise \
+    --from-literal=.env.secrets="watsonx.api_key={{current_feature.watsonx_token}}"
+
+    kubectl rollout restart -n ibm-concert-optimise deployment/turboai
+
+  register: output_string
+  ignore_errors: true
+  args:
+    executable: /bin/bash
+  when: (current_feature.enable_WatsonX | default(false))|bool == true  
+
+- name: 🟣  OUTPUT
+  debug: 
+    var: output_string.stdout_lines
+    #verbosity: 1
+
+
+
 
 
 

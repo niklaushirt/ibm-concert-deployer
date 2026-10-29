@@ -1,0 +1,56 @@
+spec:
+  global:
+    productList: turbonomic
+
+  nginx:
+    httpsRedirect: true
+    nginxIsPrimaryIngress: false
+    insecureHttpOnly: false
+    concertHubUrl: {{ HUB_URL }}
+
+  openshiftingress:
+    enabled: true
+
+  solisgateway:
+    enabled: false
+
+  concert-gateway:
+    enabled: true
+    hubURL: {{ HUB_URL }}
+
+
+  ui:
+    enabled: false
+
+  properties:
+    api:
+      basePrefixUrl: /turbonomic
+      headerAuthenticationEnabled: true
+      requestHeaderSize: '20000'
+      vendor_latest_version: false
+      vendor_public_key_url: 'https://concert-gateway.ibm-concert-optimise.svc.cluster.local/gw/auth/jwtcert'
+      vendor_public_key_skip_ssl_verification: true
+      vendor_request_jwt_cookie: ibm-platform-session
+      vendor_request_jwt_token: X-Auth-Token
+      vendor_service_user_role: User
+      vendor_skip_instance_id_check: true
+      vendor_supported_admin_role: Admin
+      vendor_supported_advisor_role: Advisor
+      vendor_supported_automator_role: Automator
+      vendor_supported_deployer_role: Deployer
+      vendor_supported_parker_automator_role: Parking Automator
+      vendor_supported_parker_role: Parking Administrator
+      vendor_supported_observer_role: Observer
+      vendor_supported_siteadmin_role: ServiceAdmin,ServiceOwner,Site Administrator
+      allowTargetManagementInIntegrationMode: true
+    global:
+      concertEnabled: true
+      deploymentMode: SERVER
+      oauth2:
+        audience: turbonomic
+      solisEnabled: false
+
+
+
+
+
