@@ -73,19 +73,9 @@ spec:
     enabled: true
   mssql:
     enabled: true
-
-  grafana:
-    adminPassword: vmturbo
-    enabled: true
-    grafana.ini:
-      database:
-        password: vmturbo
-        type: postgres
-
   kafka:
     persistence:
       size: 30Gi
-
   rsyslog:
     persistence:
       size: 30Gi

@@ -259,16 +259,16 @@
   when: (global_config.create_ocp_notifications | default(true))|bool == true  
 
 
-- name: 🕦 CONCERT OPTIMISE - Wait for >80 pods in namespace ibm-concert-optimise
+- name: 🕦 CONCERT OPTIMISE - Wait for >50 pods in namespace ibm-concert-optimise
   shell: oc get po -n ibm-concert-optimise |grep "1/"| wc -l
   register: kubectl_num_pods
-  until: kubectl_num_pods.stdout|int > 80
+  until: kubectl_num_pods.stdout|int > 50
   retries: 500
   delay: 15
   when: (current_feature.concert_optimise_lite | default(false))|bool == false  
 
 
-- name: 🕦 CONCERT OPTIMISE - Wait for >20 pods in namespace ibm-concert-optimise
+- name: 🕦 CONCERT OPTIMISE - Wait for >16 pods in namespace ibm-concert-optimise
   shell: oc get po -n ibm-concert-optimise |grep "1/"| wc -l
   register: kubectl_num_pods
   until: kubectl_num_pods.stdout|int > 16
