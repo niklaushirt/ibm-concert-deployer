@@ -1417,8 +1417,10 @@
 
 
 - name: 🕦 CONCERT OPTIMISE - Wait for all pods in ibm-concert-optimise to become ready
-  shell: oc get po -n ibm-concert-optimise | grep "0/"| grep -c ""
+  shell: oc get po -n ibm-concert-optimise | grep "0/" | grep -c ""
   register: kubectl_get_pods
   until: (kubectl_get_pods.stdout | int) < 1
+  failed_when: kubectl_get_pods.rc not in [0, 1]
+  changed_when: false
   retries: 500
   delay: 15
