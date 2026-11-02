@@ -44,7 +44,7 @@
 - name: 🚀 CONCERT OPTIMISE - INTEGRATE WITH CONCERT PLATFORM - PATCH
   kubernetes.core.k8s:
     state: present
-    template: ./templates/patch.j2
+    template: ./templates/optimize/patch.j2
     apply: yes
   ignore_errors: true
 
