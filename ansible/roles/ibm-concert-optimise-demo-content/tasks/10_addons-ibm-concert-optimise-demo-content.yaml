@@ -128,37 +128,37 @@
 # --------------------------------------------------------------------------------------------------------
 # LOAD LICENSE IF PROVIDED
 # --------------------------------------------------------------------------------------------------------
-- name: 🚀 CONCERT OPTIMISE - Add License if provided - Write Turbonomic license file
-  ansible.builtin.copy:
-    content: "{{ current_concert_optimise_license }}"
-    dest: /tmp/license.lic
-    mode: '0666'
+- name: 🚀 CONCERT OPTIMISE - Add License if provided
+  when:
+    - current_concert_optimise_license | default("NONE") != "NONE"
+    - current_concert_optimise_license | default("") | trim | length > 0
+  block:
+    - name: Write Turbonomic license file
+      ansible.builtin.copy:
+        content: "{{ current_concert_optimise_license }}"
+        dest: /tmp/license.lic
+        mode: '0600'
 
+    - name: Upload Turbonomic license
+      ansible.builtin.shell: |
+        set -euo pipefail
 
+        TURBO_URL="$(oc get route -n ibm-concert-optimise nginx -o jsonpath='{.spec.host}')"
+        test -n "$TURBO_URL"
 
-- name: 🚀 CONCERT OPTIMISE - Add License if provided - {{current_concert_optimise_license}}
-  shell: |
-    export TURBO_URL=$(oc get route -n ibm-concert-optimise nginx -o jsonpath={.spec.host})
+        curl --fail --silent --show-error \
+          -k \
+          -b /tmp/cookies \
+          -H 'Accept: application/json' \
+          -F 'file=@/tmp/license.lic' \
+          "https://${TURBO_URL}/api/v3/licenses?dryRun=false"
+      args:
+        executable: /bin/bash
+      register: output
 
-    # echo "{{current_concert_optimise_license | default("NONE") }}" > /tmp/license.lic
-    #printf '%s\n' {{ current_concert_optimise_license | quote }} > /tmp/license.lic
-    #cat /tmp/license.lic
-    
-    result=$(curl -XPOST -k -b /tmp/cookies -H 'Content-Type: multipart/form-data'  -H 'accept: application/json' "https://$TURBO_URL/api/v3/licenses?dryRun=false" -F 'file=@/tmp/license.lic')
- 
-    echo $result
-  ignore_errors: true
-  register: output
-  args:
-    executable: /bin/bash
-  when: current_concert_optimise_license | default("NONE") != "NONE"
-- name: 🟣  OUTPUT
-  debug:
-    var: output.stdout_lines
-  when: current_concert_optimise_license | default("NONE") != "NONE"
-
-
- 
+    - name: 🟣 OUTPUT
+      ansible.builtin.debug:
+        var: output.stdout_lines
 
 
 # --------------------------------------------------------------------------------------------------------
