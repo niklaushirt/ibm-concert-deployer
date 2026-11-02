@@ -91,7 +91,7 @@
         CONSOLE_URL="https://"$CONSOLE_PATH
         API_URL=${CONSOLE_URL/console-openshift-console.apps/api}:6443
         BASE_URL=${CONSOLE_PATH/console-openshift-console.apps./}
-        CONCERT_HUB_NAMESPACE={{ current_ibm_feature.project }}-hub
+        CONCERT_HUB_NAMESPACE=ibm-concert-hub
         HUB_URL="https://solis-hub-$CONCERT_HUB_NAMESPACE.apps."$BASE_URL
         echo ${HUB_URL}
   ignore_errors: true
@@ -108,8 +108,8 @@
 
 - name: 👩‍💻 CONCERT OPTIMISE - Get Concert Gateway Host
   shell: |
-        export CONCERT_NAMESPACE={{ current_ibm_feature.project }}
-        export CONCERT_HUB_NAMESPACE={{ current_ibm_feature.project }}-hub
+        export CONCERT_NAMESPACE=ibm-concert
+        export CONCERT_HUB_NAMESPACE=ibm-concert-hub
         CONSOLE_PATH=$(oc get route -n openshift-console console -o jsonpath={.spec.host})
         CONSOLE_URL="https://"$CONSOLE_PATH
         API_URL=${CONSOLE_URL/console-openshift-console.apps/api}:6443
@@ -259,16 +259,16 @@
   when: (global_config.create_ocp_notifications | default(true))|bool == true  
 
 
-- name: 🕦 CONCERT OPTIMISE - Wait for >80 pods in namespace ibm-concert-optimise
+- name: 🕦 CONCERT OPTIMISE - Wait for >50 pods in namespace ibm-concert-optimise
   shell: oc get po -n ibm-concert-optimise |grep "1/"| wc -l
   register: kubectl_num_pods
-  until: kubectl_num_pods.stdout|int > 80
+  until: kubectl_num_pods.stdout|int > 50
   retries: 500
   delay: 15
   when: (current_feature.concert_optimise_lite | default(false))|bool == false  
 
 
-- name: 🕦 CONCERT OPTIMISE - Wait for >20 pods in namespace ibm-concert-optimise
+- name: 🕦 CONCERT OPTIMISE - Wait for >16 pods in namespace ibm-concert-optimise
   shell: oc get po -n ibm-concert-optimise |grep "1/"| wc -l
   register: kubectl_num_pods
   until: kubectl_num_pods.stdout|int > 16
@@ -281,5 +281,16 @@
   shell: oc get po -n ibm-concert-optimise | grep -v Running |grep -v Completed|grep -v Error|grep -v prometheus-server |grep -v concert-gateway |grep -v postgres-0| grep -c ""
   register: kubectl_get_pods
   until: kubectl_get_pods.stdout == "1"
+  retries: 500
+  delay: 15
+
+
+
+- name: 🕦 CONCERT OPTIMISE - Wait for all pods in ibm-concert-optimise to become ready
+  shell: oc get po -n ibm-concert-optimise | grep "0/" | grep -c ""
+  register: kubectl_get_pods
+  until: (kubectl_get_pods.stdout | int) < 1
+  failed_when: kubectl_get_pods.rc not in [0, 1]
+  changed_when: false
   retries: 500
   delay: 15

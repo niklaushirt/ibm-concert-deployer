@@ -148,7 +148,7 @@ data:
       - name: ibm-concert-optimise
         kind: IBMConcertOptimise
         install: true
-        concert_optimise_version: 8.21.2
+        concert_optimise_version: 8.21.4
 
         # Only install Concert Optimise Lite (no additional add-ons) if set to true - as Concert platform Backend
         concert_optimise_lite: true

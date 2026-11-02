@@ -1,5 +1,5 @@
 # number of pods to be expected in final ibm-aiops namespace
-aiops_ns_min_pods_final: 125
+aiops_ns_min_pods_final: 140
 # number of pods to be expected in final ibm-aiops namespace
 cs_ns_min_pods: 30
 # Link to documentation
