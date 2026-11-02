@@ -146,7 +146,6 @@
 - name: 🟣  OUTPUT
   debug:
     var: output.stdout_lines
-    verbosity: 2
   when: current_concert_optimise_license | default("NONE") != "NONE"
 
 
