@@ -271,7 +271,7 @@ data:
 
         # ---------------------------------------------------------------------
         # CONCERT VERSION - check https://github.com/IBM/Concert/releases
-        concert_version: v3.1.0.2
+        concert_version: v3.1.0
 
 
 
