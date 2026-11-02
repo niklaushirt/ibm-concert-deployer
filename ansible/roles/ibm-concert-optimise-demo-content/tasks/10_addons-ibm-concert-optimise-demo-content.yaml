@@ -128,37 +128,37 @@
 # --------------------------------------------------------------------------------------------------------
 # LOAD LICENSE IF PROVIDED
 # --------------------------------------------------------------------------------------------------------
-- name: 🚀 CONCERT OPTIMISE - Add License if provided
-  when:
-    - current_concert_optimise_license | default("NONE") != "NONE"
-    - current_concert_optimise_license | default("") | trim | length > 0
-  block:
-    - name: Write Turbonomic license file
-      ansible.builtin.copy:
-        content: "{{ current_concert_optimise_license }}"
-        dest: /tmp/license.lic
-        mode: '0600'
+# --------------------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------------
+# LOAD LICENSE IF PROVIDED
+# --------------------------------------------------------------------------------------------------------
+- name: 🚀 CONCERT OPTIMISE - Add License if provided - Write Turbonomic license file
+  ansible.builtin.copy:
+    content: "{{ current_concert_optimise_license }}"
+    dest: /tmp/license.lic
+    mode: '0666'
 
-    - name: Upload Turbonomic license
-      ansible.builtin.shell: |
-        set -euo pipefail
 
-        TURBO_URL="$(oc get route -n ibm-concert-optimise nginx -o jsonpath='{.spec.host}')"
-        test -n "$TURBO_URL"
 
-        curl --fail --silent --show-error \
-          -k \
-          -b /tmp/cookies \
-          -H 'Accept: application/json' \
-          -F 'file=@/tmp/license.lic' \
-          "https://${TURBO_URL}/api/v3/licenses?dryRun=false"
-      args:
-        executable: /bin/bash
-      register: output
+- name: 🚀 CONCERT OPTIMISE - Add License if provided 
+  shell: |
+    export TURBO_URL=$(oc get route -n ibm-concert-optimise nginx -o jsonpath={.spec.host})
 
-    - name: 🟣 OUTPUT
-      ansible.builtin.debug:
-        var: output.stdout_lines
+    result=$(curl -XPOST -k -b /tmp/cookies -H 'Content-Type: multipart/form-data'  -H 'accept: application/json' "https://$TURBO_URL/api/v3/licenses?dryRun=false" -F 'file=@/tmp/license.lic')
+    
+    echo $result
+  ignore_errors: true
+  register: output
+  args:
+    executable: /bin/bash
+  when: current_concert_optimise_license | default("NONE") != "NONE"
+- name: 🟣  OUTPUT
+  debug:
+    var: output.stdout_lines
+  when: current_concert_optimise_license | default("NONE") != "NONE"
+
+
+ 
 
 
 # --------------------------------------------------------------------------------------------------------
@@ -1389,38 +1389,3 @@
 
 
 
-
-
-- name: 🚀 CONCERT OPTIMISE - INTEGRATE WITH CONCERT PLATFORM - PATCH
-  kubernetes.core.k8s:
-    state: present
-    template: ./templates/patch.j2
-    apply: yes
-  ignore_errors: true
-
-
-- name: 🚀 CONCERT OPTIMISE - INTEGRATE WITH CONCERT PLATFORM - RESTART
-  shell: |
-    #oc patch xl xl-release -n ibm-concert-optimise --type=merge --patch-file PATCH.yaml
-    oc rollout restart deployment/api deployment/auth deployment/consul deployment/nginx deployment/oauth2 -n ibm-concert-optimise
-    oc get pods -n ibm-concert-optimise | grep "concert"
-    echo ""
-    echo ""
-  ignore_errors: true
-  register: output
-  args:
-    executable: /bin/bash
-- name: 🟣  OUTPUT
-  debug:
-    var: output.stdout_lines
-    verbosity: 1
-
-
-- name: 🕦 CONCERT OPTIMISE - Wait for all pods in ibm-concert-optimise to become ready
-  shell: oc get po -n ibm-concert-optimise | grep "0/" | grep -c ""
-  register: kubectl_get_pods
-  until: (kubectl_get_pods.stdout | int) < 1
-  failed_when: kubectl_get_pods.rc not in [0, 1]
-  changed_when: false
-  retries: 500
-  delay: 15
