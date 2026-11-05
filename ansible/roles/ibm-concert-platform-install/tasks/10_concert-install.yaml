@@ -382,7 +382,8 @@
     echo "------------------------------------------------------------------------------------------------------------------------------"
     echo " ✅ Register Turbo with ITOM"
     echo "------------------------------------------------------------------------------------------------------------------------------"
-    export CONCERT_HUB_NAMESPACE={{ current_ibm_feature.project }}-hub
+    export CONCERT_HUB_NAMESPACE=$(oc get po -A|grep ibm-solis-core |awk '{print$1}')
+    echo "CONCERT_HUB_NAMESPACE: $CONCERT_HUB_NAMESPACE"
     export TURBOLITE_URL="https://$TURBO_URL"
     export TURBOLITE_USER="Administrator"
     export TURBOLITE_PASSWORD={{ global_config.global_password }}
@@ -768,8 +769,9 @@
 
     # echo "------------------------------------------------------------------------------------------------------------------------------"
     # echo " 🚀 Enable WatsonX"
-    export CONCERT_NAMESPACE={{ current_ibm_feature.project }}
-    export CONCERT_HUB_NAMESPACE=$CONCERT_NAMESPACE-hub
+    export CONCERT_HUB_NAMESPACE=$(oc get po -A|grep ibm-solis-core |awk '{print$1}')
+    echo "CONCERT_HUB_NAMESPACE: $CONCERT_HUB_NAMESPACE"
+
     export WATSONX_API_KEY={{current_feature.watsonx_token}}
     export WATSONX_API_PROJECT_ID={{current_feature.watsonx_projectid}}
     export WATSONX_API_URL={{current_feature.watsonx_url}}
@@ -860,8 +862,8 @@
     echo " ✅ Integrate with KeyCloak"
     echo "------------------------------------------------------------------------------------------------------------------------------"
     
-    export CONCERT_NAMESPACE={{ current_ibm_feature.project }}
-    export CONCERT_HUB_NAMESPACE={{ current_ibm_feature.project }}-hub
+    export CONCERT_HUB_NAMESPACE=$(oc get po -A|grep ibm-solis-core |awk '{print$1}')
+    echo "CONCERT_HUB_NAMESPACE: $CONCERT_HUB_NAMESPACE"
 
     export CONCERT_USER={{current_feature.concert_user | default("admin") }}
     export CONCERT_PASSWORD={{ global_config.global_password }}

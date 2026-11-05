@@ -529,10 +529,10 @@ spec:
       backgroundColor: '#009a00'
       color: '#fff'
       location: BannerTop
-      text: "✅ IBM Concert Optimise Lite is installed in this cluster. 🚀 Access it here:"
+      text: "✅ IBM Concert Optimise is installed in this cluster. 🚀 Access it here:"
       link:
             href: "https://$appURL"
-            text: IBM Concert Platform
+            text: IBM Concert Optimise
 
 EOF
 

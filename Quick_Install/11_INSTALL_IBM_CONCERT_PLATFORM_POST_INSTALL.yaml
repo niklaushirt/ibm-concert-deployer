@@ -1,0 +1,718 @@
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#     ________  __  ___   __________    ___         __                        __  _
+#    /  _/ __ )/  |/  /  /  _/_  __/   /   | __  __/ /_____  ____ ___  ____ _/ /_(_)___  ____
+#    / // __  / /|_/ /   / /  / /     / /| |/ / / / __/ __ \/ __ `__ \/ __ `/ __/ / __ \/ __ \
+#  _/ // /_/ / /  / /  _/ /  / /     / ___ / /_/ / /_/ /_/ / / / / / / /_/ / /_/ / /_/ / / / /
+# /___/_____/_/  /_/  /___/ /_/     /_/  |_\__,_/\__/\____/_/ /_/ /_/\__,_/\__/_/\____/_/ /_/
+#
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------------------------------------------------------"
+#  IBM Concert platform - Post Install
+#
+#  IBM Concert Demo Content
+#
+#  ©2026 nikh@ch.ibm.com
+# ---------------------------------------------------------------------------------------------------------------------------------------------------"
+# ---------------------------------------------------------------------------------------------------------------------------------------------------"
+# ---------------------------------------------------------------------------------------------------------------------------------------------------"
+
+
+# ------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# MODIFY THE ❗VARIABLES❗ BELOW WITH YOUR CONCERT CREDENTIALS AND EXTERNAL ENVIRONMENTS
+# ------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: ibm-concert-post-config
+  namespace: ibm-installer
+spec:
+  template:
+    metadata:
+      labels:
+        app: ibm-concert
+    spec:
+      serviceAccount: ibm-installer-admin
+      containers:
+        - name: concert-post-config
+          env:
+          - name: AUTH_API_KEY
+            value: ❗<API KEY FROM CONCERT INSTANCE>❗
+          - name: OCP_URL
+            value: ❗<YOUR OCP URL FROM DEMO UI>❗  # e.g."https://api.itz-12345.hub04-lb.techzone.ibm.com:6443"
+          - name: OCP_TOKEN
+            value: ❗<YOUR OCP TOKEN FROM DEMO UI>❗
+          - name: GITHUB_URL
+            value: https://api.github.com/
+          - name: GITHUB_USERNAME
+            value: ❗<GITHUB ORG>❗ # e.g.niklaushirt
+          - name: GITHUB_TOKEN
+            value: ❗<GITHUB PERSONAL ACCESS TOKEN>❗ # e.g. ghp_1234567890abcdef123... or github_pat_11AAGJBD...
+
+          image: quay.io/niklaushirt/ibm-concert-tools:1.0.0
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            privileged: true
+            allowPrivilegeEscalation: true
+            runAsUser: 0
+            capabilities:
+              add: 
+              - ALL
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "150m"
+            limits:
+              memory: "2024Mi"
+              cpu: "1200m"
+          command:
+            - /bin/sh
+            - -c
+            - |
+              #!/bin/bash
+              #set -x
+              echo "***************************************************************************************************************************************************"
+              echo "***************************************************************************************************************************************************"
+              echo "***************************************************************************************************************************************************"
+              echo "***************************************************************************************************************************************************"
+              echo "                                                                                                                                                   "
+              echo "      🚀 IBM Concert platform - Post Installation configuration script                                                                              "
+              echo "                                                                                                                                                   "
+              echo "***************************************************************************************************************************************************"
+              echo "***************************************************************************************************************************************************"
+              echo "***************************************************************************************************************************************************"
+              echo ""	
+              echo ""	
+              echo "  ⏳ INSTALLATION START TIMESTAMP: $(date)"
+              echo ""
+
+              # ------------------------------------------------------------------------------------------------------------------------------------------------------------------
+              # ------------------------------------------------------------------------------------------------------------------------------------------------------------------
+              # DO NOT MODIFY BELOW
+              # ------------------------------------------------------------------------------------------------------------------------------------------------------------------
+              # ------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+              echo "------------------------------------------------------------------------------------------------------------------------------"
+              echo " ✅ Initialize"
+              echo "------------------------------------------------------------------------------------------------------------------------------"
+              echo ""	
+
+              export CONCERT_NAMESPACE=$(oc get po -A|grep roja-portal |awk '{print$1}')
+              export CONCERT_URL=$(oc get routes -n $CONCERT_NAMESPACE concert  -o jsonpath="{['spec']['host']}")|| true
+
+              echo "     📥 CONCERT_NAMESPACE:           $CONCERT_NAMESPACE"
+              echo "     📥 CONCERT_URL:                 $CONCERT_URL"
+              echo ""	
+              echo ""	
+              echo ""	
+
+
+
+              echo "------------------------------------------------------------------------------------------------------------------------------"
+              echo " ✅ Adapt Concert instance settings"
+              echo "------------------------------------------------------------------------------------------------------------------------------"
+              echo ""	
+
+              echo "***************************************************************************************************************************************************"
+              echo "   🛠️   Setting: Enable Goal evaluation"
+              curl -s "https://$CONCERT_URL/concert/core/api/v1/instance_settings" \
+                  -X 'PATCH' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' \
+                  --data-raw '{"instance_settings":[{"object_type":"goal_posture","settings":{"enable_goal_evaluation":true}}]}'
+
+              echo ""
+              echo "***************************************************************************************************************************************************"
+              echo "   🛠️   Setting: Enable Resilience and Compliance agents"
+              curl -s "https://$CONCERT_URL/concert/core/api/v1/instance_settings" \
+                  -X 'PATCH' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' \
+                  --data-raw '{"instance_settings":[{"object_type":"ai_agents","settings":{"resilience_ai_agent_status":"enabled","ciso_ai_agent_status":"enabled"}}]}'
+
+              echo ""
+              echo "***************************************************************************************************************************************************"
+              echo "   🛠️   Setting: Enable Vulnerability Scoring"
+              curl -s "https://$CONCERT_URL/concert/core/api/v1/instance_settings" \
+                  -X 'PATCH' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' \
+              --data-raw '{"instance_settings":[{"object_type":"application","settings":{"enable_vulnerability_scoring":true}}]}'
+
+              echo ""
+              echo "***************************************************************************************************************************************************"
+              echo "   🛠️   Setting: Enable Vulnerability Risk Scoring"
+              curl -s "https://$CONCERT_URL/concert/core/api/v1/instance_settings" \
+                  -X 'PATCH' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' \
+              --data-raw '{"instance_settings":[{"object_type":"vulnerability","settings":{"priority_settings":{"priority1":7.5,"priority2":5,"priority3":2.5},"score_type":"risk_score","external_score_status":"disabled","enable_concert_risk_scoring":true}}]}'
+
+              echo ""
+              echo "***************************************************************************************************************************************************"
+              echo "   🛠️   Setting: Enable Vulnerability Lookup"
+              curl -s "https://$CONCERT_URL/concert/core/api/v1/instance_settings" \
+                  -X 'PATCH' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' \
+              --data-raw '{"instance_settings":[{"object_type":"code_scan","settings":{"vulnerability_lookup":"enabled"}}]}'
+
+              echo ""
+              echo "***************************************************************************************************************************************************"
+              echo "   🛠️   Setting: Disallow BSD-1-Clause and BSD-2-Clause Licenses for demo"
+              curl -s "https://$CONCERT_URL/concert/core/api/v1/instance_settings" \
+                  -X 'PATCH' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' \
+                  --data-raw '{"instance_settings":[{"object_type":"license","settings":{"licenses":[{"id":"0BSD","description":"BSD Zero Clause License","acceptable":true},{"id":"Apache-1.0","description":"Apache License 1.0","acceptable":true},{"id":"Apache-1.1","description":"Apache License 1.1","acceptable":true},{"id":"Apache-2.0","description":"Apache License 2.0","acceptable":true},{"id":"BSD-1-Clause","description":"BSD 1-Clause License","acceptable":false},{"id":"BSD-2-Clause","description":"BSD 2-Clause \"Simplified\" License","acceptable":false},{"id":"BSD-2-Clause-Darwin","description":"BSD 2-Clause - Ian Darwin variant","acceptable":true},{"id":"BSD-2-Clause-FreeBSD","description":"BSD 2-Clause FreeBSD License","acceptable":true},{"id":"BSD-2-Clause-NetBSD","description":"BSD 2-Clause NetBSD License","acceptable":true},{"id":"BSD-2-Clause-Patent","description":"BSD-2-Clause Plus Patent License","acceptable":true},{"id":"BSD-2-Clause-Views","description":"BSD 2-Clause with views sentence","acceptable":true},{"id":"BSD-2-Clause-first-lines","description":"BSD 2-Clause - first lines requirement","acceptable":true},{"id":"BSD-3-Clause","description":"BSD 3-Clause \"New\" or \"Revised\" License","acceptable":true},{"id":"BSD-3-Clause-Attribution","description":"BSD with attribution","acceptable":true},{"id":"BSD-3-Clause-Clear","description":"BSD 3-Clause Clear License","acceptable":true},{"id":"BSD-3-Clause-HP","description":"Hewlett-Packard BSD variant license","acceptable":true},{"id":"BSD-3-Clause-LBNL","description":"Lawrence Berkeley National Labs BSD variant license","acceptable":true},{"id":"BSD-3-Clause-Modification","description":"BSD 3-Clause Modification","acceptable":true},{"id":"BSD-3-Clause-No-Military-License","description":"BSD 3-Clause No Military License","acceptable":true},{"id":"BSD-3-Clause-No-Nuclear-License","description":"BSD 3-Clause No Nuclear License","acceptable":true},{"id":"BSD-3-Clause-No-Nuclear-License-2014","description":"BSD 3-Clause No Nuclear License 2014","acceptable":true},{"id":"BSD-3-Clause-No-Nuclear-Warranty","description":"BSD 3-Clause No Nuclear Warranty","acceptable":true},{"id":"BSD-3-Clause-Open-MPI","description":"BSD 3-Clause Open MPI variant","acceptable":true},{"id":"BSD-3-Clause-Sun","description":"BSD 3-Clause Sun Microsystems","acceptable":true},{"id":"BSD-3-Clause-acpica","description":"BSD 3-Clause acpica variant","acceptable":true},{"id":"BSD-3-Clause-flex","description":"BSD 3-Clause Flex variant","acceptable":true},{"id":"BSD-4-Clause","description":"BSD 4-Clause \"Original\" or \"Old\" License","acceptable":true},{"id":"BSD-4-Clause-Shortened","description":"BSD 4 Clause Shortened","acceptable":true},{"id":"BSD-4-Clause-UC","description":"BSD-4-Clause (University of California-Specific)","acceptable":true},{"id":"BSD-4.3RENO","description":"BSD 4.3 RENO License","acceptable":true},{"id":"BSD-4.3TAHOE","description":"BSD 4.3 TAHOE License","acceptable":true},{"id":"BSD-Advertising-Acknowledgement","description":"BSD Advertising Acknowledgement License","acceptable":true},{"id":"BSD-Attribution-HPND-disclaimer","description":"BSD with Attribution and HPND disclaimer","acceptable":true},{"id":"BSD-Inferno-Nettverk","description":"BSD-Inferno-Nettverk","acceptable":true},{"id":"BSD-Protection","description":"BSD Protection License","acceptable":true},{"id":"BSD-Source-Code","description":"BSD Source Code Attribution","acceptable":true},{"id":"BSD-Source-beginning-file","description":"BSD Source Code Attribution - beginning of file variant","acceptable":true},{"id":"BSD-Systemics","description":"Systemics BSD variant license","acceptable":true},{"id":"BSD-Systemics-W3Works","description":"Systemics W3Works BSD variant license","acceptable":true},{"id":"CDDL-1.0","description":"CDDL-1.0","acceptable":true},{"id":"GPL-1.0","description":"GNU General Public License v1.0 only","acceptable":true},{"id":"GPL-1.0+","description":"GNU General Public License v1.0 or later","acceptable":true},{"id":"GPL-1.0-only","description":"GNU General Public License v1.0 only","acceptable":true},{"id":"GPL-1.0-or-later","description":"GNU General Public License v1.0 or later","acceptable":true},{"id":"GPL-2.0","description":"GNU General Public License v2.0 only","acceptable":true},{"id":"GPL-2.0+","description":"GNU General Public License v2.0 or later","acceptable":true},{"id":"GPL-2.0-only","description":"GNU General Public License v2.0 only","acceptable":true},{"id":"GPL-2.0-or-later","description":"GNU General Public License v2.0 or later","acceptable":true},{"id":"GPL-2.0-with-GCC-exception","description":"GNU General Public License v2.0 w/GCC Runtime Library exception","acceptable":true},{"id":"GPL-2.0-with-autoconf-exception","description":"GNU General Public License v2.0 w/Autoconf exception","acceptable":true},{"id":"GPL-2.0-with-bison-exception","description":"GNU General Public License v2.0 w/Bison exception","acceptable":true},{"id":"GPL-2.0-with-classpath-exception","description":"GNU General Public License v2.0 w/Classpath exception","acceptable":true},{"id":"GPL-2.0-with-font-exception","description":"GNU General Public License v2.0 w/Font exception","acceptable":true},{"id":"GPL-3.0","description":"GNU General Public License v3.0 only","acceptable":true},{"id":"GPL-3.0+","description":"GNU General Public License v3.0 or later","acceptable":true},{"id":"GPL-3.0-only","description":"GNU General Public License v3.0 only","acceptable":true},{"id":"GPL-3.0-or-later","description":"GNU General Public License v3.0 or later","acceptable":true},{"id":"GPL-3.0-with-GCC-exception","description":"GNU General Public License v3.0 w/GCC Runtime Library exception","acceptable":true},{"id":"GPL-3.0-with-autoconf-exception","description":"GNU General Public License v3.0 w/Autoconf exception","acceptable":true},{"id":"LGPL-2.0","description":"GNU Library General Public License v2 only","acceptable":true},{"id":"LGPL-2.0+","description":"GNU Library General Public License v2 or later","acceptable":true},{"id":"LGPL-2.0-only","description":"GNU Library General Public License v2 only","acceptable":true},{"id":"LGPL-2.0-or-later","description":"GNU Library General Public License v2 or later","acceptable":true},{"id":"LGPL-2.1","description":"GNU Lesser General Public License v2.1 only","acceptable":true},{"id":"LGPL-2.1+","description":"GNU Lesser General Public License v2.1 or later","acceptable":true},{"id":"LGPL-2.1-only","description":"GNU Lesser General Public License v2.1 only","acceptable":true},{"id":"LGPL-2.1-or-later","description":"GNU Lesser General Public License v2.1 or later","acceptable":true},{"id":"LGPL-3.0","description":"GNU Lesser General Public License v3.0 only","acceptable":true},{"id":"LGPL-3.0+","description":"GNU Lesser General Public License v3.0 or later","acceptable":true},{"id":"LGPL-3.0-only","description":"GNU Lesser General Public License v3.0 only","acceptable":true},{"id":"LGPL-3.0-or-later","description":"GNU Lesser General Public License v3.0 or later","acceptable":true},{"id":"LGPLLR","description":"Lesser General Public License For Linguistic Resources","acceptable":true},{"id":"MIT","description":"MIT License","acceptable":true},{"id":"OpenSSL","description":"OpenSSL","acceptable":true},{"id":"PSF-2.0","description":"Python Software Foundation License 2.0","acceptable":true},{"id":"Vim","description":"Vim License","acceptable":true},{"id":"X11","description":"X11 License","acceptable":true},{"id":"Zlib","description":"zlib License","acceptable":true},{"id":"bzip2-1.0.5","description":"bzip2 and libbzip2 License v1.0.5","acceptable":true},{"id":"bzip2-1.0.6","description":"bzip2 and libbzip2 License v1.0.6","acceptable":true},{"id":"curl","description":"curl License","acceptable":true},{"id":"zlib-acknowledgement","description":"zlib/libpng License with Acknowledgement","acceptable":true}]}}]}'
+
+              echo ""
+              echo "***************************************************************************************************************************************************"
+              echo "   🛠️   Setting: Load Sample Data"
+              curl -s "https://$CONCERT_URL/concert/ingestion/api/v1/load_sample_data" \
+                  -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json'
+              echo ""	
+              echo ""	
+              echo ""	
+
+
+
+              echo "------------------------------------------------------------------------------------------------------------------------------"
+              echo " ✅ Create Credentials"
+              echo "------------------------------------------------------------------------------------------------------------------------------"
+
+              echo ""
+              echo "***************************************************************************************************************************************************"
+              echo "   🔐   Create Git Credential"
+              curl -s "https://$CONCERT_URL/concert/core/api/v1/credentials" \
+                  -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+              -d @- <<EOF
+              {
+              "credentials": [
+                  {
+                  "key": "access_token",
+                  "value": "$GITHUB_TOKEN"
+                  },
+                  {
+                  "key": "base_url",
+                  "value": "$GITHUB_URL"
+                  }
+              ],
+              "name": "MY-GITHUB-CREDENTIALS",
+              "description": "My GitHub credentials",
+              "expiry": 0,
+              "id": "id",
+              "type": "github",
+              "created_by": "demo@ibm.com"
+              }
+              EOF
+
+
+
+              echo ""
+              echo "***************************************************************************************************************************************************"
+              echo "   🔐   Create OCP Credential"
+              curl -s "https://$CONCERT_URL/concert/core/api/v1/credentials" \
+                  -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+              -d @- <<EOF
+              {
+                  "credentials": [{
+                          "key": "token",
+                          "value": "$OCP_TOKEN"
+                      },
+                      {
+                          "key": "endpoint",
+                          "value": "$OCP_URL"
+                      }
+                  ],
+                  "name": "MY-CLUSTER-CREDENTIALS",
+                  "description": "My Cluster credentials",
+                  "expiry": 0,
+                  "id": "id",
+                  "type": "ocp",
+                  "created_by": "demo@ibm.com"
+              }
+              EOF
+              echo ""	
+              echo ""	
+              echo ""	
+
+
+              echo "------------------------------------------------------------------------------------------------------------------------------"
+              echo " ✅ Create Environments"
+              echo "------------------------------------------------------------------------------------------------------------------------------"
+              echo ""	
+
+              echo "***************************************************************************************************************************************************"
+              echo "   🌍   Create Development"
+              curl -s "https://$CONCERT_URL/concert/core/api/v1/environments" \
+                  -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+              -d @- <<EOF
+              {
+                "purpose": "Development",
+                "name": "Development",
+                "description": "This environment is used for development",
+                "type": "",
+                "region": "",
+                "tags": [
+                  {
+                    "name": "development"
+                  }
+                ]
+              }
+              EOF
+
+
+              echo ""
+              echo "***************************************************************************************************************************************************"
+              echo "   🌍   Create Test"
+              curl -s "https://$CONCERT_URL/concert/core/api/v1/environments" \
+                  -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+              -d @- <<EOF
+              {
+                "purpose": "Test",
+                "name": "Test",
+                "description": "This environment is used for testing",
+                "type": "",
+                "region": "",
+                "tags": [
+                  {
+                    "name": "test"
+                  }
+                ]
+              }
+              EOF
+
+
+              echo ""
+              echo "***************************************************************************************************************************************************"
+              echo "   🌍   Create Production"
+              curl -s "https://$CONCERT_URL/concert/core/api/v1/environments" \
+                  -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+              -d @- <<EOF
+              {
+                "purpose": "Production",
+                "name": "Production",
+                "description": "This environment is used for production",
+                "type": "",
+                "region": "",
+                "tags": [
+                  {
+                    "name": "production"
+                  }
+                ]
+              }
+              EOF
+              echo ""	
+              echo ""	
+              echo ""	
+
+
+
+              echo "------------------------------------------------------------------------------------------------------------------------------"
+              echo " ✅ Credentials and Environments created"
+              echo "------------------------------------------------------------------------------------------------------------------------------"
+              echo ""	
+
+              export GITHUB_CREDENTIAL_ID=$(curl -s "https://$CONCERT_URL/concert/core/api/v1/credentials?filter=name:MY-GITHUB-CREDENTIALS" \
+                  -X 'GET' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json'|jq '.credentials[0].id'|tr -d '"')
+              echo "     🔐 GITHUB_CREDENTIAL_ID:        "$GITHUB_CREDENTIAL_ID
+
+              export CLUSTER_CREDENTIAL_ID=$(curl -s "https://$CONCERT_URL/concert/core/api/v1/credentials?filter=name:MY-CLUSTER-CREDENTIALS" \
+                  -X 'GET' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json'|jq '.credentials[0].id'|tr -d '"')
+              echo "     🔐 CLUSTER_CREDENTIAL_ID:       "$CLUSTER_CREDENTIAL_ID
+
+
+
+
+              export DEV_ENV_ID=$(curl -s "https://$CONCERT_URL/concert/core/api/v1/environments?filter=name:Development" \
+                  -X 'GET' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json'|jq '.environments[0].id'|tr -d '"')
+              echo "     🌍 DEV_ENV_ID:                  "$DEV_ENV_ID
+
+              export TEST_ENV_ID=$(curl -s "https://$CONCERT_URL/concert/core/api/v1/environments?filter=name:Test" \
+                  -X 'GET' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json'|jq '.environments[0].id'|tr -d '"')
+              echo "     🌍 TEST_ENV_ID:                  "$TEST_ENV_ID
+
+
+              export PROD_ENV_ID=$(curl -s "https://$CONCERT_URL/concert/core/api/v1/environments?filter=name:Production" \
+                  -X 'GET' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json'|jq '.environments[0].id'|tr -d '"')
+              echo "     🌍 PROD_ENV_ID:                  "$PROD_ENV_ID
+              echo ""	
+              echo ""	
+              echo ""	
+
+
+
+
+
+
+
+
+              echo "------------------------------------------------------------------------------------------------------------------------------"
+              echo " ✅ Create OCP Applications - Resilience"
+              echo "------------------------------------------------------------------------------------------------------------------------------"
+              echo ""	
+
+              echo "***************************************************************************************************************************************************"
+              echo "   📦   Create OCP Application: Robot Shop"
+              curl -s "https://$CONCERT_URL/concert/core/api/v1/k8_components" \
+                  -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+              -d @- <<EOF
+              {
+                  "type": "ocp",
+                  "disable_trivy_scan": false,
+                  "enable_node_components_scan": true,
+                  "assessment_period": "99 hour",
+                  "discovery_job_name": "discovery-ocp-robot-shop",
+                  "ingestion_details": {
+                      "parameters": [{
+                          "key": "cluster_name",
+                          "value": "local"
+                      }]
+                  },
+                  "credentials_id": "$CLUSTER_CREDENTIAL_ID",
+                  "namespaces": [{
+                      "application_name": "robot-shop",
+                      "label": "1.24.3,1.24.3",
+                      "namespace": "robot-shop",
+                      "version": "1.0.0",
+                      "cluster_name": "local",
+                      "profile_name": "kubernetes_profile",
+                      "deployment_name": "robot-shop_1.0.0_Production"
+                  }],
+                  "environment": "$PROD_ENV_ID",
+                  "clusters": [{
+                      "name": "local",
+                      "namespaces": ["robot-shop"]
+                  }]
+              }
+              EOF
+
+
+              echo ""
+              echo "***************************************************************************************************************************************************"
+              echo "   📦   Create OCP Application: Galaxium Travels"
+              curl -s "https://$CONCERT_URL/concert/core/api/v1/k8_components" \
+                  -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+              -d @- <<EOF
+              {
+                  "type": "ocp",
+                  "disable_trivy_scan": false,
+                  "enable_node_components_scan": true,
+                  "assessment_period": "99 hour",
+                  "discovery_job_name": "discovery-ocp-galaxium-travels",
+                  "ingestion_details": {
+                      "parameters": [{
+                          "key": "cluster_name",
+                          "value": "local"
+                      }]
+                  },
+                  "credentials_id": "$CLUSTER_CREDENTIAL_ID",
+                  "namespaces": [{
+                      "application_name": "galaxium-travels",
+                      "label": "1.24.3,1.24.3",
+                      "namespace": "galaxium-travels",
+                      "version": "1.0.0",
+                      "cluster_name": "local",
+                      "profile_name": "kubernetes_profile",
+                      "deployment_name": "galaxium-travels_1.0.0_Production"
+                  }],
+                  "environment": "$PROD_ENV_ID",
+                  "clusters": [{
+                      "name": "local",
+                      "namespaces": ["galaxium-travels"]
+                  }]
+              }
+              EOF
+
+
+              echo ""
+              echo "***************************************************************************************************************************************************"
+              echo "   📦   Create OCP Application: Sock Shop"
+              curl -s "https://$CONCERT_URL/concert/core/api/v1/k8_components" \
+                  -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+              -d @- <<EOF
+              {
+                  "type": "ocp",
+                  "disable_trivy_scan": false,
+                  "enable_node_components_scan": true,
+                  "assessment_period": "99 hour",
+                  "discovery_job_name": "discovery-ocp-sock-shop",
+                  "ingestion_details": {
+                      "parameters": [{
+                          "key": "cluster_name",
+                          "value": "local"
+                      }]
+                  },
+                  "credentials_id": "$CLUSTER_CREDENTIAL_ID",
+                  "namespaces": [{
+                      "application_name": "sock-shop",
+                      "label": "1.24.3,1.24.3",
+                      "namespace": "sock-shop",
+                      "version": "1.0.0",
+                      "cluster_name": "local",
+                      "profile_name": "kubernetes_profile",
+                      "deployment_name": "sock-shop_1.0.0_Production"
+                  }],
+                  "environment": "$PROD_ENV_ID",
+                  "clusters": [{
+                      "name": "local",
+                      "namespaces": ["sock-shop"]
+                  }]
+              }
+              EOF
+              echo ""	
+              echo ""	
+              echo ""	
+
+
+
+
+              echo "------------------------------------------------------------------------------------------------------------------------------"
+              echo " ✅ Create GIT Applications - Protect"
+              echo "------------------------------------------------------------------------------------------------------------------------------"
+              echo ""	
+
+              echo "***************************************************************************************************************************************************"
+              echo "   🗄️   Create GIT Application: Robot Shop"
+              curl -s "https://$CONCERT_URL/concert/core/api/v1/k8_components" \
+                  -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+              -d @- <<EOF
+              {
+                  "type": "github",
+                  "discovery_job_name": "discovery-git-robot-shop",
+                  "discovery_type": "source_control_discovery_job",
+                  "ingestion_details": {
+                      "parameters": [{
+                          "key": "org",
+                          "value": "$GITHUB_USERNAME"
+                      }, {
+                          "key": "repository",
+                          "value": "robot-shop:main"
+                      }, {
+                          "key": "application_name",
+                          "value": "robot-shop"
+                      }, {
+                          "key": "application_version",
+                          "value": "1.0.0"
+                      }]
+                  },
+                  "credentials_id": "$GITHUB_CREDENTIAL_ID"
+              }
+              EOF
+
+
+              echo ""
+              echo "***************************************************************************************************************************************************"
+              echo "   🗄️   Create GIT Application: Galaxium Travels"
+              curl -s "https://$CONCERT_URL/concert/core/api/v1/k8_components" \
+                  -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+              -d @- <<EOF
+              {
+                  "type": "github",
+                  "discovery_job_name": "discovery-git-galaxium-travels",
+                  "discovery_type": "source_control_discovery_job",
+                  "ingestion_details": {
+                      "parameters": [{
+                          "key": "org",
+                          "value": "$GITHUB_USERNAME"
+                      }, {
+                          "key": "repository",
+                          "value": "galaxium-travels:main"
+                      }, {
+                          "key": "application_name",
+                          "value": "galaxium-travels"
+                      }, {
+                          "key": "application_version",
+                          "value": "1.0.0"
+                      }]
+                  },
+                  "credentials_id": "$GITHUB_CREDENTIAL_ID"
+              }
+              EOF
+
+
+              echo ""
+              echo "***************************************************************************************************************************************************"
+              echo "   🗄️   Create GIT Application: Sock Shop"
+              curl -s "https://$CONCERT_URL/concert/core/api/v1/k8_components" \
+                  -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+              -d @- <<EOF
+              {
+                  "type": "github",
+                  "discovery_job_name": "discovery-git-sock-shop",
+                  "discovery_type": "source_control_discovery_job",
+                  "ingestion_details": {
+                      "parameters": [{
+                          "key": "org",
+                          "value": "$GITHUB_USERNAME"
+                      }, {
+                          "key": "repository",
+                          "value": "sock-shop:main"
+                      }, {
+                          "key": "application_name",
+                          "value": "sock-shop"
+                      }, {
+                          "key": "application_version",
+                          "value": "1.0.0"
+                      }]
+                  },
+                  "credentials_id": "$GITHUB_CREDENTIAL_ID"
+              }
+              EOF
+              echo ""	
+              echo ""	
+              echo ""	
+
+
+
+
+              echo "------------------------------------------------------------------------------------------------------------------------------"
+              echo " ✅ Applications and Jobs created"
+              echo "------------------------------------------------------------------------------------------------------------------------------"
+              echo ""	
+
+              export ROBOT_APP_ID=$(curl -s "https://$CONCERT_URL/concert/core/api/v1/applications?filter=name:robot-shop" \
+                  -X 'GET' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json'|jq '.applications[0].id'|tr -d '"')
+              echo "     🧰 ROBOT_APP_ID:                "$ROBOT_APP_ID
+
+              export ROBOT_OCP_JOB_ID=$(curl -s "https://$CONCERT_URL/concert/core/api/v1/ingestion_jobs?filter=name:discovery-ocp-robot-shop" \
+                  -X 'GET' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json'|jq '.ingestion_jobs[0].id'|tr -d '"')
+              echo "     📦 ROBOT_OCP_JOB_ID:            "$ROBOT_OCP_JOB_ID
+
+              export ROBOT_GIT_JOB_ID=$(curl -s "https://$CONCERT_URL/concert/core/api/v1/ingestion_jobs?filter=name:discovery-git-robot-shop" \
+                  -X 'GET' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json'|jq '.ingestion_jobs[0].id'|tr -d '"')
+              echo "     🗄️ ROBOT_GIT_JOB_ID:            "$ROBOT_GIT_JOB_ID
+              echo ""	
+
+
+
+
+              export GALAX_APP_ID=$(curl -s "https://$CONCERT_URL/concert/core/api/v1/applications?filter=name:galaxium-travels" \
+                  -X 'GET' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json'|jq '.applications[0].id'|tr -d '"')
+              echo "     🧰 GALAX_APP_ID:                "$GALAX_APP_ID
+
+              export GALAX_OCP_JOB_ID=$(curl -s "https://$CONCERT_URL/concert/core/api/v1/ingestion_jobs?filter=name:discovery-ocp-galaxium-travels" \
+                  -X 'GET' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json'|jq '.ingestion_jobs[0].id'|tr -d '"')
+              echo "     📦 GALAX_OCP_JOB_ID:            "$GALAX_OCP_JOB_ID
+
+              export GALAX_GIT_JOB_ID=$(curl -s "https://$CONCERT_URL/concert/core/api/v1/ingestion_jobs?filter=name:discovery-git-galaxium-travels" \
+                  -X 'GET' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json'|jq '.ingestion_jobs[0].id'|tr -d '"')
+              echo "     🗄️ GALAX_GIT_JOB_ID:            "$GALAX_GIT_JOB_ID
+              echo ""	
+
+
+
+
+              export SOCK_APP_ID=$(curl -s "https://$CONCERT_URL/concert/core/api/v1/applications?filter=name:sock-shop" \
+                  -X 'GET' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json'|jq '.applications[0].id'|tr -d '"')
+              echo "     🧰 SOCK_APP_ID:                 "$SOCK_APP_ID
+
+              export SOCK_OCP_JOB_ID=$(curl -s "https://$CONCERT_URL/concert/core/api/v1/ingestion_jobs?filter=name:discovery-ocp-sock-shop" \
+                  -X 'GET' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json'|jq '.ingestion_jobs[0].id'|tr -d '"')
+              echo "     🛠️ SOCK_OCP_JOB_ID:             "$SOCK_OCP_JOB_ID
+
+              export SOCK_GIT_JOB_ID=$(curl -s "https://$CONCERT_URL/concert/core/api/v1/ingestion_jobs?filter=name:discovery-git-sock-shop" \
+                  -X 'GET' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json'|jq '.ingestion_jobs[0].id'|tr -d '"')
+              echo "     🗄️ SOCK_GIT_JOB_ID:             "$SOCK_GIT_JOB_ID
+              echo ""	
+              echo ""	
+              echo ""	
+              echo ""	
+
+
+
+              echo "------------------------------------------------------------------------------------------------------------------------------"
+              echo " ✅ List Applications"
+              echo "------------------------------------------------------------------------------------------------------------------------------"
+              echo ""	
+              curl -s "https://$CONCERT_URL/concert/core/api/v1/applications" \
+                  -X 'GET' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json'|jq -r '.applications[].name'
+              echo ""	
+              echo ""	
+              echo ""	
+
+
+              echo "------------------------------------------------------------------------------------------------------------------------------"
+              echo " ✅ List Jobs"
+              echo "------------------------------------------------------------------------------------------------------------------------------"
+              echo ""	
+              curl -s "https://$CONCERT_URL/concert/core/api/v1/ingestion_jobs" \
+                  -X 'GET' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json'|jq -r '.ingestion_jobs[].name'|tr -d '"'
+              echo ""	
+              echo ""	
+              echo ""	
+
+
+
+              echo "------------------------------------------------------------------------------------------------------------------------------"
+              echo " ✅ Run All Jobs"
+              echo "------------------------------------------------------------------------------------------------------------------------------"
+              echo ""	
+              echo "***************************************************************************************************************************************************"
+              echo "   🚀🚀🚀   Run Robot Shop Git Discovery"
+              curl -s "https://$CONCERT_URL/concert/ingestion/api/v1/job/v2/submit" \
+                  -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+                  --data-raw '{"job_details":{"job_id":"'$ROBOT_GIT_JOB_ID'","job_type":"source_control_discovery_job"}}'
+              
+              echo ""	
+              echo "***************************************************************************************************************************************************"
+              echo "   🚀   Run Galaxium Travels Git Discovery"
+              curl -s "https://$CONCERT_URL/concert/ingestion/api/v1/job/v2/submit" \
+                  -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+                  --data-raw '{"job_details":{"job_id":"'$GALAX_GIT_JOB_ID'","job_type":"source_control_discovery_job"}}'
+              
+              echo ""	
+              echo "***************************************************************************************************************************************************"
+              echo "   🚀   Run Sock Shop Git Discovery"
+              curl -s "https://$CONCERT_URL/concert/ingestion/api/v1/job/v2/submit" \
+                  -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+                  --data-raw '{"job_details":{"job_id":"'$SOCK_GIT_JOB_ID'","job_type":"source_control_discovery_job"}}'
+              
+              echo ""	
+              echo "***************************************************************************************************************************************************"
+              echo "   🚀   Run Robot Shop OCP Discovery"
+              curl -s "https://$CONCERT_URL/concert/ingestion/api/v1/job/v2/submit" \
+                  -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+                  --data-raw '{"job_details":{"job_id":"'$ROBOT_OCP_JOB_ID'","job_type":"discovery_job"}}'
+              
+              echo ""	
+              echo "***************************************************************************************************************************************************"
+              echo "   🚀   Run Galaxium Travels OCP Discovery"
+              curl -s "https://$CONCERT_URL/concert/ingestion/api/v1/job/v2/submit" \
+                  -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+                  --data-raw '{"job_details":{"job_id":"'$GALAX_OCP_JOB_ID'","job_type":"discovery_job"}}'
+              
+              echo ""	
+              echo "***************************************************************************************************************************************************"
+              echo "   🚀   Run Sock Shop OCP Discovery"
+              curl -s "https://$CONCERT_URL/concert/ingestion/api/v1/job/v2/submit" \
+                  -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+                  --data-raw '{"job_details":{"job_id":"'$SOCK_OCP_JOB_ID'","job_type":"discovery_job"}}'
+              echo ""	
+              echo ""	
+              echo ""	
+
+
+
+              echo "------------------------------------------------------------------------------------------------------------------------------"
+              echo "  ⏳ INSTALLATION END TIMESTAMP: $(date)"
+              echo ""
+
+              echo ""
+              echo ""
+              echo ""
+              echo ""
+              echo "------------------------------------------------------------------------------------------------------------------------------"
+              echo "------------------------------------------------------------------------------------------------------------------------------"
+              echo "------------------------------------------------------------------------------------------------------------------------------"
+              echo "✅ DONE"
+              echo "------------------------------------------------------------------------------------------------------------------------------"
+              echo "------------------------------------------------------------------------------------------------------------------------------"
+              echo "------------------------------------------------------------------------------------------------------------------------------"
+
+
+              while true
+              do
+                sleep 1000
+              done
+
+
+
+      restartPolicy: Never
+  backoffLimit: 500
+
