@@ -61,7 +61,7 @@ export ENV_CMD="
     echo \"<BR>\"
     echo \"    🔴🔴🔴🔴🔴🔴 WATSONX TOKEN INVALID - Error returned from IAM. You won't be able to access the WatsonX services in Concert platform.<BR>\"
     echo \"\"
-    exit 1
+    #exit 1
     else
     echo \"<BR>\"
     echo \"    ✅ Successfully retrieved IAM token. You can access the WatsonX services in Concert platform.<BR>\"
