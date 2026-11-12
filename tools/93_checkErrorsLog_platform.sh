@@ -67,12 +67,16 @@ cat <<EOF | oc apply -f -
 apiVersion: console.openshift.io/v1
 kind: ConsoleNotification
 metadata:
-      name: ibm-concert-operate-notification-turbo
+        name: ibm-concert-operate-notification-turbo
 spec:
-      backgroundColor: '#003148'
-      color: '#fff'
-      location: BannerTop
-      text: "✅ IBM Concert Optimise Lite is installed in this cluster."
+        backgroundColor: '#009a00'
+        color: '#fff'
+        location: BannerTop
+        text: "✅ IBM Concert Optimise is installed in this cluster. 🚀 Access it here:"
+        link:
+            href: "https://$appURL"
+            text: IBM Concert Optimise
+
 EOF
 
 echo ""

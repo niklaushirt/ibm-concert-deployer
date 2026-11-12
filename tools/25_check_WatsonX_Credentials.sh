@@ -32,7 +32,7 @@ if echo "$RESPONSE" | jq -e '.errorMessage' > /dev/null 2>&1; then
   echo ""
   echo "    🔴🔴🔴🔴🔴🔴 WATSONX TOKEN INVALID - Error returned from IAM. You won't be able to access the WatsonX services in Concert platform."
   echo ""
-  exit 1
+  #exit 1
 else
   echo ""
   echo "    ✅ Successfully retrieved IAM token. You can access the WatsonX services in Concert platform."

@@ -382,16 +382,19 @@
     echo "------------------------------------------------------------------------------------------------------------------------------"
     echo " ✅ Register Turbo with ITOM"
     echo "------------------------------------------------------------------------------------------------------------------------------"
-    export CONCERT_HUB_NAMESPACE={{ current_ibm_feature.project }}-hub
+    export CONCERT_HUB_NAMESPACE=$(oc get po -A|grep ibm-solis-core |awk '{print$1}')
+    echo "CONCERT_HUB_NAMESPACE: $CONCERT_HUB_NAMESPACE"
     export TURBOLITE_URL="https://$TURBO_URL"
     export TURBOLITE_USER="Administrator"
     export TURBOLITE_PASSWORD={{ global_config.global_password }}
     export APIKEY=$(kubectl -n "${CONCERT_HUB_NAMESPACE}" \
       get secret itom-secrets \
       -o jsonpath="{.data.BACKEND_APIKEY}" | base64 -d)
-    
+    export CONCERT_HUB_ROUTE=$(oc get route solis-hub -o jsonpath={.spec.host} -n $CONCERT_HUB_NAMESPACE)
+
     echo "TURBO_URL:  $TURBO_URL"
     echo "CONCERT_HUB_NAMESPACE:  $CONCERT_HUB_NAMESPACE"
+    echo "CONCERT_HUB_ROUTE:  $CONCERT_HUB_ROUTE"
     echo "TURBOLITE_URL:  $TURBOLITE_URL"
     echo "TURBOLITE_USER:  $TURBOLITE_USER"
     echo "TURBOLITE_PASSWORD:  $TURBOLITE_PASSWORD"
@@ -421,7 +424,7 @@
 
 
     # kubectl exec -it $(kubectl get pods -n ibm-installer | grep "ibm-install-concert" | awk '{print $1}') -n ibm-installer -- ls -al /tmp/ibm-concert/concert-hub/bin/
-    # kubectl exec -it $(kubectl get pods -n ibm-installer | grep "ibm-install-concert" | awk '{print $1}') -n ibm-installer -- /tmp/ibm-concert/concert-hub/bin/manage-product.sh --action=add --deployment-type=k8s --product-id=turbonomic --instance-url=https://nginx.ibm-concert-optimise.svc.cluster.local:443 --kc-entrypoint-url=https://$TURBO_URL --namespace={{ current_ibm_feature.project }}-hub --restart-hub=true
+    # kubectl exec -it $(kubectl get pods -n ibm-installer | grep "ibm-install-concert" | awk '{print $1}') -n ibm-installer -- /tmp/ibm-concert/concert-hub/bin/manage-product.sh --action=add --deployment-type=k8s --product-id=turbonomic --instance-url=https://nginx.ibm-concert-optimise.svc.cluster.local:443 --kc-entrypoint-url=https://$TURBO_URL --namespace=$CONCERT_HUB_NAMESPACE --restart-hub=true
 
 
 
@@ -768,14 +771,17 @@
 
     # echo "------------------------------------------------------------------------------------------------------------------------------"
     # echo " 🚀 Enable WatsonX"
-    export CONCERT_NAMESPACE={{ current_ibm_feature.project }}
-    export CONCERT_HUB_NAMESPACE=$CONCERT_NAMESPACE-hub
+    export CONCERT_HUB_NAMESPACE=$(oc get po -A|grep ibm-solis-core |awk '{print$1}')
+    echo "CONCERT_HUB_NAMESPACE: $CONCERT_HUB_NAMESPACE"
+    
+    export CONCERT_NAMESPACE=$(oc get po -A|grep roja-py-utils |awk '{print$1}')
+    echo "CONCERT_NAMESPACE: $CONCERT_NAMESPACE"
+
     export WATSONX_API_KEY={{current_feature.watsonx_token}}
     export WATSONX_API_PROJECT_ID={{current_feature.watsonx_projectid}}
     export WATSONX_API_URL={{current_feature.watsonx_url}}
 
     echo "CONCERT_NAMESPACE: $CONCERT_NAMESPACE"
-    echo "CONCERT_HUB_NAMESPACE: $CONCERT_HUB_NAMESPACE"
     echo "WATSONX_API_KEY: $WATSONX_API_KEY"
     echo "WATSONX_API_PROJECT_ID: $WATSONX_API_PROJECT_ID"
     echo "WATSONX_API_URL: $WATSONX_API_URL"
@@ -860,8 +866,8 @@
     echo " ✅ Integrate with KeyCloak"
     echo "------------------------------------------------------------------------------------------------------------------------------"
     
-    export CONCERT_NAMESPACE={{ current_ibm_feature.project }}
-    export CONCERT_HUB_NAMESPACE={{ current_ibm_feature.project }}-hub
+    export CONCERT_HUB_NAMESPACE=$(oc get po -A|grep ibm-solis-core |awk '{print$1}')
+    echo "CONCERT_HUB_NAMESPACE: $CONCERT_HUB_NAMESPACE"
 
     export CONCERT_USER={{current_feature.concert_user | default("admin") }}
     export CONCERT_PASSWORD={{ global_config.global_password }}
