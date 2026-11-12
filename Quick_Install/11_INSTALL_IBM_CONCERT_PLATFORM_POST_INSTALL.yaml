@@ -43,10 +43,6 @@ spec:
           env:
           - name: AUTH_API_KEY
             value: ❗<API KEY FROM CONCERT INSTANCE>❗
-          - name: OCP_URL
-            value: ❗<YOUR OCP URL FROM DEMO UI>❗  # e.g."https://api.itz-12345.hub04-lb.techzone.ibm.com:6443"
-          - name: OCP_TOKEN
-            value: ❗<YOUR OCP TOKEN FROM DEMO UI>❗
           - name: GITHUB_URL
             value: https://api.github.com/
           - name: GITHUB_USERNAME
@@ -114,6 +110,23 @@ spec:
               echo ""	
               echo ""	
 
+
+
+
+              echo "------------------------------------------------------------------------------------------------------------------------------"
+              echo " ✅ Create OCP User"
+              echo "------------------------------------------------------------------------------------------------------------------------------"
+              echo ""	
+              export OCP_URL=$(oc get Infrastructure cluster -o jsonpath={.status.apiServerURL})
+              export OCP_TOKEN=$(oc create token -n ibm-installer ibm-installer-admin --duration=999999999s)
+              #export OCP_TOKEN=$(oc -n openshift-authentication get secret $(oc get secret -n openshift-authentication |grep -m1 oauth-openshift-token|awk '{print$1}') -o jsonpath='{.data.token}'|base64 --decode)
+              echo "  🌏 URL:         $OCP_URL"
+              echo "  🫅 User:        kubeadmin"
+              echo "  🔐 Token:       $OCP_TOKEN"
+              echo "  🔐 Login:       oc login --server=$OCP_URL --token=$OCP_TOKEN "
+              echo ""	
+              echo ""	
+              echo ""	
 
 
               echo "------------------------------------------------------------------------------------------------------------------------------"
@@ -415,7 +428,7 @@ spec:
               echo ""	
 
               echo "***************************************************************************************************************************************************"
-              echo "   📦   Create OCP Application: Robot Shop"
+              echo "   📦   Create OCP Application: Robot Shop MAIN"
               curl -s "https://$CONCERT_URL/concert/core/api/v1/k8_components" \
                   -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
               -d @- <<EOF
@@ -423,8 +436,8 @@ spec:
                   "type": "ocp",
                   "disable_trivy_scan": false,
                   "enable_node_components_scan": true,
-                  "assessment_period": "99 hour",
-                  "discovery_job_name": "discovery-ocp-robot-shop",
+                  "assessment_period": "6 hour",
+                  "discovery_job_name": "discovery-resilience-ocp-robot-shop0",
                   "ingestion_details": {
                       "parameters": [{
                           "key": "cluster_name",
@@ -434,12 +447,84 @@ spec:
                   "credentials_id": "$CLUSTER_CREDENTIAL_ID",
                   "namespaces": [{
                       "application_name": "robot-shop",
-                      "label": "1.24.3,1.24.3",
+                      "label": "1.24.3,1.24.3,robot-shop,1.2.0",
                       "namespace": "robot-shop",
                       "version": "1.0.0",
                       "cluster_name": "local",
                       "profile_name": "kubernetes_profile",
                       "deployment_name": "robot-shop_1.0.0_Production"
+                  }],
+                  "environment": "$PROD_ENV_ID",
+                  "clusters": [{
+                      "name": "local",
+                      "namespaces": ["robot-shop"]
+                  }]
+              }
+              EOF
+
+
+              echo "***************************************************************************************************************************************************"
+              echo "   📦   Create OCP Application: Robot Shop VULN"
+              curl -s "https://$CONCERT_URL/concert/core/api/v1/k8_components" \
+                  -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+              -d @- <<EOF
+              {
+                  "type": "ocp",
+                  "disable_trivy_scan": false,
+                  "enable_node_components_scan": true,
+                  "assessment_period": "6 hour",
+                  "discovery_job_name": "discovery-resilience-ocp-robot-shop1",
+                  "ingestion_details": {
+                      "parameters": [{
+                          "key": "cluster_name",
+                          "value": "local"
+                      }]
+                  },
+                  "credentials_id": "$CLUSTER_CREDENTIAL_ID",
+                  "namespaces": [{
+                      "application_name": "robot-shop",
+                      "label": "1.24.3,1.24.3,robot-shop,1.1.0",
+                      "namespace": "robot-shop",
+                      "version": "1.1.0",
+                      "cluster_name": "local",
+                      "profile_name": "kubernetes_profile",
+                      "deployment_name": "robot-shop_1.1.0_Production"
+                  }],
+                  "environment": "$PROD_ENV_ID",
+                  "clusters": [{
+                      "name": "local",
+                      "namespaces": ["robot-shop"]
+                  }]
+              }
+              EOF
+
+
+              echo "***************************************************************************************************************************************************"
+              echo "   📦   Create OCP Application: Robot Shop FIX"
+              curl -s "https://$CONCERT_URL/concert/core/api/v1/k8_components" \
+                  -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+              -d @- <<EOF
+              {
+                  "type": "ocp",
+                  "disable_trivy_scan": false,
+                  "enable_node_components_scan": true,
+                  "assessment_period": "6 hour",
+                  "discovery_job_name": "discovery-resilience-ocp-robot-shop2",
+                  "ingestion_details": {
+                      "parameters": [{
+                          "key": "cluster_name",
+                          "value": "local"
+                      }]
+                  },
+                  "credentials_id": "$CLUSTER_CREDENTIAL_ID",
+                  "namespaces": [{
+                      "application_name": "robot-shop",
+                      "label": "1.24.3,1.24.3,robot-shop,1.2.0",
+                      "namespace": "robot-shop",
+                      "version": "1.2.0",
+                      "cluster_name": "local",
+                      "profile_name": "kubernetes_profile",
+                      "deployment_name": "robot-shop_1.2.0_Production"
                   }],
                   "environment": "$PROD_ENV_ID",
                   "clusters": [{
@@ -460,7 +545,7 @@ spec:
                   "type": "ocp",
                   "disable_trivy_scan": false,
                   "enable_node_components_scan": true,
-                  "assessment_period": "99 hour",
+                  "assessment_period": "6 hour",
                   "discovery_job_name": "discovery-ocp-galaxium-travels",
                   "ingestion_details": {
                       "parameters": [{
@@ -497,7 +582,7 @@ spec:
                   "type": "ocp",
                   "disable_trivy_scan": false,
                   "enable_node_components_scan": true,
-                  "assessment_period": "99 hour",
+                  "assessment_period": "6 hour",
                   "discovery_job_name": "discovery-ocp-sock-shop",
                   "ingestion_details": {
                       "parameters": [{
@@ -535,13 +620,13 @@ spec:
               echo ""	
 
               echo "***************************************************************************************************************************************************"
-              echo "   🗄️   Create GIT Application: Robot Shop"
+              echo "   🗄️   Create GIT Application: Robot Shop MAIN"
               curl -s "https://$CONCERT_URL/concert/core/api/v1/k8_components" \
                   -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
               -d @- <<EOF
               {
                   "type": "github",
-                  "discovery_job_name": "discovery-git-robot-shop",
+                  "discovery_job_name": "discovery-git-robot-shop0",
                   "discovery_type": "source_control_discovery_job",
                   "ingestion_details": {
                       "parameters": [{
@@ -559,6 +644,66 @@ spec:
                       }]
                   },
                   "credentials_id": "$GITHUB_CREDENTIAL_ID"
+              }
+              EOF
+
+
+
+
+              echo "***************************************************************************************************************************************************"
+              echo "   🗄️   Create GIT Application: Robot Shop VULNERABLE"
+              curl -s "https://$CONCERT_URL/concert/core/api/v1/k8_components" \
+                  -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+              -d @- <<EOF
+              {
+                  "type": "github",
+                  "discovery_job_name": "discovery-git-robot-shop1",
+                  "discovery_type": "source_control_discovery_job",
+                  "ingestion_details": {
+                      "parameters": [{
+                          "key": "org",
+                        "value": "$GITHUB_USERNAME"
+                      }, {
+                          "key": "repository",
+                          "value": "robot-shop:vulnerable"
+                      }, {
+                          "key": "application_name",
+                          "value": "robot-shop"
+                      }, {
+                          "key": "application_version",
+                          "value": "1.1.0"
+                      }]
+                  },
+                "credentials_id": "$GITHUB_CREDENTIAL_ID"
+              }
+              EOF
+
+
+              echo "***************************************************************************************************************************************************"
+              echo "   🗄️   Create GIT Application: Robot Shop FIX"
+              curl -s "https://$CONCERT_URL/concert/core/api/v1/k8_components" \
+                  -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+              -d @- <<EOF
+              {
+                  "type": "github",
+                  "discovery_job_name": "discovery-git-robot-shop2",
+                  "discovery_type": "source_control_discovery_job",
+                  "ingestion_details": {
+                      "parameters": [{
+                          "key": "org",
+                        "value": "$GITHUB_USERNAME"
+                      }, {
+                          "key": "repository",
+                          "value": "robot-shop:security-fix-1794125693"
+                      }, {
+                          "key": "application_name",
+                          "value": "robot-shop"
+                      }, {
+                          "key": "application_version",
+                          "value": "1.2.0"
+                      }]
+                  },
+                "credentials_id": "$GITHUB_CREDENTIAL_ID"
               }
               EOF
 
@@ -639,7 +784,7 @@ spec:
               -d @- <<EOF
               {
                     "type": "ocp",
-                    "discovery_job_name": "discovery-ocp-compliance-robot-shop",
+                    "discovery_job_name": "discovery-compliance-ocp-robot-shop",
                     "ingestion_details": {
                         "parameters": [{
                             "key": "cluster_name",
@@ -671,7 +816,7 @@ spec:
               -d @- <<EOF
               {
                     "type": "ocp",
-                    "discovery_job_name": "discovery-ocp-compliance-galaxium-travels",
+                    "discovery_job_name": "discovery-compliance-ocp-galaxium-travels",
                     "ingestion_details": {
                         "parameters": [{
                             "key": "cluster_name",
@@ -703,7 +848,7 @@ spec:
               -d @- <<EOF
               {
                     "type": "ocp",
-                    "discovery_job_name": "discovery-ocp-compliance-sock-shop",
+                    "discovery_job_name": "discovery-compliance-ocp-sock-shop",
                     "ingestion_details": {
                         "parameters": [{
                             "key": "cluster_name",
@@ -741,17 +886,33 @@ spec:
 
               export ROBOT_APP_ID=$(curl -s "https://$CONCERT_URL/concert/core/api/v1/applications?filter=name:robot-shop" \
                   -X 'GET' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json'|jq '.applications[0].id'|tr -d '"')
-              echo "     🧰 ROBOT_APP_ID:                "$ROBOT_APP_ID
+              echo "     🧰 ROBOT_APP_ID:                 "$ROBOT_APP_ID
 
-              export ROBOT_OCP_JOB_ID=$(curl -s "https://$CONCERT_URL/concert/core/api/v1/ingestion_jobs?filter=name:discovery-ocp-robot-shop" \
+              export ROBOT_OCP_JOB_ID=$(curl -s "https://$CONCERT_URL/concert/core/api/v1/ingestion_jobs?filter=name:discovery-resilience-ocp-robot-shop0" \
                   -X 'GET' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json'|jq '.ingestion_jobs[0].id'|tr -d '"')
-              echo "     📦 ROBOT_OCP_JOB_ID:            "$ROBOT_OCP_JOB_ID
+              echo "     📦 ROBOT_OCP_JOB_ID:             "$ROBOT_OCP_JOB_ID
 
-              export ROBOT_GIT_JOB_ID=$(curl -s "https://$CONCERT_URL/concert/core/api/v1/ingestion_jobs?filter=name:discovery-git-robot-shop" \
+              export ROBOT_VULN_OCP_JOB_ID=$(curl -s "https://$CONCERT_URL/concert/core/api/v1/ingestion_jobs?filter=name:discovery-resilience-ocp-robot-shop1" \
+                  -X 'GET' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json'|jq '.ingestion_jobs[0].id'|tr -d '"')
+              echo "     📦 ROBOT_VULN_OCP_JOB_ID:        "$ROBOT_VULN_OCP_JOB_ID
+
+              export ROBOT_FIX_OCP_JOB_ID=$(curl -s "https://$CONCERT_URL/concert/core/api/v1/ingestion_jobs?filter=name:discovery-resilience-ocp-robot-shop2" \
+                  -X 'GET' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json'|jq '.ingestion_jobs[0].id'|tr -d '"')
+              echo "     📦 ROBOT_FIX_OCP_JOB_ID:         "$ROBOT_FIX_OCP_JOB_ID
+
+              export ROBOT_GIT_JOB_ID=$(curl -s "https://$CONCERT_URL/concert/core/api/v1/ingestion_jobs?filter=name:discovery-git-robot-shop0" \
                   -X 'GET' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json'|jq '.ingestion_jobs[0].id'|tr -d '"')
               echo "     🗄️ ROBOT_GIT_JOB_ID:            "$ROBOT_GIT_JOB_ID
 
-              export ROBOT_COMP_JOB_ID=$(curl -s "https://$CONCERT_URL/concert/core/api/v1/ingestion_jobs?filter=name:discovery-ocp-compliance-robot-shop" \
+              export ROBOT_VULN_GIT_JOB_ID=$(curl -s "https://$CONCERT_URL/concert/core/api/v1/ingestion_jobs?filter=name:discovery-git-robot-shop1" \
+                  -X 'GET' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json'|jq '.ingestion_jobs[0].id'|tr -d '"')
+              echo "     🗄️ ROBOT_VULN_GIT_JOB_ID:       "$ROBOT_VULN_GIT_JOB_ID
+
+              export ROBOT_FIX__GIT_JOB_ID=$(curl -s "https://$CONCERT_URL/concert/core/api/v1/ingestion_jobs?filter=name:discovery-git-robot-shop2" \
+                  -X 'GET' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json'|jq '.ingestion_jobs[0].id'|tr -d '"')
+              echo "     🗄️ ROBOT_FIX__GIT_JOB_ID:       "$ROBOT_FIX__GIT_JOB_ID
+
+              export ROBOT_COMP_JOB_ID=$(curl -s "https://$CONCERT_URL/concert/core/api/v1/ingestion_jobs?filter=name:discovery-compliance-ocp-robot-shop" \
                   -X 'GET' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json'|jq '.ingestion_jobs[0].id'|tr -d '"')
               echo "     🗄️ ROBOT_COMP_JOB_ID:           "$ROBOT_COMP_JOB_ID
               echo ""	
@@ -769,7 +930,7 @@ spec:
                   -X 'GET' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json'|jq '.ingestion_jobs[0].id'|tr -d '"')
               echo "     🗄️ GALAX_GIT_JOB_ID:            "$GALAX_GIT_JOB_ID
 
-              export GALAX_COMP_JOB_ID=$(curl -s "https://$CONCERT_URL/concert/core/api/v1/ingestion_jobs?filter=name:discovery-ocp-compliance-galaxium-travels" \
+              export GALAX_COMP_JOB_ID=$(curl -s "https://$CONCERT_URL/concert/core/api/v1/ingestion_jobs?filter=name:discovery-compliance-ocp-galaxium-travels" \
                   -X 'GET' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json'|jq '.ingestion_jobs[0].id'|tr -d '"')
               echo "     🗄️ GALAX_COMP_JOB_ID:           "$GALAX_COMP_JOB_ID
               echo ""	
@@ -787,7 +948,7 @@ spec:
                   -X 'GET' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json'|jq '.ingestion_jobs[0].id'|tr -d '"')
               echo "     🗄️ SOCK_GIT_JOB_ID:             "$SOCK_GIT_JOB_ID
 
-              export SOCK_COMP_JOB_ID=$(curl -s "https://$CONCERT_URL/concert/core/api/v1/ingestion_jobs?filter=name:discovery-ocp-compliance-sock-shop" \
+              export SOCK_COMP_JOB_ID=$(curl -s "https://$CONCERT_URL/concert/core/api/v1/ingestion_jobs?filter=name:discovery-compliance-ocp-sock-shop" \
                   -X 'GET' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json'|jq '.ingestion_jobs[0].id'|tr -d '"')
               echo "     🗄️ SOCK_COMP_JOB_ID:            "$SOCK_COMP_JOB_ID
               echo ""		
@@ -845,22 +1006,6 @@ spec:
                 -X 'DELETE' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' 
 
 
-
-              echo ""
-              echo "***************************************************************************************************************************************************"
-              echo "   🗄️   Create Goal: Demo Vulnerability SLA adherence"
-              curl -s "https://$CONCERT_URL/concert/ingestion/api/v1/goals/user_goals" \
-              -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
-              --data-raw '{"template_name":"Vulnerability SLA adherence","name":"Demo Vulnerability SLA adherence","description":"Ensure timely vulnerability remediation based on severity-defined SLA targets.","persona_code":"CISO","goal_category":"EXEC_VIEW","goal_type":"VULNERABILITY_ADHERENCE","strictness":"HIGH","priority":"CRITICAL","source_type":"BUDDY","created_by":"admin","scope":{"environments":[],"application_tiers":[],"asset_types":[],"severity":"[{\"name\":\"CRITICAL\",\"sla\":2},{\"name\":\"HIGH\",\"sla\":5},{\"name\":\"MEDIUM\",\"sla\":8},{\"name\":\"LOW\",\"sla\":180}]","priority":"[]","applications":[],"application_categories":[],"internet_facing":null,"business_units":[],"clouds":[],"regions":[]},"rule":{"metric_key":"vulnerability_sla_adherence","tolerance_pattern":"ZERO_TOLERANCE","operator":"EQ","threshold_value":0,"secondary_value":null,"unit":"COUNT","evaluation_mode":"CONTINUOUS","aggregation_level":"APPLICATION","time_progression_enabled":false,"progression_rate_per_day":null},"action_policy":{"on_breach_actions":["NOTIFY_APPLICATION_OWNER"],"on_risk_actions":[],"notification_targets":[],"workflow_ids":[]},"sla_policy":{"sla_type":"CUSTOM","target_duration":0,"duration_unit":"DAYS"}}'
-
-
-              echo ""
-              echo "***************************************************************************************************************************************************"
-              echo "   🗄️   Create Goal: Demo Exposure SLA adherence"
-              curl -s "https://$CONCERT_URL/concert/ingestion/api/v1/goals/user_goals" \
-              -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
-              --data-raw '{"template_name":"Exposure SLA adherence","name":"Demo Exposure SLA adherence","description":"Ensure timely exposure remediation based on priority-defined SLA targets.","persona_code":"CISO","goal_category":"EXEC_VIEW","goal_type":"EXPOSURE_ADHERENCE","strictness":"HIGH","priority":"CRITICAL","source_type":"BUDDY","created_by":"admin","scope":{"environments":[],"application_tiers":[],"asset_types":[],"severity":"[]","priority":"[{\"name\":\"PRIORITY_1\",\"sla\":1},{\"name\":\"PRIORITY_2\",\"sla\":3},{\"name\":\"PRIORITY_3\",\"sla\":5},{\"name\":\"PRIORITY_4\",\"sla\":180}]","applications":[],"application_categories":[],"internet_facing":null,"business_units":[],"clouds":[],"regions":[]},"rule":{"metric_key":"exposure_sla_adherence","tolerance_pattern":"ZERO_TOLERANCE","operator":"EQ","threshold_value":0,"secondary_value":null,"unit":"COUNT","evaluation_mode":"CONTINUOUS","aggregation_level":"APPLICATION","time_progression_enabled":false,"progression_rate_per_day":null},"action_policy":{"on_breach_actions":["NOTIFY_APPLICATION_OWNER"],"on_risk_actions":[],"notification_targets":[],"workflow_ids":[]},"sla_policy":{"sla_type":"CUSTOM","target_duration":0,"duration_unit":"DAYS"}}'
-              
               
               echo ""
               echo "***************************************************************************************************************************************************"
@@ -886,6 +1031,23 @@ spec:
               -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
               --data-raw '{"template_name":"Application category severity by SLA adherence","name":"Demo Application SLA adherence","description":"SLA targets for vulnerabilities by application category and severity.","persona_code":"CISO","goal_category":"VULNERABILITY","goal_type":"SEVERITY_SLA_BY_APP_CATEGORY","strictness":"MEDIUM","priority":"HIGH","source_type":"BUDDY","created_by":"admin","scope":{"environments":[],"application_tiers":[],"asset_types":[],"severity":"[{\"name\":\"CRITICAL\",\"sla\":7},{\"name\":\"HIGH\",\"sla\":30},{\"name\":\"MEDIUM\",\"sla\":90},{\"name\":\"LOW\",\"sla\":180}]","priority":"[]","applications":[],"application_categories":["production"],"internet_facing":null,"business_units":[],"clouds":[],"regions":[]},"rule":{"metric_key":"no_over_dues","tolerance_pattern":"SLA_BASED","operator":"EQ","threshold_value":0,"secondary_value":null,"unit":"PERCENT","evaluation_mode":"CONTINUOUS","aggregation_level":"APPLICATION","time_progression_enabled":false,"progression_rate_per_day":null},"action_policy":{"on_breach_actions":[],"on_risk_actions":[],"notification_targets":[],"workflow_ids":[]},"sla_policy":{"sla_type":"DAYS_7","target_duration":0,"duration_unit":"DAYS","mode":"HARD","track_only":false,"escalate_at_percent":70,"auto_breach_at_expiry":true}}'
 
+
+
+              echo ""
+              echo "***************************************************************************************************************************************************"
+              echo "   🗄️   Create Goal: Demo Vulnerability SLA adherence"
+              curl -s "https://$CONCERT_URL/concert/ingestion/api/v1/goals/user_goals" \
+              -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+              --data-raw '{"template_name":"Vulnerability SLA adherence","name":"Demo Vulnerability SLA adherence","description":"Ensure timely vulnerability remediation based on severity-defined SLA targets.","persona_code":"CISO","goal_category":"EXEC_VIEW","goal_type":"VULNERABILITY_ADHERENCE","strictness":"HIGH","priority":"CRITICAL","source_type":"BUDDY","created_by":"admin","scope":{"environments":[],"application_tiers":[],"asset_types":[],"severity":"[{\"name\":\"CRITICAL\",\"sla\":2},{\"name\":\"HIGH\",\"sla\":5},{\"name\":\"MEDIUM\",\"sla\":8},{\"name\":\"LOW\",\"sla\":180}]","priority":"[]","applications":[],"application_categories":[],"internet_facing":null,"business_units":[],"clouds":[],"regions":[]},"rule":{"metric_key":"vulnerability_sla_adherence","tolerance_pattern":"ZERO_TOLERANCE","operator":"EQ","threshold_value":0,"secondary_value":null,"unit":"COUNT","evaluation_mode":"CONTINUOUS","aggregation_level":"APPLICATION","time_progression_enabled":false,"progression_rate_per_day":null},"action_policy":{"on_breach_actions":["NOTIFY_APPLICATION_OWNER"],"on_risk_actions":[],"notification_targets":[],"workflow_ids":[]},"sla_policy":{"sla_type":"CUSTOM","target_duration":0,"duration_unit":"DAYS"}}'
+
+
+              echo ""
+              echo "***************************************************************************************************************************************************"
+              echo "   🗄️   Create Goal: Demo Exposure SLA adherence"
+              curl -s "https://$CONCERT_URL/concert/ingestion/api/v1/goals/user_goals" \
+              -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+              --data-raw '{"template_name":"Exposure SLA adherence","name":"Demo Exposure SLA adherence","description":"Ensure timely exposure remediation based on priority-defined SLA targets.","persona_code":"CISO","goal_category":"EXEC_VIEW","goal_type":"EXPOSURE_ADHERENCE","strictness":"HIGH","priority":"CRITICAL","source_type":"BUDDY","created_by":"admin","scope":{"environments":[],"application_tiers":[],"asset_types":[],"severity":"[]","priority":"[{\"name\":\"PRIORITY_1\",\"sla\":1},{\"name\":\"PRIORITY_2\",\"sla\":3},{\"name\":\"PRIORITY_3\",\"sla\":5},{\"name\":\"PRIORITY_4\",\"sla\":180}]","applications":[],"application_categories":[],"internet_facing":null,"business_units":[],"clouds":[],"regions":[]},"rule":{"metric_key":"exposure_sla_adherence","tolerance_pattern":"ZERO_TOLERANCE","operator":"EQ","threshold_value":0,"secondary_value":null,"unit":"COUNT","evaluation_mode":"CONTINUOUS","aggregation_level":"APPLICATION","time_progression_enabled":false,"progression_rate_per_day":null},"action_policy":{"on_breach_actions":["NOTIFY_APPLICATION_OWNER"],"on_risk_actions":[],"notification_targets":[],"workflow_ids":[]},"sla_policy":{"sla_type":"CUSTOM","target_duration":0,"duration_unit":"DAYS"}}'
+              
 
               echo ""	
               echo ""	
@@ -922,75 +1084,103 @@ spec:
 
 
 
-              echo "------------------------------------------------------------------------------------------------------------------------------"
-              echo " ✅ Run All Jobs"
-              echo "------------------------------------------------------------------------------------------------------------------------------"
-              echo ""	
-              echo "***************************************************************************************************************************************************"
-              echo "   🚀   Run Robot Shop Git Discovery"
-              curl -s "https://$CONCERT_URL/concert/ingestion/api/v1/job/v2/submit" \
-                  -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
-                  --data-raw '{"job_details":{"job_id":"'$ROBOT_GIT_JOB_ID'","job_type":"source_control_discovery_job"}}'
+                echo "------------------------------------------------------------------------------------------------------------------------------"
+                echo " ✅ Run Jobs"
+                echo "------------------------------------------------------------------------------------------------------------------------------"
+                echo ""	
+                echo "***************************************************************************************************************************************************"
+                echo "   🚀   Run Robot Shop Git Discovery MAIN"
+                curl -s "https://$CONCERT_URL/concert/ingestion/api/v1/job/v2/submit" \
+                    -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+                    --data-raw '{"job_details":{"job_id":"'$ROBOT_GIT_JOB_ID'","job_type":"source_control_discovery_job"}}'
               
-              echo ""	
-              echo "***************************************************************************************************************************************************"
-              echo "   🚀   Run Galaxium Travels Git Discovery"
-              curl -s "https://$CONCERT_URL/concert/ingestion/api/v1/job/v2/submit" \
-                  -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
-                  --data-raw '{"job_details":{"job_id":"'$GALAX_GIT_JOB_ID'","job_type":"source_control_discovery_job"}}'
-              
-              echo ""	
-              echo "***************************************************************************************************************************************************"
-              echo "   🚀   Run Sock Shop Git Discovery"
-              curl -s "https://$CONCERT_URL/concert/ingestion/api/v1/job/v2/submit" \
-                  -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
-                  --data-raw '{"job_details":{"job_id":"'$SOCK_GIT_JOB_ID'","job_type":"source_control_discovery_job"}}'
-              
-              echo ""	
-              echo "***************************************************************************************************************************************************"
-              echo "   🚀   Run Robot Shop OCP Discovery"
-              curl -s "https://$CONCERT_URL/concert/ingestion/api/v1/job/v2/submit" \
-                  -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
-                  --data-raw '{"job_details":{"job_id":"'$ROBOT_OCP_JOB_ID'","job_type":"discovery_job"}}'
-              
-              echo ""	
-              echo "***************************************************************************************************************************************************"
-              echo "   🚀   Run Galaxium Travels OCP Discovery"
-              curl -s "https://$CONCERT_URL/concert/ingestion/api/v1/job/v2/submit" \
-                  -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
-                  --data-raw '{"job_details":{"job_id":"'$GALAX_OCP_JOB_ID'","job_type":"discovery_job"}}'
-              
-              echo ""	
-              echo "***************************************************************************************************************************************************"
-              echo "   🚀   Run Sock Shop OCP Discovery"
-              curl -s "https://$CONCERT_URL/concert/ingestion/api/v1/job/v2/submit" \
-                  -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
-                  --data-raw '{"job_details":{"job_id":"'$SOCK_OCP_JOB_ID'","job_type":"discovery_job"}}'
+                echo "***************************************************************************************************************************************************"
+                echo "   🚀   Run Robot Shop Git Discovery VULN"
+                curl -s "https://$CONCERT_URL/concert/ingestion/api/v1/job/v2/submit" \
+                    -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+                    --data-raw '{"job_details":{"job_id":"'$ROBOT_VULN_GIT_JOB_ID'","job_type":"source_control_discovery_job"}}'
 
-              echo ""	
-              echo "***************************************************************************************************************************************************"
-              echo "   🚀   Run Robot Shop Compliance Discovery"
-              curl -s "https://$CONCERT_URL/concert/ingestion/api/v1/job/v2/submit" \
-                  -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
-                  --data-raw '{"job_details":{"job_id":"'$ROBOT_COMP_JOB_ID'","job_type":"discovery_job_compliance"}}'
-              
-              echo ""	
-              echo "***************************************************************************************************************************************************"
-              echo "   🚀   Run Galaxium Travels Compliance Discovery"
-              curl -s "https://$CONCERT_URL/concert/ingestion/api/v1/job/v2/submit" \
-                  -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
-                  --data-raw '{"job_details":{"job_id":"'$GALAX_COMP_JOB_ID'","job_type":"discovery_job_compliance"}}'
-              
-              echo ""	
-              echo "***************************************************************************************************************************************************"
-              echo "   🚀   Run Sock Shop Compliance Discovery"
-              curl -s "https://$CONCERT_URL/concert/ingestion/api/v1/job/v2/submit" \
-                  -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
-                  --data-raw '{"job_details":{"job_id":"'$SOCK_COMP_JOB_ID'","job_type":"discovery_job_compliance"}}'
+                echo "***************************************************************************************************************************************************"
+                echo "   🚀   Run Robot Shop Git Discovery FIX"
+                curl -s "https://$CONCERT_URL/concert/ingestion/api/v1/job/v2/submit" \
+                    -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+                    --data-raw '{"job_details":{"job_id":"'$ROBOT_FIX_GIT_JOB_ID'","job_type":"source_control_discovery_job"}}'
 
-              echo ""	
-              echo ""	
-              echo ""	
+                echo ""	
+                echo "***************************************************************************************************************************************************"
+                echo "   🚀   Run Galaxium Travels Git Discovery"
+                curl -s "https://$CONCERT_URL/concert/ingestion/api/v1/job/v2/submit" \
+                    -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+                    --data-raw '{"job_details":{"job_id":"'$GALAX_GIT_JOB_ID'","job_type":"source_control_discovery_job"}}'
+              
+                echo ""	
+                echo "***************************************************************************************************************************************************"
+                echo "   🚀   Run Sock Shop Git Discovery"
+                curl -s "https://$CONCERT_URL/concert/ingestion/api/v1/job/v2/submit" \
+                    -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+                    --data-raw '{"job_details":{"job_id":"'$SOCK_GIT_JOB_ID'","job_type":"source_control_discovery_job"}}'
+              
+              #   echo ""	
+              #   echo "***************************************************************************************************************************************************"
+              #   echo "   🚀   Run Robot Shop OCP Discovery MAIN"
+              #   curl -s "https://$CONCERT_URL/concert/ingestion/api/v1/job/v2/submit" \
+              #       -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+              #       --data-raw '{"job_details":{"job_id":"'$ROBOT_OCP_JOB_ID'","job_type":"discovery_job"}}'
+              
+
+              #   echo ""	
+              #   echo "***************************************************************************************************************************************************"
+              #   echo "   🚀   Run Robot Shop OCP Discovery VULN"
+              #   curl -s "https://$CONCERT_URL/concert/ingestion/api/v1/job/v2/submit" \
+              #       -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+              #       --data-raw '{"job_details":{"job_id":"'$ROBOT_VULN_OCP_JOB_ID'","job_type":"discovery_job"}}'
+              
+
+              #   echo ""	
+              #   echo "***************************************************************************************************************************************************"
+              #   echo "   🚀   Run Robot Shop OCP Discovery FIX"
+              #   curl -s "https://$CONCERT_URL/concert/ingestion/api/v1/job/v2/submit" \
+              #       -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+              #       --data-raw '{"job_details":{"job_id":"'$ROBOT_FIX_OCP_JOB_ID'","job_type":"discovery_job"}}'
+              
+              #   echo ""	
+              #   echo "***************************************************************************************************************************************************"
+              #   echo "   🚀   Run Galaxium Travels OCP Discovery"
+              #   curl -s "https://$CONCERT_URL/concert/ingestion/api/v1/job/v2/submit" \
+              #       -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+              #       --data-raw '{"job_details":{"job_id":"'$GALAX_OCP_JOB_ID'","job_type":"discovery_job"}}'
+              
+              #   echo ""	
+              #   echo "***************************************************************************************************************************************************"
+              #   echo "   🚀   Run Sock Shop OCP Discovery"
+              #   curl -s "https://$CONCERT_URL/concert/ingestion/api/v1/job/v2/submit" \
+              #       -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+              #       --data-raw '{"job_details":{"job_id":"'$SOCK_OCP_JOB_ID'","job_type":"discovery_job"}}'
+
+              #   echo ""	
+              #   echo "***************************************************************************************************************************************************"
+              #   echo "   🚀   Run Robot Shop Compliance Discovery"
+              #   curl -s "https://$CONCERT_URL/concert/ingestion/api/v1/job/v2/submit" \
+              #       -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+              #       --data-raw '{"job_details":{"job_id":"'$ROBOT_COMP_JOB_ID'","job_type":"discovery_job_compliance"}}'
+              
+              #   echo ""	
+              #   echo "***************************************************************************************************************************************************"
+              #   echo "   🚀   Run Galaxium Travels Compliance Discovery"
+              #   curl -s "https://$CONCERT_URL/concert/ingestion/api/v1/job/v2/submit" \
+              #       -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+              #       --data-raw '{"job_details":{"job_id":"'$GALAX_COMP_JOB_ID'","job_type":"discovery_job_compliance"}}'
+              
+              #   echo ""	
+              #   echo "***************************************************************************************************************************************************"
+              #   echo "   🚀   Run Sock Shop Compliance Discovery"
+              #   curl -s "https://$CONCERT_URL/concert/ingestion/api/v1/job/v2/submit" \
+              #       -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+              #       --data-raw '{"job_details":{"job_id":"'$SOCK_COMP_JOB_ID'","job_type":"discovery_job_compliance"}}'
+
+              #   echo ""	
+              #   echo ""	
+              #   echo ""	
 
 
               echo "------------------------------------------------------------------------------------------------------------------------------"
