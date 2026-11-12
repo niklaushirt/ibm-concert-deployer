@@ -53,7 +53,7 @@
       spec:
         applicationMenu:
           imageURL: >-
-            https://raw.githubusercontent.com/niklaushirt/ibm-concert-deployer/main/doc/pics/icons/ibm-aiops6-white.svg
+            https://raw.githubusercontent.com/niklaushirt/ibm-concert-deployer/main/doc/pics/icons/ibm-aiops6.svg
           section: IBM IT Automation
         href: >-
           https://$appURL

@@ -86,7 +86,7 @@
 
 
 
-- name: 🚀 Toggle Row Coloring On
+- name: 🚀 Toggle Row Coloring On and set default Views fro Alerts
   shell: |
     set -x
     export AIOPS_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
@@ -105,12 +105,14 @@
 
 
     export views=$(curl -k -X GET  --header 'Accept: application/json' -H "Authorization: Bearer ${ZEN_TOKEN}" https://$CPD_ROUTE/aiops/api/v2/configuration/views -H "accept: application/json" -H "Content-Type: application/json" -H "X-TenantID: cfd95b7e-3bc7-4006-a4a8-a73a79c71255" )
-    export viewID=$(echo $views|jq -r -c '.views[]| select( .name == "DEMO Incidents View")|.id')
+    export viewID=$(echo $views|jq -r -c '.items[]| select( .name == "DEMO Incidents View")|.id')
     echo $viewID
 
 
     export payload="{\"value\": { \"rowColorToggle\": true, \"ael_user_properties_refresh_time\": 60, \"defaultView\": \"$viewID\", \"defaultIncidentAlertView\": \"$viewID\"}}"
     echo $payload   
+
+
 
 
     curl -X 'PUT' \
