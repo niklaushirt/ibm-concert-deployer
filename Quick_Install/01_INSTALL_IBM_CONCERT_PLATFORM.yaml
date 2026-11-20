@@ -62,7 +62,7 @@ data:
       # --------------------------------------------------------------------------------------------------------------------------------------
       # Passwords and Licenses
       # --------------------------------------------------------------------------------------------------------------------------------------
-      # Use this Password for all Instances ❗ do NOT use the "-" character and do NOT leave empty ❗
+      # Use this Password for all Instances ❗ Password must be at least 12 characters long and do NOT use the "-" character and do NOT leave empty ❗
       global_password: CHANGEME
 
 
@@ -151,7 +151,7 @@ data:
       - name: ibm-concert-optimise
         kind: IBMConcertOptimise
         install: true
-        concert_optimise_version: 8.21.4
+        concert_optimise_version: 8.21.5
 
         # Only install Concert Optimise Lite (no additional add-ons) if set to true - as Concert platform Backend
         concert_optimise_lite: true
@@ -274,7 +274,7 @@ data:
 
         # ---------------------------------------------------------------------
         # CONCERT VERSION - check https://github.com/IBM/Concert/releases
-        concert_version: v3.1.0
+        concert_version: v3.1.0.3
 
 
 

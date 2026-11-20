@@ -46,11 +46,11 @@ spec:
           - name: GITHUB_URL
             value: https://api.github.com/
           - name: GITHUB_USERNAME
-            value: ❗<GITHUB ORG>❗ # e.g.niklaushirt
+            value: niklaushirt # change if you want to use your own repo
           - name: GITHUB_TOKEN
-            value: ❗<GITHUB PERSONAL ACCESS TOKEN>❗ # e.g. ghp_1234567890abcdef123... or github_pat_11AAGJBD...
+            value: ❗<GITHUB PERSONAL ACCESS TOKEN>❗ # e.g. ghp_1234567890abcdef123... or github_pat_11AAGJBD... only for PRs
           - name: BOB_TOKEN
-            value: ❗<BOB TOKEN>❗
+            value: ❗<BOB TOKEN>❗ # Only for Secure Coder Web aka Buddy
 
           image: quay.io/niklaushirt/ibm-concert-tools:1.0.0
           imagePullPolicy: IfNotPresent
@@ -285,6 +285,30 @@ spec:
 
               echo ""
               echo "***************************************************************************************************************************************************"
+              echo "   🔐   Create Empty Git Credential"
+              curl -s "https://$CONCERT_URL/concert/core/api/v1/credentials" \
+                  -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+              -d @- <<EOF
+              {
+              "credentials": [
+                  {
+                  "key": "base_url",
+                  "value": "$GITHUB_URL"
+                  }
+              ],
+              "name": "EMPTY-GITHUB-CREDENTIALS",
+              "description": "Empty GitHub credentials",
+              "expiry": 0,
+              "id": "id",
+              "type": "github",
+              "created_by": "demo@ibm.com"
+              }
+              EOF
+
+
+
+              echo ""
+              echo "***************************************************************************************************************************************************"
               echo "   🔐   Create OCP Credential"
               curl -s "https://$CONCERT_URL/concert/core/api/v1/credentials" \
                   -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
@@ -391,6 +415,11 @@ spec:
               export GITHUB_CREDENTIAL_ID=$(curl -s "https://$CONCERT_URL/concert/core/api/v1/credentials?filter=name:MY-GITHUB-CREDENTIALS" \
                   -X 'GET' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json'|jq '.credentials[0].id'|tr -d '"')
               echo "     🔐 GITHUB_CREDENTIAL_ID:        "$GITHUB_CREDENTIAL_ID
+
+              export GITHUB_EMPTY_CREDENTIAL_ID=$(curl -s "https://$CONCERT_URL/concert/core/api/v1/credentials?filter=name:EMPTY-GITHUB-CREDENTIALS" \
+                  -X 'GET' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json'|jq '.credentials[0].id'|tr -d '"')
+              echo "     🔐 GITHUB_EMPTY_CREDENTIAL_ID:  "$GITHUB_EMPTY_CREDENTIAL_ID
+
 
               export CLUSTER_CREDENTIAL_ID=$(curl -s "https://$CONCERT_URL/concert/core/api/v1/credentials?filter=name:MY-CLUSTER-CREDENTIALS" \
                   -X 'GET' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json'|jq '.credentials[0].id'|tr -d '"')
@@ -572,7 +601,7 @@ spec:
                           "value": "1.0.0"
                       }]
                   },
-                  "credentials_id": "$GITHUB_CREDENTIAL_ID"
+                  "credentials_id": "$GITHUB_EMPTY_CREDENTIAL_ID"
               }
               EOF
 
@@ -603,7 +632,7 @@ spec:
                           "value": "1.1.0"
                       }]
                   },
-                "credentials_id": "$GITHUB_CREDENTIAL_ID"
+                "credentials_id": "$GITHUB_EMPTY_CREDENTIAL_ID"
               }
               EOF
 
@@ -632,7 +661,7 @@ spec:
                           "value": "1.2.0"
                       }]
                   },
-                "credentials_id": "$GITHUB_CREDENTIAL_ID"
+                "credentials_id": "$GITHUB_EMPTY_CREDENTIAL_ID"
               }
               EOF
 
@@ -662,7 +691,7 @@ spec:
                           "value": "1.0.0"
                       }]
                   },
-                  "credentials_id": "$GITHUB_CREDENTIAL_ID"
+                  "credentials_id": "$GITHUB_EMPTY_CREDENTIAL_ID"
               }
               EOF
 
@@ -692,7 +721,7 @@ spec:
                           "value": "1.0.0"
                       }]
                   },
-                  "credentials_id": "$GITHUB_CREDENTIAL_ID"
+                  "credentials_id": "$GITHUB_EMPTY_CREDENTIAL_ID"
               }
               EOF
               echo ""	
