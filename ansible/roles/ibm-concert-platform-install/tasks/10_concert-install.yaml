@@ -643,8 +643,12 @@
 
     echo "------------------------------------------------------------------------------------------------------------------------------"
     echo "    ✅ Register: OPTIMIZATION_COORDINATOR_AGENT"
-    export OPTIMIZE_HOST=$(oc get route -n ibm-concert-optimise nginx -o jsonpath={.spec.host})
-    OPTIMIZATION_COORDINATOR_AGENT_URL="https://$OPTIMIZE_HOST/turbonomic/turboai/a2a"
+
+    oc create route edge a2a-turboai -n ibm-concert-optimise --service=turboai --port=http-a2a-turboai
+
+    export OPTIMIZE_HOST=$(oc get route -n ibm-concert-optimise a2a-turboai -o jsonpath={.spec.host})
+    # OPTIMIZATION_COORDINATOR_AGENT_URL="https://$OPTIMIZE_HOST/turbonomic/turboai/a2a"
+    OPTIMIZATION_COORDINATOR_AGENT_URL="https://$OPTIMIZE_HOST"
 
     curl -k -X POST "$AGENT_CARD_REGISTRATION_URL" \
       -H "Secret: $AUTH_API_KEY" \

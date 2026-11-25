@@ -43,18 +43,14 @@ spec:
           env:
           - name: AUTH_API_KEY
             value: ❗<API KEY FROM CONCERT INSTANCE>❗
-          - name: OCP_URL
-            value: ❗<YOUR OCP URL FROM DEMO UI>❗  # e.g."https://api.itz-12345.hub04-lb.techzone.ibm.com:6443"
-          - name: OCP_TOKEN
-            value: ❗<YOUR OCP TOKEN FROM DEMO UI>❗
           - name: GITHUB_URL
             value: https://api.github.com/
           - name: GITHUB_USERNAME
-            value: ❗<GITHUB ORG>❗ # e.g.niklaushirt
+            value: niklaushirt # change if you want to use your own repo
           - name: GITHUB_TOKEN
-            value: ❗<GITHUB PERSONAL ACCESS TOKEN>❗ # e.g. ghp_1234567890abcdef123... or github_pat_11AAGJBD...
+            value: ❗<GITHUB PERSONAL ACCESS TOKEN>❗ # e.g. ghp_1234567890abcdef123... or github_pat_11AAGJBD... only for PRs
           - name: BOB_TOKEN
-            value: ❗<BOB TOKEN>❗
+            value: ❗<BOB TOKEN>❗ # Only for Secure Coder Web aka Buddy
 
           image: quay.io/niklaushirt/ibm-concert-tools:1.0.0
           imagePullPolicy: IfNotPresent
@@ -114,6 +110,23 @@ spec:
               echo ""	
               echo ""	
 
+
+
+
+              echo "------------------------------------------------------------------------------------------------------------------------------"
+              echo " ✅ Create OCP User"
+              echo "------------------------------------------------------------------------------------------------------------------------------"
+              echo ""	
+              export OCP_URL=$(oc get Infrastructure cluster -o jsonpath={.status.apiServerURL})
+              export OCP_TOKEN=$(oc create token -n ibm-installer ibm-installer-admin --duration=999999999s)
+              #export OCP_TOKEN=$(oc -n openshift-authentication get secret $(oc get secret -n openshift-authentication |grep -m1 oauth-openshift-token|awk '{print$1}') -o jsonpath='{.data.token}'|base64 --decode)
+              echo "  🌏 URL:         $OCP_URL"
+              echo "  🫅 User:        kubeadmin"
+              echo "  🔐 Token:       $OCP_TOKEN"
+              echo "  🔐 Login:       oc login --server=$OCP_URL --token=$OCP_TOKEN "
+              echo ""	
+              echo ""	
+              echo ""	
 
 
               echo "------------------------------------------------------------------------------------------------------------------------------"
@@ -272,6 +285,30 @@ spec:
 
               echo ""
               echo "***************************************************************************************************************************************************"
+              echo "   🔐   Create Empty Git Credential"
+              curl -s "https://$CONCERT_URL/concert/core/api/v1/credentials" \
+                  -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+              -d @- <<EOF
+              {
+              "credentials": [
+                  {
+                  "key": "base_url",
+                  "value": "$GITHUB_URL"
+                  }
+              ],
+              "name": "EMPTY-GITHUB-CREDENTIALS",
+              "description": "Empty GitHub credentials",
+              "expiry": 0,
+              "id": "id",
+              "type": "github",
+              "created_by": "demo@ibm.com"
+              }
+              EOF
+
+
+
+              echo ""
+              echo "***************************************************************************************************************************************************"
               echo "   🔐   Create OCP Credential"
               curl -s "https://$CONCERT_URL/concert/core/api/v1/credentials" \
                   -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
@@ -379,6 +416,11 @@ spec:
                   -X 'GET' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json'|jq '.credentials[0].id'|tr -d '"')
               echo "     🔐 GITHUB_CREDENTIAL_ID:        "$GITHUB_CREDENTIAL_ID
 
+              export GITHUB_EMPTY_CREDENTIAL_ID=$(curl -s "https://$CONCERT_URL/concert/core/api/v1/credentials?filter=name:EMPTY-GITHUB-CREDENTIALS" \
+                  -X 'GET' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json'|jq '.credentials[0].id'|tr -d '"')
+              echo "     🔐 GITHUB_EMPTY_CREDENTIAL_ID:  "$GITHUB_EMPTY_CREDENTIAL_ID
+
+
               export CLUSTER_CREDENTIAL_ID=$(curl -s "https://$CONCERT_URL/concert/core/api/v1/credentials?filter=name:MY-CLUSTER-CREDENTIALS" \
                   -X 'GET' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json'|jq '.credentials[0].id'|tr -d '"')
               echo "     🔐 CLUSTER_CREDENTIAL_ID:       "$CLUSTER_CREDENTIAL_ID
@@ -415,7 +457,7 @@ spec:
               echo ""	
 
               echo "***************************************************************************************************************************************************"
-              echo "   📦   Create OCP Application: Robot Shop"
+              echo "   📦   Create OCP Application: Robot Shop MAIN"
               curl -s "https://$CONCERT_URL/concert/core/api/v1/k8_components" \
                   -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
               -d @- <<EOF
@@ -423,8 +465,8 @@ spec:
                   "type": "ocp",
                   "disable_trivy_scan": false,
                   "enable_node_components_scan": true,
-                  "assessment_period": "99 hour",
-                  "discovery_job_name": "discovery-ocp-robot-shop",
+                  "assessment_period": "6 hour",
+                  "discovery_job_name": "discovery-resilience-ocp-robot-shop0",
                   "ingestion_details": {
                       "parameters": [{
                           "key": "cluster_name",
@@ -434,7 +476,7 @@ spec:
                   "credentials_id": "$CLUSTER_CREDENTIAL_ID",
                   "namespaces": [{
                       "application_name": "robot-shop",
-                      "label": "1.24.3,1.24.3",
+                      "label": "1.24.3,1.24.3,robot-shop,1.2.0",
                       "namespace": "robot-shop",
                       "version": "1.0.0",
                       "cluster_name": "local",
@@ -450,6 +492,7 @@ spec:
               EOF
 
 
+
               echo ""
               echo "***************************************************************************************************************************************************"
               echo "   📦   Create OCP Application: Galaxium Travels"
@@ -460,7 +503,7 @@ spec:
                   "type": "ocp",
                   "disable_trivy_scan": false,
                   "enable_node_components_scan": true,
-                  "assessment_period": "99 hour",
+                  "assessment_period": "6 hour",
                   "discovery_job_name": "discovery-ocp-galaxium-travels",
                   "ingestion_details": {
                       "parameters": [{
@@ -497,7 +540,7 @@ spec:
                   "type": "ocp",
                   "disable_trivy_scan": false,
                   "enable_node_components_scan": true,
-                  "assessment_period": "99 hour",
+                  "assessment_period": "6 hour",
                   "discovery_job_name": "discovery-ocp-sock-shop",
                   "ingestion_details": {
                       "parameters": [{
@@ -535,13 +578,13 @@ spec:
               echo ""	
 
               echo "***************************************************************************************************************************************************"
-              echo "   🗄️   Create GIT Application: Robot Shop"
+              echo "   🗄️   Create GIT Application: Robot Shop MAIN"
               curl -s "https://$CONCERT_URL/concert/core/api/v1/k8_components" \
                   -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
               -d @- <<EOF
               {
                   "type": "github",
-                  "discovery_job_name": "discovery-git-robot-shop",
+                  "discovery_job_name": "discovery-git-robot-shop0",
                   "discovery_type": "source_control_discovery_job",
                   "ingestion_details": {
                       "parameters": [{
@@ -558,7 +601,67 @@ spec:
                           "value": "1.0.0"
                       }]
                   },
-                  "credentials_id": "$GITHUB_CREDENTIAL_ID"
+                  "credentials_id": "$GITHUB_EMPTY_CREDENTIAL_ID"
+              }
+              EOF
+
+
+
+
+              echo "***************************************************************************************************************************************************"
+              echo "   🗄️   Create GIT Application: Robot Shop VULNERABLE"
+              curl -s "https://$CONCERT_URL/concert/core/api/v1/k8_components" \
+                  -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+              -d @- <<EOF
+              {
+                  "type": "github",
+                  "discovery_job_name": "discovery-git-robot-shop1",
+                  "discovery_type": "source_control_discovery_job",
+                  "ingestion_details": {
+                      "parameters": [{
+                          "key": "org",
+                        "value": "$GITHUB_USERNAME"
+                      }, {
+                          "key": "repository",
+                          "value": "robot-shop:vulnerable"
+                      }, {
+                          "key": "application_name",
+                          "value": "robot-shop"
+                      }, {
+                          "key": "application_version",
+                          "value": "1.1.0"
+                      }]
+                  },
+                "credentials_id": "$GITHUB_EMPTY_CREDENTIAL_ID"
+              }
+              EOF
+
+
+              echo "***************************************************************************************************************************************************"
+              echo "   🗄️   Create GIT Application: Robot Shop FIX"
+              curl -s "https://$CONCERT_URL/concert/core/api/v1/k8_components" \
+                  -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+              -d @- <<EOF
+              {
+                  "type": "github",
+                  "discovery_job_name": "discovery-git-robot-shop2",
+                  "discovery_type": "source_control_discovery_job",
+                  "ingestion_details": {
+                      "parameters": [{
+                          "key": "org",
+                        "value": "$GITHUB_USERNAME"
+                      }, {
+                          "key": "repository",
+                          "value": "robot-shop:security-fix-1794125693"
+                      }, {
+                          "key": "application_name",
+                          "value": "robot-shop"
+                      }, {
+                          "key": "application_version",
+                          "value": "1.2.0"
+                      }]
+                  },
+                "credentials_id": "$GITHUB_EMPTY_CREDENTIAL_ID"
               }
               EOF
 
@@ -588,7 +691,7 @@ spec:
                           "value": "1.0.0"
                       }]
                   },
-                  "credentials_id": "$GITHUB_CREDENTIAL_ID"
+                  "credentials_id": "$GITHUB_EMPTY_CREDENTIAL_ID"
               }
               EOF
 
@@ -618,7 +721,7 @@ spec:
                           "value": "1.0.0"
                       }]
                   },
-                  "credentials_id": "$GITHUB_CREDENTIAL_ID"
+                  "credentials_id": "$GITHUB_EMPTY_CREDENTIAL_ID"
               }
               EOF
               echo ""	
@@ -639,7 +742,7 @@ spec:
               -d @- <<EOF
               {
                     "type": "ocp",
-                    "discovery_job_name": "discovery-ocp-compliance-robot-shop",
+                    "discovery_job_name": "discovery-compliance-ocp-robot-shop",
                     "ingestion_details": {
                         "parameters": [{
                             "key": "cluster_name",
@@ -671,7 +774,7 @@ spec:
               -d @- <<EOF
               {
                     "type": "ocp",
-                    "discovery_job_name": "discovery-ocp-compliance-galaxium-travels",
+                    "discovery_job_name": "discovery-compliance-ocp-galaxium-travels",
                     "ingestion_details": {
                         "parameters": [{
                             "key": "cluster_name",
@@ -703,7 +806,7 @@ spec:
               -d @- <<EOF
               {
                     "type": "ocp",
-                    "discovery_job_name": "discovery-ocp-compliance-sock-shop",
+                    "discovery_job_name": "discovery-compliance-ocp-sock-shop",
                     "ingestion_details": {
                         "parameters": [{
                             "key": "cluster_name",
@@ -732,6 +835,124 @@ spec:
 
 
 
+              echo "------------------------------------------------------------------------------------------------------------------------------"
+              echo " ✅ Create Simulated Postures"
+              echo "------------------------------------------------------------------------------------------------------------------------------"
+              echo ""	
+
+              export date_1_month_later=$(date --date='+1 month' +'%Y-%m-%d')
+              export date_1_week_later=$(date --date='+1 week' +'%Y-%m-%d')
+              export date_1_week_ago=$(date --date='-1 week' +'%Y-%m-%d')
+              export date_1_month_ago=$(date --date='-1 month' +'%Y-%m-%d')
+              export date_3_month_ago=$(date --date='-3 month' +'%Y-%m-%d')
+              export date_6_month_ago=$(date --date='-6 month' +'%Y-%m-%d')
+
+
+              echo "***************************************************************************************************************************************************"
+              echo "   🗄️   Create Simulated Posture Robot Shop"
+              curl -s "https://$CONCERT_URL//concert/resilience/assessment/api/v1/evaluate" \
+                  -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+                --data-raw '{"timestamp":"'$date_6_month_ago'T06:00:00.000Z","profile":"kubernetes_profile","target_type":"app_deployment","target":"robot-shop_1.0.0_Production","data":{"num_workloads_with_single_replica":"0","num_stfs_with_single_member":"0","pct_workloads_service_account_defined":"80","pct_workloads_with_rootfs_not_read_only":"4","pct_workloads_with_all_capabilities_drop":"5","pct_workloads_with_privilege_escalation":"3","pct_automation_coverage_change":"5","pct_automation_coverage_deployment":"5","pct_automation_coverage_change":"5","pct_automation_coverage_deployment":"5","pct_availability_by_error_rate":"10","pct_availability_by_synthetic_tests":"5","pct_availability_by_downtime_post_rca":"5","avg_msecs_health_check_latency":"50","max_number_image_layers":"70","average_number_image_layers":"50","max_image_size_mb":"500","avg_image_size_mb":"250","avg_number_of_replicas":"5","pct_canary_release":"60","pct_configmaps_with_secrets":"0","pct_configmap_with_sensitive_content":"20","num_control_plane_nodes":"2","pct_master_nodes_with_taints":"0","num_coredns_pods":"5","avg_pct_cpu_usage":"80","num_certificates_expired":"1","pct_images_with_digest":"20","pct_images_with_devel_pkgs":"70","pct_sev1_incidents_by_change":"10","pct_sev2_incidents_by_change":"5","pct_infra_nodes_with_taints":"0","pct_images_latest_tag_identification":"3","mins_mttd":"2","mins_mttd_sev1":"1","mins_mttd_sev2":"10","mins_mttdiagnose":"20","mins_mttdiagnose_sev1":"5","mins_mttdiagnose_sev2":"20","avg_pct_memory_usage":"70","pct_self_healing_success_actual":"90","num_outdated_packages":"2","pct_backlevel_packages":"2","pct_incidents_detected_by_monitoring":"99","num_priority1_exposures":"10","num_priority1_vulnerabilities":"1","num_priority2_exposures":"1","num_priority2_vulnerabilities":"1","num_priority3_exposures":"30","num_priority3_vulnerabilities":"1","pct_privileged_mode_containers":"5","days_rca_sla_sev1":"1","days_rca_sla_sev2":"2","mins_rpo":"10","mins_rto":"20","pct_rollback_coverage":"90","pct_runbook_coverage_sev1":"50","pct_runbook_coverage_sev2":"20","num_unlicensed_packages":"5","pct_workloads_missing_cpu_limits":"33","pct_workloads_missing_cpu_requests":"33","pct_workloads_missing_memory_limits":"33","pct_workloads_missing_memory_requests":"33","pct_workload_run_as_root":"33","pct_workloads_with_default_seccomp_policies":"33","pct_workload_network_policy_defined":"80","pct_workloads_with_liveliness_probe_defined":"33","pct_workload_liveness_initial_delay_defined":"33","pct_workloads_with_readiness_probe_defined":"33","pct_workloads_with_minAvailable_gt_1":"33","pct_workloads_with_pdb":"33","pct_workloads_within_90pct_memory_limits":"2","pct_workloads_within_90pct_cpu_limits":"3"},"origin":"Manual","environment":"Production","custom_metadata":{"origin_name":"Concert","origin_url":""}}'
+
+
+              curl -s "https://$CONCERT_URL//concert/resilience/assessment/api/v1/evaluate" \
+                  -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+                --data-raw '{"timestamp":"'$date_3_month_ago'T07:01:34.000Z","profile":"kubernetes_profile","target_type":"app_deployment","target":"robot-shop_1.0.0_Production","data":{"num_workloads_with_single_replica":"0","num_stfs_with_single_member":"0","pct_workloads_service_account_defined":"80","pct_workloads_with_rootfs_not_read_only":"4","pct_workloads_with_all_capabilities_drop":"90","pct_workloads_with_privilege_escalation":"3","pct_automation_coverage_change":"100","pct_automation_coverage_deployment":"100","pct_automation_coverage_change":"100","pct_automation_coverage_deployment":"100","pct_availability_by_error_rate":"10","pct_availability_by_synthetic_tests":"90","pct_availability_by_downtime_post_rca":"100","avg_msecs_health_check_latency":"50","max_number_image_layers":"50","average_number_image_layers":"20","max_image_size_mb":"500","avg_image_size_mb":"250","avg_number_of_replicas":"5","pct_canary_release":"60","pct_configmaps_with_secrets":"0","pct_configmap_with_sensitive_content":"0","num_control_plane_nodes":"5","pct_master_nodes_with_taints":"0","num_coredns_pods":"5","avg_pct_cpu_usage":"50","num_certificates_expired":"1","pct_images_with_digest":"70","pct_images_with_devel_pkgs":"70","pct_sev1_incidents_by_change":"1","pct_sev2_incidents_by_change":"5","pct_infra_nodes_with_taints":"0","pct_images_latest_tag_identification":"3","mins_mttd":"2","mins_mttd_sev1":"1","mins_mttd_sev2":"10","mins_mttdiagnose":"20","mins_mttdiagnose_sev1":"5","mins_mttdiagnose_sev2":"20","avg_pct_memory_usage":"70","pct_self_healing_success_actual":"90","num_outdated_packages":"2","pct_backlevel_packages":"2","pct_incidents_detected_by_monitoring":"99","num_priority1_exposures":"9","num_priority1_vulnerabilities":"1","num_priority2_exposures":"1","num_priority2_vulnerabilities":"1","num_priority3_exposures":"30","num_priority3_vulnerabilities":"1","pct_privileged_mode_containers":"5","days_rca_sla_sev1":"1","days_rca_sla_sev2":"2","mins_rpo":"10","mins_rto":"20","pct_rollback_coverage":"90","pct_runbook_coverage_sev1":"50","pct_runbook_coverage_sev2":"20","num_unlicensed_packages":"5","pct_workloads_missing_cpu_limits":"33","pct_workloads_missing_cpu_requests":"33","pct_workloads_missing_memory_limits":"33","pct_workloads_missing_memory_requests":"33","pct_workload_run_as_root":"33","pct_workloads_with_default_seccomp_policies":"33","pct_workload_network_policy_defined":"80","pct_workloads_with_liveliness_probe_defined":"33","pct_workload_liveness_initial_delay_defined":"33","pct_workloads_with_readiness_probe_defined":"33","pct_workloads_with_minAvailable_gt_1":"33","pct_workloads_with_pdb":"33","pct_workloads_within_90pct_memory_limits":"2","pct_workloads_within_90pct_cpu_limits":"3"},"origin":"Manual","environment":"Production","custom_metadata":{"origin_name":"Concert","origin_url":""}}'
+
+
+              curl -s "https://$CONCERT_URL//concert/resilience/assessment/api/v1/evaluate" \
+                  -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+                --data-raw '{"timestamp":"'$date_1_month_ago'T06:56:30.000Z","profile":"kubernetes_profile","target_type":"app_deployment","target":"robot-shop_1.0.0_Production","data":{"num_workloads_with_single_replica":"0","num_stfs_with_single_member":"0","pct_workloads_service_account_defined":"80","pct_workloads_with_rootfs_not_read_only":"4","pct_workloads_with_all_capabilities_drop":"90","pct_workloads_with_privilege_escalation":"3","pct_automation_coverage_change":"100","pct_automation_coverage_deployment":"100","pct_automation_coverage_change":"100","pct_automation_coverage_deployment":"100","pct_availability_by_error_rate":"10","pct_availability_by_synthetic_tests":"90","pct_availability_by_downtime_post_rca":"100","avg_msecs_health_check_latency":"50","max_number_image_layers":"40","average_number_image_layers":"20","max_image_size_mb":"500","avg_image_size_mb":"250","avg_number_of_replicas":"5","pct_canary_release":"60","pct_configmaps_with_secrets":"0","pct_configmap_with_sensitive_content":"0","num_control_plane_nodes":"5","pct_master_nodes_with_taints":"0","num_coredns_pods":"5","avg_pct_cpu_usage":"50","num_certificates_expired":"1","pct_images_with_digest":"70","pct_images_with_devel_pkgs":"70","pct_sev1_incidents_by_change":"1","pct_sev2_incidents_by_change":"5","pct_infra_nodes_with_taints":"0","pct_images_latest_tag_identification":"3","mins_mttd":"2","mins_mttd_sev1":"1","mins_mttd_sev2":"10","mins_mttdiagnose":"20","mins_mttdiagnose_sev1":"5","mins_mttdiagnose_sev2":"20","avg_pct_memory_usage":"70","pct_self_healing_success_actual":"90","num_outdated_packages":"2","pct_backlevel_packages":"2","pct_incidents_detected_by_monitoring":"99","num_priority1_exposures":"8","num_priority1_vulnerabilities":"1","num_priority2_exposures":"1","num_priority2_vulnerabilities":"1","num_priority3_exposures":"20","num_priority3_vulnerabilities":"1","pct_privileged_mode_containers":"5","days_rca_sla_sev1":"1","days_rca_sla_sev2":"2","mins_rpo":"10","mins_rto":"20","pct_rollback_coverage":"90","pct_runbook_coverage_sev1":"50","pct_runbook_coverage_sev2":"20","num_unlicensed_packages":"5","pct_workloads_missing_cpu_limits":"33","pct_workloads_missing_cpu_requests":"33","pct_workloads_missing_memory_limits":"33","pct_workloads_missing_memory_requests":"33","pct_workload_run_as_root":"33","pct_workloads_with_default_seccomp_policies":"33","pct_workload_network_policy_defined":"80","pct_workloads_with_liveliness_probe_defined":"55","pct_workload_liveness_initial_delay_defined":"55","pct_workloads_with_readiness_probe_defined":"55","pct_workloads_with_minAvailable_gt_1":"55","pct_workloads_with_pdb":"55","pct_workloads_within_90pct_memory_limits":"80","pct_workloads_within_90pct_cpu_limits":"88"},"origin":"Manual","environment":"Production","custom_metadata":{"origin_name":"Concert","origin_url":""}}'
+
+
+              curl -s "https://$CONCERT_URL//concert/resilience/assessment/api/v1/evaluate" \
+                  -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+                --data-raw '{"timestamp":"'$date_1_week_ago'T08:25:43.000Z","profile":"kubernetes_profile","target_type":"app_deployment","target":"robot-shop_1.0.0_Production","data":{"num_workloads_with_single_replica":"0","num_stfs_with_single_member":"0","pct_workloads_service_account_defined":"80","pct_workloads_with_rootfs_not_read_only":"4","pct_workloads_with_all_capabilities_drop":"90","pct_workloads_with_privilege_escalation":"3","pct_automation_coverage_change":"100","pct_automation_coverage_deployment":"100","pct_automation_coverage_change":"100","pct_automation_coverage_deployment":"100","pct_availability_by_error_rate":"10","pct_availability_by_synthetic_tests":"90","pct_availability_by_downtime_post_rca":"100","avg_msecs_health_check_latency":"50","max_number_image_layers":"30","average_number_image_layers":"20","max_image_size_mb":"300","avg_image_size_mb":"250","avg_number_of_replicas":"5","pct_canary_release":"60","pct_configmaps_with_secrets":"0","pct_configmap_with_sensitive_content":"0","num_control_plane_nodes":"5","pct_master_nodes_with_taints":"0","num_coredns_pods":"5","avg_pct_cpu_usage":"50","num_certificates_expired":"0","pct_images_with_digest":"70","pct_images_with_devel_pkgs":"33","pct_sev1_incidents_by_change":"1","pct_sev2_incidents_by_change":"5","pct_infra_nodes_with_taints":"0","pct_images_latest_tag_identification":"3","mins_mttd":"2","mins_mttd_sev1":"1","mins_mttd_sev2":"10","mins_mttdiagnose":"20","mins_mttdiagnose_sev1":"5","mins_mttdiagnose_sev2":"20","avg_pct_memory_usage":"70","pct_self_healing_success_actual":"90","num_outdated_packages":"2","pct_backlevel_packages":"2","pct_incidents_detected_by_monitoring":"99","num_priority1_exposures":"7","num_priority1_vulnerabilities":"1","num_priority2_exposures":"1","num_priority2_vulnerabilities":"1","num_priority3_exposures":"10","num_priority3_vulnerabilities":"1","pct_privileged_mode_containers":"5","days_rca_sla_sev1":"1","days_rca_sla_sev2":"2","mins_rpo":"10","mins_rto":"20","pct_rollback_coverage":"90","pct_runbook_coverage_sev1":"50","pct_runbook_coverage_sev2":"20","num_unlicensed_packages":"5","pct_workloads_missing_cpu_limits":"33","pct_workloads_missing_cpu_requests":"33","pct_workloads_missing_memory_limits":"33","pct_workloads_missing_memory_requests":"33","pct_workload_run_as_root":"33","pct_workloads_with_default_seccomp_policies":"33","pct_workload_network_policy_defined":"80","pct_workloads_with_liveliness_probe_defined":"90","pct_workload_liveness_initial_delay_defined":"90","pct_workloads_with_readiness_probe_defined":"95","pct_workloads_with_minAvailable_gt_1":"77","pct_workloads_with_pdb":"77","pct_workloads_within_90pct_memory_limits":"80","pct_workloads_within_90pct_cpu_limits":"88"},"origin":"Manual","environment":"Production","custom_metadata":{"origin_name":"Concert","origin_url":""}}'
+
+
+              curl -s "https://$CONCERT_URL//concert/resilience/assessment/api/v1/evaluate" \
+                  -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+                --data-raw '{"timestamp":"'$date_1_week_later'T08:25:43.000Z","profile":"kubernetes_profile","target_type":"app_deployment","target":"robot-shop_1.0.0_Production","data":{"num_workloads_with_single_replica":"0","num_stfs_with_single_member":"0","pct_workloads_service_account_defined":"80","pct_workloads_with_rootfs_not_read_only":"4","pct_workloads_with_all_capabilities_drop":"90","pct_workloads_with_privilege_escalation":"3","pct_automation_coverage_change":"100","pct_automation_coverage_deployment":"100","pct_automation_coverage_change":"100","pct_automation_coverage_deployment":"100","pct_availability_by_error_rate":"10","pct_availability_by_synthetic_tests":"90","pct_availability_by_downtime_post_rca":"100","avg_msecs_health_check_latency":"50","max_number_image_layers":"20","average_number_image_layers":"17","max_image_size_mb":"200","avg_image_size_mb":"200","avg_number_of_replicas":"5","pct_canary_release":"60","pct_configmaps_with_secrets":"0","pct_configmap_with_sensitive_content":"0","num_control_plane_nodes":"5","pct_master_nodes_with_taints":"0","num_coredns_pods":"5","avg_pct_cpu_usage":"50","num_certificates_expired":"0","pct_images_with_digest":"70","pct_images_with_devel_pkgs":"6","pct_sev1_incidents_by_change":"1","pct_sev2_incidents_by_change":"5","pct_infra_nodes_with_taints":"0","pct_images_latest_tag_identification":"1","mins_mttd":"2","mins_mttd_sev1":"1","mins_mttd_sev2":"10","mins_mttdiagnose":"20","mins_mttdiagnose_sev1":"5","mins_mttdiagnose_sev2":"20","avg_pct_memory_usage":"70","pct_self_healing_success_actual":"90","num_outdated_packages":"2","pct_backlevel_packages":"2","pct_incidents_detected_by_monitoring":"99","num_priority1_exposures":"3","num_priority1_vulnerabilities":"1","num_priority2_exposures":"1","num_priority2_vulnerabilities":"1","num_priority3_exposures":"4","num_priority3_vulnerabilities":"1","pct_privileged_mode_containers":"5","days_rca_sla_sev1":"1","days_rca_sla_sev2":"2","mins_rpo":"10","mins_rto":"20","pct_rollback_coverage":"90","pct_runbook_coverage_sev1":"50","pct_runbook_coverage_sev2":"20","num_unlicensed_packages":"5","pct_workloads_missing_cpu_limits":"13","pct_workloads_missing_cpu_requests":"13","pct_workloads_missing_memory_limits":"13","pct_workloads_missing_memory_requests":"13","pct_workload_run_as_root":"13","pct_workloads_with_default_seccomp_policies":"43","pct_workload_network_policy_defined":"80","pct_workloads_with_liveliness_probe_defined":"90","pct_workload_liveness_initial_delay_defined":"90","pct_workloads_with_readiness_probe_defined":"95","pct_workloads_with_minAvailable_gt_1":"77","pct_workloads_with_pdb":"77","pct_workloads_within_90pct_memory_limits":"80","pct_workloads_within_90pct_cpu_limits":"88"},"origin":"Manual","environment":"Production","custom_metadata":{"origin_name":"Concert","origin_url":""}}'
+
+
+              curl -s "https://$CONCERT_URL//concert/resilience/assessment/api/v1/evaluate" \
+                  -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+                --data-raw '{"timestamp":"'$date_1_month_later'T06:46:02.844Z","profile":"kubernetes_profile","target_type":"app_deployment","target":"robot-shop_1.0.0_Production","data":{"num_workloads_with_single_replica":"0","num_stfs_with_single_member":"0","pct_workloads_service_account_defined":"80","pct_workloads_with_rootfs_not_read_only":"4","pct_workloads_with_all_capabilities_drop":"90","pct_workloads_with_privilege_escalation":"27","pct_automation_coverage_change":"100","pct_automation_coverage_deployment":"100","pct_automation_coverage_change":"100","pct_automation_coverage_deployment":"100","pct_availability_by_error_rate":"10","pct_availability_by_synthetic_tests":"90","pct_availability_by_downtime_post_rca":"100","avg_msecs_health_check_latency":"50","max_number_image_layers":"20","average_number_image_layers":"14","max_image_size_mb":"200","avg_image_size_mb":"190","avg_number_of_replicas":"5","pct_canary_release":"60","pct_configmaps_with_secrets":"100","pct_configmap_with_sensitive_content":"100","num_control_plane_nodes":"5","pct_master_nodes_with_taints":"0","num_coredns_pods":"5","avg_pct_cpu_usage":"50","num_certificates_expired":"0","pct_images_with_digest":"70","pct_images_with_devel_pkgs":"3","pct_sev1_incidents_by_change":"1","pct_sev2_incidents_by_change":"5","pct_infra_nodes_with_taints":"0","pct_images_latest_tag_identification":"0","mins_mttd":"2","mins_mttd_sev1":"1","mins_mttd_sev2":"10","mins_mttdiagnose":"20","mins_mttdiagnose_sev1":"5","mins_mttdiagnose_sev2":"20","avg_pct_memory_usage":"70","pct_self_healing_success_actual":"90","num_outdated_packages":"2","pct_backlevel_packages":"2","pct_incidents_detected_by_monitoring":"99","num_priority1_exposures":"16","num_priority1_vulnerabilities":"5","num_priority2_exposures":"25","num_priority2_vulnerabilities":"11","num_priority3_exposures":"58","num_priority3_vulnerabilities":"14","pct_privileged_mode_containers":"5","days_rca_sla_sev1":"1","days_rca_sla_sev2":"2","mins_rpo":"10","mins_rto":"20","pct_rollback_coverage":"90","pct_runbook_coverage_sev1":"68","pct_runbook_coverage_sev2":"20","num_unlicensed_packages":"5","pct_workloads_missing_cpu_limits":"4","pct_workloads_missing_cpu_requests":"5","pct_workloads_missing_memory_limits":"2","pct_workloads_missing_memory_requests":"3","pct_workload_run_as_root":"3","pct_workloads_with_default_seccomp_policies":"73","pct_workload_network_policy_defined":"80","pct_workloads_with_liveliness_probe_defined":"90","pct_workload_liveness_initial_delay_defined":"90","pct_workloads_with_readiness_probe_defined":"95","pct_workloads_with_minAvailable_gt_1":"77","pct_workloads_with_pdb":"77","pct_workloads_within_90pct_memory_limits":"80","pct_workloads_within_90pct_cpu_limits":"88"},"origin":"Manual","environment":"Production","custom_metadata":{"origin_name":"Concert","origin_url":""}}'
+              echo ""	
+              echo ""	
+              echo ""	
+
+
+
+
+              echo "***************************************************************************************************************************************************"
+              echo "   🗄️   Create Simulated Posture Galaxium Travels"
+              curl -s "https://$CONCERT_URL//concert/resilience/assessment/api/v1/evaluate" \
+                  -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+                --data-raw '{"timestamp":"'$date_6_month_ago'T06:00:00.000Z","profile":"kubernetes_profile","target_type":"app_deployment","target":"galaxium-travels_1.0.0_Production","data":{"num_workloads_with_single_replica":"0","num_stfs_with_single_member":"0","pct_workloads_service_account_defined":"80","pct_workloads_with_rootfs_not_read_only":"4","pct_workloads_with_all_capabilities_drop":"5","pct_workloads_with_privilege_escalation":"3","pct_automation_coverage_change":"5","pct_automation_coverage_deployment":"5","pct_automation_coverage_change":"5","pct_automation_coverage_deployment":"5","pct_availability_by_error_rate":"10","pct_availability_by_synthetic_tests":"5","pct_availability_by_downtime_post_rca":"5","avg_msecs_health_check_latency":"50","max_number_image_layers":"70","average_number_image_layers":"50","max_image_size_mb":"500","avg_image_size_mb":"250","avg_number_of_replicas":"5","pct_canary_release":"60","pct_configmaps_with_secrets":"0","pct_configmap_with_sensitive_content":"20","num_control_plane_nodes":"2","pct_master_nodes_with_taints":"0","num_coredns_pods":"5","avg_pct_cpu_usage":"80","num_certificates_expired":"1","pct_images_with_digest":"20","pct_images_with_devel_pkgs":"70","pct_sev1_incidents_by_change":"10","pct_sev2_incidents_by_change":"5","pct_infra_nodes_with_taints":"0","pct_images_latest_tag_identification":"3","mins_mttd":"2","mins_mttd_sev1":"1","mins_mttd_sev2":"10","mins_mttdiagnose":"20","mins_mttdiagnose_sev1":"5","mins_mttdiagnose_sev2":"20","avg_pct_memory_usage":"70","pct_self_healing_success_actual":"90","num_outdated_packages":"2","pct_backlevel_packages":"2","pct_incidents_detected_by_monitoring":"99","num_priority1_exposures":"10","num_priority1_vulnerabilities":"1","num_priority2_exposures":"1","num_priority2_vulnerabilities":"1","num_priority3_exposures":"30","num_priority3_vulnerabilities":"1","pct_privileged_mode_containers":"5","days_rca_sla_sev1":"1","days_rca_sla_sev2":"2","mins_rpo":"10","mins_rto":"20","pct_rollback_coverage":"90","pct_runbook_coverage_sev1":"50","pct_runbook_coverage_sev2":"20","num_unlicensed_packages":"5","pct_workloads_missing_cpu_limits":"33","pct_workloads_missing_cpu_requests":"33","pct_workloads_missing_memory_limits":"33","pct_workloads_missing_memory_requests":"33","pct_workload_run_as_root":"33","pct_workloads_with_default_seccomp_policies":"33","pct_workload_network_policy_defined":"80","pct_workloads_with_liveliness_probe_defined":"33","pct_workload_liveness_initial_delay_defined":"33","pct_workloads_with_readiness_probe_defined":"33","pct_workloads_with_minAvailable_gt_1":"33","pct_workloads_with_pdb":"33","pct_workloads_within_90pct_memory_limits":"2","pct_workloads_within_90pct_cpu_limits":"3"},"origin":"Manual","environment":"Production","custom_metadata":{"origin_name":"Concert","origin_url":""}}'
+
+
+              curl -s "https://$CONCERT_URL//concert/resilience/assessment/api/v1/evaluate" \
+                  -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+                --data-raw '{"timestamp":"'$date_3_month_ago'T07:01:34.000Z","profile":"kubernetes_profile","target_type":"app_deployment","target":"galaxium-travels_1.0.0_Production","data":{"num_workloads_with_single_replica":"0","num_stfs_with_single_member":"0","pct_workloads_service_account_defined":"80","pct_workloads_with_rootfs_not_read_only":"4","pct_workloads_with_all_capabilities_drop":"90","pct_workloads_with_privilege_escalation":"3","pct_automation_coverage_change":"100","pct_automation_coverage_deployment":"100","pct_automation_coverage_change":"100","pct_automation_coverage_deployment":"100","pct_availability_by_error_rate":"10","pct_availability_by_synthetic_tests":"90","pct_availability_by_downtime_post_rca":"100","avg_msecs_health_check_latency":"50","max_number_image_layers":"50","average_number_image_layers":"20","max_image_size_mb":"500","avg_image_size_mb":"250","avg_number_of_replicas":"5","pct_canary_release":"60","pct_configmaps_with_secrets":"0","pct_configmap_with_sensitive_content":"0","num_control_plane_nodes":"5","pct_master_nodes_with_taints":"0","num_coredns_pods":"5","avg_pct_cpu_usage":"50","num_certificates_expired":"1","pct_images_with_digest":"70","pct_images_with_devel_pkgs":"70","pct_sev1_incidents_by_change":"1","pct_sev2_incidents_by_change":"5","pct_infra_nodes_with_taints":"0","pct_images_latest_tag_identification":"3","mins_mttd":"2","mins_mttd_sev1":"1","mins_mttd_sev2":"10","mins_mttdiagnose":"20","mins_mttdiagnose_sev1":"5","mins_mttdiagnose_sev2":"20","avg_pct_memory_usage":"70","pct_self_healing_success_actual":"90","num_outdated_packages":"2","pct_backlevel_packages":"2","pct_incidents_detected_by_monitoring":"99","num_priority1_exposures":"9","num_priority1_vulnerabilities":"1","num_priority2_exposures":"1","num_priority2_vulnerabilities":"1","num_priority3_exposures":"30","num_priority3_vulnerabilities":"1","pct_privileged_mode_containers":"5","days_rca_sla_sev1":"1","days_rca_sla_sev2":"2","mins_rpo":"10","mins_rto":"20","pct_rollback_coverage":"90","pct_runbook_coverage_sev1":"50","pct_runbook_coverage_sev2":"20","num_unlicensed_packages":"5","pct_workloads_missing_cpu_limits":"33","pct_workloads_missing_cpu_requests":"33","pct_workloads_missing_memory_limits":"33","pct_workloads_missing_memory_requests":"33","pct_workload_run_as_root":"33","pct_workloads_with_default_seccomp_policies":"33","pct_workload_network_policy_defined":"80","pct_workloads_with_liveliness_probe_defined":"33","pct_workload_liveness_initial_delay_defined":"33","pct_workloads_with_readiness_probe_defined":"33","pct_workloads_with_minAvailable_gt_1":"33","pct_workloads_with_pdb":"33","pct_workloads_within_90pct_memory_limits":"2","pct_workloads_within_90pct_cpu_limits":"3"},"origin":"Manual","environment":"Production","custom_metadata":{"origin_name":"Concert","origin_url":""}}'
+
+
+              curl -s "https://$CONCERT_URL//concert/resilience/assessment/api/v1/evaluate" \
+                  -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+                --data-raw '{"timestamp":"'$date_1_month_ago'T06:56:30.000Z","profile":"kubernetes_profile","target_type":"app_deployment","target":"galaxium-travels_1.0.0_Production","data":{"num_workloads_with_single_replica":"0","num_stfs_with_single_member":"0","pct_workloads_service_account_defined":"80","pct_workloads_with_rootfs_not_read_only":"4","pct_workloads_with_all_capabilities_drop":"90","pct_workloads_with_privilege_escalation":"3","pct_automation_coverage_change":"100","pct_automation_coverage_deployment":"100","pct_automation_coverage_change":"100","pct_automation_coverage_deployment":"100","pct_availability_by_error_rate":"10","pct_availability_by_synthetic_tests":"90","pct_availability_by_downtime_post_rca":"100","avg_msecs_health_check_latency":"50","max_number_image_layers":"40","average_number_image_layers":"20","max_image_size_mb":"500","avg_image_size_mb":"250","avg_number_of_replicas":"5","pct_canary_release":"60","pct_configmaps_with_secrets":"0","pct_configmap_with_sensitive_content":"0","num_control_plane_nodes":"5","pct_master_nodes_with_taints":"0","num_coredns_pods":"5","avg_pct_cpu_usage":"50","num_certificates_expired":"1","pct_images_with_digest":"70","pct_images_with_devel_pkgs":"70","pct_sev1_incidents_by_change":"1","pct_sev2_incidents_by_change":"5","pct_infra_nodes_with_taints":"0","pct_images_latest_tag_identification":"3","mins_mttd":"2","mins_mttd_sev1":"1","mins_mttd_sev2":"10","mins_mttdiagnose":"20","mins_mttdiagnose_sev1":"5","mins_mttdiagnose_sev2":"20","avg_pct_memory_usage":"70","pct_self_healing_success_actual":"90","num_outdated_packages":"2","pct_backlevel_packages":"2","pct_incidents_detected_by_monitoring":"99","num_priority1_exposures":"8","num_priority1_vulnerabilities":"1","num_priority2_exposures":"1","num_priority2_vulnerabilities":"1","num_priority3_exposures":"20","num_priority3_vulnerabilities":"1","pct_privileged_mode_containers":"5","days_rca_sla_sev1":"1","days_rca_sla_sev2":"2","mins_rpo":"10","mins_rto":"20","pct_rollback_coverage":"90","pct_runbook_coverage_sev1":"50","pct_runbook_coverage_sev2":"20","num_unlicensed_packages":"5","pct_workloads_missing_cpu_limits":"33","pct_workloads_missing_cpu_requests":"33","pct_workloads_missing_memory_limits":"33","pct_workloads_missing_memory_requests":"33","pct_workload_run_as_root":"33","pct_workloads_with_default_seccomp_policies":"33","pct_workload_network_policy_defined":"80","pct_workloads_with_liveliness_probe_defined":"55","pct_workload_liveness_initial_delay_defined":"55","pct_workloads_with_readiness_probe_defined":"55","pct_workloads_with_minAvailable_gt_1":"55","pct_workloads_with_pdb":"55","pct_workloads_within_90pct_memory_limits":"80","pct_workloads_within_90pct_cpu_limits":"88"},"origin":"Manual","environment":"Production","custom_metadata":{"origin_name":"Concert","origin_url":""}}'
+
+
+              curl -s "https://$CONCERT_URL//concert/resilience/assessment/api/v1/evaluate" \
+                  -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+                --data-raw '{"timestamp":"'$date_1_week_ago'T08:25:43.000Z","profile":"kubernetes_profile","target_type":"app_deployment","target":"galaxium-travels_1.0.0_Production","data":{"num_workloads_with_single_replica":"0","num_stfs_with_single_member":"0","pct_workloads_service_account_defined":"80","pct_workloads_with_rootfs_not_read_only":"4","pct_workloads_with_all_capabilities_drop":"90","pct_workloads_with_privilege_escalation":"3","pct_automation_coverage_change":"100","pct_automation_coverage_deployment":"100","pct_automation_coverage_change":"100","pct_automation_coverage_deployment":"100","pct_availability_by_error_rate":"10","pct_availability_by_synthetic_tests":"90","pct_availability_by_downtime_post_rca":"100","avg_msecs_health_check_latency":"50","max_number_image_layers":"30","average_number_image_layers":"20","max_image_size_mb":"300","avg_image_size_mb":"250","avg_number_of_replicas":"5","pct_canary_release":"60","pct_configmaps_with_secrets":"0","pct_configmap_with_sensitive_content":"0","num_control_plane_nodes":"5","pct_master_nodes_with_taints":"0","num_coredns_pods":"5","avg_pct_cpu_usage":"50","num_certificates_expired":"0","pct_images_with_digest":"70","pct_images_with_devel_pkgs":"33","pct_sev1_incidents_by_change":"1","pct_sev2_incidents_by_change":"5","pct_infra_nodes_with_taints":"0","pct_images_latest_tag_identification":"3","mins_mttd":"2","mins_mttd_sev1":"1","mins_mttd_sev2":"10","mins_mttdiagnose":"20","mins_mttdiagnose_sev1":"5","mins_mttdiagnose_sev2":"20","avg_pct_memory_usage":"70","pct_self_healing_success_actual":"90","num_outdated_packages":"2","pct_backlevel_packages":"2","pct_incidents_detected_by_monitoring":"99","num_priority1_exposures":"7","num_priority1_vulnerabilities":"1","num_priority2_exposures":"1","num_priority2_vulnerabilities":"1","num_priority3_exposures":"10","num_priority3_vulnerabilities":"1","pct_privileged_mode_containers":"5","days_rca_sla_sev1":"1","days_rca_sla_sev2":"2","mins_rpo":"10","mins_rto":"20","pct_rollback_coverage":"90","pct_runbook_coverage_sev1":"50","pct_runbook_coverage_sev2":"20","num_unlicensed_packages":"5","pct_workloads_missing_cpu_limits":"33","pct_workloads_missing_cpu_requests":"33","pct_workloads_missing_memory_limits":"33","pct_workloads_missing_memory_requests":"33","pct_workload_run_as_root":"33","pct_workloads_with_default_seccomp_policies":"33","pct_workload_network_policy_defined":"80","pct_workloads_with_liveliness_probe_defined":"90","pct_workload_liveness_initial_delay_defined":"90","pct_workloads_with_readiness_probe_defined":"95","pct_workloads_with_minAvailable_gt_1":"77","pct_workloads_with_pdb":"77","pct_workloads_within_90pct_memory_limits":"80","pct_workloads_within_90pct_cpu_limits":"88"},"origin":"Manual","environment":"Production","custom_metadata":{"origin_name":"Concert","origin_url":""}}'
+
+
+              curl -s "https://$CONCERT_URL//concert/resilience/assessment/api/v1/evaluate" \
+                  -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+                --data-raw '{"timestamp":"'$date_1_week_later'T08:25:43.000Z","profile":"kubernetes_profile","target_type":"app_deployment","target":"galaxium-travels_1.0.0_Production","data":{"num_workloads_with_single_replica":"0","num_stfs_with_single_member":"0","pct_workloads_service_account_defined":"80","pct_workloads_with_rootfs_not_read_only":"4","pct_workloads_with_all_capabilities_drop":"90","pct_workloads_with_privilege_escalation":"3","pct_automation_coverage_change":"100","pct_automation_coverage_deployment":"100","pct_automation_coverage_change":"100","pct_automation_coverage_deployment":"100","pct_availability_by_error_rate":"10","pct_availability_by_synthetic_tests":"90","pct_availability_by_downtime_post_rca":"100","avg_msecs_health_check_latency":"50","max_number_image_layers":"20","average_number_image_layers":"17","max_image_size_mb":"200","avg_image_size_mb":"200","avg_number_of_replicas":"5","pct_canary_release":"60","pct_configmaps_with_secrets":"0","pct_configmap_with_sensitive_content":"0","num_control_plane_nodes":"5","pct_master_nodes_with_taints":"0","num_coredns_pods":"5","avg_pct_cpu_usage":"50","num_certificates_expired":"0","pct_images_with_digest":"70","pct_images_with_devel_pkgs":"6","pct_sev1_incidents_by_change":"1","pct_sev2_incidents_by_change":"5","pct_infra_nodes_with_taints":"0","pct_images_latest_tag_identification":"1","mins_mttd":"2","mins_mttd_sev1":"1","mins_mttd_sev2":"10","mins_mttdiagnose":"20","mins_mttdiagnose_sev1":"5","mins_mttdiagnose_sev2":"20","avg_pct_memory_usage":"70","pct_self_healing_success_actual":"90","num_outdated_packages":"2","pct_backlevel_packages":"2","pct_incidents_detected_by_monitoring":"99","num_priority1_exposures":"3","num_priority1_vulnerabilities":"1","num_priority2_exposures":"1","num_priority2_vulnerabilities":"1","num_priority3_exposures":"4","num_priority3_vulnerabilities":"1","pct_privileged_mode_containers":"5","days_rca_sla_sev1":"1","days_rca_sla_sev2":"2","mins_rpo":"10","mins_rto":"20","pct_rollback_coverage":"90","pct_runbook_coverage_sev1":"50","pct_runbook_coverage_sev2":"20","num_unlicensed_packages":"5","pct_workloads_missing_cpu_limits":"13","pct_workloads_missing_cpu_requests":"13","pct_workloads_missing_memory_limits":"13","pct_workloads_missing_memory_requests":"13","pct_workload_run_as_root":"13","pct_workloads_with_default_seccomp_policies":"43","pct_workload_network_policy_defined":"80","pct_workloads_with_liveliness_probe_defined":"90","pct_workload_liveness_initial_delay_defined":"90","pct_workloads_with_readiness_probe_defined":"95","pct_workloads_with_minAvailable_gt_1":"77","pct_workloads_with_pdb":"77","pct_workloads_within_90pct_memory_limits":"80","pct_workloads_within_90pct_cpu_limits":"88"},"origin":"Manual","environment":"Production","custom_metadata":{"origin_name":"Concert","origin_url":""}}'
+
+
+              curl -s "https://$CONCERT_URL//concert/resilience/assessment/api/v1/evaluate" \
+                  -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+                --data-raw '{"timestamp":"'$date_1_month_later'T06:42:11.000Z","profile":"kubernetes_profile","target_type":"app_deployment","target":"galaxium-travels_1.0.0_Production","data":{"num_workloads_with_single_replica":"0","num_stfs_with_single_member":"0","pct_workloads_service_account_defined":"80","pct_workloads_with_rootfs_not_read_only":"4","pct_workloads_with_all_capabilities_drop":"90","pct_workloads_with_privilege_escalation":"3","pct_automation_coverage_change":"100","pct_automation_coverage_deployment":"100","pct_automation_coverage_change":"100","pct_automation_coverage_deployment":"100","pct_availability_by_error_rate":"10","pct_availability_by_synthetic_tests":"90","pct_availability_by_downtime_post_rca":"100","avg_msecs_health_check_latency":"50","max_number_image_layers":"20","average_number_image_layers":"14","max_image_size_mb":"200","avg_image_size_mb":"190","avg_number_of_replicas":"5","pct_canary_release":"60","pct_configmaps_with_secrets":"0","pct_configmap_with_sensitive_content":"0","num_control_plane_nodes":"5","pct_master_nodes_with_taints":"0","num_coredns_pods":"5","avg_pct_cpu_usage":"50","num_certificates_expired":"0","pct_images_with_digest":"70","pct_images_with_devel_pkgs":"3","pct_sev1_incidents_by_change":"1","pct_sev2_incidents_by_change":"5","pct_infra_nodes_with_taints":"0","pct_images_latest_tag_identification":"0","mins_mttd":"2","mins_mttd_sev1":"1","mins_mttd_sev2":"10","mins_mttdiagnose":"20","mins_mttdiagnose_sev1":"5","mins_mttdiagnose_sev2":"20","avg_pct_memory_usage":"70","pct_self_healing_success_actual":"90","num_outdated_packages":"2","pct_backlevel_packages":"2","pct_incidents_detected_by_monitoring":"99","num_priority1_exposures":"1","num_priority1_vulnerabilities":"1","num_priority2_exposures":"1","num_priority2_vulnerabilities":"1","num_priority3_exposures":"3","num_priority3_vulnerabilities":"1","pct_privileged_mode_containers":"5","days_rca_sla_sev1":"1","days_rca_sla_sev2":"2","mins_rpo":"10","mins_rto":"20","pct_rollback_coverage":"90","pct_runbook_coverage_sev1":"68","pct_runbook_coverage_sev2":"20","num_unlicensed_packages":"5","pct_workloads_missing_cpu_limits":"4","pct_workloads_missing_cpu_requests":"5","pct_workloads_missing_memory_limits":"2","pct_workloads_missing_memory_requests":"3","pct_workload_run_as_root":"3","pct_workloads_with_default_seccomp_policies":"73","pct_workload_network_policy_defined":"80","pct_workloads_with_liveliness_probe_defined":"90","pct_workload_liveness_initial_delay_defined":"90","pct_workloads_with_readiness_probe_defined":"95","pct_workloads_with_minAvailable_gt_1":"77","pct_workloads_with_pdb":"77","pct_workloads_within_90pct_memory_limits":"80","pct_workloads_within_90pct_cpu_limits":"88"},"origin":"Manual","environment":"Production","custom_metadata":{"origin_name":"Concert","origin_url":""}}'
+              echo ""	
+              echo ""	
+              echo ""	
+
+
+              echo "***************************************************************************************************************************************************"
+              echo "   🗄️   Create Simulated Posture Sock Shop"
+              curl -s "https://$CONCERT_URL//concert/resilience/assessment/api/v1/evaluate" \
+                  -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+                --data-raw '{"timestamp":"'$date_6_month_ago'T06:00:00.000Z","profile":"kubernetes_profile","target_type":"app_deployment","target":"sock-shop_1.0.0_Production","data":{"num_workloads_with_single_replica":"0","num_stfs_with_single_member":"0","pct_workloads_service_account_defined":"80","pct_workloads_with_rootfs_not_read_only":"4","pct_workloads_with_all_capabilities_drop":"5","pct_workloads_with_privilege_escalation":"3","pct_automation_coverage_change":"5","pct_automation_coverage_deployment":"5","pct_automation_coverage_change":"5","pct_automation_coverage_deployment":"5","pct_availability_by_error_rate":"10","pct_availability_by_synthetic_tests":"5","pct_availability_by_downtime_post_rca":"5","avg_msecs_health_check_latency":"50","max_number_image_layers":"70","average_number_image_layers":"50","max_image_size_mb":"500","avg_image_size_mb":"250","avg_number_of_replicas":"5","pct_canary_release":"60","pct_configmaps_with_secrets":"0","pct_configmap_with_sensitive_content":"20","num_control_plane_nodes":"2","pct_master_nodes_with_taints":"0","num_coredns_pods":"5","avg_pct_cpu_usage":"80","num_certificates_expired":"1","pct_images_with_digest":"20","pct_images_with_devel_pkgs":"70","pct_sev1_incidents_by_change":"10","pct_sev2_incidents_by_change":"5","pct_infra_nodes_with_taints":"0","pct_images_latest_tag_identification":"3","mins_mttd":"2","mins_mttd_sev1":"1","mins_mttd_sev2":"10","mins_mttdiagnose":"20","mins_mttdiagnose_sev1":"5","mins_mttdiagnose_sev2":"20","avg_pct_memory_usage":"70","pct_self_healing_success_actual":"90","num_outdated_packages":"2","pct_backlevel_packages":"2","pct_incidents_detected_by_monitoring":"99","num_priority1_exposures":"10","num_priority1_vulnerabilities":"1","num_priority2_exposures":"1","num_priority2_vulnerabilities":"1","num_priority3_exposures":"30","num_priority3_vulnerabilities":"1","pct_privileged_mode_containers":"5","days_rca_sla_sev1":"1","days_rca_sla_sev2":"2","mins_rpo":"10","mins_rto":"20","pct_rollback_coverage":"90","pct_runbook_coverage_sev1":"50","pct_runbook_coverage_sev2":"20","num_unlicensed_packages":"5","pct_workloads_missing_cpu_limits":"33","pct_workloads_missing_cpu_requests":"33","pct_workloads_missing_memory_limits":"33","pct_workloads_missing_memory_requests":"33","pct_workload_run_as_root":"33","pct_workloads_with_default_seccomp_policies":"33","pct_workload_network_policy_defined":"80","pct_workloads_with_liveliness_probe_defined":"33","pct_workload_liveness_initial_delay_defined":"33","pct_workloads_with_readiness_probe_defined":"33","pct_workloads_with_minAvailable_gt_1":"33","pct_workloads_with_pdb":"33","pct_workloads_within_90pct_memory_limits":"2","pct_workloads_within_90pct_cpu_limits":"3"},"origin":"Manual","environment":"Production","custom_metadata":{"origin_name":"Concert","origin_url":""}}'
+
+
+              curl -s "https://$CONCERT_URL//concert/resilience/assessment/api/v1/evaluate" \
+                  -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+                --data-raw '{"timestamp":"'$date_3_month_ago'T07:01:34.000Z","profile":"kubernetes_profile","target_type":"app_deployment","target":"sock-shop_1.0.0_Production","data":{"num_workloads_with_single_replica":"0","num_stfs_with_single_member":"0","pct_workloads_service_account_defined":"80","pct_workloads_with_rootfs_not_read_only":"4","pct_workloads_with_all_capabilities_drop":"90","pct_workloads_with_privilege_escalation":"3","pct_automation_coverage_change":"100","pct_automation_coverage_deployment":"100","pct_automation_coverage_change":"100","pct_automation_coverage_deployment":"100","pct_availability_by_error_rate":"10","pct_availability_by_synthetic_tests":"90","pct_availability_by_downtime_post_rca":"100","avg_msecs_health_check_latency":"50","max_number_image_layers":"50","average_number_image_layers":"20","max_image_size_mb":"500","avg_image_size_mb":"250","avg_number_of_replicas":"5","pct_canary_release":"60","pct_configmaps_with_secrets":"0","pct_configmap_with_sensitive_content":"0","num_control_plane_nodes":"5","pct_master_nodes_with_taints":"0","num_coredns_pods":"5","avg_pct_cpu_usage":"50","num_certificates_expired":"1","pct_images_with_digest":"70","pct_images_with_devel_pkgs":"70","pct_sev1_incidents_by_change":"1","pct_sev2_incidents_by_change":"5","pct_infra_nodes_with_taints":"0","pct_images_latest_tag_identification":"3","mins_mttd":"2","mins_mttd_sev1":"1","mins_mttd_sev2":"10","mins_mttdiagnose":"20","mins_mttdiagnose_sev1":"5","mins_mttdiagnose_sev2":"20","avg_pct_memory_usage":"70","pct_self_healing_success_actual":"90","num_outdated_packages":"2","pct_backlevel_packages":"2","pct_incidents_detected_by_monitoring":"99","num_priority1_exposures":"9","num_priority1_vulnerabilities":"1","num_priority2_exposures":"1","num_priority2_vulnerabilities":"1","num_priority3_exposures":"30","num_priority3_vulnerabilities":"1","pct_privileged_mode_containers":"5","days_rca_sla_sev1":"1","days_rca_sla_sev2":"2","mins_rpo":"10","mins_rto":"20","pct_rollback_coverage":"90","pct_runbook_coverage_sev1":"50","pct_runbook_coverage_sev2":"20","num_unlicensed_packages":"5","pct_workloads_missing_cpu_limits":"33","pct_workloads_missing_cpu_requests":"33","pct_workloads_missing_memory_limits":"33","pct_workloads_missing_memory_requests":"33","pct_workload_run_as_root":"33","pct_workloads_with_default_seccomp_policies":"33","pct_workload_network_policy_defined":"80","pct_workloads_with_liveliness_probe_defined":"33","pct_workload_liveness_initial_delay_defined":"33","pct_workloads_with_readiness_probe_defined":"33","pct_workloads_with_minAvailable_gt_1":"33","pct_workloads_with_pdb":"33","pct_workloads_within_90pct_memory_limits":"2","pct_workloads_within_90pct_cpu_limits":"3"},"origin":"Manual","environment":"Production","custom_metadata":{"origin_name":"Concert","origin_url":""}}'
+
+
+              curl -s "https://$CONCERT_URL//concert/resilience/assessment/api/v1/evaluate" \
+                  -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+                --data-raw '{"timestamp":"'$date_1_month_ago'T06:56:30.000Z","profile":"kubernetes_profile","target_type":"app_deployment","target":"sock-shop_1.0.0_Production","data":{"num_workloads_with_single_replica":"0","num_stfs_with_single_member":"0","pct_workloads_service_account_defined":"80","pct_workloads_with_rootfs_not_read_only":"4","pct_workloads_with_all_capabilities_drop":"90","pct_workloads_with_privilege_escalation":"3","pct_automation_coverage_change":"100","pct_automation_coverage_deployment":"100","pct_automation_coverage_change":"100","pct_automation_coverage_deployment":"100","pct_availability_by_error_rate":"10","pct_availability_by_synthetic_tests":"90","pct_availability_by_downtime_post_rca":"100","avg_msecs_health_check_latency":"50","max_number_image_layers":"40","average_number_image_layers":"20","max_image_size_mb":"500","avg_image_size_mb":"250","avg_number_of_replicas":"5","pct_canary_release":"60","pct_configmaps_with_secrets":"0","pct_configmap_with_sensitive_content":"0","num_control_plane_nodes":"5","pct_master_nodes_with_taints":"0","num_coredns_pods":"5","avg_pct_cpu_usage":"50","num_certificates_expired":"1","pct_images_with_digest":"70","pct_images_with_devel_pkgs":"70","pct_sev1_incidents_by_change":"1","pct_sev2_incidents_by_change":"5","pct_infra_nodes_with_taints":"0","pct_images_latest_tag_identification":"3","mins_mttd":"2","mins_mttd_sev1":"1","mins_mttd_sev2":"10","mins_mttdiagnose":"20","mins_mttdiagnose_sev1":"5","mins_mttdiagnose_sev2":"20","avg_pct_memory_usage":"70","pct_self_healing_success_actual":"90","num_outdated_packages":"2","pct_backlevel_packages":"2","pct_incidents_detected_by_monitoring":"99","num_priority1_exposures":"8","num_priority1_vulnerabilities":"1","num_priority2_exposures":"1","num_priority2_vulnerabilities":"1","num_priority3_exposures":"20","num_priority3_vulnerabilities":"1","pct_privileged_mode_containers":"5","days_rca_sla_sev1":"1","days_rca_sla_sev2":"2","mins_rpo":"10","mins_rto":"20","pct_rollback_coverage":"90","pct_runbook_coverage_sev1":"50","pct_runbook_coverage_sev2":"20","num_unlicensed_packages":"5","pct_workloads_missing_cpu_limits":"33","pct_workloads_missing_cpu_requests":"33","pct_workloads_missing_memory_limits":"33","pct_workloads_missing_memory_requests":"33","pct_workload_run_as_root":"33","pct_workloads_with_default_seccomp_policies":"33","pct_workload_network_policy_defined":"80","pct_workloads_with_liveliness_probe_defined":"55","pct_workload_liveness_initial_delay_defined":"55","pct_workloads_with_readiness_probe_defined":"55","pct_workloads_with_minAvailable_gt_1":"55","pct_workloads_with_pdb":"55","pct_workloads_within_90pct_memory_limits":"80","pct_workloads_within_90pct_cpu_limits":"88"},"origin":"Manual","environment":"Production","custom_metadata":{"origin_name":"Concert","origin_url":""}}'
+
+
+              curl -s "https://$CONCERT_URL//concert/resilience/assessment/api/v1/evaluate" \
+                  -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+                --data-raw '{"timestamp":"'$date_1_week_ago'T08:25:43.000Z","profile":"kubernetes_profile","target_type":"app_deployment","target":"sock-shop_1.0.0_Production","data":{"num_workloads_with_single_replica":"0","num_stfs_with_single_member":"0","pct_workloads_service_account_defined":"80","pct_workloads_with_rootfs_not_read_only":"4","pct_workloads_with_all_capabilities_drop":"90","pct_workloads_with_privilege_escalation":"3","pct_automation_coverage_change":"100","pct_automation_coverage_deployment":"100","pct_automation_coverage_change":"100","pct_automation_coverage_deployment":"100","pct_availability_by_error_rate":"10","pct_availability_by_synthetic_tests":"90","pct_availability_by_downtime_post_rca":"100","avg_msecs_health_check_latency":"50","max_number_image_layers":"30","average_number_image_layers":"20","max_image_size_mb":"300","avg_image_size_mb":"250","avg_number_of_replicas":"5","pct_canary_release":"60","pct_configmaps_with_secrets":"0","pct_configmap_with_sensitive_content":"0","num_control_plane_nodes":"5","pct_master_nodes_with_taints":"0","num_coredns_pods":"5","avg_pct_cpu_usage":"50","num_certificates_expired":"0","pct_images_with_digest":"70","pct_images_with_devel_pkgs":"33","pct_sev1_incidents_by_change":"1","pct_sev2_incidents_by_change":"5","pct_infra_nodes_with_taints":"0","pct_images_latest_tag_identification":"3","mins_mttd":"2","mins_mttd_sev1":"1","mins_mttd_sev2":"10","mins_mttdiagnose":"20","mins_mttdiagnose_sev1":"5","mins_mttdiagnose_sev2":"20","avg_pct_memory_usage":"70","pct_self_healing_success_actual":"90","num_outdated_packages":"2","pct_backlevel_packages":"2","pct_incidents_detected_by_monitoring":"99","num_priority1_exposures":"7","num_priority1_vulnerabilities":"1","num_priority2_exposures":"1","num_priority2_vulnerabilities":"1","num_priority3_exposures":"10","num_priority3_vulnerabilities":"1","pct_privileged_mode_containers":"5","days_rca_sla_sev1":"1","days_rca_sla_sev2":"2","mins_rpo":"10","mins_rto":"20","pct_rollback_coverage":"90","pct_runbook_coverage_sev1":"50","pct_runbook_coverage_sev2":"20","num_unlicensed_packages":"5","pct_workloads_missing_cpu_limits":"33","pct_workloads_missing_cpu_requests":"33","pct_workloads_missing_memory_limits":"33","pct_workloads_missing_memory_requests":"33","pct_workload_run_as_root":"33","pct_workloads_with_default_seccomp_policies":"33","pct_workload_network_policy_defined":"80","pct_workloads_with_liveliness_probe_defined":"90","pct_workload_liveness_initial_delay_defined":"90","pct_workloads_with_readiness_probe_defined":"95","pct_workloads_with_minAvailable_gt_1":"77","pct_workloads_with_pdb":"77","pct_workloads_within_90pct_memory_limits":"80","pct_workloads_within_90pct_cpu_limits":"88"},"origin":"Manual","environment":"Production","custom_metadata":{"origin_name":"Concert","origin_url":""}}'
+
+
+              curl -s "https://$CONCERT_URL//concert/resilience/assessment/api/v1/evaluate" \
+                  -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+                --data-raw '{"timestamp":"'$date_1_week_later'T08:25:43.000Z","profile":"kubernetes_profile","target_type":"app_deployment","target":"sock-shop_1.0.0_Production","data":{"num_workloads_with_single_replica":"0","num_stfs_with_single_member":"0","pct_workloads_service_account_defined":"80","pct_workloads_with_rootfs_not_read_only":"4","pct_workloads_with_all_capabilities_drop":"90","pct_workloads_with_privilege_escalation":"3","pct_automation_coverage_change":"100","pct_automation_coverage_deployment":"100","pct_automation_coverage_change":"100","pct_automation_coverage_deployment":"100","pct_availability_by_error_rate":"10","pct_availability_by_synthetic_tests":"90","pct_availability_by_downtime_post_rca":"100","avg_msecs_health_check_latency":"50","max_number_image_layers":"20","average_number_image_layers":"17","max_image_size_mb":"200","avg_image_size_mb":"200","avg_number_of_replicas":"5","pct_canary_release":"60","pct_configmaps_with_secrets":"0","pct_configmap_with_sensitive_content":"0","num_control_plane_nodes":"5","pct_master_nodes_with_taints":"0","num_coredns_pods":"5","avg_pct_cpu_usage":"50","num_certificates_expired":"0","pct_images_with_digest":"70","pct_images_with_devel_pkgs":"6","pct_sev1_incidents_by_change":"1","pct_sev2_incidents_by_change":"5","pct_infra_nodes_with_taints":"0","pct_images_latest_tag_identification":"1","mins_mttd":"2","mins_mttd_sev1":"1","mins_mttd_sev2":"10","mins_mttdiagnose":"20","mins_mttdiagnose_sev1":"5","mins_mttdiagnose_sev2":"20","avg_pct_memory_usage":"70","pct_self_healing_success_actual":"90","num_outdated_packages":"2","pct_backlevel_packages":"2","pct_incidents_detected_by_monitoring":"99","num_priority1_exposures":"3","num_priority1_vulnerabilities":"1","num_priority2_exposures":"1","num_priority2_vulnerabilities":"1","num_priority3_exposures":"4","num_priority3_vulnerabilities":"1","pct_privileged_mode_containers":"5","days_rca_sla_sev1":"1","days_rca_sla_sev2":"2","mins_rpo":"10","mins_rto":"20","pct_rollback_coverage":"90","pct_runbook_coverage_sev1":"50","pct_runbook_coverage_sev2":"20","num_unlicensed_packages":"5","pct_workloads_missing_cpu_limits":"13","pct_workloads_missing_cpu_requests":"13","pct_workloads_missing_memory_limits":"13","pct_workloads_missing_memory_requests":"13","pct_workload_run_as_root":"13","pct_workloads_with_default_seccomp_policies":"43","pct_workload_network_policy_defined":"80","pct_workloads_with_liveliness_probe_defined":"90","pct_workload_liveness_initial_delay_defined":"90","pct_workloads_with_readiness_probe_defined":"95","pct_workloads_with_minAvailable_gt_1":"77","pct_workloads_with_pdb":"77","pct_workloads_within_90pct_memory_limits":"80","pct_workloads_within_90pct_cpu_limits":"88"},"origin":"Manual","environment":"Production","custom_metadata":{"origin_name":"Concert","origin_url":""}}'
+
+
+              curl -s "https://$CONCERT_URL//concert/resilience/assessment/api/v1/evaluate" \
+                  -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+                --data-raw '{"timestamp":"'$date_1_month_later'T06:42:11.000Z","profile":"kubernetes_profile","target_type":"app_deployment","target":"sock-shop_1.0.0_Production","data":{"num_workloads_with_single_replica":"0","num_stfs_with_single_member":"0","pct_workloads_service_account_defined":"80","pct_workloads_with_rootfs_not_read_only":"4","pct_workloads_with_all_capabilities_drop":"90","pct_workloads_with_privilege_escalation":"3","pct_automation_coverage_change":"100","pct_automation_coverage_deployment":"100","pct_automation_coverage_change":"100","pct_automation_coverage_deployment":"100","pct_availability_by_error_rate":"10","pct_availability_by_synthetic_tests":"90","pct_availability_by_downtime_post_rca":"100","avg_msecs_health_check_latency":"50","max_number_image_layers":"20","average_number_image_layers":"14","max_image_size_mb":"200","avg_image_size_mb":"190","avg_number_of_replicas":"5","pct_canary_release":"60","pct_configmaps_with_secrets":"0","pct_configmap_with_sensitive_content":"0","num_control_plane_nodes":"5","pct_master_nodes_with_taints":"0","num_coredns_pods":"5","avg_pct_cpu_usage":"50","num_certificates_expired":"0","pct_images_with_digest":"70","pct_images_with_devel_pkgs":"3","pct_sev1_incidents_by_change":"1","pct_sev2_incidents_by_change":"5","pct_infra_nodes_with_taints":"0","pct_images_latest_tag_identification":"0","mins_mttd":"2","mins_mttd_sev1":"1","mins_mttd_sev2":"10","mins_mttdiagnose":"20","mins_mttdiagnose_sev1":"5","mins_mttdiagnose_sev2":"20","avg_pct_memory_usage":"70","pct_self_healing_success_actual":"90","num_outdated_packages":"2","pct_backlevel_packages":"2","pct_incidents_detected_by_monitoring":"99","num_priority1_exposures":"1","num_priority1_vulnerabilities":"1","num_priority2_exposures":"1","num_priority2_vulnerabilities":"1","num_priority3_exposures":"3","num_priority3_vulnerabilities":"1","pct_privileged_mode_containers":"5","days_rca_sla_sev1":"1","days_rca_sla_sev2":"2","mins_rpo":"10","mins_rto":"20","pct_rollback_coverage":"90","pct_runbook_coverage_sev1":"68","pct_runbook_coverage_sev2":"20","num_unlicensed_packages":"5","pct_workloads_missing_cpu_limits":"4","pct_workloads_missing_cpu_requests":"5","pct_workloads_missing_memory_limits":"2","pct_workloads_missing_memory_requests":"3","pct_workload_run_as_root":"3","pct_workloads_with_default_seccomp_policies":"73","pct_workload_network_policy_defined":"80","pct_workloads_with_liveliness_probe_defined":"90","pct_workload_liveness_initial_delay_defined":"90","pct_workloads_with_readiness_probe_defined":"95","pct_workloads_with_minAvailable_gt_1":"77","pct_workloads_with_pdb":"77","pct_workloads_within_90pct_memory_limits":"80","pct_workloads_within_90pct_cpu_limits":"88"},"origin":"Manual","environment":"Production","custom_metadata":{"origin_name":"Concert","origin_url":""}}'
+              echo ""	
+              echo ""	
+              echo ""	
 
 
               echo "------------------------------------------------------------------------------------------------------------------------------"
@@ -741,17 +962,25 @@ spec:
 
               export ROBOT_APP_ID=$(curl -s "https://$CONCERT_URL/concert/core/api/v1/applications?filter=name:robot-shop" \
                   -X 'GET' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json'|jq '.applications[0].id'|tr -d '"')
-              echo "     🧰 ROBOT_APP_ID:                "$ROBOT_APP_ID
+              echo "     🧰 ROBOT_APP_ID:                 "$ROBOT_APP_ID
 
-              export ROBOT_OCP_JOB_ID=$(curl -s "https://$CONCERT_URL/concert/core/api/v1/ingestion_jobs?filter=name:discovery-ocp-robot-shop" \
+              export ROBOT_OCP_JOB_ID=$(curl -s "https://$CONCERT_URL/concert/core/api/v1/ingestion_jobs?filter=name:discovery-resilience-ocp-robot-shop0" \
                   -X 'GET' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json'|jq '.ingestion_jobs[0].id'|tr -d '"')
-              echo "     📦 ROBOT_OCP_JOB_ID:            "$ROBOT_OCP_JOB_ID
+              echo "     📦 ROBOT_OCP_JOB_ID:             "$ROBOT_OCP_JOB_ID
 
-              export ROBOT_GIT_JOB_ID=$(curl -s "https://$CONCERT_URL/concert/core/api/v1/ingestion_jobs?filter=name:discovery-git-robot-shop" \
+              export ROBOT_GIT_JOB_ID=$(curl -s "https://$CONCERT_URL/concert/core/api/v1/ingestion_jobs?filter=name:discovery-git-robot-shop0" \
                   -X 'GET' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json'|jq '.ingestion_jobs[0].id'|tr -d '"')
               echo "     🗄️ ROBOT_GIT_JOB_ID:            "$ROBOT_GIT_JOB_ID
 
-              export ROBOT_COMP_JOB_ID=$(curl -s "https://$CONCERT_URL/concert/core/api/v1/ingestion_jobs?filter=name:discovery-ocp-compliance-robot-shop" \
+              export ROBOT_VULN_GIT_JOB_ID=$(curl -s "https://$CONCERT_URL/concert/core/api/v1/ingestion_jobs?filter=name:discovery-git-robot-shop1" \
+                  -X 'GET' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json'|jq '.ingestion_jobs[0].id'|tr -d '"')
+              echo "     🗄️ ROBOT_VULN_GIT_JOB_ID:       "$ROBOT_VULN_GIT_JOB_ID
+
+              export ROBOT_FIX__GIT_JOB_ID=$(curl -s "https://$CONCERT_URL/concert/core/api/v1/ingestion_jobs?filter=name:discovery-git-robot-shop2" \
+                  -X 'GET' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json'|jq '.ingestion_jobs[0].id'|tr -d '"')
+              echo "     🗄️ ROBOT_FIX__GIT_JOB_ID:       "$ROBOT_FIX__GIT_JOB_ID
+
+              export ROBOT_COMP_JOB_ID=$(curl -s "https://$CONCERT_URL/concert/core/api/v1/ingestion_jobs?filter=name:discovery-compliance-ocp-robot-shop" \
                   -X 'GET' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json'|jq '.ingestion_jobs[0].id'|tr -d '"')
               echo "     🗄️ ROBOT_COMP_JOB_ID:           "$ROBOT_COMP_JOB_ID
               echo ""	
@@ -769,7 +998,7 @@ spec:
                   -X 'GET' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json'|jq '.ingestion_jobs[0].id'|tr -d '"')
               echo "     🗄️ GALAX_GIT_JOB_ID:            "$GALAX_GIT_JOB_ID
 
-              export GALAX_COMP_JOB_ID=$(curl -s "https://$CONCERT_URL/concert/core/api/v1/ingestion_jobs?filter=name:discovery-ocp-compliance-galaxium-travels" \
+              export GALAX_COMP_JOB_ID=$(curl -s "https://$CONCERT_URL/concert/core/api/v1/ingestion_jobs?filter=name:discovery-compliance-ocp-galaxium-travels" \
                   -X 'GET' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json'|jq '.ingestion_jobs[0].id'|tr -d '"')
               echo "     🗄️ GALAX_COMP_JOB_ID:           "$GALAX_COMP_JOB_ID
               echo ""	
@@ -787,7 +1016,7 @@ spec:
                   -X 'GET' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json'|jq '.ingestion_jobs[0].id'|tr -d '"')
               echo "     🗄️ SOCK_GIT_JOB_ID:             "$SOCK_GIT_JOB_ID
 
-              export SOCK_COMP_JOB_ID=$(curl -s "https://$CONCERT_URL/concert/core/api/v1/ingestion_jobs?filter=name:discovery-ocp-compliance-sock-shop" \
+              export SOCK_COMP_JOB_ID=$(curl -s "https://$CONCERT_URL/concert/core/api/v1/ingestion_jobs?filter=name:discovery-compliance-ocp-sock-shop" \
                   -X 'GET' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json'|jq '.ingestion_jobs[0].id'|tr -d '"')
               echo "     🗄️ SOCK_COMP_JOB_ID:            "$SOCK_COMP_JOB_ID
               echo ""		
@@ -845,22 +1074,6 @@ spec:
                 -X 'DELETE' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' 
 
 
-
-              echo ""
-              echo "***************************************************************************************************************************************************"
-              echo "   🗄️   Create Goal: Demo Vulnerability SLA adherence"
-              curl -s "https://$CONCERT_URL/concert/ingestion/api/v1/goals/user_goals" \
-              -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
-              --data-raw '{"template_name":"Vulnerability SLA adherence","name":"Demo Vulnerability SLA adherence","description":"Ensure timely vulnerability remediation based on severity-defined SLA targets.","persona_code":"CISO","goal_category":"EXEC_VIEW","goal_type":"VULNERABILITY_ADHERENCE","strictness":"HIGH","priority":"CRITICAL","source_type":"BUDDY","created_by":"admin","scope":{"environments":[],"application_tiers":[],"asset_types":[],"severity":"[{\"name\":\"CRITICAL\",\"sla\":2},{\"name\":\"HIGH\",\"sla\":5},{\"name\":\"MEDIUM\",\"sla\":8},{\"name\":\"LOW\",\"sla\":180}]","priority":"[]","applications":[],"application_categories":[],"internet_facing":null,"business_units":[],"clouds":[],"regions":[]},"rule":{"metric_key":"vulnerability_sla_adherence","tolerance_pattern":"ZERO_TOLERANCE","operator":"EQ","threshold_value":0,"secondary_value":null,"unit":"COUNT","evaluation_mode":"CONTINUOUS","aggregation_level":"APPLICATION","time_progression_enabled":false,"progression_rate_per_day":null},"action_policy":{"on_breach_actions":["NOTIFY_APPLICATION_OWNER"],"on_risk_actions":[],"notification_targets":[],"workflow_ids":[]},"sla_policy":{"sla_type":"CUSTOM","target_duration":0,"duration_unit":"DAYS"}}'
-
-
-              echo ""
-              echo "***************************************************************************************************************************************************"
-              echo "   🗄️   Create Goal: Demo Exposure SLA adherence"
-              curl -s "https://$CONCERT_URL/concert/ingestion/api/v1/goals/user_goals" \
-              -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
-              --data-raw '{"template_name":"Exposure SLA adherence","name":"Demo Exposure SLA adherence","description":"Ensure timely exposure remediation based on priority-defined SLA targets.","persona_code":"CISO","goal_category":"EXEC_VIEW","goal_type":"EXPOSURE_ADHERENCE","strictness":"HIGH","priority":"CRITICAL","source_type":"BUDDY","created_by":"admin","scope":{"environments":[],"application_tiers":[],"asset_types":[],"severity":"[]","priority":"[{\"name\":\"PRIORITY_1\",\"sla\":1},{\"name\":\"PRIORITY_2\",\"sla\":3},{\"name\":\"PRIORITY_3\",\"sla\":5},{\"name\":\"PRIORITY_4\",\"sla\":180}]","applications":[],"application_categories":[],"internet_facing":null,"business_units":[],"clouds":[],"regions":[]},"rule":{"metric_key":"exposure_sla_adherence","tolerance_pattern":"ZERO_TOLERANCE","operator":"EQ","threshold_value":0,"secondary_value":null,"unit":"COUNT","evaluation_mode":"CONTINUOUS","aggregation_level":"APPLICATION","time_progression_enabled":false,"progression_rate_per_day":null},"action_policy":{"on_breach_actions":["NOTIFY_APPLICATION_OWNER"],"on_risk_actions":[],"notification_targets":[],"workflow_ids":[]},"sla_policy":{"sla_type":"CUSTOM","target_duration":0,"duration_unit":"DAYS"}}'
-              
               
               echo ""
               echo "***************************************************************************************************************************************************"
@@ -886,6 +1099,23 @@ spec:
               -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
               --data-raw '{"template_name":"Application category severity by SLA adherence","name":"Demo Application SLA adherence","description":"SLA targets for vulnerabilities by application category and severity.","persona_code":"CISO","goal_category":"VULNERABILITY","goal_type":"SEVERITY_SLA_BY_APP_CATEGORY","strictness":"MEDIUM","priority":"HIGH","source_type":"BUDDY","created_by":"admin","scope":{"environments":[],"application_tiers":[],"asset_types":[],"severity":"[{\"name\":\"CRITICAL\",\"sla\":7},{\"name\":\"HIGH\",\"sla\":30},{\"name\":\"MEDIUM\",\"sla\":90},{\"name\":\"LOW\",\"sla\":180}]","priority":"[]","applications":[],"application_categories":["production"],"internet_facing":null,"business_units":[],"clouds":[],"regions":[]},"rule":{"metric_key":"no_over_dues","tolerance_pattern":"SLA_BASED","operator":"EQ","threshold_value":0,"secondary_value":null,"unit":"PERCENT","evaluation_mode":"CONTINUOUS","aggregation_level":"APPLICATION","time_progression_enabled":false,"progression_rate_per_day":null},"action_policy":{"on_breach_actions":[],"on_risk_actions":[],"notification_targets":[],"workflow_ids":[]},"sla_policy":{"sla_type":"DAYS_7","target_duration":0,"duration_unit":"DAYS","mode":"HARD","track_only":false,"escalate_at_percent":70,"auto_breach_at_expiry":true}}'
 
+
+
+              echo ""
+              echo "***************************************************************************************************************************************************"
+              echo "   🗄️   Create Goal: Demo Vulnerability SLA adherence"
+              curl -s "https://$CONCERT_URL/concert/ingestion/api/v1/goals/user_goals" \
+              -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+              --data-raw '{"template_name":"Vulnerability SLA adherence","name":"Demo Vulnerability SLA adherence","description":"Ensure timely vulnerability remediation based on severity-defined SLA targets.","persona_code":"CISO","goal_category":"EXEC_VIEW","goal_type":"VULNERABILITY_ADHERENCE","strictness":"HIGH","priority":"CRITICAL","source_type":"BUDDY","created_by":"admin","scope":{"environments":[],"application_tiers":[],"asset_types":[],"severity":"[{\"name\":\"CRITICAL\",\"sla\":2},{\"name\":\"HIGH\",\"sla\":5},{\"name\":\"MEDIUM\",\"sla\":8},{\"name\":\"LOW\",\"sla\":180}]","priority":"[]","applications":[],"application_categories":[],"internet_facing":null,"business_units":[],"clouds":[],"regions":[]},"rule":{"metric_key":"vulnerability_sla_adherence","tolerance_pattern":"ZERO_TOLERANCE","operator":"EQ","threshold_value":0,"secondary_value":null,"unit":"COUNT","evaluation_mode":"CONTINUOUS","aggregation_level":"APPLICATION","time_progression_enabled":false,"progression_rate_per_day":null},"action_policy":{"on_breach_actions":["NOTIFY_APPLICATION_OWNER"],"on_risk_actions":[],"notification_targets":[],"workflow_ids":[]},"sla_policy":{"sla_type":"CUSTOM","target_duration":0,"duration_unit":"DAYS"}}'
+
+
+              echo ""
+              echo "***************************************************************************************************************************************************"
+              echo "   🗄️   Create Goal: Demo Exposure SLA adherence"
+              curl -s "https://$CONCERT_URL/concert/ingestion/api/v1/goals/user_goals" \
+              -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+              --data-raw '{"template_name":"Exposure SLA adherence","name":"Demo Exposure SLA adherence","description":"Ensure timely exposure remediation based on priority-defined SLA targets.","persona_code":"CISO","goal_category":"EXEC_VIEW","goal_type":"EXPOSURE_ADHERENCE","strictness":"HIGH","priority":"CRITICAL","source_type":"BUDDY","created_by":"admin","scope":{"environments":[],"application_tiers":[],"asset_types":[],"severity":"[]","priority":"[{\"name\":\"PRIORITY_1\",\"sla\":1},{\"name\":\"PRIORITY_2\",\"sla\":3},{\"name\":\"PRIORITY_3\",\"sla\":5},{\"name\":\"PRIORITY_4\",\"sla\":180}]","applications":[],"application_categories":[],"internet_facing":null,"business_units":[],"clouds":[],"regions":[]},"rule":{"metric_key":"exposure_sla_adherence","tolerance_pattern":"ZERO_TOLERANCE","operator":"EQ","threshold_value":0,"secondary_value":null,"unit":"COUNT","evaluation_mode":"CONTINUOUS","aggregation_level":"APPLICATION","time_progression_enabled":false,"progression_rate_per_day":null},"action_policy":{"on_breach_actions":["NOTIFY_APPLICATION_OWNER"],"on_risk_actions":[],"notification_targets":[],"workflow_ids":[]},"sla_policy":{"sla_type":"CUSTOM","target_duration":0,"duration_unit":"DAYS"}}'
+              
 
               echo ""	
               echo ""	
@@ -922,75 +1152,88 @@ spec:
 
 
 
-              echo "------------------------------------------------------------------------------------------------------------------------------"
-              echo " ✅ Run All Jobs"
-              echo "------------------------------------------------------------------------------------------------------------------------------"
-              echo ""	
-              echo "***************************************************************************************************************************************************"
-              echo "   🚀   Run Robot Shop Git Discovery"
-              curl -s "https://$CONCERT_URL/concert/ingestion/api/v1/job/v2/submit" \
-                  -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
-                  --data-raw '{"job_details":{"job_id":"'$ROBOT_GIT_JOB_ID'","job_type":"source_control_discovery_job"}}'
+                echo "------------------------------------------------------------------------------------------------------------------------------"
+                echo " ✅ Run Jobs"
+                echo "------------------------------------------------------------------------------------------------------------------------------"
+                echo ""	
+                echo "***************************************************************************************************************************************************"
+                echo "   🚀   Run Robot Shop Git Discovery MAIN"
+                curl -s "https://$CONCERT_URL/concert/ingestion/api/v1/job/v2/submit" \
+                    -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+                    --data-raw '{"job_details":{"job_id":"'$ROBOT_GIT_JOB_ID'","job_type":"source_control_discovery_job"}}'
               
-              echo ""	
-              echo "***************************************************************************************************************************************************"
-              echo "   🚀   Run Galaxium Travels Git Discovery"
-              curl -s "https://$CONCERT_URL/concert/ingestion/api/v1/job/v2/submit" \
-                  -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
-                  --data-raw '{"job_details":{"job_id":"'$GALAX_GIT_JOB_ID'","job_type":"source_control_discovery_job"}}'
-              
-              echo ""	
-              echo "***************************************************************************************************************************************************"
-              echo "   🚀   Run Sock Shop Git Discovery"
-              curl -s "https://$CONCERT_URL/concert/ingestion/api/v1/job/v2/submit" \
-                  -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
-                  --data-raw '{"job_details":{"job_id":"'$SOCK_GIT_JOB_ID'","job_type":"source_control_discovery_job"}}'
-              
-              echo ""	
-              echo "***************************************************************************************************************************************************"
-              echo "   🚀   Run Robot Shop OCP Discovery"
-              curl -s "https://$CONCERT_URL/concert/ingestion/api/v1/job/v2/submit" \
-                  -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
-                  --data-raw '{"job_details":{"job_id":"'$ROBOT_OCP_JOB_ID'","job_type":"discovery_job"}}'
-              
-              echo ""	
-              echo "***************************************************************************************************************************************************"
-              echo "   🚀   Run Galaxium Travels OCP Discovery"
-              curl -s "https://$CONCERT_URL/concert/ingestion/api/v1/job/v2/submit" \
-                  -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
-                  --data-raw '{"job_details":{"job_id":"'$GALAX_OCP_JOB_ID'","job_type":"discovery_job"}}'
-              
-              echo ""	
-              echo "***************************************************************************************************************************************************"
-              echo "   🚀   Run Sock Shop OCP Discovery"
-              curl -s "https://$CONCERT_URL/concert/ingestion/api/v1/job/v2/submit" \
-                  -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
-                  --data-raw '{"job_details":{"job_id":"'$SOCK_OCP_JOB_ID'","job_type":"discovery_job"}}'
+                echo "***************************************************************************************************************************************************"
+                echo "   🚀   Run Robot Shop Git Discovery VULN"
+                curl -s "https://$CONCERT_URL/concert/ingestion/api/v1/job/v2/submit" \
+                    -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+                    --data-raw '{"job_details":{"job_id":"'$ROBOT_VULN_GIT_JOB_ID'","job_type":"source_control_discovery_job"}}'
 
-              echo ""	
-              echo "***************************************************************************************************************************************************"
-              echo "   🚀   Run Robot Shop Compliance Discovery"
-              curl -s "https://$CONCERT_URL/concert/ingestion/api/v1/job/v2/submit" \
-                  -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
-                  --data-raw '{"job_details":{"job_id":"'$ROBOT_COMP_JOB_ID'","job_type":"discovery_job_compliance"}}'
-              
-              echo ""	
-              echo "***************************************************************************************************************************************************"
-              echo "   🚀   Run Galaxium Travels Compliance Discovery"
-              curl -s "https://$CONCERT_URL/concert/ingestion/api/v1/job/v2/submit" \
-                  -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
-                  --data-raw '{"job_details":{"job_id":"'$GALAX_COMP_JOB_ID'","job_type":"discovery_job_compliance"}}'
-              
-              echo ""	
-              echo "***************************************************************************************************************************************************"
-              echo "   🚀   Run Sock Shop Compliance Discovery"
-              curl -s "https://$CONCERT_URL/concert/ingestion/api/v1/job/v2/submit" \
-                  -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
-                  --data-raw '{"job_details":{"job_id":"'$SOCK_COMP_JOB_ID'","job_type":"discovery_job_compliance"}}'
+                echo "***************************************************************************************************************************************************"
+                echo "   🚀   Run Robot Shop Git Discovery FIX"
+                curl -s "https://$CONCERT_URL/concert/ingestion/api/v1/job/v2/submit" \
+                    -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+                    --data-raw '{"job_details":{"job_id":"'$ROBOT_FIX_GIT_JOB_ID'","job_type":"source_control_discovery_job"}}'
 
-              echo ""	
-              echo ""	
-              echo ""	
+                echo ""	
+                echo "***************************************************************************************************************************************************"
+                echo "   🚀   Run Galaxium Travels Git Discovery"
+                curl -s "https://$CONCERT_URL/concert/ingestion/api/v1/job/v2/submit" \
+                    -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+                    --data-raw '{"job_details":{"job_id":"'$GALAX_GIT_JOB_ID'","job_type":"source_control_discovery_job"}}'
+              
+                echo ""	
+                echo "***************************************************************************************************************************************************"
+                echo "   🚀   Run Sock Shop Git Discovery"
+                curl -s "https://$CONCERT_URL/concert/ingestion/api/v1/job/v2/submit" \
+                    -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+                    --data-raw '{"job_details":{"job_id":"'$SOCK_GIT_JOB_ID'","job_type":"source_control_discovery_job"}}'
+              
+              #   echo ""	
+              #   echo "***************************************************************************************************************************************************"
+              #   echo "   🚀   Run Robot Shop OCP Discovery MAIN"
+              #   curl -s "https://$CONCERT_URL/concert/ingestion/api/v1/job/v2/submit" \
+              #       -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+              #       --data-raw '{"job_details":{"job_id":"'$ROBOT_OCP_JOB_ID'","job_type":"discovery_job"}}'
+              
+
+              #   echo ""	
+              #   echo "***************************************************************************************************************************************************"
+              #   echo "   🚀   Run Galaxium Travels OCP Discovery"
+              #   curl -s "https://$CONCERT_URL/concert/ingestion/api/v1/job/v2/submit" \
+              #       -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+              #       --data-raw '{"job_details":{"job_id":"'$GALAX_OCP_JOB_ID'","job_type":"discovery_job"}}'
+              
+              #   echo ""	
+              #   echo "***************************************************************************************************************************************************"
+              #   echo "   🚀   Run Sock Shop OCP Discovery"
+              #   curl -s "https://$CONCERT_URL/concert/ingestion/api/v1/job/v2/submit" \
+              #       -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+              #       --data-raw '{"job_details":{"job_id":"'$SOCK_OCP_JOB_ID'","job_type":"discovery_job"}}'
+
+              #   echo ""	
+              #   echo "***************************************************************************************************************************************************"
+              #   echo "   🚀   Run Robot Shop Compliance Discovery"
+              #   curl -s "https://$CONCERT_URL/concert/ingestion/api/v1/job/v2/submit" \
+              #       -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+              #       --data-raw '{"job_details":{"job_id":"'$ROBOT_COMP_JOB_ID'","job_type":"discovery_job_compliance"}}'
+              
+              #   echo ""	
+              #   echo "***************************************************************************************************************************************************"
+              #   echo "   🚀   Run Galaxium Travels Compliance Discovery"
+              #   curl -s "https://$CONCERT_URL/concert/ingestion/api/v1/job/v2/submit" \
+              #       -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+              #       --data-raw '{"job_details":{"job_id":"'$GALAX_COMP_JOB_ID'","job_type":"discovery_job_compliance"}}'
+              
+              #   echo ""	
+              #   echo "***************************************************************************************************************************************************"
+              #   echo "   🚀   Run Sock Shop Compliance Discovery"
+              #   curl -s "https://$CONCERT_URL/concert/ingestion/api/v1/job/v2/submit" \
+              #       -X 'POST' -H "Authorization: C_API_KEY $AUTH_API_KEY" -H 'InstanceId: 0000-0000-0000-0000' -H 'accept: application/json' -H 'content-type: application/json' \
+              #       --data-raw '{"job_details":{"job_id":"'$SOCK_COMP_JOB_ID'","job_type":"discovery_job_compliance"}}'
+
+              #   echo ""	
+              #   echo ""	
+              #   echo ""	
 
 
               echo "------------------------------------------------------------------------------------------------------------------------------"

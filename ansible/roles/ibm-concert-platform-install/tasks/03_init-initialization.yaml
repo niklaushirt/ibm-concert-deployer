@@ -69,7 +69,7 @@
   debug:
     msg:
     - "** IBM Concert Parameters ***********************************************************************"
-    - " IBM Concert PASSWORD:                    {{ global_config.global_password }}"
+    - " IBM Concert PASSWORD:                   {{ global_config.global_password }}"
     - " IBM Concert Namespace:                  {{ current_ibm_feature.project }}"
     - " IBM Concert prod_registry:              {{ current_feature.prod_registry}}"
     - " IBM Concert prod_user:                  {{ current_feature.prod_user}}"

@@ -205,7 +205,7 @@ This installation contains:
 1. Copy and paste the content from [this file](./Quick_Install/01_INSTALL_IBM_CONCERT_PLATFORM.yaml)
 1. Accept the license by setting `accept_all_licenses` to `True` (line 76)
 1. Replace `<REGISTRY_TOKEN>` at the top of the file with your entitlement key from step 1.1.2 (line 50 - the Entitlement key from https://myibm.ibm.com)
-1. Replace the default Password `global_password: CHANGEME` with a Password of your choice (line 63, ❗ do NOT use the "-" character and do NOT leave empty ❗)
+1. Replace the default Password `global_password: CHANGEME` with a Password of your choice (line 63, ❗ Password must be at least 12 characters long and do NOT use the "-" character and do NOT leave empty ❗)
 1. If you want a full Concert Optimize/Turbonomic installed, set `concert_optimise_lite` (line 154) `True`
 1. In `concert_optimise_license` (line 171) provide your licence for Concert Optimize/Turbonomic in base64 (run `cat turbo.lic|base64`)
 1. If you want AI features enbaled, set `enable_WatsonX` to `True` (line 225) and provide your `watsonx_projectid` and `watsonx_token`

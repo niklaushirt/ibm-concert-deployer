@@ -1,6 +1,6 @@
 {
   "state": "enabled",
-  "executionPriority": 50,
+  "executionPriority": 15,
   "metadata": {
     "labels": {
       "ibm.com/aiops/uitemplate": "alert:createstory",

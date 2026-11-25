@@ -64,7 +64,7 @@
                         "conditions": [{
                             "actionId": "lang/condition/template",
                             "arguments": {
-                                "template": "({{contains alert.resource.name \"mysql\"}})"
+                                "template": "({{contains alert.resource.name \"mysql-db\"}})"
                             }
                         }]
                     }
