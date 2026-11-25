@@ -105,7 +105,7 @@ spec:
               echo ""
               echo "------------------------------------------------------------------------------------------------------------------------------"
     
-
+              export CONCERT_NAMESPACE=$(oc get po -A|grep aiops-orchestrator-controller |awk '{print$1}')
 
               #oc delete ConsoleNotification --all &
 
@@ -139,57 +139,50 @@ spec:
               echo " 💣 WIPE OPERATE"
               echo "*****************************************************************************************************************************"
             
-
-              export PROJECT_CP4AIOPS=ibm-concert-operate
-              export INSTALLATION_NAME="$(oc get installation.orchestrator.aiops.ibm.com -n ${PROJECT_CP4AIOPS} -o jsonpath="{.items[0].metadata.name}")"
+              export INSTALLATION_NAME="$(oc get installation.orchestrator.aiops.ibm.com -n ${CONCERT_NAMESPACE} -o jsonpath="{.items[0].metadata.name}")"
 
               echo "    ------------------------------------------------------------------------------------------------------------------------------"
-              echo "     🧻 Deleting Concert Operate Instance ${INSTALLATION_NAME} in Namespace ${PROJECT_CP4AIOPS}"
+              echo "     🧻 Deleting Concert Operate Instance ${INSTALLATION_NAME} in Namespace ${CONCERT_NAMESPACE}"
 
-              oc delete installation ${INSTALLATION_NAME} -n ${PROJECT_CP4AIOPS}
+              oc delete installation ${INSTALLATION_NAME} -n ${CONCERT_NAMESPACE}
               
-              remaining=$(oc get installation -n ${PROJECT_CP4AIOPS} --no-headers | wc -l)
-              while [[ $remaining -gt 0 ]]; do
-                sleep 10
-                remaining=$(oc get installation -n ${PROJECT_CP4AIOPS} --no-headers | wc -l)
-              done
-
-
+              
               echo "    ------------------------------------------------------------------------------------------------------------------------------"
-              echo "      🧻 Delete Namespace ibm-concert-operate"
-              oc delete ns ibm-concert-operate
+              echo "      🧻 Delete Namespace $CONCERT_NAMESPACE"
+              oc delete ns $CONCERT_NAMESPACE
               oc delete ConsoleNotification --all
 
 
               echo "    ------------------------------------------------------------------------------------------------------------------------------"
               echo "      🧻 Delete remaining stuff"
 
-              remaining=$(oc get installation.orchestrator.aiops.ibm.com -n ${PROJECT_CP4AIOPS} --no-headers | wc -l)
+              remaining=$(oc get installation.orchestrator.aiops.ibm.com -n ${CONCERT_NAMESPACE} --no-headers | wc -l)
               while [[ $remaining -gt 0 ]]; do
 
-                oc delete persistentVolumeClaims -n ${PROJECT_CP4AIOPS} --all &
-                oc delete installations.orchestrator.aiops.ibm.com -n ${PROJECT_CP4AIOPS} --all &
-                oc delete operandconfigs.operator.ibm.com -n ${PROJECT_CP4AIOPS} --all &
-                oc delete operandregistries.operator.ibm.com -n ${PROJECT_CP4AIOPS} --all &
-                oc delete operandrequests.operator.ibm.com -n ${PROJECT_CP4AIOPS} --all &
+                oc delete persistentVolumeClaims -n ${CONCERT_NAMESPACE} --all &
+                oc delete installations.orchestrator.aiops.ibm.com -n ${CONCERT_NAMESPACE} --all &
+                oc delete operandconfigs.operator.ibm.com -n ${CONCERT_NAMESPACE} --all &
+                oc delete operandregistries.operator.ibm.com -n ${CONCERT_NAMESPACE} --all &
+                oc delete operandrequests.operator.ibm.com -n ${CONCERT_NAMESPACE} --all &
 
                 sleep 30
 
-                CSV_NAME=$(oc get operandconfigs.operator.ibm.com -n ${PROJECT_CP4AIOPS} --no-headers | grep ibm-aiops | awk '{print $1}')
-                oc patch operandconfigs.operator.ibm.com ${CSV_NAME} -n ${PROJECT_CP4AIOPS} --type json -p='[{"op": "remove", "path": "/metadata/finalizers"}]'
-                CSV_NAME=$(oc get operandregistries.operator.ibm.com -n ${PROJECT_CP4AIOPS} --no-headers | grep ibm-aiops | awk '{print $1}')
-                oc patch operandregistries.operator.ibm.com ${CSV_NAME} -n ${PROJECT_CP4AIOPS} --type json -p='[{"op": "remove", "path": "/metadata/finalizers"}]'
-                CSV_NAME=$(oc get operandregistries.operator.ibm.com -n ${PROJECT_CP4AIOPS} --no-headers | grep aiops-foundational-services | awk '{print $1}')
-                oc patch operandregistries.operator.ibm.com ${CSV_NAME} -n ${PROJECT_CP4AIOPS} --type json -p='[{"op": "remove", "path": "/metadata/finalizers"}]'
-                CSV_NAME=$(oc get operandrequests.operator.ibm.com -n ${PROJECT_CP4AIOPS} --no-headers | grep aiops-platformui-operator | awk '{print $1}')
-                oc patch operandrequests.operator.ibm.com ${CSV_NAME} -n ${PROJECT_CP4AIOPS} --type json -p='[{"op": "remove", "path": "/metadata/finalizers"}]'
-                CSV_NAME=$(oc get installations.orchestrator.aiops.ibm.com -n ${PROJECT_CP4AIOPS} --no-headers | grep ibm-concert-operate | awk '{print $1}')
-                oc patch installations.orchestrator.aiops.ibm.com ${CSV_NAME} -n ${PROJECT_CP4AIOPS} --type json -p='[{"op": "remove", "path": "/metadata/finalizers"}]'
+                CSV_NAME=$(oc get operandconfigs.operator.ibm.com -n ${CONCERT_NAMESPACE} --no-headers | grep ibm-aiops | awk '{print $1}')
+                oc patch operandconfigs.operator.ibm.com ${CSV_NAME} -n ${CONCERT_NAMESPACE} --type json -p='[{"op": "remove", "path": "/metadata/finalizers"}]'
+                CSV_NAME=$(oc get operandregistries.operator.ibm.com -n ${CONCERT_NAMESPACE} --no-headers | grep ibm-aiops | awk '{print $1}')
+                oc patch operandregistries.operator.ibm.com ${CSV_NAME} -n ${CONCERT_NAMESPACE} --type json -p='[{"op": "remove", "path": "/metadata/finalizers"}]'
+                CSV_NAME=$(oc get operandregistries.operator.ibm.com -n ${CONCERT_NAMESPACE} --no-headers | grep aiops-foundational-services | awk '{print $1}')
+                oc patch operandregistries.operator.ibm.com ${CSV_NAME} -n ${CONCERT_NAMESPACE} --type json -p='[{"op": "remove", "path": "/metadata/finalizers"}]'
+                CSV_NAME=$(oc get operandrequests.operator.ibm.com -n ${CONCERT_NAMESPACE} --no-headers | grep aiops-platformui-operator | awk '{print $1}')
+                oc patch operandrequests.operator.ibm.com ${CSV_NAME} -n ${CONCERT_NAMESPACE} --type json -p='[{"op": "remove", "path": "/metadata/finalizers"}]'
+                CSV_NAME=$(oc get installations.orchestrator.aiops.ibm.com -n ${CONCERT_NAMESPACE} --no-headers | grep ibm-concert-operate | awk '{print $1}')
+                oc patch installations.orchestrator.aiops.ibm.com ${CSV_NAME} -n ${CONCERT_NAMESPACE} --type json -p='[{"op": "remove", "path": "/metadata/finalizers"}]'
 
-                remaining=$(oc get installation.orchestrator.aiops.ibm.com -n ${PROJECT_CP4AIOPS} --no-headers | wc -l)
+                remaining=$(oc get installation.orchestrator.aiops.ibm.com -n ${CONCERT_NAMESPACE} --no-headers | wc -l)
               done
 
 
+            
               echo "*****************************************************************************************************************************"
               echo " 💣 OFFICIAL UNINSTALL COMPLEMENT"
               echo "*****************************************************************************************************************************"
@@ -254,6 +247,21 @@ spec:
               oc delete ConsoleLink ibm-concert-operate-sockshop
               oc delete ConsoleLink ibm-concert-operate-spark
 
+
+
+              oc delete CustomResourceDefinitions $(oc get CustomResourceDefinitions |grep aiops.ibm.com |awk '{print$1}') 
+              oc delete CustomResourceDefinitions $(oc get CustomResourceDefinitions |grep cpd.ibm.com |awk '{print$1}') 
+              oc delete CustomResourceDefinitions $(oc get CustomResourceDefinitions |grep asm.ibm.com |awk '{print$1}') 
+              oc delete CustomResourceDefinitions $(oc get CustomResourceDefinitions |grep management.ibm.com |awk '{print$1}') 
+              oc delete CustomResourceDefinitions $(oc get CustomResourceDefinitions |grep flink.ibm.com |awk '{print$1}') 
+              oc delete CustomResourceDefinitions $(oc get CustomResourceDefinitions |grep ibmevents.ibm.com |awk '{print$1}') 
+              oc delete CustomResourceDefinitions $(oc get CustomResourceDefinitions |grep aiops.ibm.com |awk '{print$1}') 
+              oc delete CustomResourceDefinitions $(oc get CustomResourceDefinitions |grep pg.ibm.com |awk '{print$1}') 
+              oc delete CustomResourceDefinitions $(oc get CustomResourceDefinitions |grep management.ibm.com |awk '{print$1}') 
+              oc delete CustomResourceDefinitions $(oc get CustomResourceDefinitions |grep management.ibm.com |awk '{print$1}') 
+
+              oc delete CustomResourceDefinitions commonservices.operator.ibm.com
+              oc delete CustomResourceDefinitions commonwebuis.operators.ibm.com
 
 
               
