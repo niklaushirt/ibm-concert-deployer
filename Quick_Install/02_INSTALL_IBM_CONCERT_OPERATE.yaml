@@ -105,8 +105,9 @@ data:
       # --------------------------------------------------------------------------------------------------------------------------------------
       entitled_registry: cp.icr.io
       entitled_registry_user: cp
-      catalog_image: icr.io/cpopen/ibm-aiops-catalog@sha256:dd001b156473070b5ea32b2e1968d844dc4df1da9c241a8776e24247c1359cf5
-      current_supported_operate_version: v5.2
+      # catalog_image: icr.io/cpopen/ibm-aiops-catalog@sha256:dd001b156473070b5ea32b2e1968d844dc4df1da9c241a8776e24247c1359cf5
+      catalog_image: icr.io/cpopen/ibm-aiops-catalog@sha256:ffc15fae9549d8daaca9c8afac83c8ef483b3b74e1fd7264c63de86cea228dcf
+      current_supported_operate_version: v5.3
 
 
 
@@ -186,7 +187,7 @@ data:
         # Name of the ibm-concert-operate instance
         concert_operate_name: ibm-concert-operate
         # Version of the catalog subscription
-        subscription_channel: v5.2
+        subscription_channel: v5.3
 
         # Enable Log Anomaly and Similar Tickets
         logAnomalyDetection: true
