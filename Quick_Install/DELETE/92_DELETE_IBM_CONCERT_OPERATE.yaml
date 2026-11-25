@@ -190,25 +190,31 @@ spec:
               done
 
 
-              # CSV_NAME=$(oc get csv -n ${PROJECT_CP4AIOPS} --no-headers | grep ibm-aiops-orchestrator | awk '{print $1}')
-              # oc delete csv ${CSV_NAME} -n ${PROJECT_CP4AIOPS}
+              echo "*****************************************************************************************************************************"
+              echo " 💣 OFFICIAL UNINSTALL COMPLEMENT"
+              echo "*****************************************************************************************************************************"
+              echo ""
+              echo "  ⏳ INSTALLATION START TIMESTAMP: $(date)"
+              echo ""
 
 
+              CSV_NAME=$(oc get csv -n ${PROJECT_CP4AIOPS} --no-headers | grep ibm-aiops-orchestrator | awk '{print $1}')
+              oc delete csv ${CSV_NAME} -n ${PROJECT_CP4AIOPS}
 
-              # oc delete subscription ibm-aiops-orchestrator -n ${PROJECT_CP4AIOPS}
-              # oc delete pod -l app.kubernetes.io/name=ibm-aiops-orchestrator-controller-manager -n ${PROJECT_CP4AIOPS}
+              oc delete subscription ibm-aiops-orchestrator -n ${PROJECT_CP4AIOPS}
+              oc delete pod -l app.kubernetes.io/name=ibm-aiops-orchestrator-controller-manager -n ${PROJECT_CP4AIOPS}
 
 
-              # # For CSV
-              # CSV_NAME=$(oc get csv -n ${PROJECT_CP4AIOPS} --no-headers | grep ibm-aiops-orchestrator | awk '{print $1}')
-              # oc patch csv ${CSV_NAME} -n ${PROJECT_CP4AIOPS} --type json -p='[{"op": "remove", "path": "/metadata/finalizers"}]'
+              # For CSV
+              CSV_NAME=$(oc get csv -n ${PROJECT_CP4AIOPS} --no-headers | grep ibm-aiops-orchestrator | awk '{print $1}')
+              oc patch csv ${CSV_NAME} -n ${PROJECT_CP4AIOPS} --type json -p='[{"op": "remove", "path": "/metadata/finalizers"}]'
 
-              # # For Subscription
-              # oc patch subscription ibm-aiops-orchestrator -n ${PROJECT_CP4AIOPS} --type json -p='[{"op": "remove", "path": "/metadata/finalizers"}]'
+              # For Subscription
+              oc patch subscription ibm-aiops-orchestrator -n ${PROJECT_CP4AIOPS} --type json -p='[{"op": "remove", "path": "/metadata/finalizers"}]'
 
-              # oc delete catalogsource -n ${PROJECT_CP4AIOPS} ibm-aiops-catalog
+              oc delete catalogsource -n ${PROJECT_CP4AIOPS} ibm-aiops-catalog
 
-              # oc get catalogsource -n ${PROJECT_CP4AIOPS}
+              oc get catalogsource -n ${PROJECT_CP4AIOPS}
 
 
 

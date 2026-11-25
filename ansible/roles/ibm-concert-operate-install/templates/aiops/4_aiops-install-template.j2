@@ -21,15 +21,15 @@ spec:
   size: {{ current_feature.concert_operate_size }}
   storage:
     aiops-ir-core-postgres:
-      storageClass: '{{ STORAGE_CLASS_FILE }}'
+      storageClass: '{{ STORAGE_CLASS_LARGE_BLOCK }}'
     aiops-ir-core-postgres-wal:
-      storageClass: '{{ STORAGE_CLASS_FILE }}'
+      storageClass: '{{ STORAGE_CLASS_LARGE_BLOCK }}'
     aiops-topology-postgres:
-      storageClass: '{{ STORAGE_CLASS_FILE }}'
+      storageClass: '{{ STORAGE_CLASS_LARGE_BLOCK }}'
     aiops-topology-postgres-wal:
-      storageClass: '{{ STORAGE_CLASS_FILE }}'
+      storageClass: '{{ STORAGE_CLASS_LARGE_BLOCK }}'
     data-iaf-system-kafka:
-      storageClass: '{{ STORAGE_CLASS_FILE }}'
-  storageClass: '{{ STORAGE_CLASS_FILE }}'
+      storageClass: '{{ STORAGE_CLASS_LARGE_BLOCK }}'
+  storageClass: '{{ STORAGE_CLASS_LARGE_BLOCK }}'
   storageClassLargeBlock: '{{ STORAGE_CLASS_LARGE_BLOCK }}'
   topologyModel: {{ current_feature.topologyModel | default("application") }}
