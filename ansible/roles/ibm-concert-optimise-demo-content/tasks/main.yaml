@@ -146,7 +146,7 @@
       OS=$(uname -s | tr '[:upper:]' '[:lower:]')
       if [ "${OS}" == "darwin" ]; then
             echo "MAC"
-            LICENSE_FILE=$(pwd)"/roles/ibm-ibm-concert-optimise-demo-content/vars/lic.yaml"
+            LICENSE_FILE=$(pwd)"/roles/ibm-ibm-platform-dal-demo-content/vars/lic.yaml"
       else
             LICENSE_FILE="{{role_path}}/vars/lic.yaml"
       fi    
@@ -226,7 +226,7 @@
 # ---------------------------------------------------------------------------------------------------------------------------------------------------"
 # Install CONCERT OPTIMISE
 - name: (001/003) - 🟡🟡🟡🟡🟡🟡🟡🟡🟡  Install Concert Optimise Demo Content
-  include_tasks: 10_addons-ibm-concert-optimise-demo-content.yaml
+  include_tasks: 10_addons-ibm-platform-dal-demo-content.yaml
 
 
 
@@ -265,7 +265,7 @@
     oc delete ConsoleNotification ibm-concert-operate-notification-turbo>/dev/null 2>/dev/null
     oc delete ConsoleNotification ibm-concert-operate-notification-password>/dev/null 2>/dev/null
     oc delete ConsoleNotification ibm-concert-operate-notification-status>/dev/null 2>/dev/null
-    export appURL=$(oc get routes -n ibm-concert-optimise nginx -o jsonpath="{['spec']['host']}")|| true
+    export appURL=$(oc get routes -n ibm-platform-dal nginx -o jsonpath="{['spec']['host']}")|| true
     cat <<EOF | oc apply -f -
     apiVersion: console.openshift.io/v1
     kind: ConsoleNotification

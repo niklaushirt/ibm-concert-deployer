@@ -559,7 +559,7 @@ export TURBO_PASSWORD=CHANGEME
 
     echo "------------------------------------------------------------------------------------------------------------------------------"
     echo " 🚀 Deploy Synthetic Metrics Server for DIF"
-    oc apply -f ./roles/ibm-concert-optimise-demo-content/templates/create-data-ingestion.yaml
+    oc apply -f ./roles/ibm-platform-dal-demo-content/templates/create-data-ingestion.yaml
     echo ""
     echo ""
     export robotshopUUID=$(curl -XGET -s -k "https://$TURBO_URL/api/v3/topologydefinitions" -b /tmp/cookies  -H 'Content-Type: application/json;' -H 'accept: application/json'|jq -r '.[]|select(.displayName=="RobotShopSynthetic").uuid')

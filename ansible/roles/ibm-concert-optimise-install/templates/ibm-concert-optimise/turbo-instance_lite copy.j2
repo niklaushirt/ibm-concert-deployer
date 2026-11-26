@@ -1,0 +1,58 @@
+apiVersion: charts.helm.k8s.io/v1
+kind: Xl
+metadata:
+  name: xl-release
+  namespace: ibm-platform-dal
+spec:
+  nginx:
+    nginxIsPrimaryIngress: false
+    httpsRedirect: false
+  nginxingress:
+    enabled: true
+  openshiftingress:
+    enabled: true
+
+  global:
+    customImageNames: false
+    repository: icr.io/cpopen/turbonomic
+    storageClassName: {{ STORAGE_CLASS_LARGE_BLOCK }}
+    storageSelector: false
+    tag: {{ current_feature.concert_optimise_version }}
+    securityContext:
+      fsGroup: {{ FS_GROUP }}
+    turboLite:
+      enabled: true
+    turboai:
+      config:
+        env.parameters:
+          env_name: on-prem
+          feedback.enabled.override: false
+          flags.a2a_enabled.override: true
+          mcp.api.host: mcp-turbo-api
+          mcp.api.max_connection_retries: '3'
+          mcp.api.port: '8000'
+          mcp.api.timeout: '30.0'
+          mcp.api.transport: streamable-http
+        watsonx.host: '{{current_feature.watsonx_url  | default('https://us-south.ml.cloud.ibm.com')}}'
+        watsonx.project_id: {{current_feature.watsonx_projectid  | default('00000000-0000-0000-0000-000000000000')}}
+
+  properties:
+    extractor:
+      grafanaAdminPassword: vmturbo
+  turboai:
+    enabled: true
+  rsyslog:
+    persistence:
+      size: 30Gi
+  solisgateway:
+    enabled: false
+  instana:
+    enabled: true
+  kubeturbo:
+    enabled: true
+  ui:
+    enabled: true
+  mcp-turbo-api:
+    enabled: true
+  concert-turbo:
+    enabled: true

@@ -81,12 +81,12 @@
 
 - name: tools-install-modules-loop 🌡   CHECK for - IBM Concert Optimise
   include_role:
-    name: ibm-concert-optimise-install
+    name: ibm-platform-dal-install
   when: current_feature.kind=="IBMConcertOptimise" and current_feature.install|bool == true
 
 - name: tools-install-modules-loop 🌡   CHECK for - IBM Concert Optimise Demo Content
   include_role:
-    name: ibm-concert-optimise-demo-content
+    name: ibm-platform-dal-demo-content
   when: current_feature.kind=="IBMConcertOptimiseDemoContent" and current_feature.install|bool == true
 
 

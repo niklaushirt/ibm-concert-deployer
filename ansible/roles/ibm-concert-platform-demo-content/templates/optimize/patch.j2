@@ -2,7 +2,7 @@ apiVersion: charts.helm.k8s.io/v1
 kind: Xl
 metadata:
   name: xl-release
-  namespace: ibm-concert-optimise
+  namespace: ibm-platform-dal
 spec:
   global:
     productList: turbonomic
@@ -33,7 +33,7 @@ spec:
       headerAuthenticationEnabled: true
       requestHeaderSize: '20000'
       vendor_latest_version: false
-      vendor_public_key_url: 'https://concert-gateway.ibm-concert-optimise.svc.cluster.local/gw/auth/jwtcert'
+      vendor_public_key_url: 'https://concert-gateway.ibm-platform-dal.svc.cluster.local/gw/auth/jwtcert'
       vendor_public_key_skip_ssl_verification: true
       vendor_request_jwt_cookie: ibm-platform-session
       vendor_request_jwt_token: X-Auth-Token

@@ -1,58 +1,55 @@
+---
 apiVersion: charts.helm.k8s.io/v1
 kind: Xl
 metadata:
   name: xl-release
-  namespace: ibm-concert-optimise
+  namespace: ibm-platform-dal
 spec:
-  nginx:
-    nginxIsPrimaryIngress: false
-    httpsRedirect: false
-  nginxingress:
-    enabled: true
-  openshiftingress:
-    enabled: true
+  # This configuration file is used for production.
+  # Default values copied from <project_dir>/helm-charts/xl/values.yaml
 
+  # Default values for turbolite deployment.
+  # This is a YAML-formatted file.
+  # Declare variables to be passed into your templates.
+
+  # Any changes run : kubectl apply -f charts_v1_turbolite_cr.yaml -n turbonomic
+
+  # Global settings
   global:
-    customImageNames: false
+    turboLite:
+      enabled: true
     repository: icr.io/cpopen/turbonomic
+    tag: 8.21.5
+    enableExternalSecrets: true
     storageClassName: {{ STORAGE_CLASS_LARGE_BLOCK }}
     storageSelector: false
     tag: {{ current_feature.concert_optimise_version }}
     securityContext:
       fsGroup: {{ FS_GROUP }}
-    turboLite:
-      enabled: true
-    turboai:
-      config:
-        env.parameters:
-          env_name: on-prem
-          feedback.enabled.override: false
-          flags.a2a_enabled.override: true
-          mcp.api.host: mcp-turbo-api
-          mcp.api.max_connection_retries: '3'
-          mcp.api.port: '8000'
-          mcp.api.timeout: '30.0'
-          mcp.api.transport: streamable-http
-        watsonx.host: '{{current_feature.watsonx_url  | default('https://us-south.ml.cloud.ibm.com')}}'
-        watsonx.project_id: {{current_feature.watsonx_projectid  | default('00000000-0000-0000-0000-000000000000')}}
 
-  properties:
-    extractor:
-      grafanaAdminPassword: vmturbo
-  turboai:
-    enabled: true
-  rsyslog:
-    persistence:
-      size: 30Gi
-  solisgateway:
-    enabled: false
+  # Most components are disabled by helper templates when turboLite.enabled is set to true.
+  
+  # Required: Enable Instana  for TurboLite
   instana:
     enabled: true
-  kubeturbo:
+  concert-turbo:
     enabled: true
-  ui:
+  clickhouse:
+    enabled: false
+  metrics-store:
+    enabled: false
+  onprem-cost:
+    enabled: false
+
+  # Only used in Red Hat OpenShift deployments - uncomment if needed
+  nginx:
+    nginxIsPrimaryIngress: false
+    httpsRedirect: false
+    httpPort: 9080
+    httpsPort: 9443
+  nginxingress:
+    enabled: true
+  openshiftingress:
     enabled: true
   mcp-turbo-api:
-    enabled: true
-  concert-turbo:
     enabled: true

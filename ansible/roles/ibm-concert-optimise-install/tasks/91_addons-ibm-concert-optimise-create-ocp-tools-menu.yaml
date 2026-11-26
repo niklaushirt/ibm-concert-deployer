@@ -44,13 +44,13 @@
 
 - name: 🌏 OCP MENU - Create Openshift WebConsole Menu Item - Concert Optimise
   shell: |
-    appURL=$(oc get route -n ibm-concert-optimise nginx -o jsonpath={.spec.host})|| true
+    appURL=$(oc get route -n ibm-platform-dal nginx -o jsonpath={.spec.host})|| true
 
     cat <<EOF | oc apply -f -
       apiVersion: console.openshift.io/v1
       kind: ConsoleLink
       metadata:
-        name: ibm-ibm-concert-optimise-install
+        name: ibm-ibm-platform-dal-install
       spec:
         applicationMenu:
           imageURL: >-

@@ -377,16 +377,16 @@
 
 - name:   🚀 IBM Concert - IBM Concert Integrate ITOM and TurboLite
   shell: |
-    export TURBO_URL=$(oc get route -n ibm-concert-optimise nginx -o jsonpath={.spec.host})
+    export TURBO_URL=$(oc get route -n ibm-platform-dal nginx -o jsonpath={.spec.host})
 
     echo "------------------------------------------------------------------------------------------------------------------------------"
     echo " ✅ Register Turbo with ITOM"
     echo "------------------------------------------------------------------------------------------------------------------------------"
     export CONCERT_HUB_NAMESPACE=$(oc get po -A|grep ibm-solis-core |awk '{print$1}')
     echo "CONCERT_HUB_NAMESPACE: $CONCERT_HUB_NAMESPACE"
-    export TURBOLITE_URL="https://$TURBO_URL"
-    export TURBOLITE_USER="Administrator"
-    export TURBOLITE_PASSWORD={{ global_config.global_password }}
+    export DAL_URL="https://$TURBO_URL"
+    export DAL_USER="administrator"
+    export DAL_PASSWORD={{ global_config.global_password }}
     export APIKEY=$(kubectl -n "${CONCERT_HUB_NAMESPACE}" \
       get secret itom-secrets \
       -o jsonpath="{.data.BACKEND_APIKEY}" | base64 -d)
@@ -395,22 +395,19 @@
     echo "TURBO_URL:  $TURBO_URL"
     echo "CONCERT_HUB_NAMESPACE:  $CONCERT_HUB_NAMESPACE"
     echo "CONCERT_HUB_ROUTE:  $CONCERT_HUB_ROUTE"
-    echo "TURBOLITE_URL:  $TURBOLITE_URL"
-    echo "TURBOLITE_USER:  $TURBOLITE_USER"
-    echo "TURBOLITE_PASSWORD:  $TURBOLITE_PASSWORD"
-    echo "APIKEY:  $APIKEY"
+    echo "DAL_URL:            $DAL_URL"
+    echo "DAL_USER:           $DAL_USER"
+    echo "DAL_PASSWORD:       $DAL_PASSWORD"
+    echo "APIKEY:             $APIKEY"
 
-    kubectl -n "${CONCERT_HUB_NAMESPACE}" exec deployment/ibm-itom-data-model-backend -- \
+
+    JSON_BODY="{\"group_id\":\"0000-0000-0000-0000-default\",\"account_id\":\"0000-0000-0000-0000\",\"dal_endpoint\":\"${DAL_URL}\",\"dal_user\":\"${DAL_USER}\",\"dal_password\":\"${DAL_PASSWORD}\"}"
+
+    kubectl -n "${namespace}" exec deployment/ibm-itom-data-model-backend -- \
     bash -c "curl -k -X POST https://localhost:7531/api/v1/registerGroupWithTurboLite \
       -H \"x-api-key: ${APIKEY}\" \
-      -H 'Content-Type: application/json' \
-      -d '{
-        \"group_id\": \"0000-0000-0000-0000-default\",
-        \"account_id\": \"0000-0000-0000-0000\",
-        \"turbolite_endpoint\": \"${TURBOLITE_URL}\",
-        \"turbolite_user\": \"${TURBOLITE_USER}\",
-        \"turbolite_password\": \"${TURBOLITE_PASSWORD}\"
-      }'"
+      -H \"Content-Type: application/json\" \
+      -d '${JSON_BODY}'"
 
 
     # echo "------------------------------------------------------------------------------------------------------------------------------"
@@ -424,7 +421,7 @@
 
 
     # kubectl exec -it $(kubectl get pods -n ibm-installer | grep "ibm-install-concert" | awk '{print $1}') -n ibm-installer -- ls -al /tmp/ibm-concert/concert-hub/bin/
-    # kubectl exec -it $(kubectl get pods -n ibm-installer | grep "ibm-install-concert" | awk '{print $1}') -n ibm-installer -- /tmp/ibm-concert/concert-hub/bin/manage-product.sh --action=add --deployment-type=k8s --product-id=turbonomic --instance-url=https://nginx.ibm-concert-optimise.svc.cluster.local:443 --kc-entrypoint-url=https://$TURBO_URL --namespace=$CONCERT_HUB_NAMESPACE --restart-hub=true
+    # kubectl exec -it $(kubectl get pods -n ibm-installer | grep "ibm-install-concert" | awk '{print $1}') -n ibm-installer -- /tmp/ibm-concert/concert-hub/bin/manage-product.sh --action=add --deployment-type=k8s --product-id=turbonomic --instance-url=https://nginx.ibm-platform-dal.svc.cluster.local:443 --kc-entrypoint-url=https://$TURBO_URL --namespace=$CONCERT_HUB_NAMESPACE --restart-hub=true
 
 
 
@@ -611,42 +608,42 @@
     }
     EOF
 
-    # OBSERVABILITY_COORDINATOR_AGENT_URL="https://{OBSERVE_HOST}/a2a"
+    OBSERVABILITY_COORDINATOR_AGENT_URL="{{current_feature.instana_url | default("https://ibmdevsandbox-instanaibm.instana.io") }}/a2a"
 
-    # curl -k -X POST "$AGENT_CARD_REGISTRATION_URL" \
-    #   -H "Secret: $AUTH_API_KEY" \
-    #   -H "Content-Type: application/json" \
-    #   -d @- <<EOF
-    # {
-    #     "metadata": {
-    #       "name": "observability-coordinator",
-    #       "agentType": "generic",
-    #       "author": "admin",
-    #       "description": "Observability coordinator",
-    #       "version": "1.0.0",
-    #       "display_name": "observability-coordinator",
-    #       "organization": "itom",
-    #       "category": "observability"
-    #     },
-    #     "configuration": {
-    #         "endpoint_url": "$OBSERVABILITY_COORDINATOR_AGENT_URL",
-    #         "protocol": "a2a"
-    #     },
-    #     "security": {
-    #         "access_level": "public",
-    #         "requires_authentication": false,
-    #         "authentication_type": "none"
-    #     }
-    # }
-    # EOF
+    curl -k -X POST "$AGENT_CARD_REGISTRATION_URL" \
+      -H "Secret: $AUTH_API_KEY" \
+      -H "Content-Type: application/json" \
+      -d @- <<EOF
+    {
+        "metadata": {
+          "name": "observability-coordinator",
+          "agentType": "generic",
+          "author": "admin",
+          "description": "Observability coordinator",
+          "version": "1.0.0",
+          "display_name": "observability-coordinator",
+          "organization": "itom",
+          "category": "observability"
+        },
+        "configuration": {
+            "endpoint_url": "$OBSERVABILITY_COORDINATOR_AGENT_URL",
+            "protocol": "a2a"
+        },
+        "security": {
+            "access_level": "public",
+            "requires_authentication": false,
+            "authentication_type": "none"
+        }
+    }
+    EOF
 
 
     echo "------------------------------------------------------------------------------------------------------------------------------"
     echo "    ✅ Register: OPTIMIZATION_COORDINATOR_AGENT"
 
-    oc create route edge a2a-turboai -n ibm-concert-optimise --service=turboai --port=http-a2a-turboai
+    oc create route edge a2a-turboai -n ibm-platform-dal --service=turboai --port=http-a2a-turboai
 
-    export OPTIMIZE_HOST=$(oc get route -n ibm-concert-optimise a2a-turboai -o jsonpath={.spec.host})
+    export OPTIMIZE_HOST=$(oc get route -n ibm-platform-dal a2a-turboai -o jsonpath={.spec.host})
     # OPTIMIZATION_COORDINATOR_AGENT_URL="https://$OPTIMIZE_HOST/turbonomic/turboai/a2a"
     OPTIMIZATION_COORDINATOR_AGENT_URL="https://$OPTIMIZE_HOST"
 
@@ -843,10 +840,10 @@
     # echo " 🚀 Enable WatsonX In Turbo"
 
     kubectl create secret generic turboai-secret \
-    -n ibm-concert-optimise \
+    -n ibm-platform-dal \
     --from-literal=.env.secrets="watsonx.api_key={{current_feature.watsonx_token}}"
 
-    kubectl rollout restart -n ibm-concert-optimise deployment/turboai
+    kubectl rollout restart -n ibm-platform-dal deployment/turboai
 
   register: output_string
   ignore_errors: true

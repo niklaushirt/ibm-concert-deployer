@@ -71,9 +71,9 @@
 
 - name: 🚀 CONCERT OPTIMISE - INTEGRATE WITH CONCERT PLATFORM - RESTART
   shell: |
-    #oc patch xl xl-release -n ibm-concert-optimise --type=merge --patch-file PATCH.yaml
-    oc rollout restart deployment/api deployment/auth deployment/consul deployment/nginx deployment/oauth2 -n ibm-concert-optimise
-    oc get pods -n ibm-concert-optimise | grep "concert"
+    #oc patch xl xl-release -n ibm-platform-dal --type=merge --patch-file PATCH.yaml
+    oc rollout restart deployment/api deployment/auth deployment/consul deployment/nginx deployment/oauth2 -n ibm-platform-dal
+    oc get pods -n ibm-platform-dal | grep "concert"
     echo ""
     echo ""
   ignore_errors: true
@@ -86,8 +86,8 @@
     verbosity: 1
 
 
-- name: 🕦 CONCERT OPTIMISE - Wait for all pods in ibm-concert-optimise to become ready
-  shell: oc get po -n ibm-concert-optimise | grep "0/" | grep -c ""
+- name: 🕦 CONCERT OPTIMISE - Wait for all pods in ibm-platform-dal to become ready
+  shell: oc get po -n ibm-platform-dal | grep "0/" | grep -c ""
   register: kubectl_get_pods
   until: (kubectl_get_pods.stdout | int) < 1
   failed_when: kubectl_get_pods.rc not in [0, 1]

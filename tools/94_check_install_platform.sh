@@ -519,7 +519,7 @@ echo ""
 
 
 oc delete ConsoleNotification ibm-concert-operate-notification-turbo>/dev/null 2>/dev/null
-export appURL=$(oc get routes -n ibm-concert-optimise nginx -o jsonpath="{['spec']['host']}")|| true
+export appURL=$(oc get routes -n ibm-platform-dal nginx -o jsonpath="{['spec']['host']}")|| true
 cat <<EOF | oc apply -f -
 apiVersion: console.openshift.io/v1
 kind: ConsoleNotification

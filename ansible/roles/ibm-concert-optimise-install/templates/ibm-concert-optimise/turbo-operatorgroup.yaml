@@ -1,11 +1,11 @@
 apiVersion: operators.coreos.com/v1
 kind: OperatorGroup
 metadata:
-  name: ibm-concert-optimise
-  namespace: ibm-concert-optimise
+  name: ibm-platform-dal
+  namespace: ibm-platform-dal
 spec:
   targetNamespaces:
-    - ibm-concert-optimise
+    - ibm-platform-dal
 status:
   namespaces:
-    - ibm-concert-optimise
+    - ibm-platform-dal
