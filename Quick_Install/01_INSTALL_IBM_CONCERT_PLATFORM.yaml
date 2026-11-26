@@ -145,10 +145,10 @@ data:
     # IBM CONCERT OPTIMIZE (CONCERT OPTIMISE - Prerequisite for IBM CONCERT platform)
     # --------------------------------------------------------------------------------------------------------------------------------------
 
-    - project: ibm-platform-dal
+    - project: ibm-concert-optimise
       instances:
 
-      - name: ibm-platform-dal
+      - name: ibm-concert-optimise
         kind: IBMConcertOptimise
         install: true
         concert_optimise_version: 8.21.5
@@ -163,7 +163,7 @@ data:
         #storage_class_block: automatic
 
 
-      - name: ibm-platform-dal-demo-content
+      - name: ibm-concert-optimise-demo-content
         kind: IBMConcertOptimiseDemoContent
         install: true
         # Admin User Password (OVERRIDES GLOBAL PASSWORD)

@@ -62,7 +62,7 @@ spec:
     location: BannerTop
     text: "✅ IBM Concert Platform is installed in this cluster. 🚀 Access it here:"
 EOF
-export appURL=$(oc get routes -n ibm-platform-dal nginx -o jsonpath="{['spec']['host']}")|| true
+export appURL=$(oc get routes -n ibm-concert-optimise nginx -o jsonpath="{['spec']['host']}")|| true
 cat <<EOF | oc apply -f -
 apiVersion: console.openshift.io/v1
 kind: ConsoleNotification

@@ -45,25 +45,25 @@
   kubernetes.core.k8s:
     api_version: v1
     kind: Namespace
-    name: "ibm-platform-dal"
+    name: "ibm-concert-optimise"
     state: present
   
 
 - name: 🚀 CONCERT OPTIMISE - Create Concert Optimise scc
   shell: |
-    oc delete clusterrolebinding ibm-platform-dal-admin1 --ignore-not-found
-    oc delete clusterrolebinding ibm-platform-dal-admin2 --ignore-not-found
-    oc delete clusterrolebinding ibm-platform-dal-admin3 --ignore-not-found
-    oc adm policy add-scc-to-group anyuid system:serviceaccounts:ibm-platform-dal
-    oc create clusterrolebinding ibm-platform-dal-admin1 --clusterrole=cluster-admin --serviceaccount=ibm-platform-dal:t8c-operator
-    oc create clusterrolebinding ibm-platform-dal-admin2 --clusterrole=cluster-admin --serviceaccount=ibm-platform-dal:turbo-user
-    oc create clusterrolebinding ibm-platform-dal-admin3 --clusterrole=cluster-admin --serviceaccount=ibm-platform-dal:default
+    oc delete clusterrolebinding ibm-concert-optimise-admin1 --ignore-not-found
+    oc delete clusterrolebinding ibm-concert-optimise-admin2 --ignore-not-found
+    oc delete clusterrolebinding ibm-concert-optimise-admin3 --ignore-not-found
+    oc adm policy add-scc-to-group anyuid system:serviceaccounts:ibm-concert-optimise
+    oc create clusterrolebinding ibm-concert-optimise-admin1 --clusterrole=cluster-admin --serviceaccount=ibm-concert-optimise:t8c-operator
+    oc create clusterrolebinding ibm-concert-optimise-admin2 --clusterrole=cluster-admin --serviceaccount=ibm-concert-optimise:turbo-user
+    oc create clusterrolebinding ibm-concert-optimise-admin3 --clusterrole=cluster-admin --serviceaccount=ibm-concert-optimise:default
   ignore_errors: true
   register: demo_robot_shop
         
 - name: 🚀 CONCERT OPTIMISE - Delete ClusterRoleBinding turbo-all-binding in case of ROKS
   shell: |
-    oc delete clusterrolebinding turbo-all-binding -n ibm-platform-dal --ignore-not-found
+    oc delete clusterrolebinding turbo-all-binding -n ibm-concert-optimise --ignore-not-found
   ignore_errors: true
 
 
@@ -71,7 +71,7 @@
 
 - name: 👩‍💻 CONCERT OPTIMISE - Get FS Group from Namespace
   shell: |
-        oc get ns ibm-platform-dal -o json | jq -r '.metadata.annotations["openshift.io/sa.scc.uid-range"] | split("/")[0]'
+        oc get ns ibm-concert-optimise -o json | jq -r '.metadata.annotations["openshift.io/sa.scc.uid-range"] | split("/")[0]'
   ignore_errors: true
   args:
     executable: /bin/bash
@@ -159,7 +159,7 @@
   shell: |
         oc get secret -n openshift-ingress $(kubectl get secrets -n openshift-ingress | grep "-serving-cert" | awk '{print $1}') -o jsonpath='{.data.tls\.crt}'| base64 -d > cert.crt
         oc get secret -n openshift-ingress $(kubectl get secrets -n openshift-ingress | grep "-serving-cert" | awk '{print $1}') -o jsonpath='{.data.tls\.key}'| base64 -d > cert.key
-        oc create secret tls -n ibm-platform-dal nginx-ingressgateway-certs --cert=./cert.crt --key=./cert.key
+        oc create secret tls -n ibm-concert-optimise nginx-ingressgateway-certs --cert=./cert.crt --key=./cert.key
   ignore_errors: true
   args:
     executable: /bin/bash
@@ -170,22 +170,22 @@
 - name: 🚀 CONCERT OPTIMISE - Create Concert Optimise Operator Group
   kubernetes.core.k8s:
     state: present
-    namespace: ibm-platform-dal
-    src: ./templates/ibm-platform-dal/turbo-operatorgroup.yaml
+    namespace: ibm-concert-optimise
+    src: ./templates/ibm-concert-optimise/turbo-operatorgroup.yaml
   
 
 
 - name: 🚀 CONCERT OPTIMISE - Create Concert Optimise Subscription
   kubernetes.core.k8s:
     state: present
-    namespace: ibm-platform-dal
-    src: ./templates/ibm-platform-dal/turbo-subscription.yaml
+    namespace: ibm-concert-optimise
+    src: ./templates/ibm-concert-optimise/turbo-subscription.yaml
   
 
 
 
 - name: 🕦 CONCERT OPTIMISE - Wait for CRD to become ready
-  shell: oc get crd -n ibm-platform-dal xls.charts.helm.k8s.io --ignore-not-found  --no-headers| grep -c ""
+  shell: oc get crd -n ibm-concert-optimise xls.charts.helm.k8s.io --ignore-not-found  --no-headers| grep -c ""
   register: kubectl_get_pods
   until: kubectl_get_pods.stdout == "1"
   retries: 500
@@ -215,8 +215,8 @@
 - name: 🚀 CONCERT OPTIMISE - Create Concert Optimise Instance
   kubernetes.core.k8s:
     state: present
-    namespace: ibm-platform-dal
-    template: ./templates/ibm-platform-dal/turbo-instance.j2
+    namespace: ibm-concert-optimise
+    template: ./templates/ibm-concert-optimise/turbo-instance.j2
   when: (current_feature.concert_optimise_lite | default(false))|bool == false  
 
 
@@ -224,8 +224,8 @@
 - name: 🚀 CONCERT OPTIMISE - Create Concert Optimise Lite Instance
   kubernetes.core.k8s:
     state: present
-    namespace: ibm-platform-dal
-    template: ./templates/ibm-platform-dal/turbo-instance_lite.j2
+    namespace: ibm-concert-optimise
+    template: ./templates/ibm-concert-optimise/turbo-instance_lite.j2
   when: (current_feature.concert_optimise_lite | default(false))|bool == true  
   
 
@@ -237,7 +237,7 @@
 
 
 # --------------------------------------------------------------------------------------------------------------------------------------
-# Wait for ibm-platform-dal Namespace to be ready
+# Wait for ibm-concert-optimise Namespace to be ready
 # --------------------------------------------------------------------------------------------------------------------------------------
 
 - name: 📣 OCP CONSOLE - Create Openshift NOTIFICATION
@@ -259,8 +259,8 @@
   when: (global_config.create_ocp_notifications | default(true))|bool == true  
 
 
-- name: 🕦 CONCERT OPTIMISE - Wait for >50 pods in namespace ibm-platform-dal
-  shell: oc get po -n ibm-platform-dal |grep "1/"| wc -l
+- name: 🕦 CONCERT OPTIMISE - Wait for >50 pods in namespace ibm-concert-optimise
+  shell: oc get po -n ibm-concert-optimise |grep "1/"| wc -l
   register: kubectl_num_pods
   until: kubectl_num_pods.stdout|int > 50
   retries: 500
@@ -268,8 +268,8 @@
   when: (current_feature.concert_optimise_lite | default(false))|bool == false  
 
 
-- name: 🕦 CONCERT OPTIMISE - Wait for >16 pods in namespace ibm-platform-dal
-  shell: oc get po -n ibm-platform-dal |grep "1/"| wc -l
+- name: 🕦 CONCERT OPTIMISE - Wait for >16 pods in namespace ibm-concert-optimise
+  shell: oc get po -n ibm-concert-optimise |grep "1/"| wc -l
   register: kubectl_num_pods
   until: kubectl_num_pods.stdout|int > 16
   retries: 500
@@ -277,8 +277,8 @@
   when: (current_feature.concert_optimise_lite | default(false))|bool == true  
 
 
-- name: 🕦 CONCERT OPTIMISE - Wait for ibm-platform-dal to become ready
-  shell: oc get po -n ibm-platform-dal | grep -v Running |grep -v Completed|grep -v Error|grep -v prometheus-server |grep -v concert-gateway |grep -v postgres-0| grep -c ""
+- name: 🕦 CONCERT OPTIMISE - Wait for ibm-concert-optimise to become ready
+  shell: oc get po -n ibm-concert-optimise | grep -v Running |grep -v Completed|grep -v Error|grep -v prometheus-server |grep -v concert-gateway |grep -v postgres-0| grep -c ""
   register: kubectl_get_pods
   until: kubectl_get_pods.stdout == "1"
   retries: 500
@@ -286,8 +286,8 @@
 
 
 
-- name: 🕦 CONCERT OPTIMISE - Wait for all pods in ibm-platform-dal to become ready
-  shell: oc get po -n ibm-platform-dal | grep "0/" | grep -c ""
+- name: 🕦 CONCERT OPTIMISE - Wait for all pods in ibm-concert-optimise to become ready
+  shell: oc get po -n ibm-concert-optimise | grep "0/" | grep -c ""
   register: kubectl_get_pods
   until: (kubectl_get_pods.stdout | int) < 1
   failed_when: kubectl_get_pods.rc not in [0, 1]

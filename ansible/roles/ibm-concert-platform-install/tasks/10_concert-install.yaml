@@ -377,7 +377,7 @@
 
 - name:   🚀 IBM Concert - IBM Concert Integrate ITOM and TurboLite
   shell: |
-    export TURBO_URL=$(oc get route -n ibm-platform-dal nginx -o jsonpath={.spec.host})
+    export TURBO_URL=$(oc get route -n ibm-concert-optimise nginx -o jsonpath={.spec.host})
 
     echo "------------------------------------------------------------------------------------------------------------------------------"
     echo " ✅ Register Turbo with ITOM"
@@ -421,7 +421,7 @@
 
 
     # kubectl exec -it $(kubectl get pods -n ibm-installer | grep "ibm-install-concert" | awk '{print $1}') -n ibm-installer -- ls -al /tmp/ibm-concert/concert-hub/bin/
-    # kubectl exec -it $(kubectl get pods -n ibm-installer | grep "ibm-install-concert" | awk '{print $1}') -n ibm-installer -- /tmp/ibm-concert/concert-hub/bin/manage-product.sh --action=add --deployment-type=k8s --product-id=turbonomic --instance-url=https://nginx.ibm-platform-dal.svc.cluster.local:443 --kc-entrypoint-url=https://$TURBO_URL --namespace=$CONCERT_HUB_NAMESPACE --restart-hub=true
+    # kubectl exec -it $(kubectl get pods -n ibm-installer | grep "ibm-install-concert" | awk '{print $1}') -n ibm-installer -- /tmp/ibm-concert/concert-hub/bin/manage-product.sh --action=add --deployment-type=k8s --product-id=turbonomic --instance-url=https://nginx.ibm-concert-optimise.svc.cluster.local:443 --kc-entrypoint-url=https://$TURBO_URL --namespace=$CONCERT_HUB_NAMESPACE --restart-hub=true
 
 
 
@@ -641,9 +641,9 @@
     echo "------------------------------------------------------------------------------------------------------------------------------"
     echo "    ✅ Register: OPTIMIZATION_COORDINATOR_AGENT"
 
-    oc create route edge a2a-turboai -n ibm-platform-dal --service=turboai --port=http-a2a-turboai
+    oc create route edge a2a-turboai -n ibm-concert-optimise --service=turboai --port=http-a2a-turboai
 
-    export OPTIMIZE_HOST=$(oc get route -n ibm-platform-dal a2a-turboai -o jsonpath={.spec.host})
+    export OPTIMIZE_HOST=$(oc get route -n ibm-concert-optimise a2a-turboai -o jsonpath={.spec.host})
     # OPTIMIZATION_COORDINATOR_AGENT_URL="https://$OPTIMIZE_HOST/turbonomic/turboai/a2a"
     OPTIMIZATION_COORDINATOR_AGENT_URL="https://$OPTIMIZE_HOST"
 
@@ -840,10 +840,10 @@
     # echo " 🚀 Enable WatsonX In Turbo"
 
     kubectl create secret generic turboai-secret \
-    -n ibm-platform-dal \
+    -n ibm-concert-optimise \
     --from-literal=.env.secrets="watsonx.api_key={{current_feature.watsonx_token}}"
 
-    kubectl rollout restart -n ibm-platform-dal deployment/turboai
+    kubectl rollout restart -n ibm-concert-optimise deployment/turboai
 
   register: output_string
   ignore_errors: true

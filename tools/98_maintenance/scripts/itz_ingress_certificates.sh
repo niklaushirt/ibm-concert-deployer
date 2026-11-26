@@ -50,12 +50,12 @@ echo "Extracting signed cert"
 oc get secret -n openshift-ingress -o 'go-template={{index .data "tls.crt"}}' letsencrypt-certs | base64 -d > cert.crt
 oc get secret -n openshift-ingress -o 'go-template={{index .data "tls.key"}}' letsencrypt-certs | base64 -d > cert.key
 
-oc create secret tls -n ibm-platform-dal nginx-ingressgateway-certs --cert=cert.crt --key=cert.key --dry-run=client -o yaml | oc apply -f -
+oc create secret tls -n ibm-concert-optimise nginx-ingressgateway-certs --cert=cert.crt --key=cert.key --dry-run=client -o yaml | oc apply -f -
 
 
-REPLICAS=$(oc get pods -n ibm-platform-dal |grep nginx|wc -l |xargs)
-oc scale Deployment/nginx --replicas=0 -n ibm-platform-dal
+REPLICAS=$(oc get pods -n ibm-concert-optimise |grep nginx|wc -l |xargs)
+oc scale Deployment/nginx --replicas=0 -n ibm-concert-optimise
 sleep 10
-oc scale Deployment/nginx --replicas=${REPLICAS} -n ibm-platform-dal
+oc scale Deployment/nginx --replicas=${REPLICAS} -n ibm-concert-optimise
 
 

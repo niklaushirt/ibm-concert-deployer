@@ -105,7 +105,7 @@ stream = os.popen("oc get route  -n ibm-demo-ui ibm-demo-ui  -o jsonpath='{.stat
 DENO_UI_ROUTE = stream.read().strip()
 stream = os.popen("oc get route  -n instana-core dev-aiops -o jsonpath='{.status.ingress[0].host}'")
 INSTANA_ROUTE = stream.read().strip()
-stream = os.popen("oc get route  -n ibm-platform-dal nginx -o jsonpath='{.status.ingress[0].host}'")
+stream = os.popen("oc get route  -n ibm-concert-optimise nginx -o jsonpath='{.status.ingress[0].host}'")
 TURBO_ROUTE = stream.read().strip()
 
 

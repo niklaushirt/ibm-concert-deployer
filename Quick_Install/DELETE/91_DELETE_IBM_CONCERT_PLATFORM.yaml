@@ -131,7 +131,7 @@ spec:
               echo "------------------------------------------------------------------------------------------------------------------------------"
       
 
-              oc delete Xl -n ibm-platform-dal xl-release 
+              oc delete Xl -n ibm-concert-optimise xl-release 
               sleep 15
               oc delete ns home-ui &
               oc delete ns sock-shop &
@@ -151,7 +151,7 @@ spec:
               oc delete ns faas &
 
 
-              oc delete ns ibm-platform-dal &
+              oc delete ns ibm-concert-optimise &
 
               oc delete ConsoleNotifications --all
 

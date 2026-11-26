@@ -65,7 +65,7 @@
 
 - name: 🚀 CONCERT OPTIMISE - Get ROUTE
   shell: |
-    export TURBO_URL=$(oc get route -n ibm-platform-dal nginx -o jsonpath={.spec.host})
+    export TURBO_URL=$(oc get route -n ibm-concert-optimise nginx -o jsonpath={.spec.host})
     echo $TURBO_URL
   ignore_errors: true
   register: output
@@ -142,7 +142,7 @@
 
 - name: 🚀 CONCERT OPTIMISE - Add License if provided 
   shell: |
-    export TURBO_URL=$(oc get route -n ibm-platform-dal nginx -o jsonpath={.spec.host})
+    export TURBO_URL=$(oc get route -n ibm-concert-optimise nginx -o jsonpath={.spec.host})
 
     result=$(curl -XPOST -k -b /tmp/cookies -H 'Content-Type: multipart/form-data'  -H 'accept: application/json' "https://$TURBO_URL/api/v3/licenses?dryRun=false" -F 'file=@/tmp/license.lic')
     
@@ -867,14 +867,14 @@
     kind: ConfigMap
     metadata:
       name: turbodif-config-turbodif-helloworld
-      namespace: ibm-platform-dal
+      namespace: ibm-concert-optimise
     data:
       turbodif-config.json: |-
         {
           "communicationConfig": {
             "serverMeta": {
               "version": "8.15.1",
-              "turboServer": "https://nginx-ibm-platform-dal.apps.itz-jdly7v.osv.techzone.ibm.com"
+              "turboServer": "https://nginx-ibm-concert-optimise.apps.itz-jdly7v.osv.techzone.ibm.com"
             },
             "restAPIConfig": {
               "opsManagerUserName": "administrator",
@@ -883,7 +883,7 @@
           },
           "targetConfig": {
             "targetName": "SyntheticMetricsHelloWorld",
-            "targetAddress": "http://turbo-metrics-dif-service.ibm-platform-dal:3000/helloworld"
+            "targetAddress": "http://turbo-metrics-dif-service.ibm-concert-optimise:3000/helloworld"
           }
         }
 
@@ -893,7 +893,7 @@
     kind: Deployment
     metadata:
       name: turbodif-helloworld
-      namespace: ibm-platform-dal-helloworld
+      namespace: ibm-concert-optimise-helloworld
       labels:
         app.kubernetes.io/name: turbodif-helloworld
         helm.sh/chart: turbodif-1.0.0
@@ -913,7 +913,7 @@
         spec:
           containers:
             - name: turbodif-helloworld
-              image: cp.icr.io/cpopen/ibm-platform-dal/turbodif:8.15.1
+              image: cp.icr.io/cpopen/ibm-concert-optimise/turbodif:8.15.1
               imagePullPolicy: IfNotPresent
               args:
                 - --v=2
@@ -922,8 +922,8 @@
               - name: turbodif-config
                 mountPath: /etc/turbodif
                 readOnly: true
-              - name: ibm-platform-dal-credentials-volume
-                mountPath: /etc/ibm-platform-dal-credentials
+              - name: ibm-concert-optimise-credentials-volume
+                mountPath: /etc/ibm-concert-optimise-credentials
                 readOnly: true
               - name: varlog
                 mountPath: /var/log
@@ -931,11 +931,11 @@
           - name: turbodif-config
             configMap:
               name: turbodif-config-turbodif-helloworld
-          - name: ibm-platform-dal-credentials-volume
+          - name: ibm-concert-optimise-credentials-volume
             secret:
               defaultMode: 420
               optional: true
-              secretName: "ibm-platform-dal-credentials"
+              secretName: "ibm-concert-optimise-credentials"
           - name: varlog
             emptyDir: {}
           restartPolicy: Always
@@ -970,14 +970,14 @@
     kind: ConfigMap
     metadata:
       name: turbodif-config-turbodif
-      namespace: ibm-platform-dal
+      namespace: ibm-concert-optimise
     data:
       turbodif-config.json: |-
         {
           "communicationConfig": {
             "serverMeta": {
               "version": "8.15.1",
-              "turboServer": "https://nginx-ibm-platform-dal.apps.itz-jdly7v.osv.techzone.ibm.com"
+              "turboServer": "https://nginx-ibm-concert-optimise.apps.itz-jdly7v.osv.techzone.ibm.com"
             },
             "restAPIConfig": {
               "opsManagerUserName": "administrator",
@@ -986,7 +986,7 @@
           },
           "targetConfig": {
             "targetName": "RobotShopSynthetic",
-            "targetAddress": "http://turbo-metrics-dif-service.ibm-platform-dal:3000/businessApplication/RobotShopSynthetic/$robotshopUUID"
+            "targetAddress": "http://turbo-metrics-dif-service.ibm-concert-optimise:3000/businessApplication/RobotShopSynthetic/$robotshopUUID"
           }
         }
 
@@ -996,7 +996,7 @@
     kind: Deployment
     metadata:
       name: turbodif
-      namespace: ibm-platform-dal
+      namespace: ibm-concert-optimise
       labels:
         app.kubernetes.io/name: turbodif
         helm.sh/chart: turbodif-1.0.0
@@ -1016,7 +1016,7 @@
         spec:
           containers:
             - name: turbodif
-              image: cp.icr.io/cpopen/ibm-platform-dal/turbodif:8.15.1
+              image: cp.icr.io/cpopen/ibm-concert-optimise/turbodif:8.15.1
               imagePullPolicy: IfNotPresent
               args:
                 - --v=2
@@ -1025,8 +1025,8 @@
               - name: turbodif-config
                 mountPath: /etc/turbodif
                 readOnly: true
-              - name: ibm-platform-dal-credentials-volume
-                mountPath: /etc/ibm-platform-dal-credentials
+              - name: ibm-concert-optimise-credentials-volume
+                mountPath: /etc/ibm-concert-optimise-credentials
                 readOnly: true
               - name: varlog
                 mountPath: /var/log
@@ -1034,11 +1034,11 @@
           - name: turbodif-config
             configMap:
               name: turbodif-config-turbodif
-          - name: ibm-platform-dal-credentials-volume
+          - name: ibm-concert-optimise-credentials-volume
             secret:
               defaultMode: 420
               optional: true
-              secretName: "ibm-platform-dal-credentials"
+              secretName: "ibm-concert-optimise-credentials"
           - name: varlog
             emptyDir: {}
           restartPolicy: Always
@@ -1151,13 +1151,13 @@
 #         oc get secret -n openshift-ingress letsencrypt-certs -o jsonpath='{.data.tls\.crt}'| base64 -d > cert.crt
 #         oc get secret -n openshift-ingress letsencrypt-certs -o jsonpath='{.data.tls\.key}'| base64 -d > cert.key
 
-#         oc create secret tls -n ibm-platform-dal nginx-ingressgateway-certs --cert=cert.crt --key=cert.key --dry-run=client -o yaml | oc apply -f -
+#         oc create secret tls -n ibm-concert-optimise nginx-ingressgateway-certs --cert=cert.crt --key=cert.key --dry-run=client -o yaml | oc apply -f -
 
 
-#         REPLICAS=$(oc get pods -n ibm-platform-dal |grep nginx|wc -l |xargs)
-#         oc scale Deployment/nginx --replicas=0 -n ibm-platform-dal
+#         REPLICAS=$(oc get pods -n ibm-concert-optimise |grep nginx|wc -l |xargs)
+#         oc scale Deployment/nginx --replicas=0 -n ibm-concert-optimise
 #         sleep 10
-#         oc scale Deployment/nginx --replicas=${REPLICAS} -n ibm-platform-dal
+#         oc scale Deployment/nginx --replicas=${REPLICAS} -n ibm-concert-optimise
 #     else
 #         echo "✅ Seems that you're NOT on Techzone IPI/UPI"  
 #         echo "✅ No need to patch the certificates any further"  
